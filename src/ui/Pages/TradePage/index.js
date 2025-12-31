@@ -1,0 +1,1852 @@
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import moment from "moment";
+import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
+import AuthService from "../../../api/services/AuthService";
+import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
+import TVChartContainer from "../../../customComponents/Libraries/TVChartContainer";
+import '../TradePage/trade_new.css'
+import { ApiConfig } from "../../../api/apiConfig/apiConfig";
+import { ProfileContext } from "../../../context/ProfileProvider";
+import { SocketContext } from "../../../customComponents/SocketContext";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Helmet } from "react-helmet-async";
+
+const Trade = () => {
+    let params = useParams()
+    let URL = params?.pairs?.split('_');
+
+    const location = useLocation();
+    const { state } = location;
+
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem('userId');
+    let recentPair = sessionStorage.getItem('RecentPair');
+    let ParsedPair = JSON.parse(recentPair);
+    const [urlPath, setUrlPath] = useState(URL ? URL : []);
+    const [search, setsearch] = useState('');
+    const [AllData, setAllData] = useState([]);
+    const [BuyOrders, setBuyOrders] = useState([]);
+    const [CoinPairDetails, setCoinPairDetails] = useState();
+    const [RecentTrade, setRecentTrade] = useState([]);
+    const [SellOrders, setSellOrders] = useState([]);
+    const [buyamount, setbuyamount] = useState(1);
+    const [sellAmount, setsellAmount] = useState(1);
+    const [infoPlaceOrder, setinfoPlaceOrder] = useState('LIMIT');
+    const [coinFilter, setcoinFilter] = useState('ALL');
+    const [BuyCoinBal, setBuyCoinBal] = useState();
+    const [SellCoinBal, setSellCoinBal] = useState();
+    const [openOrders, setopenOrders] = useState([]);
+    const [orderType, setorderType] = useState('All');
+    const [pastOrderType, setpastOrderType] = useState('All');
+    const [priceDecimal, setpriceDecimal] = useState(8);
+    const [pastOrders, setpastOrders] = useState([]);
+    const [pastOrder2, setpastOrder2] = useState([]);
+    const [favCoins, setfavCoins] = useState([]);
+    const [sellOrderPrice, setsellOrderPrice] = useState(undefined);
+    const [buyOrderPrice, setbuyOrderPrice] = useState(undefined);
+    const [priceChange, setpriceChange] = useState();
+    const [changesHour, setChangesHour] = useState();
+    const [priceHigh, setpriceHigh] = useState();
+    const [priceLow, setpriceLow] = useState();
+    const [volume, setvolume] = useState();
+    const [showCoinList, setShowCoinList] = useState(false);
+    const [loader, setloader] = useState(true);
+    const [baseCurId, setbaseCurId] = useState();
+    const [quoteCurId, setquoteCurId] = useState();
+    const [buyprice, setbuyprice] = useState();
+    const [sellPrice, setsellPrice] = useState();
+    const [SelectedCoin, setSelectedCoin] = useState();
+    const [isPricePositive, setIsPricePositive] = useState(true);
+    const [showTab, setShowTab] = useState("chart");
+    const [showBuySellTab, setShowBuySellTab] = useState("");
+    const [Coins, setCoins] = useState([]);
+    const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+    const { userDetails, newStoredTheme } = useContext(ProfileContext);
+    const KycStatus = userDetails?.kycVerified;
+    const { socket } = useContext(SocketContext);
+    const binanceEndpoint = 'wss://stream.binance.com:9443/ws';
+    const wsRef = useRef(null);
+    const reconnectIntervalRef = useRef(null);
+    const currentSubscriptionRef = useRef(null);
+    const [orderBookColor, setOrderBookColor] = useState({ buy: "#1c2a2b", sell: "#301e27" });
+    const navigate = useNavigate()
+    let socketId = sessionStorage.getItem("socketId")
+
+    useEffect(() => {
+
+        const Theme = sessionStorage.getItem('theme');
+        if (Theme === "light") {
+            setOrderBookColor({ buy: "#1c2a2b", sell: "#301e27" })
+        } else {
+            setOrderBookColor({ buy: "#1c2a2b", sell: "#301e27" })
+        }
+    }, [newStoredTheme]);
+
+
+
+    useEffect(() => {
+        if (socket) {
+            if (state) {
+                let payload = {
+                    'message': 'market',
+                    'userId': userId,
+                    'base_currency_id': state?.base_currency_id,
+                    'quote_currency_id': state?.quote_currency_id,
+                };
+                socket.emit('message', payload);
+            } else if (ParsedPair && !state) {
+                let payload = {
+                    'message': 'exchange',
+                    'userId': userId,
+                    'socketId': socketId,
+                    'base_currency_id': ParsedPair?.base_currency_id,
+                    'quote_currency_id': ParsedPair?.quote_currency_id,
+                };
+                socket.emit('message', payload);
+            } else {
+                let payload = {
+                    'message': 'market',
+                    'userId': userId,
+                };
+                socket.emit('message', payload);
+            }
+        }
+
+    }, [state, socket]);
+
+
+
+
+    useEffect(() => {
+        if (socket) {
+            let payload = {
+                'message': 'exchange',
+                'userId': userId,
+                'socketId': socketId,
+            };
+            socket.emit('message', payload);
+            socket.on('message', (data) => {
+                // if (data?.base_currency_id === "66138abf4197cf39e73e3bd9" || data.quote_currency_id === "66138abf4197cf39e73e3bd9") {
+                //     setBuyOrders(data?.buy_order);
+                //     setSellOrders(data?.sell_order);
+                // }
+                // setRecentTrade(data?.recent_trades);
+                setBuyCoinBal(data?.balance?.quote_currency_balance);
+                setSellCoinBal(data?.balance?.base_currency_balance);
+                setopenOrders(data?.open_orders);
+                setloader(false);
+                setAllData(data);
+                setBuyCoinBal(data?.balance?.quote_currency_balance);
+                setSellCoinBal(data?.balance?.base_currency_balance);
+                setpastOrders(data?.executed_order)
+                setpastOrder2(data?.executed_order)
+                setloader(false);
+            });
+        }
+    }, [socket]);
+
+
+    useEffect(() => {
+        let interval;
+        if (baseCurId && quoteCurId && socket) {
+
+            interval = setInterval(() => {
+                let payload = {
+                    'message': 'exchange',
+                    'userId': userId,
+                    'socketId': socketId,
+                    'base_currency_id': baseCurId,
+                    'quote_currency_id': quoteCurId,
+                    name: "socket",
+                }
+                socket.emit('message', payload);
+            }, 1000)
+        }
+        return (() => {
+            clearInterval(interval)
+        })
+    }, [baseCurId, quoteCurId, socket]);
+
+
+
+
+    const connectWebSocket = () => {
+
+        // 🛑 If there's already a socket, close it before opening a new one
+        // if (wsRef.current) {
+        //     try {
+        //         wsRef.current.close();
+        //         console.warn("Coekt closing:");
+        //     } catch (e) {
+        //         console.warn("Failed to close previous WebSocket:", e);
+        //     }
+        // }
+
+
+        const ws = new WebSocket(binanceEndpoint);
+        wsRef.current = ws;
+
+        ws.onopen = () => {
+            console.log("📡 WebSocket connected");
+            if (SelectedCoin) {
+                subscribeToPair(SelectedCoin);
+            }
+        };
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            if (message?.bids?.length > 0 && message?.asks?.length > 0) {
+                const transformedBids = message.bids.map(transformBid);
+                const transformedAsks = message.asks.map(transformAsk);
+
+                setBuyOrders(transformedBids);
+                setSellOrders(transformedAsks);
+
+                const MIN_QTY = 0.0001;
+                const fakeTrades = [];
+
+                for (let i = 0; i < 5; i++) {
+                    const isBuy = Math.random() > 0.5;
+                    const orders = isBuy ? transformedBids : transformedAsks;
+                    const selected = orders[Math.floor(Math.random() * orders.length)];
+                    if (!selected) continue;
+
+                    const rawQty = Math.random() * selected.quantity;
+                    const qty = Math.max(rawQty, MIN_QTY);
+                    const quantity = parseFloat(qty.toFixed(4));
+
+                    const trade = {
+                        side: isBuy ? "BUY" : "SELL",
+                        price: selected.price,
+                        quantity,
+                        time: new Date().toLocaleTimeString("en-GB", { hour12: false }),
+                    };
+                    fakeTrades.push(trade);
+                }
+
+                setRecentTrade((prev) => {
+                    const updated = [...fakeTrades, ...prev];
+                    return updated.slice(0, 50);
+                });
+            }
+        };
+
+        ws.onerror = (e) => {
+            console.warn("❌ WebSocket error:", e);
+        };
+
+        ws.onclose = () => {
+            console.warn("🔌 WebSocket closed. Reconnecting...");
+            reconnectIntervalRef.current = setTimeout(() => {
+                connectWebSocket();
+            }, 3000);
+        };
+    };
+
+
+
+
+    useEffect(() => {
+        connectWebSocket();
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") {
+                if (!wsRef.current || wsRef.current.readyState === WebSocket.CLOSED) {
+                    connectWebSocket();
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            if (wsRef.current) {
+                try {
+                    wsRef.current.close();
+                } catch (e) {
+                    console.warn("Failed to close WebSocket on unmount");
+                }
+            }
+            clearTimeout(reconnectIntervalRef.current);
+        };
+    }, [binanceEndpoint]);
+
+
+
+    // ********* Auto Select Coin Pair after Socket Connection ********** //
+    useEffect(() => {
+        if (!SelectedCoin && CoinPairDetails) {
+            var Pair;
+            var filteredData;
+            if (urlPath?.length > 0) {
+                filteredData = CoinPairDetails?.filter?.((item) => {
+                    return urlPath[0]?.includes(item?.base_currency) && urlPath[1]?.includes(item?.quote_currency)
+                })
+            }
+            if (filteredData?.length > 0) {
+                Pair = filteredData[0]
+            }
+            else {
+                Pair = CoinPairDetails[0]
+            }
+            navigate(`/trade/${Pair?.base_currency}_${Pair?.quote_currency}`);
+            setloader(true);
+            setsellOrderPrice(undefined);
+            setbuyOrderPrice(undefined);
+            setSelectedCoin(Pair);
+            setbaseCurId(Pair?.base_currency_id);
+            setquoteCurId(Pair?.quote_currency_id);
+            setbuyprice(Pair?.buy_price);
+            setsellPrice(Pair?.sell_price);
+
+            subscribeToPair(Pair);
+
+            let payload = {
+                'message': 'exchange',
+                'socketId': socketId,
+                'userId': userId,
+                'base_currency_id': Pair?.base_currency_id,
+                'quote_currency_id': Pair?.quote_currency_id,
+            }
+            socket.emit('message', payload);
+        }
+    }, [CoinPairDetails, infoPlaceOrder]);
+
+
+    useEffect(() => {
+        let filteredData = pastOrder2?.filter((item) => {
+            return pastOrderType === item?.side || pastOrderType === 'All'
+        })
+        setpastOrders(filteredData ? filteredData?.reverse() : [])
+    }, [pastOrderType]);
+
+
+    // ********* Update Buy Sell 24HChange High Low Volume Price********** //
+    useEffect(() => {
+        let filteredData = AllData?.pairs?.filter((item) => {
+            return item?.base_currency_id === SelectedCoin?.base_currency_id
+        })
+        if (filteredData) {
+            setbuyprice(filteredData[0]?.buy_price);
+            setsellPrice(filteredData[0]?.sell_price);
+            setpriceChange(filteredData[0]?.change_percentage);
+            setChangesHour(filteredData[0]?.change);
+            setpriceHigh(filteredData[0]?.high);
+            setpriceLow(filteredData[0]?.low);
+            setvolume(filteredData[0]?.volume);
+
+        }
+    }, [AllData]);
+
+
+
+
+    // ********* Update Buy Sell 24HChange High Low Volume Price********** //
+    useEffect(() => {
+        if (AllData && SelectedCoin) {
+            let filteredData = AllData?.pairs?.filter((item) => {
+                return item?.base_currency_id === SelectedCoin?.base_currency_id && item?.quote_currency_id === SelectedCoin?.quote_currency_id
+            })
+            if (filteredData) {
+                if (filteredData[0]?.buy_price >= buyprice) {
+                    setIsPricePositive(true)
+                } else {
+                    setIsPricePositive(false)
+                }
+                setbuyprice(filteredData[0]?.buy_price);
+                setsellPrice(filteredData[0]?.sell_price);
+                setpriceChange(filteredData[0]?.change_percentage);
+                setChangesHour(filteredData[0]?.change);
+                setpriceHigh(filteredData[0]?.high);
+                setpriceLow(filteredData[0]?.low);
+                setvolume(filteredData[0]?.volume);
+            }
+        }
+    }, [AllData]);
+
+
+    // ********* Search Coins ********** //
+    useEffect(() => {
+        let filteredData = AllData?.pairs?.filter((item) => {
+            return item?.base_currency?.toLowerCase().includes(search?.toLowerCase()) || item?.quote_currency?.toLowerCase().includes(search?.toLowerCase())
+        })
+        setCoinPairDetails(filteredData)
+    }, [search, AllData]);
+
+
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        token && favoriteList();
+        handleCoinList()
+    }, []);
+
+
+    const handleCoinList = async () => {
+        LoaderHelper.loaderStatus(true);
+        await AuthService.getCoinList().then(async (result) => {
+            if (result?.success) {
+                LoaderHelper.loaderStatus(false);
+                try {
+                    setCoins(result.data);
+                } catch (error) {
+                    alertErrorMessage(error);
+                }
+            } else {
+                LoaderHelper.loaderStatus(false);
+                alertErrorMessage(result?.message);
+            }
+        });
+    };
+
+
+    const handleOrderPlace = async (infoPlaceOrder, buyprice, buyamount, base_currency_id, quote_currency_id, side) => {
+        LoaderHelper.loaderStatus(true);
+        await AuthService.placeOrder(infoPlaceOrder, buyprice, buyamount, base_currency_id, quote_currency_id, side).then((result) => {
+            if (result?.success) {
+                LoaderHelper.loaderStatus(false);
+                try {
+                    alertSuccessMessage('Order Placed Successfully!!')
+                    setbuyOrderPrice(undefined);
+                    setsellOrderPrice(undefined);
+                    let payload = {
+                        'message': 'exchange',
+                        'userId': userId,
+                        'socketId': socketId,
+                        'base_currency_id': SelectedCoin?.base_currency_id,
+                        'quote_currency_id': SelectedCoin?.quote_currency_id,
+                    };
+                    socket.emit('message', payload);
+                } catch (error) {
+                    LoaderHelper.loaderStatus(false);
+                }
+            } else {
+                LoaderHelper.loaderStatus(false);
+                alertErrorMessage(result?.message)
+            }
+        })
+    };
+
+    const cancelOrder = async (orderId) => {
+        await AuthService.cancelOrder(orderId).then((result) => {
+            if (result?.success) {
+                LoaderHelper.loaderStatus(false);
+                try {
+                    alertSuccessMessage('Order Cancelled Successfully');
+                } catch (error) {
+                    LoaderHelper.loaderStatus(false);
+                }
+            } else {
+                LoaderHelper.loaderStatus(false);
+                alertErrorMessage(result?.message)
+            }
+        })
+    };
+
+    const handleAddFav = async (pairId) => {
+        LoaderHelper.loaderStatus(true);
+        await AuthService.favoriteCoin(pairId).then((result) => {
+            if (result?.success) {
+                LoaderHelper.loaderStatus(false);
+                favoriteList()
+            } else {
+                LoaderHelper.loaderStatus(false);
+                alertErrorMessage(result?.message)
+            }
+        })
+    };
+    const favoriteList = async () => {
+        await AuthService.favoriteList().then((result) => {
+            if (result?.success) {
+                setfavCoins(result?.data?.pairs ? result?.data?.pairs : ['']);
+            }
+        });
+    };
+
+
+    const transformBid = (bid) => ({
+        _id: new Date().getTime().toString(36), // Unique ID for the order
+        side: "BUY",
+        price: parseFloat(bid[0]),
+        quantity: parseFloat(bid[1]),
+        filled: 0,
+        remaining: parseFloat(bid[1]),
+        maker_fee: 0.1,
+        taker_fee: 0.1,
+        status: "PENDING",
+        transaction_fee: 0.1,
+        tds: 1,
+        __v: 0
+    });
+
+    const transformAsk = (ask,) => ({
+        _id: new Date().getTime().toString(36), // Unique ID for the order
+        side: "SELL",
+        price: parseFloat(ask[0]),
+        quantity: parseFloat(ask[1]),
+        filled: 0,
+        remaining: parseFloat(ask[1]),
+        maker_fee: 0.1,
+        taker_fee: 0.1,
+        status: "PENDING",
+        transaction_fee: 0,
+        tds: 0,
+        order_by: "BOT",
+        __v: 0
+    });
+
+    const subscribeToPair = (pair) => {
+        setSellOrders([]);
+        setBuyOrders([]);
+        setRecentTrade([]);
+        if (wsRef.current.readyState !== WebSocket.OPEN) {
+            wsRef.current.onopen = () => subscribeToPair(pair);
+            return;
+        }
+        if (pair?.base_currency_id === "66138abf4197cf39e73e3bd9" || pair.quote_currency_id === "66138abf4197cf39e73e3bd9") {
+
+            const unsubscribeMsg = {
+                method: "UNSUBSCRIBE",
+                params: [currentSubscriptionRef.current],
+                id: 1
+            };
+            wsRef.current.send(JSON.stringify(unsubscribeMsg));
+
+        }
+        else {
+
+            const data = `${pair?.base_currency.toLowerCase()}${pair?.quote_currency.toLowerCase()}`;
+            const stream = `${data}@depth20`;
+
+            // Unsubscribe from the current stream if there's an active subscription
+            if (currentSubscriptionRef.current) {
+                const unsubscribeMsg = {
+                    method: "UNSUBSCRIBE",
+                    params: [currentSubscriptionRef.current],
+                    id: 1
+                };
+                wsRef.current.send(JSON.stringify(unsubscribeMsg));
+            }
+
+            // Subscribe to the new pair
+            const subscribeMsg = {
+                method: "SUBSCRIBE",
+                params: [stream],
+                id: 1
+            };
+            wsRef.current.send(JSON.stringify(subscribeMsg));
+            currentSubscriptionRef.current = stream; // Update the current subscription
+        }
+    };
+
+    const handleSelectCoin = (data) => {
+        setinfoPlaceOrder("LIMIT");
+        navigate(`/trade/${data?.base_currency}_${data?.quote_currency}`);
+        setloader(true);
+        setsellOrderPrice(undefined);
+        setbuyOrderPrice(undefined);
+        setSelectedCoin(data);
+        setbaseCurId(data?.base_currency_id);
+        setquoteCurId(data?.quote_currency_id);
+        setbuyprice(data?.buy_price);
+        setsellPrice(data?.sell_price);
+        setShowCoinList(!showCoinList);
+        setbuyamount(1);
+        setsellAmount(1);
+        setExpandedRowIndex(null);
+        subscribeToPair(data);
+        let filteredData = Coins?.filter((item) => item?.short_name === data?.base_currency)[0]
+        setDesAndLinks({ ...filteredData })
+        let payload = {
+            'message': 'exchange',
+            'userId': userId,
+            'socketId': socketId,
+            'base_currency_id': data?.base_currency_id,
+            'quote_currency_id': data?.quote_currency_id,
+        }
+        socket.emit('message', payload);
+    };
+
+    const [desAndLinks, setDesAndLinks] = useState({ description: "", links: [] });
+    const getDescAndLink = () => {
+        if (SelectedCoin) {
+            let filteredData = Coins?.filter((item) => item?.short_name === SelectedCoin?.base_currency)[0]
+            setDesAndLinks({ ...filteredData })
+        }
+    }
+
+    const handleOrderType = (e) => {
+        // if (SelectedCoin?.available === "LOCAL") return;
+        setinfoPlaceOrder(e.target.value);
+        if (e.target.value === 'MARKET') {
+            setsellOrderPrice(undefined);
+            setbuyOrderPrice(undefined);
+            setbuyprice(SelectedCoin?.buy_price)
+            setsellPrice(SelectedCoin?.sell_price)
+        };
+    };
+
+    const nineDecimalFormat = (data) => {
+        if (typeof (data) === "number") {
+            // return data
+            return parseFloat(data?.toFixed(9))
+        } else {
+            return 0
+        }
+    };
+
+
+    const formatTotal = (value) => {
+        const finalValue = value?.toFixed(8)?.replace(/\.?0+$/, '');
+        let formattedNum = finalValue?.toString();
+        let result = formattedNum?.replace(/^0\.0*/, '');
+        const decimalPart = finalValue?.toString()?.split('.')[1];
+        if (!decimalPart) return finalValue;
+        let zeroCount = 0;
+        for (let char of decimalPart) {
+            if (char === '0') {
+                zeroCount++;
+            } else {
+                break;
+            }
+        }
+        if (zeroCount > 4) {
+            return `0.0{${zeroCount}}${result}`;
+        }
+        if (value < 1e-7) {
+            return `0.0{${zeroCount}}${result}`;
+        } else {
+            return finalValue;
+        }
+    };
+
+    const toFixed8 = (data) => Math.floor(data * 1000000) / 1000000;
+
+    const maxBuyVolume = Math.max(...BuyOrders.map(order => order.remaining), 1);
+    const maxSellVolume = Math.max(...SellOrders.map(order => order.remaining), 1);
+    return (
+        <>
+            <Helmet>
+                <title>{`${SelectedCoin?.base_currency || "BTC"}/${SelectedCoin?.quote_currency || "USDT"} Spot Trading – Wrathcode`}</title>
+
+                <meta
+                    name="description"
+                    content="Trade Bitcoin against USDT on Wrathcode with intuitive interface, live market data and safety features. Register today."
+                />
+
+                <meta
+                    name="keywords"
+                    content="spot bitcoin usdt, trade bitcoin exchange, Wrathcode spot trading, BTC USDT Wrathcode"
+                />
+            </Helmet>
+
+     
+
+            <div className="trade-wrapper spot pb-3 ">
+                <div className="  container-fluid">
+                    <div className="row g-1 g-md-2" >
+                        <div className="col-12 col-lg-12 col-xl-7  col-xxl-7 " >
+                            <div className={`bs_dropbox spotLists_bs_dropbox ${showCoinList === true ? 'active' : ""}`}>
+                                <div className="spotLists active" >
+                                    <div className=" trade_tabs buy_sell_cards   ">
+                                        <div className="bs_box_header " >
+                                            <h6>
+                                                Trading Pair
+                                            </h6>
+                                            <span className="cursor-pointer" onClick={() => setShowCoinList(!showCoinList)}>
+                                                <i className="ri-close-line"></i>
+                                            </span>
+                                        </div>
+
+                                        {/* <ul className="nav custom-tabs nav_order">
+                                            <li className="all-tab">
+                                                <a className="active" data-bs-toggle="tab" href="#tab_all" onClick={() => setcoinFilter('ALL')}> All </a>
+                                            </li>
+                                            <li className="cvt-tab">
+                                                <a data-bs-toggle="tab" href="#tab_all" onClick={() => setcoinFilter('CVT')}>CVT</a>
+                                            </li>
+                                            <li className="usdt-tab">
+                                                <a data-bs-toggle="tab" href="#tab_all" onClick={() => setcoinFilter('USDT')}>USDT</a>
+                                            </li>
+                                            {token &&
+                                                <li className="favt-tab">
+                                                    <a data-bs-toggle="tab" href="#tab_fav" onClick={() => setcoinFilter('FAV')}>FAV</a>
+                                                </li>
+                                            }
+                                        </ul> */}
+                                    </div>
+                                    <div className="spot-list-search">
+                                        <div className="ivu-input" >
+                                            <i className="ri-search-2-line"></i>
+                                            <input autoComplete="off" spellCheck="false" type="search" placeholder="Search" className=""
+                                                onChange={(e) => { setsearch(e.target.value) }} value={search} />
+                                        </div>
+                                    </div>
+                                    <div className="price_card">
+                                        <div className="price_card_head">
+                                            <div>Pair</div>
+                                            <div>Price</div>
+                                            <div>24H%</div>
+                                        </div>
+                                        <div className="price_card_body tab-content scroll_y" style={{ cursor: "pointer" }}>
+                                            <div className="tab-pane px-0" id="tab_fav" >
+                                                {CoinPairDetails ? CoinPairDetails?.map((data, index) => {
+                                                    return (
+                                                        favCoins.includes(data?._id) && <div className={`price_item_value ${SelectedCoin?.base_currency === data?.base_currency && SelectedCoin?.quote_currency === data?.quote_currency ? 'active' : ''}`} key={index}>
+                                                            <span className="d-flex align-items-center gap-1">
+                                                                {token && <i className={favCoins.includes(data?._id) ? "ri ri-star-fill ri-xl" : "ri ri-star-line ri-xl"} onClick={() => { handleAddFav(data?._id) }} >
+                                                                </i>}
+                                                                <dt className="td_div" onClick={() => handleSelectCoin(data)}>
+                                                                    <img alt="" src={ApiConfig.baseImage + data?.icon_path} className="img-fluid  me-1 round_img" />
+                                                                    {`${data?.base_currency}/${data?.quote_currency}`}
+                                                                </dt>
+                                                            </span>
+                                                            <span className="">{data?.buy_price}</span>
+                                                            <span className={data?.change_percentage >= 0 ? "text-green" : "text-danger"}>
+                                                                {parseFloat(data?.change_percentage?.toFixed(5))}%
+                                                            </span>
+                                                        </div>
+
+                                                    )
+                                                }) : null}
+                                            </div>
+                                            <div className="tab-pane px-0 active" id="tab_all" >
+                                                {CoinPairDetails ?
+                                                    CoinPairDetails?.map((data, index) => {
+                                                        return (
+                                                            (coinFilter === 'ALL' ||
+                                                                (coinFilter === 'USDT' && (data?.quote_currency === 'USDT' || data?.base_currency === 'USDT')) ||
+                                                                (coinFilter === 'CVT' && (data?.quote_currency === 'CVT' || data?.base_currency === 'CVT'))) &&
+
+                                                            <div className={`price_item_value ${SelectedCoin?.base_currency === data?.base_currency && SelectedCoin?.quote_currency === data?.quote_currency ? 'active' : ''}`} key={index} onClick={() => handleSelectCoin(data)}>
+                                                                <span className="d-flex align-items-center gap-1">
+                                                                    {token && <i className={favCoins.includes(data?._id) ? "ri ri-star-fill ri-xl" : "ri ri-star-line  ri-xl"} onClick={() => { handleAddFav(data?._id) }} >
+                                                                    </i>}
+                                                                    <dt className="td_div" >
+                                                                        <img alt="" src={ApiConfig.baseImage + data?.icon_path} className="img-fluid  me-1 round_img" />
+                                                                        {`${data?.base_currency}/${data?.quote_currency}`}
+                                                                    </dt>
+                                                                </span>
+                                                                <span className="">{data?.buy_price}</span>
+                                                                <span className={data?.change_percentage >= 0 ? "text-green" : "text-danger"}>{parseFloat(data?.change_percentage?.toFixed(5))}%</span>
+                                                            </div>
+                                                        );
+                                                    })
+                                                    : null}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="trade_card p-2  overflow_card mb-1" >
+                                <div className="headline_left__lBBPY">
+
+
+                                    <div className="headline_left__lBBPY_leftmain d-flex align-items-center">
+                                        <div className="headline_symbolName__KfmIZ mt_tr_pr cursor-pointer" onClick={() => setShowCoinList(!showCoinList)}>
+                                            <div className="headline_bigName__dspVW "  >
+                                                {/* <i className="faaa  ri-menu-add-line"></i> */}
+                                                <img alt="" src={ApiConfig.baseImage + SelectedCoin?.icon_path} width="24" className="img-fluid round_img" />
+
+                                            </div>
+
+                                            <div>
+                                                <div className="headline_bigName__dspVW ">
+                                                    <h1>{SelectedCoin ? `${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}` : "---/---"}
+                                                        <i className="ri-arrow-down-s-line ms-1"></i>
+                                                    </h1>
+                                                </div>
+                                                <div className="headline_etfDisplay__P4Hdv"><span>{SelectedCoin?.base_currency_fullname}</span></div>
+                                            </div>
+                                        </div>
+                                        <div className="headline_leftItem__7BFYq headline_latestPrice__AYXu0 d-lg-none ms-0 mt-1">
+                                            <div>
+                                                <span className={`headline_title__x1csO font-weight-boldd  ${isPricePositive ? "text-green" : "text-danger"}`}  >{SelectedCoin ? parseFloat(buyprice?.toFixed(8)) : 0} </span>
+                                            </div>
+                                        </div>
+                                        <div className="headline_leftItem__7BFYq ms-0 d-flex d-lg-none ">
+                                            <div className="headline_withBorder__a6ZD2 me-1 ">24h Change</div>
+                                            <div className={`headline_title__x1csO font-weight-boldd ${priceChange >= 0 ? "text-green" : "text-danger"}`}  >
+                                                {priceChange >= 0 ? "+" : ""}   {parseFloat(parseFloat(priceChange?.toFixed(2))) || "0.00"}%
+                                                <span className="ms-1"> {parseFloat(parseFloat(changesHour?.toFixed(2))) || "0.00"}</span>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div className="scroll-subtabs_scrollSubInfo__T5nZF headline_left__lBBPY_rightmain" >
+                                        <div className="scroll-subtabs_tabs__Prom8" >
+                                            <div className="scroll-subtabs_subMarketWrap__XVmHp" >
+                                                <div className="headline_extendInfoWrapper__dooIS">
+                                                    <div className="headline_leftItem__7BFYq  d-none d-lg-block">
+                                                        <div className="headline_withBorder__a6ZD2 ">  Last Price  ({SelectedCoin?.quote_currency}) </div>
+
+                                                        <span className={`headline_title__x1csO font-weight-boldd  ${isPricePositive ? "text-green" : "text-danger"}`}  >{SelectedCoin ? parseFloat(buyprice?.toFixed(8)) : 0} </span>
+
+                                                    </div>
+                                                    <div className="headline_leftItem__7BFYq d-none d-lg-block">
+                                                        <div className="headline_withBorder__a6ZD2 ">24h Change</div>
+                                                        <div className={`headline_title__x1csO font-weight-boldd ${priceChange >= 0 ? "text-green" : "text-danger"}`}  >
+                                                            {priceChange >= 0 ? "+" : ""}   {parseFloat(parseFloat(priceChange?.toFixed(2))) || "0.00"}%
+                                                            {/* <span className="mx-1"> {parseFloat(parseFloat(changesHour?.toFixed(2))) || "0.00"}</span> */}
+                                                        </div>
+                                                    </div>
+                                                    <div className="headline_leftItem__7BFYq">
+                                                        <div className="headline_withBorder__a6ZD2 ">24h High ({SelectedCoin?.quote_currency})</div>
+                                                        <div className="headline_title__x1csO text-success font-weight-boldd"  >
+                                                            {parseFloat(priceHigh?.toFixed(2)) || "0.00"}
+                                                        </div>
+                                                    </div>
+                                                    <div className="headline_leftItem__7BFYq">
+                                                        <div className="headline_withBorder__a6ZD2 ">24h Low ({SelectedCoin?.quote_currency})</div>
+                                                        <div className="headline_title__x1csO text-danger font-weight-boldd" >
+                                                            {parseFloat(priceLow?.toFixed(2)) || "0.00"}
+                                                        </div>
+                                                    </div>
+                                                    <div className="headline_leftItem__7BFYq">
+                                                        <div className="headline_withBorder__a6ZD2">24h Volume ({SelectedCoin?.base_currency})</div>
+                                                        <div className="headline_title__x1csO font-weight-boldd">{parseFloat(volume?.toFixed(2)) || "0.00"}</div>
+                                                    </div>
+                                                    <div className="headline_leftItem__7BFYq">
+                                                        <div className="headline_withBorder__a6ZD2">24h Volume ({SelectedCoin?.quote_currency}) </div>
+                                                        <div className="headline_title__x1csO font-weight-boldd">
+
+                                                            {parseFloat((SelectedCoin?.volumeQuote)?.toFixed(2)) || "0.00"}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="trade_card trade_chart p-0"  >
+                                <div className="treade_card_header tch_main_tab">
+                                    <div className={`card_header_title  cursor-pointer ${showTab === "chart" && "active"}`} onClick={() => setShowTab("chart")}> Chart  </div>
+                                    <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div>
+                                    <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "order_book" && "active"}`} onClick={() => setShowTab("order_book")}> Order Book  </div>
+                                    <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "trade_history" && "active"}`} onClick={() => setShowTab("trade_history")}> Market Trades </div>
+
+                                </div>
+                                {/* tab 1 */}
+                                <div id="tab_1" className={`cc_tab ${showTab !== "chart" && "d-none"}`} >
+                                    {!SelectedCoin?.base_currency ?
+                                        <div style={{ width: '100%', }}>
+                                            <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                                                <div className="loading-bar"></div>
+                                                <div className="loading-bar"></div>
+                                                <div className="loading-bar"></div>
+                                                <div className="loading-bar"></div>
+                                            </div>
+                                        </div> :
+                                        // <></>
+                                        <TVChartContainer symbol={`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`} />
+                                    }
+                                </div>
+                                {/* tab 2 */}
+                                <div id="tab_2" className={`cc_tab ${showTab !== "token_info" && "d-none"}`} >
+                                    <div className="inf_row scroll_y" >
+                                        <div className="headline_symbolName__KfmIZ mt_tr_pr cursor-pointer">
+                                            <div className="headline_bigName__dspVW me-2">
+                                                <img alt="" src={ApiConfig.baseImage + SelectedCoin?.icon_path} width="24" className="img-fluid round_img" />
+                                            </div>
+                                            <div>
+                                                <div className="headline_bigName__dspVW ">
+                                                    <h1> {SelectedCoin?.base_currency_fullname || "N/A"}</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row g-2 g-md-4 " >
+                                            <div className="col-lg-6" >
+                                                <ul className="infor_row"  >
+
+                                                    <li>
+                                                        Total Supply <span>{desAndLinks?.total_supply || "N/A"}</span>
+                                                    </li>
+                                                    <li>
+                                                        Circulating Supply <span>{desAndLinks?.circulating_supply || "N/A"}</span>
+                                                    </li>
+                                                    <li>
+                                                        Volume <span>{SelectedCoin?.volumeQuote?.toFixed(2) || "N/A"} {SelectedCoin?.quote_currency || "N/A"}</span>
+                                                    </li>
+
+                                                    <li>
+                                                        Issue Date   <span>{desAndLinks?.issueDate || "N/A"}</span>
+                                                    </li>
+                                                    {desAndLinks?.links?.length > 0 && desAndLinks?.links?.map((item) => {
+
+                                                        return (
+                                                            <li>
+                                                                <a href={item?.description} target="_blank" rel="noreferrer">  {item?.name}   </a>
+                                                            </li>
+                                                        )
+                                                    })}
+
+                                                </ul>
+                                            </div>
+                                            <div className=" col-lg-6 t_info" >
+                                                <h5>Information</h5>
+                                                <p>
+                                                    {desAndLinks?.description || ""}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-lg-12 col-xl-5 col-xxl-5 mmn_btm_minus_spc" >
+                            <div className="row g-1 g-md-2 px-1 px-md-0" >
+                                <div className="col-lg-6" >
+
+                                    {/* tab 3 content is here */}
+                                    <div id="tab_3" className={`trade_card orderbook_two d-lg-block ${showTab !== "order_book"}`}>
+                                        <div className="treade_card_header d-lg-flex"><div className="card_header_title active">Order Book</div></div>
+                                        <div className=" trade_tabs buy_sell_cards  buy_sell_row d-flex-between">
+                                            <ul className="nav custom-tabs nav_order">
+                                                <li className="fav-tab"><a className="active" data-bs-toggle="tab" href="#all_orders"> <img alt='' src="/images/order_1.svg" width="22" height="11" />   </a></li>
+
+                                                <li className="usdt-tab">
+                                                    <a data-bs-toggle="tab" href="#buy_orders">
+                                                        <img alt='' src="/images/order_2.svg" width="22" height="11" />
+                                                    </a>
+                                                </li>
+                                                <li className="btc-tab"><a data-bs-toggle="tab" href="#sell_orders" className="me-0"> <img alt='' src="/images/order_3.svg" width="22" height="11" /> </a></li>
+                                            </ul>
+                                            <div className='num-div' >
+                                                <select className="form-select num-select p-0 input-select cursor-pointer" aria-label="Default select example" onClick={(e) => { setpriceDecimal(e.target.value) }}>
+                                                    <option value={8}>
+                                                        0.00000001
+                                                    </option>
+                                                    <option value={7}>
+                                                        0.0000001
+                                                    </option>
+                                                    <option value={6}>
+                                                        0.000001
+                                                    </option>
+                                                    <option value={5}>
+                                                        0.00001
+                                                    </option>
+                                                    <option value={4}>
+                                                        0.0001
+                                                    </option>
+                                                    <option value={3}>
+                                                        0.001
+                                                    </option>
+                                                    <option value={2}>
+                                                        0.01
+                                                    </option>
+                                                    <option value={1}>
+                                                        0.1
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                            {/* </div> */}
+                                        </div>
+                                        <div className="tab-content buy_sell_row_price" >
+                                            <div className="tab-pane fade px-0  active show" id="all_orders">
+                                                <div className="price_card">
+                                                    <div className="price_card_head">
+                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                        <div>Total({SelectedCoin?.quote_currency})</div>
+                                                    </div>
+                                                    <div className="price_card_body scroll_y scroll_y_reverse" style={{ cursor: "pointer" }} >
+                                                        {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
+                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
+                                                            return (
+                                                                <div className="price_item_value" style={{
+                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                }} key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
+                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                </div>
+                                                            )
+                                                        }) : loader ?
+                                                            <div className="favouriteData">
+                                                                <div >
+                                                                    <div className="spinner-border text-primary" role="status" />
+                                                                </div>
+                                                            </div> :
+                                                            <>
+
+                                                                <div className="favouriteData">
+                                                                    <div >
+                                                                        <div className="spinner-border text-primary" role="status" />
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                    <small>No data Available</small>
+                                                                </div>
+                                                            </p> */}
+                                                            </>
+                                                        }
+                                                    </div>
+                                                    <div className="mrkt_trde_tab justify-content-center" >
+                                                        {/* <span className={`headline_title__x1csO  ${isPricePositive  ? "text-green" : "text-danger"}`} >{parseFloat(buyprice?.toFixed(8))} </span> */}
+
+                                                        <b className={isPricePositive ? "text-green" : "text-danger"} >
+                                                            {parseFloat(buyprice?.toFixed(8))}
+                                                        </b>
+                                                        <i className={isPricePositive ? 'ri-arrow-up-line ri-xl mx-3 text-green' : 'ri-arrow-down-line ri-xl mx-3 text-danger'}></i>
+                                                        <span>{parseFloat(priceChange?.toFixed(priceDecimal))}%</span>
+                                                    </div>
+                                                    <div className="price_card_body scroll_y" style={{ cursor: "pointer" }} >
+                                                        {(BuyOrders?.length > 0 && !loader) ?
+                                                            BuyOrders?.map((data, index) => {
+                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
+                                                                return (
+                                                                    <div style={{
+                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
+                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                    </div>
+                                                                )
+                                                            }) :
+                                                            loader ?
+                                                                <div className="favouriteData">
+                                                                    <div >
+                                                                        <div className="spinner-border text-primary" role="status" />
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+
+                                                                    <div className="favouriteData">
+                                                                        <div >
+                                                                            <div className="spinner-border text-primary" role="status" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                    <small>No data Available</small>
+                                                                </div>
+                                                            </p> */}
+                                                                </>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="tab-pane fade px-0 " id="buy_orders">
+                                                <div className="price_card">
+                                                    <div className="price_card_head">
+                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                        <div>Total({SelectedCoin?.quote_currency})</div>
+                                                    </div>
+                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
+                                                        {(BuyOrders?.length > 0 && !loader) ?
+                                                            BuyOrders?.map((data, index) => {
+                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
+                                                                return (
+                                                                    <div style={{
+                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy} ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
+                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                    </div>
+                                                                )
+                                                            }) :
+                                                            loader ?
+                                                                <div className="favouriteData">
+                                                                    <div >
+                                                                        <div className="spinner-border text-primary" role="status" />
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+
+                                                                    <div className="favouriteData">
+                                                                        <div >
+                                                                            <div className="spinner-border text-primary" role="status" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                    <small>No data Available</small>
+                                                                </div>
+                                                            </p> */}
+                                                                </>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="tab-pane fade px-0 " id="sell_orders">
+                                                <div className="price_card">
+                                                    <div className="price_card_head">
+                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                        <div>Total({SelectedCoin?.quote_currency})
+                                                        </div>
+                                                    </div>
+                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
+                                                        {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
+                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
+                                                            return (
+                                                                <div style={{
+                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                }} className="price_item_value" key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
+                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                </div>
+                                                            )
+                                                        }) : loader ?
+                                                            <div className="favouriteData">
+                                                                <div >
+                                                                    <div className="spinner-border text-primary" role="status" />
+                                                                </div>
+                                                            </div> :
+                                                            <>
+
+                                                                <div className="favouriteData">
+                                                                    <div >
+                                                                        <div className="spinner-border text-primary" role="status" />
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                    <small>No data Available</small>
+                                                                </div>
+                                                            </p> */}
+                                                            </>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="bs_tab_row d-lg-none" >
+                                        <div className="row gx-3" >
+                                            <div className="col-6" >
+                                                <button className="btn btn-success  btn-block w-100" onClick={() => setShowBuySellTab("buy")}>
+                                                    <span>Buy</span>
+                                                </button>
+                                            </div>
+                                            <div className="col-6" >
+
+                                                <button className="btn btn-danger btn-block w-100" onClick={() => setShowBuySellTab("sell")}>
+                                                    <span>Sell</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* buy sell dropbox is here */}
+                                    <div className={`bs_dropbox d-lg-block ${!showBuySellTab && "d-none"}`} >
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div className="d-flex bottm_lightbox_two">
+                                                    <div id="tab_3" className={`trade_card d-lg-block summay_dasboard_pop ${showTab !== "order_book" && "d-block"}`}>
+                                                        <div className="treade_card_header d-block d-lg-flex"><div className="card_header_title active">Order Book</div></div>
+                                                        <div className=" trade_tabs buy_sell_cards  buy_sell_row d-flex-between">
+                                                            <ul className="nav custom-tabs nav_order">
+                                                                <li className="fav-tab"><a className="active" data-bs-toggle="tab" href="#all_orders"> <img alt='' src="/images/order_1.svg" width="22" height="11" />   </a></li>
+
+                                                                <li className="usdt-tab">
+                                                                    <a data-bs-toggle="tab" href="#buy_orders">
+                                                                        <img alt='' src="/images/order_2.svg" width="22" height="11" />
+                                                                    </a>
+                                                                </li>
+                                                                <li className="btc-tab">
+                                                                    <a data-bs-toggle="tab" href="#sell_orders" className="me-0">
+                                                                        <img alt='' src="/images/order_3.svg" width="22" height="11" />
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <div className='num-div' >
+                                                                <select className="form-select num-select p-0 input-select cursor-pointer" aria-label="Default select example" onClick={(e) => { setpriceDecimal(e.target.value) }}>
+                                                                    <option value={8}>
+                                                                        0.00000001
+                                                                    </option>
+                                                                    <option value={7}>
+                                                                        0.0000001
+                                                                    </option>
+                                                                    <option value={6}>
+                                                                        0.000001
+                                                                    </option>
+                                                                    <option value={5}>
+                                                                        0.00001
+                                                                    </option>
+                                                                    <option value={4}>
+                                                                        0.0001
+                                                                    </option>
+                                                                    <option value={3}>
+                                                                        0.001
+                                                                    </option>
+                                                                    <option value={2}>
+                                                                        0.01
+                                                                    </option>
+                                                                    <option value={1}>
+                                                                        0.1
+                                                                    </option>
+
+                                                                </select>
+                                                            </div>
+                                                            {/* </div> */}
+                                                        </div>
+                                                        <div className="tab-content buy_sell_row_price" >
+                                                            <div className="tab-pane fade px-0  active show" id="all_orders">
+                                                                <div className="price_card">
+                                                                    <div className="price_card_head">
+                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                                        {/* <div>Total({SelectedCoin?.quote_currency})</div> */}
+                                                                    </div><div className="table-responsive">
+                                                                        <div className="price_card_body scroll_y scroll_y_reverse" style={{ cursor: "pointer" }} >
+                                                                            {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
+                                                                                const fillPercentage = (data.remaining / maxSellVolume) * 100;
+                                                                                return (
+                                                                                    <div className="price_item_value" style={{
+                                                                                        background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                                    }} key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
+                                                                                        <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                                        <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                        {/* <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span> */}
+                                                                                    </div>
+                                                                                )
+                                                                            }) : loader ?
+                                                                                <div className="favouriteData">
+                                                                                    <div style={{ width: '100%', height: '429px' }}>
+                                                                                        <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> : <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                                    <div className="no_data_s">
+                                                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                                        <small>No data Available</small>
+                                                                                    </div>
+                                                                                </p>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="mrkt_trde_tab justify-content-center" >
+                                                                        {/* <span className={`headline_title__x1csO  ${isPricePositive  ? "text-green" : "text-danger"}`} >{parseFloat(buyprice?.toFixed(8))} </span> */}
+
+                                                                        <b className={isPricePositive ? "text-green" : "text-danger"} >
+                                                                            {parseFloat(buyprice?.toFixed(8))}
+                                                                        </b>
+                                                                        <i className={isPricePositive ? 'ri-arrow-up-line ri-xl mx-3 text-green' : 'ri-arrow-down-line ri-xl mx-3 text-danger'}></i>
+                                                                        <span>{parseFloat(priceChange?.toFixed(priceDecimal))}%</span>
+                                                                    </div>
+                                                                    <div className="price_card_body scroll_y" style={{ cursor: "pointer" }} >
+                                                                        {(BuyOrders?.length > 0 && !loader) ?
+                                                                            BuyOrders?.map((data, index) => {
+                                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
+                                                                                return (
+                                                                                    <div style={{
+                                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
+                                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                        {/* <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span> */}
+                                                                                    </div>
+                                                                                )
+                                                                            }) :
+                                                                            loader ?
+                                                                                <div className="favouriteData">
+                                                                                    <div style={{ width: '100%', height: '429px' }}>
+                                                                                        <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                            <div className="loading-bar"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> : <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                                    <div className="no_data_s">
+                                                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                                        <small>No data Available</small>
+                                                                                    </div>
+                                                                                </p>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="tab-pane fade px-0 " id="buy_orders">
+                                                                <div className="price_card">
+                                                                    <div className="price_card_head">
+                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                                        <div>Total({SelectedCoin?.quote_currency})</div>
+                                                                    </div>
+                                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
+                                                                        {BuyOrders?.length > 0 ?
+                                                                            BuyOrders?.map((data, index) => {
+                                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
+                                                                                return (
+                                                                                    <div style={{
+                                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy} ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
+                                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                    </div>
+                                                                                )
+                                                                            }) :
+                                                                            <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                                <div className="no_data_s">
+                                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                                    <small>No data Available</small>
+                                                                                </div>
+                                                                            </p>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="tab-pane fade px-0 " id="sell_orders">
+                                                                <div className="price_card">
+                                                                    <div className="price_card_head">
+                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
+                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
+                                                                        <div>Total({SelectedCoin?.quote_currency})
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
+                                                                        {SellOrders?.length > 0 ? SellOrders?.map((data, index) => {
+                                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
+                                                                            return (
+                                                                                <div style={{
+                                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
+                                                                                }} className="price_item_value" key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
+                                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
+                                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
+                                                                                </div>
+                                                                            )
+                                                                        }) : <p className="text-center no-data h-100 mb-0 center_b" >
+                                                                            <div className="no_data_s">
+                                                                                <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                                                <small>No data Available</small>
+                                                                            </div>
+                                                                        </p>}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="trade_card trade_chart  buysell_card buysell_two">
+                                                        <div className="treade_card_header buysell_heder d-block ">
+                                                            <div className="bs_box_header d-lg-none" >
+                                                                <h6>
+                                                                    Trade
+                                                                </h6>
+                                                                <span className="cursor-pointer" onClick={() => setShowBuySellTab("")}>
+                                                                    <i className="ri-close-line"></i>
+                                                                </span>
+                                                            </div>
+                                                            <ul className="nav custom-tabs padding-0">
+                                                                <li className="buysell-tab buy-tab"><a href="#/" className={`${(showBuySellTab === "buy" || !showBuySellTab) ? "active" : ""}`} onClick={() => setShowBuySellTab("buy")}><button><span>Buy</span></button></a></li>
+                                                                <li className="  sell-tab"><a href="#/" className={`${showBuySellTab === "sell" ? "active" : ""}`} onClick={() => setShowBuySellTab("sell")}><button><span>Sell</span></button></a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className=" p-2 p-md-3" >
+                                                            <div className="col-md-12 mb-3">
+                                                                <div className="spot_limit  " >
+                                                                    <select className=" mb-0 form-select-sm" name="infoPlaceOrder" onChange={handleOrderType} value={infoPlaceOrder}>
+                                                                        <option value="LIMIT" >Limit</option>
+                                                                        <option value="MARKET">Market</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div className="tab-content" >
+                                                                <div className={`tab-pane px-0 ${(showBuySellTab === "buy" || !showBuySellTab) ? "show active" : ''}`} id="buytab" >
+                                                                    <form action="" className="buysellform data-buy">
+                                                                        <div className="actions_balance__kTHO0">
+                                                                            <span className="actions_primaryText__ufKT0"> Available Balance: </span>
+                                                                            <div>
+                                                                                <span> {BuyCoinBal ? BuyCoinBal?.toFixed(9) : "0.00"}</span>
+                                                                                <span className="text ms-1">{SelectedCoin?.quote_currency}</span>
+                                                                                <Link className="actions_deposit__Ydutk" to={token ? '/asset_managemnet/deposit' : '/login'}>
+                                                                                    <i className="ri-add-circle-fill"></i>
+                                                                                </Link>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <label>Price</label>
+                                                                            <div className="input-group">
+                                                                                {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"Best Market Price"} readOnly /> : <input type="text" className="form-control" disabled={infoPlaceOrder === 'MARKET'} value={buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : formatTotal(buyprice)}
+
+                                                                                    onChange={(e) => {
+                                                                                        const value = e.target.value;
+                                                                                        const regex = /^\d{0,8}(\.\d{0,8})?$/;
+                                                                                        if (regex.test(value) || value === '') {
+                                                                                            setbuyOrderPrice(value);
+                                                                                        }
+                                                                                    }}
+
+                                                                                />}
+
+                                                                                <span className="input-group-text text-start"><small>  {SelectedCoin?.quote_currency}</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <label>Amount</label>
+                                                                            <div className="input-group ">
+                                                                                <input type="number" aria-invalid="true" className="form-control" value={buyamount}
+                                                                                    onChange={(e) => {
+                                                                                        if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
+                                                                                            setbuyamount(e.target.value)
+                                                                                        }
+                                                                                    }}
+                                                                                />
+                                                                                <span className="input-group-text text-start"><small> {SelectedCoin?.base_currency}</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <div className="input-group  ">
+                                                                                <input type="text" className="form-control" value={
+                                                                                    (buyOrderPrice !== undefined && buyOrderPrice && buyamount) ? formatTotal(+buyOrderPrice * +buyamount) :
+                                                                                        (buyprice && buyamount) ? formatTotal(+buyprice * +buyamount) : formatTotal(0)
+                                                                                } />
+                                                                                <span className="input-group-text text-start"><small>Total</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group" >
+                                                                            <div className="btn-group btn-group-mini  mb-3" role="group" aria-label="Basic radio toggle button group">
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio125" autoComplete="off" />
+                                                                                <label className="btn btn-outline-success" htmlFor="btnradio125" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 25) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >25%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio250" autoComplete="off" />
+                                                                                <label className="btn btn-outline-success" htmlFor="btnradio250" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 50) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>50%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio375" autoComplete="off" />
+                                                                                <label className="btn btn-outline-success" htmlFor="btnradio375" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 75) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>75%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio3100" autoComplete="off" />
+                                                                                <label className="btn btn-outline-success" htmlFor="btnradio3100" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal)) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>100%</label>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <small className="">Minimal Buy : 10 USDT</small>
+                                                                        <>
+
+
+                                                                            {token ?
+                                                                                KycStatus === 0 || KycStatus == 1 || KycStatus == 3 ?
+                                                                                    <Link to={KycStatus == 1 ? "" : '/user_profile/kyc'
+                                                                                    } className={`btn custom-btn w-100 btn-mini w-100 my-3 my-md-0 ${KycStatus === 1 ? "btn-warning" : KycStatus === 0 ? "btn-warning" : "btn-danger"}`}>
+                                                                                        {KycStatus == 1 ? "Verification Pending" : KycStatus == 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
+                                                                                    </Link> :
+                                                                                    nineDecimalFormat(+buyprice * +buyamount) < 10 ?
+                                                                                        <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0" disabled >
+                                                                                            Buy {SelectedCoin?.base_currency}
+                                                                                        </button> : <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
+                                                                                            onClick={() => handleOrderPlace(infoPlaceOrder, buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice, buyamount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'BUY')}>
+                                                                                            Buy {SelectedCoin?.base_currency}
+                                                                                        </button>
+                                                                                :
+                                                                                <div className="order-btns my-2" >
+                                                                                    <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
+                                                                                        onClick={() => navigate("/login")}>
+                                                                                        Login
+                                                                                    </button>
+
+                                                                                </div>
+                                                                            }
+
+
+                                                                        </>
+                                                                    </form>
+                                                                </div>
+                                                                <div className={`tab-pane px-0 ${showBuySellTab === "sell" ? "show active" : ""}`} id="selltab" >
+                                                                    <form action="" className="buysellform data-sell">
+                                                                        <div className="actions_balance__kTHO0">
+                                                                            <span className="actions_primaryText__ufKT0"> Available Balance: </span>
+                                                                            <div>
+                                                                                <span>{SellCoinBal ? SellCoinBal?.toFixed(9) : "0.00"} {" "}
+                                                                                </span>
+                                                                                <span className="text ms-1">{SelectedCoin?.base_currency}</span>
+                                                                                <Link className="actions_deposit__Ydutk" to={token ? '/asset_managemnet/deposit' : '/login'}>
+                                                                                    <i className="ri-add-circle-fill"></i>
+                                                                                </Link>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <label>Price</label>
+                                                                            <div className="input-group ">
+                                                                                {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"Best Market Price"} readOnly />
+                                                                                    :
+
+                                                                                    <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" value={sellOrderPrice !== undefined || sellOrderPrice ? sellOrderPrice : formatTotal(sellPrice)}
+
+                                                                                        onChange={(e) => {
+                                                                                            if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
+                                                                                                setsellOrderPrice(e.target.value)
+                                                                                            }
+                                                                                        }}
+
+                                                                                        disabled={infoPlaceOrder === 'MARKET'} />}
+
+
+
+                                                                                <span className="input-group-text text-start" ><small> {SelectedCoin?.quote_currency}</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <label>Amount</label>
+                                                                            <div className="input-group ">
+                                                                                <input type="text" aria-invalid="true" className="form-control" aria-label="Amount (to the nearest dollar)" value={sellAmount}
+                                                                                    onChange={(e) => {
+                                                                                        if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
+                                                                                            setsellAmount(e.target.value)
+                                                                                        }
+                                                                                    }}
+                                                                                />
+                                                                                <span className="input-group-text text-start"><small>{SelectedCoin?.base_currency}</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group  mb-3" >
+                                                                            <div className="input-group  ">
+                                                                                <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" value=
+                                                                                    {(sellOrderPrice !== undefined && sellOrderPrice && sellAmount) ? formatTotal(+sellOrderPrice * +sellAmount) :
+                                                                                        (sellPrice && sellAmount) ? formatTotal(+sellPrice * +sellAmount) : formatTotal(0)}
+
+                                                                                />
+                                                                                <span className="input-group-text text-start"><small>Total</small></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="form-group" >
+                                                                            <div className="btn-group btn-group-mini   mb-3 " role="group" aria-label="Basic radio toggle button group">
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio15" autoComplete="off" />
+                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio15" onClick={() => { setsellAmount(toFixed8(SellCoinBal / 100) * 25) }}>25%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio20" autoComplete="off" />
+                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio20" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 50)) }}>50%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio35" autoComplete="off" />
+                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio35" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 75)) }}>75%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio300" autoComplete="off" />
+                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio300" onClick={() => { setsellAmount(toFixed8(SellCoinBal)) }}>100%</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <small className=" ">Minimal Sell: {nineDecimalFormat(10 / SelectedCoin?.buy_price)} {SelectedCoin?.base_currency}</small>
+
+                                                                        <>
+
+                                                                            {token ?
+                                                                                KycStatus === 0 || KycStatus == 1 || KycStatus == 3 ?
+                                                                                    <Link to={KycStatus == 1 ? "" : '/user_profile/kyc'
+                                                                                    } className={`btn custom-btn w-100 btn-mini w-100 my-3 my-md-0 ${KycStatus === 1 ? "btn-warning" : KycStatus === 0 ? "btn-warning" : "btn-danger"}`}>
+                                                                                        {KycStatus == 1 ? "Verification Pending" : KycStatus == 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
+                                                                                    </Link> :
+                                                                                    sellAmount < nineDecimalFormat(10 / SelectedCoin?.buy_price) ?
+                                                                                        <button button type='button' className="btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0" disabled >
+                                                                                            Sell {SelectedCoin?.base_currency}
+                                                                                        </button> : <button button type='button' className="btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0"
+                                                                                            onClick={() => handleOrderPlace(infoPlaceOrder, sellOrderPrice !== undefined || sellOrderPrice ? sellOrderPrice : sellPrice, sellAmount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'SELL')} disabled={!sellAmount || !token || sellAmount === '0'}>
+                                                                                            Sell {SelectedCoin?.base_currency}
+                                                                                        </button>
+                                                                                :
+                                                                                <div className="order-btns my-2" >
+                                                                                    <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
+                                                                                        onClick={() => navigate("/login")}>
+                                                                                        Login
+                                                                                    </button>
+
+                                                                                    {/* <Link to='/signup' className="btn  custom-border-btn  custom-border-btn-white  btn-mini w-100  ">
+                                                                            Register
+                                                                        </Link> */}
+                                                                                </div>
+                                                                            }
+
+                                                                        </>
+                                                                    </form>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div className="assets_list">
+
+                                                            <div className="top_heading"><h4>Assets</h4><Link className="more_btn" to="/user_profile/asset_overview">More &gt;</Link></div>
+
+                                                            <div className="assets_btn">
+                                                                <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>
+                                                                <button><Link to="/asset_managemnet/withdraw">Withdrawal</Link></button>
+                                                                <button><Link to="/user_profile/spot_orders">Trade History</Link></button>
+                                                            </div>
+
+                                                            <ul>
+                                                                <li>Coin<span>Total Assets</span></li>
+
+                                                                <li>{SelectedCoin?.quote_currency}<span>{BuyCoinBal ? BuyCoinBal?.toFixed(9) : "0.00"}</span></li>
+                                                                <li>{SelectedCoin?.base_currency}<span>{SellCoinBal ? SellCoinBal?.toFixed(9) : "0.00"}</span></li>
+                                                            </ul>
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="trade_account_summary_assets">
+
+                            <div class="trade_summary_table_lft mt-0 position_order">
+                                <div class="top_th_easyop border-0">
+                                    <ul class="position_list">
+                                        <li class="nav-item positions" role="presentation">
+                                            <button>Open Orders</button>
+                                        </li>
+                                        <li class="nav-item open" role="presentation">
+                                            <button>Order History</button>
+                                        </li>
+
+                                    </ul>
+                                    <div className='cnt_table positions'>
+                                        <div className="table-responsive" style={{ height: '353px' }}>
+
+                                            <table className="table table_home ">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Trading Pair</th>
+                                                        <th> Date</th>
+                                                        <th> Type</th>
+                                                        <th> <div className="num-div justify-content-start">
+                                                            <select className=" form-select num-select p-0 input-select cursor-pointer" name="" value={orderType} onChange={(e) => { setorderType(e.target.value) }}>
+                                                                <option value="All">All</option>
+                                                                <option value="BUY">Buy</option>
+                                                                <option value="SELL">Sell</option>
+                                                            </select>
+                                                        </div></th>
+                                                        <th> Price</th>
+                                                        <th>Amount</th>
+                                                        <th>Remaining</th>
+                                                        <th>Filled</th>
+                                                        <th>Total</th>
+                                                        <th> Action </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {openOrders?.length > 0 ? openOrders.map((item, index) =>
+                                                        (orderType === item?.side || orderType === 'All') &&
+                                                        <tr key={index}>
+                                                            <td>{`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`}</td>
+                                                            <td>
+                                                                <small>
+                                                                    <div className="c_view justify-content-start" >
+                                                                        <span>{moment(item?.updatedAt).format("DD/MM/YYYY  ")}
+                                                                            <small>{moment(item?.updatedAt).format("hh:mm")}</small>
+                                                                        </span>
+                                                                    </div>
+                                                                </small>
+                                                            </td>
+                                                            <td>{item?.order_type}</td>
+                                                            <td>{item?.side}</td>
+                                                            <td>{item?.price?.toFixed(8)}</td>
+                                                            <td>{item?.quantity?.toFixed(8)}</td>
+                                                            <td>{item?.remaining?.toFixed(8)}</td>
+                                                            <td>{item?.filled?.toFixed(8)}</td>
+                                                            <td>{(item?.price * item?.quantity)?.toFixed(8)}</td>
+                                                            <td>
+                                                                <button className="btn text-danger btn-sm btn-icon" type="button" onClick={() => { cancelOrder(item?._id) }}><i className="ri-delete-bin-6-line pr-0"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ) : <tr rowSpan="5">
+                                                        <td colSpan="12">
+                                                            <div className="favouriteData">
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    <p>No Data Available</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                    <div className='cnt_table open'>
+                                        <div className="table-responsive" style={{ height: '353px' }} >
+                                            <table className="table table_home ">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Trading Pair</th>
+                                                        <th> <div className="num-div justify-content-start">
+                                                            <select className=" form-select num-select p-0 input-select cursor-pointer" value={pastOrderType} onChange={(e) => { setpastOrderType(e.target.value) }}>
+                                                                <option value="All">All</option>
+                                                                <option value="BUY">Buy</option>
+                                                                <option value="SELL">Sell</option>
+                                                            </select>
+                                                        </div></th>
+                                                        <th>Price</th>
+                                                        <th>Average</th>
+                                                        <th>Quantity</th>
+                                                        <th>Remaining</th>
+                                                        <th>Total</th>
+                                                        <th>Fee</th>
+                                                        <th>Order Type</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {pastOrders?.length > 0 ? pastOrders.map((item, index) =>
+                                                        (item?.side === pastOrderType || pastOrderType === "All") &&
+                                                        <>
+                                                            <tr key={index} onClick={() => setExpandedRowIndex(expandedRowIndex === index ? null : index)} className="cursor-pointer">
+                                                                <td>
+
+                                                                    <div className="c_view justify-content-start">
+                                                                        {item?.executed_prices?.length > 0 && (
+                                                                            <p className="ms-2 mx-2 text-xl d-inline text-success">{expandedRowIndex === index ? '▾' : '▸'}</p>
+                                                                        )}
+                                                                        <span>{moment(item?.updatedAt).format("DD/MM/YYYY")}
+                                                                            <small>{moment(item?.updatedAt).format("hh:mm")}</small>
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td>{item?.side === "BUY" ? `${item?.ask_currency}/${item?.pay_currency}` : `${item?.pay_currency}/${item?.ask_currency}`}</td>
+                                                                <td>{item?.side}</td>
+                                                                <td>{nineDecimalFormat(item?.price)}</td>
+                                                                <td>{nineDecimalFormat(item?.avg_execution_price)}</td>
+                                                                <td>{nineDecimalFormat(item?.quantity)}</td>
+                                                                <td>{nineDecimalFormat(item?.remaining)}</td>
+                                                                <td>{nineDecimalFormat(item?.quantity * item?.avg_execution_price)}</td>
+                                                                <td>{nineDecimalFormat(item?.total_fee)} {item?.ask_currency}</td>
+                                                                <td>{item?.order_type}</td>
+                                                                <td className={`text-${item?.status === "FILLED" ? "success" : item?.status === "CANCELLED" ? "danger" : "warning"}`}>
+                                                                    {item?.status === 'FILLED' ? 'EXECUTED' : item?.status}
+
+                                                                </td>
+                                                            </tr>
+
+                                                            {/* Sub-row for executed trades */}
+                                                            {expandedRowIndex === index && item?.executed_prices?.length > 0 && (
+                                                                <tr>
+                                                                    <td colSpan="12">
+                                                                        <div className='table-responsive bg-dark'>
+                                                                            <table className="table table_home   ">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>#</th>
+                                                                                        <th>Trading price	</th>
+                                                                                        <th>Executed</th>
+                                                                                        <th>Trading Fee</th>
+                                                                                        <th>Total</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    {item.executed_prices.map((trade, i) => (
+                                                                                        <tr key={i}>
+                                                                                            <td>{i + 1}</td>
+                                                                                            <td >{nineDecimalFormat(trade.price)} {item?.side === "BUY" ? `${item?.pay_currency}` : `${item?.ask_currency}`}</td>
+                                                                                            <td>{nineDecimalFormat(trade.quantity)} {item?.side === "BUY" ? `${item?.ask_currency}` : `${item?.pay_currency}`}</td>
+                                                                                            <td>{nineDecimalFormat(+trade.fee)} {item?.ask_currency}</td>
+                                                                                            <td>{nineDecimalFormat(+trade.price * trade.quantity)}</td>
+                                                                                        </tr>
+                                                                                    ))}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </>
+
+                                                    ) : <tr rowSpan="5">
+                                                        <td colSpan="12">
+                                                            <div className="favouriteData">
+                                                                <div className="no_data_s">
+                                                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    <p>No Data Available</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div className="assets_right" >
+                                {/* tab 4 content is here */}
+                                <div id="tab_4" className={` d-lg-block ${showTab !== "trade_history" && "d-none"}`}>
+                                    <div className="price_card">
+                                        <div className="treade_card_header d-none d-lg-flex">
+                                            <div className="card_header_title active">Trade History </div>
+                                        </div>
+                                        <div className="price_card_head">
+                                            <div className="ps-0">Price({SelectedCoin?.quote_currency})</div>
+                                            <div >Quantity({SelectedCoin?.base_currency})</div>
+                                            <div >Time</div>
+                                        </div>
+                                        <div className="price_card_body scroll_y scroll_y_mt" style={{ cursor: "pointer" }}>
+                                            {RecentTrade?.length > 0 ? RecentTrade.map((item, index) =>
+                                                <div className="price_item_value" key={index}>
+                                                    <span className={item?.side === "BUY" ? "text-green d-flex align-items-center" : "text-danger d-flex align-items-center"}>
+                                                        {parseFloat((item?.price || 0))}
+                                                    </span>
+                                                    <span>{parseFloat((item?.quantity || 0))}</span>
+                                                    <span>{item?.time || "---"}</span>
+                                                </div>
+                                            ) : (
+                                                <p className="text-center no-data h-100 mb-0 center_b">
+                                                    <div className="no_data_s">
+                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
+                                                        <small>No data Available</small>
+                                                    </div>
+                                                </p>
+                                            )}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div >
+        </>
+    )
+}
+
+export default Trade

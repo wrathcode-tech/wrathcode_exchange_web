@@ -1,0 +1,2599 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #000;
+}
+
+a {
+    text-decoration: none;
+    transition: 0.5s all;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+p {
+    font-size: 18px;
+    line-height: 140%;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 65px;
+    line-height: 110%;
+    font-weight: 500;
+    font-family: "Afacad", sans-serif;
+}
+
+.h2,
+h2 {
+    font-size: 48px;
+    font-weight: 500;
+    font-family: "Afacad", sans-serif;
+}
+
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl,
+.container-xxl {
+    max-width: 1510px;
+    padding: 0px 20px;
+}
+
+
+header {
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+.launchpad_hero_s {
+    width: 100%;
+    color: #fff;
+    padding: 80px 0px 40px;
+}
+
+.launchpad_hero_s .row {
+    align-items: center;
+}
+
+.launchpad_hero_s p {
+    font-family: "Afacad", sans-serif;
+    margin-top: 24px;
+    font-size: 20px;
+    color: #adadad;
+}
+
+.hero_img {
+    max-width: 620px;
+    position: relative;
+    animation: rocketFloat 5s ease-in-out infinite;
+}
+
+@keyframes rocketFloat {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+        /* rocket thoda upar jaye */
+    }
+
+    100% {
+        transform: translateY(0);
+        /* phir wapas niche aaye */
+    }
+}
+
+.project_coin {
+    width: 100%;
+    position: relative;
+    display: block;
+    color: #fff;
+    padding-bottom: 100px;
+}
+
+.project_coin::before {
+    position: absolute;
+    left: 0px;
+    top: 15%;
+    content: "";
+    width: 150px;
+    height: 100%;
+    background-image: url(/public/images/AnnouncementImg/leftbg_after.svg);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.project_coin.complete_project_s::before {
+    display: none;
+}
+
+.coin_block {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    border: 2px solid #29313D;
+    border-radius: 18px;
+    position: relative;
+    height: 315px;
+    transition: all 0.5s;
+}
+
+.receivedblock.flexreceive {
+    display: flex;
+    gap: 50px;
+    flex-direction: row-reverse;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.add_banner img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.receivedblock_left {
+    width: 60%;
+    flex-direction: column;
+    display: flex;
+    padding: 24px 0px;
+    gap: 12px;
+}
+
+.receivedblock_right img {
+    width: 100%;
+    object-fit: cover;
+    height: 100% !important;
+}
+
+.receivedblock .receivedblock_left h5 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.receivedblock_right {
+    width: 740px;
+    max-width: 100%;
+    height: 250px;
+}
+
+
+
+
+.subscription_modal.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.add_banner {
+    height: 310px;
+    width: 100%;
+}
+
+.subscription_modal .modal-box {
+    background: #fff;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    color: #000;
+    max-width: 90%;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: popup 0.3s ease-in-out;
+}
+
+.subscription_modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.subscription_modal .close-btn {
+    background: transparent;
+    border: none;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+
+
+
+.coin_block:hover {
+    box-shadow: 0px 0px 15px #e7961dc5;
+}
+
+.coin_lft {
+    padding: 24px 10px;
+}
+
+.coin_top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.coin {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 100px;
+}
+
+.coin_top h3 {
+    margin-bottom: 0px;
+}
+
+.coin_cnt span {
+    color: #4D5B6F;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.coin_lft ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.coin_lft ul::before {
+    width: 2px;
+    height:calc(100% - 26px);
+    background-color: #D9D9D9;
+    content: "";
+    position: absolute;
+    left: -2px;
+}
+
+.coin_lft ul li {
+    font-size: 18px;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    font-weight: 300;
+    color: #4D5B6F;
+    position: relative;
+}
+
+.coin_lft ul li h6 {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.coin_lft ul li::before {
+    width: 14px;
+    height: 14px;
+    background-color: #D9D9D9;
+    content: "";
+    position: absolute;
+    left: -32px;
+    top: 2px;
+    transform: rotate(45deg);
+}
+
+.coin_right table {
+    width: 100%;
+}
+
+.coin_right {
+    height: 100%;
+    border-left: 1px solid #29313D;
+    padding: 15px 24px;
+}
+
+.coin_right table tr th {
+    color: #4D5B6F;
+    font-size: 20px;
+    font-weight: 300;
+    padding: 10px;
+}
+
+.coin_right table tr td {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    padding: 15px 10px;
+    border-bottom: 1px solid #29313D;
+}
+
+.coin_right table tr td span.value_price {
+    display: block;
+    color: #4D5B6F;
+    font-weight: 300;
+}
+
+td.first_child .icon_icon {
+    width: 25px;
+    border-radius: 100px;
+    margin-right: 6px;
+}
+
+.coin img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.coin_right table tr td .trade_btn {
+    font-size: 12px;
+    background: #f5b301;
+    color: #000;
+    font-weight: 500;
+    margin-top: 0px;
+    padding: 8px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    display: inline-block;
+    text-align: center;
+}
+
+.coin_right table tr td.rightbtn {
+    text-align: right;
+}
+
+/* === Filter Tabs Styling === */
+.filter_tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-color: transparent;
+}
+
+.filter_tab_btn {
+    background-color: #191919;
+    border-radius: 4px;
+    border: 1px solid #787878;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: "Poppins", sans-serif;
+}
+
+.filter_tab_btn:hover {
+    border-color: #F3BB2B;
+    color: #fff;
+}
+
+.filter_tab_btn.active {
+    background-color: #F3BB2B;
+    border-color: #F3BB2B;
+    color: #000;
+    font-weight: 500;
+}
+
+.coin_data_table {
+    margin: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dashboard_right .dashboard_listing_section.Overview_mid .coin_right {
+    flex-direction: row;
+    border: none;
+}
+
+
+.table-responsive_tow {
+    min-height: 280px;
+    max-height: 700px;
+    overflow: auto;
+}
+
+.coin_right table tr:last-child td {
+    border-bottom: none;
+}
+
+.coin_right table tr td .trade_btn:hover {
+    opacity: 0.8;
+}
+
+
+.complete_project_s .coin_data_table {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.complete_project_s .coin_lft {
+    padding: 28px;
+}
+
+table {
+    width: 100%;
+}
+
+.complete_project_s .coin_top {
+    margin-bottom: 24px;
+}
+
+.complete_project_s table tr th {
+    font-weight: 300;
+    color: #4D5B6F;
+    padding-bottom: 0px;
+}
+
+.complete_project_s table tr td .value_price {
+    display: block;
+    color: #4D5B6F;
+}
+
+.complete_project_s table tr td.right_alien {
+    text-align: right;
+}
+
+.view_morebtn {
+    text-align: center;
+    width: 100%;
+    margin: 36px 0px 10px;
+}
+
+.view_morebtn a {
+    font-family: "Afacad", sans-serif;
+    color: #FEBA00;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+.countdown_timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(41, 49, 61, 0.3);
+    border-radius: 12px;
+}
+
+.countdown_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.countdown_separator {
+    font-size: 32px;
+    font-weight: 700;
+    color: #F3BB2B;
+    padding-bottom: 8px;
+    font-family: "Afacad", sans-serif;
+}
+
+
+.faq_section .accordion .accordion-item {
+    background-color: transparent !important;
+    color: #ffffff;
+    border: 0px;
+    padding: 20px 0px;
+    border-bottom: 1px solid #45484D;
+    border-radius: 0px !important;
+}
+
+.countdown_value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #F3BB2B;
+    font-family: "Afacad", sans-serif;
+    line-height: 1;
+}
+
+.countdown_label {
+    font-size: 12px;
+    color: #4D5B6F;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+
+.coin_lft ul li.duration_box {
+    flex-direction: row;
+    align-items: start;
+}
+
+.coin_lft ul li.duration_box .countdown_timer {
+flex-wrap: nowrap;
+    width: auto;
+    gap: 10px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+.faq_section .accordion .accordion-item.active {
+    background-color: #45484D !important;
+}
+
+.table-responsive {
+    width: 100%;
+}
+
+.coin_right {
+    flex-direction: column;
+}
+
+ul.duration_data {
+    background-color: transparent;
+    width: 100%;
+    margin-top: 10px;
+}
+
+ul.duration_data .duration_box {
+    background: none;
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+    margin-top: 0px;
+}
+
+.coin_lft ul li.duration_box .countdown_value {
+    font-size: 24px;
+}
+
+ul.duration_data .countdown_timer {
+    width: 80%;
+    margin: 10px;
+    padding: 10px;
+}
+
+.coin_lft ul.duration_data::before {
+    display: none;
+}
+
+.coin_lft ul.duration_data li::before {
+    display: none;
+}
+
+ul.duration_data .countdown_value {
+    font-size: 26px;
+}
+
+
+ul.duration_data .duration_label {
+    font-size: 18px;
+}
+
+.announcement_vector {
+    max-width: 470px;
+    position: relative;
+    animation: speakerMove 7s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* Animation keyframes */
+@keyframes speakerMove {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(7px) rotate(-5deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.faq_section .accordion .accordion-button {
+    background-color: transparent;
+    color: #fff;
+    font-size: 22px;
+    border: none;
+    padding: 0px 20px;
+    box-shadow: none;
+}
+
+.faq_section .accordion-body {
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.faq_section .accordion .accordion-item .accordion-collapse {
+    display: none;
+}
+
+.faq_section .accordion .accordion-item.active .accordion-collapse {
+    display: block;
+}
+
+/* .accordion-button::after {
+    filter: brightness(0) invert(1);
+} */
+
+.coin_single {
+    width: 100%;
+    color: #ffffffec;
+    padding: 60px 0px;
+}
+
+.coin_single h1 {
+    font-size: 36px;
+    font-weight: 400;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leftside_detail {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.participation_bl {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.coin_single h2 {
+    font-size: 22px;
+}
+
+.receivedblock {
+    border: 1px solid #29313D;
+    padding: 40px;
+    border-radius: 16px;
+}
+
+img.icon_icon {
+    width: 25px;
+    height: 25px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.receivedblock h5 {
+    font-size: 16px;
+    color: #4D5B6F;
+    font-weight: 300;
+}
+
+.detail_pool {
+    border: 1px solid #29313D;
+    border-radius: 16px;
+}
+
+.detail_pool table tr th {
+    padding: 24px;
+}
+
+.detail_pool table tr td {
+    padding: 15px 24px;
+    border-top: #29313D 1px solid;
+    font-weight: 300;
+}
+
+.detail_pool table tr td span {
+    font-weight: 300;
+    color: #4D5B6F;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.coin_tbl {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.rightside_detail {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+}
+
+.timeline_s ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.timeline_s ul li {
+    font-size: 16px;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    font-weight: 300;
+    color: #4D5B6F;
+    position: relative;
+}
+
+.timeline_s ul::before {
+    width: 2px;
+    height:68%;
+    background-color: #D9D9D9;
+    content: "";
+    position: absolute;
+    left: -2px;
+}
+
+.timeline_s ul li::before {
+    width: 14px;
+    height: 14px;
+    background-color: #D9D9D9;
+    content: "";
+    position: absolute;
+    left: -32px;
+    top: 2px;
+    transform: rotate(45deg);
+}
+
+.timeline_s ul li h6 {
+    color: #fff;
+    font-weight: 300;
+}
+
+/* Countdown Timer Styling */
+.countdown_timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(41, 49, 61, 0.3);
+    border-radius: 12px;
+}
+
+.countdown_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.countdown_value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #F3BB2B;
+    font-family: "Afacad", sans-serif;
+    line-height: 1;
+}
+
+.countdown_label {
+    font-size: 12px;
+    color: #4D5B6F;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.countdown_separator {
+    font-size: 32px;
+    font-weight: 700;
+    color: #F3BB2B;
+    padding-bottom: 8px;
+    font-family: "Afacad", sans-serif;
+}
+
+.countdown_ended {
+    font-size:20px;
+    font-weight: 600;
+    color: #dc3545;
+    padding: 15px 0;
+}
+
+.rightside_detail p {
+    font-size: 15px;
+    margin: 10px 0px;
+}
+
+.countdown_timer .countdown_ended{ padding: 0px; }
+
+.project_summary ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.filter_tabs button.btn {
+    min-width: 130px;
+}
+
+.project_summary ul li a {
+    font-size: 15px;
+    border: 1px solid #29313D;
+    border-radius: 5px;
+    padding: 10px;
+    display: block;
+    color: #fff;
+    text-align: center;
+}
+
+section.announcement_section {
+    width: 100%;
+    background-image: url(/public/images/AnnouncementImg/notificationbg.jpg);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-color: #000;
+    color: #fff;
+    padding-bottom: 60px;
+}
+
+.announcement_hero_s {
+    width: 100%;
+    padding: 20px 0px;
+}
+
+.announcement_hero_s .row {
+    align-items: center;
+}
+
+.announcement_hero_s p {
+    width: 85%;
+    font-family: "Afacad", sans-serif;
+    font-size: 22px;
+    color: #D9D9D9;
+}
+
+.search_info {
+    align-items: center;
+    display: flex;
+    background-color: #141414;
+    border: 1px solid #ffffff17;
+    border-radius: 7px;
+}
+
+.search_info input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    color: #D9D9D9;
+}
+
+.search_info button {
+    background-color: transparent;
+    border: none;
+    padding: 10px 0px 10px 10px;
+}
+
+input:focus-visible {
+    outline: none;
+}
+
+.topic_block ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 40px;
+    gap: 40px;
+}
+
+.topic_block ul li {
+    background-image: url(/public/images/AnnouncementImg/item_bg.svg);
+    background-repeat: no-repeat;
+    text-align: center;
+    background-position: top;
+    min-height: 395px;
+    background-size: contain;
+    padding: 0px 45px 45px;
+    width: 457px;
+    max-width: 100%;
+    transition: all 0.5s;
+}
+
+.topic_block ul li:hover {
+    transform: scale(1.05);
+}
+
+.topic_block ul li .cryptocurrency_icon {
+    width: 111px;
+    height: 111px;
+    border-radius: 16px;
+    background-color: #ffffff11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.topic_block ul li .cryptocurrency_icon img {
+    width: 55px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.cnt_topic {
+    padding-top: 60px;
+}
+
+.topic_block ul li h3 {
+    font-family: "Afacad", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.topic_block ul li p {
+    color: #D9D9D9;
+    padding: 4px 0px;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.readbtn button {
+    background-color: #ffffff11;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    transition: all 0.5s;
+    font-weight: 500;
+    padding: 11px 36px;
+    border-radius: 50px;
+}
+
+.topic_block ul li:hover .readbtn button {
+    background-color: #F3BB2B;
+    color: #000;
+}
+
+.topic_block ul li:hover .readbtn button img {
+    filter: brightness(0);
+}
+
+.single_announcement {
+    padding: 60px 0px 0px;
+}
+
+.single_announcement h1 {
+    font-size: 32px;
+    display: flex;
+    align-items: start;
+    gap: 12px;
+}
+
+.single_announcement h1 img {
+    position: relative;
+    top: 5px;
+}
+
+.announcement_tabs li button.nav-link {
+    background-color: #191919;
+    border-radius: 4px;
+    border: 1px solid #787878;
+    font-size: 13px;
+    padding: 7px 19px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.announcement_tabs {
+    gap: 12px;
+    border-color: transparent;
+}
+
+.announcement_tabs li button.nav-link.active {
+    background-color: #F3BB2B;
+    border-color: #F3BB2B;
+}
+
+.announcement_content {
+    border: 1px solid #29313D !important;
+    border-radius: 19px;
+    margin-top: 30px;
+}
+
+.announcement_tabs li button.nav-link:hover {
+    border-color: #787878;
+}
+
+.crypto_listing_cnt {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.crypto_listing_cnt .block_listing {
+    border-top: 1px solid #29313D;
+    padding: 40px 36px;
+}
+
+.crypto_listing_cnt .block_listing h5 {
+    font-size: 20px;
+    font-weight: 300;
+    color: #e9e9e9;
+}
+
+.crypto_listing_cnt .block_listing h5 a {
+    color: #e9e9e9;
+}
+
+.crypto_listing_cnt span.small {
+    font-size: 18px;
+    padding-top: 15px;
+    color: #4D5B6F;
+    display: block;
+}
+
+.single_announcement .announcement_content h3 {
+    font-weight: 300;
+    padding: 22px 36px;
+    margin: 0px;
+    font-size: 22px;
+}
+
+.announcement_tabs li button.nav-link.active img {
+    filter: brightness(0);
+}
+
+nav.pagination {
+    padding: 36px 36px;
+    border-top: 1px solid #29313D;
+}
+
+.pagination ul {
+    display: flex;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin: 0 4px;
+}
+
+.pagination a.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #f1f1f1;
+}
+
+nav.pagination ul {
+    padding: 0px;
+    gap: 16px;
+}
+
+nav.pagination ul li a {
+    background-color: #3A3A3C;
+    border-radius: 4px;
+    border-color: #3A3A3C;
+    color: #fff;
+    padding: 1px 12px;
+}
+
+nav.pagination ul li.active a {
+    background-color: #F3BB2B;
+    border-color: #F3BB2B;
+    color: #000;
+}
+
+span.subtext {
+    color: #69778b;
+    padding-left: 40px;
+}
+
+.single_left_s {
+    width: 100%;
+    display: block;
+}
+
+.block_cnt {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.block_cnt ul {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.block_cnt ul li {
+    font-size: 18px;
+    position: relative;
+    padding-left: 40px;
+    color: #D9D9D9;
+}
+
+.block_cnt ul li span {
+    color: #F3BB2B;
+    padding-right: 6px;
+}
+
+.block_cnt ul li:before {
+    position: absolute;
+    content: "";
+    left: 0px;
+    width: 29px;
+    height: 29px;
+    background-image: url(/public/images/AnnouncementImg/listing_arrow.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: contain;
+}
+
+.block_cnt p {
+    color: #D9D9D9;
+}
+
+.rightsidebar {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.articles_blog {
+    border: 1px solid #29313D;
+    border-radius: 19px;
+}
+
+.articles_blog ul li h5 {
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+}
+
+.articles_blog h3 {
+    font-size: 24px;
+    padding: 18px 24px;
+    border-bottom: 1px solid #29313D;
+}
+
+.articles_blog ul {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 24px 30px;
+}
+
+.articles_blog ul li {
+    font-size: 18px;
+}
+
+.articles_blog ul li a {
+    color: #fff;
+    font-weight: 300;
+}
+
+.articles_blog span.subtext {
+    padding-left: 0px;
+    font-size: 16px;
+}
+
+/* === Project Cycle & Key Highlight Styling === */
+.project_cycle_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.my_subscription_link {
+    color: #F3BB2B;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.my_subscription_link:hover {
+    color: #F3BB2B;
+    opacity: 0.8;
+}
+
+.project_cycle_timeline {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 30px 0;
+    flex-wrap: wrap;
+}
+
+.timeline_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.timeline_circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #29313D;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    border: 2px solid #29313D;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.timeline_circle.active {
+    background-color: #F3BB2B;
+    border-color: #F3BB2B;
+    color: #000;
+}
+
+.timeline_connector {
+    width: 100%;
+    height: 2px;
+    background-color: #29313D;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.timeline_content {
+    text-align: center;
+}
+
+.timeline_content h5 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.timeline_content span {
+    font-size: 14px;
+    color: #4D5B6F;
+}
+
+/* Key Highlight Table */
+.key_highlight_table {
+    margin-top: 20px;
+    border: 1px solid #29313D;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.highlight_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #29313D;
+}
+
+.highlight_row:last-child {
+    border-bottom: none;
+}
+
+.highlight_row:nth-child(even) {
+    background-color: rgba(41, 49, 61, 0.3);
+}
+
+.highlight_label {
+    font-size: 16px;
+    color: #88909a;
+    font-weight: 400;
+}
+
+.project_summary {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.highlight_value {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    text-align: right;
+}
+
+
+
+/* Buy Now Button Styling */
+.buy_now_btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: "Poppins", sans-serif;
+}
+
+.buy_now_btn.enabled {
+    background-color: #F3BB2B;
+    color: #000;
+    cursor: pointer;
+}
+
+.buy_now_btn.enabled:hover {
+    background-color: #f5b301;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 12px rgba(243, 187, 43, 0.3);
+}
+
+.buy_now_btn.disabled {
+    background-color: #29313D;
+    color: #4D5B6F;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Popup Overlay Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.popup-box {
+    background: #191919;
+    /* padding: 30px; */
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    /* border: 1px solid #29313D; */
+}
+
+.popup-box .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-box .close-btn:hover {
+    color: #F3BB2B;
+}
+
+.popup-box h3 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.popup-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #29313D;
+    background-color: #191919;
+    color: #fff;
+    font-size: 16px;
+}
+
+.popup-input:focus {
+    outline: none;
+    border-color: #F3BB2B;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+
+@media screen and (max-width:1440px) {
+
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: 90%;
+    }
+
+    .topic_block ul li {
+        padding: 0px 32px 32px;
+        width: 100%;
+    }
+
+    .cnt_topic {
+        padding-top: 40px;
+    }
+
+    .topic_block ul li .cryptocurrency_icon {
+        width: 90px;
+        height: 90px;
+    }
+
+    .coin_lft {
+        padding: 20px 5px;
+    }
+
+    .project_coin::before {
+        top: 0%;
+        width: 90px;
+        background-size: 100px;
+    }
+
+    .receivedblock.flexreceive {
+        gap: 20px;
+    }
+
+    .receivedblock_right {
+        width: 600px;
+    }
+
+    .rightside_detail {
+        gap: 40px;
+    }
+
+    .leftside_detail {
+        width: 95%;
+        gap: 30px;
+    }
+
+    .coin_lft ul li h6 {
+        font-size: 15px;
+    }
+
+    .coin_lft ul li {
+        font-size: 15px;
+    }
+
+    .coin_right table tr td {
+        font-size: 15px;
+    }
+
+    .coin_right table tr th {
+        font-size: 15px;
+    }
+
+    ul.duration_data .duration_label {
+        font-size: 16px;
+    }
+
+    .coin_top h3 {
+        font-size: 24px;
+    }
+
+    .coin_cnt span {
+        font-size: 16px;
+    }
+
+    .h2,
+    h2 {
+        font-size: 36px;
+    }
+
+    h1 {
+        font-size: 54px;
+    }
+
+    .coin_lft ul::before {
+    height: calc(100% - 14px); }
+
+}
+
+@media screen and (max-width:1366px) {
+
+    h1 {
+        font-size: 48px;
+    }
+
+
+        .top_header_dash {
+        gap: 20px;
+        overflow: auto;
+        padding-bottom: 0px;
+    }
+
+        .coin_lft ul::before {
+        height: calc(100% - 35px);
+    }
+
+    .h2,
+    h2 {
+        font-size: 42px;
+    }
+
+    .coin_lft ul li h6 {
+        font-size: 16px;
+    }
+
+    .coin_lft ul li {
+        font-size: 16px;
+    }
+
+    .coin_right table tr td {
+        font-size: 15px;
+    }
+
+    .coin_right table tr th {
+        font-size: 15px;
+    }
+
+    .coin_right table tr td .trade_btn {
+       font-size: 13px;
+        padding: 7px 12px;
+        line-height: 18px;
+    }
+
+    .h3,
+    h3 {
+        font-size: 22px;
+    }
+
+    .announcement_hero_s p {
+        width: 90%;
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    .readbtn button {
+        font-size: 15px;
+    }
+
+}
+
+@media screen and (max-width:1200px) {
+
+    .leftside_detail {
+        width: 100%;
+        gap: 20px;
+    }
+
+        .coin_lft ul::before {
+        height: calc(100% - 24px);
+    }
+
+
+    .filter_tabs button {
+        font-size: 15px;
+        padding: 6px 20px !important;
+    }
+
+    .highlight_row {
+        padding: 12px 20px;
+    }
+
+    .highlight_label {
+        font-size: 14px;
+    }
+
+    .highlight_value {
+        font-size: 14px;
+    }
+
+    .key_highlight_table {
+        margin-top: 0px;
+    }
+
+    .receivedblock.flexreceive {
+        gap: 15px;
+    }
+
+    .receivedblock_right {
+        width: 400px;
+    }
+
+    .coin_lft ul {
+        margin-top: 10px;
+    }
+
+    .countdown_timer {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    .coin_lft ul li.duration_box {
+        flex-direction: column;
+        align-items: start;
+    }
+
+
+    ul.duration_data .countdown_timer {
+        width: 100%;
+    }
+
+    ul.duration_data .countdown_value {
+        font-size: 22px;
+    }
+
+    ul.duration_data .duration_box {
+        flex-direction: column;
+        align-items: normal;
+    }
+
+    .cnt_topic {
+        width: 300px;
+        margin: auto;
+    }
+
+    .single_announcement h1 {
+        font-size: 24px;
+    }
+
+    .articles_blog ul li a {
+        font-size: 15px;
+    }
+
+    .articles_blog span.subtext {
+        font-size: 14px;
+    }
+
+    .block_cnt ul li {
+        font-size: 16px;
+    }
+
+    .articles_blog h3 {
+        font-size: 20px;
+        padding: 12px 18px;
+    }
+
+    .articles_blog ul {
+        gap: 15px;
+        padding: 12px 18px 18px;
+    }
+
+    .announcement_tabs {
+        white-space: nowrap;
+        flex-wrap: nowrap;
+        overflow: auto;
+        padding-bottom: 10px;
+    }
+
+    .announcement_tabs li button.nav-link {
+        justify-content: center;
+        padding: 7px 26px;
+    }
+
+    .coin_single {
+        padding: 30px 0px;
+    }
+
+    .detail_pool table tr td {
+        font-size: 14px;
+    }
+
+    .announcement_section .d-flex.justify-content-between {
+        gap: 24px;
+    }
+
+    .rightside_detail p {
+        font-size: 13px;
+    }
+
+    .project_summary ul li a {
+        font-size: 13px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    .launchpad_hero_s p {
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .launchpad_hero_s {
+        padding: 30px 0px 20px;
+    }
+
+    .h2,
+    h2 {
+        font-size: 32px;
+    }
+
+    .coin_data_table {
+        margin-top: 10px;
+    }
+
+    .coin_lft {
+        padding: 15px 5px;
+    }
+
+    .coin_lft ul li h6 {
+        font-size: 13px;
+    }
+
+    .coin_lft ul li {
+        font-size: 13px;
+    }
+
+    .coin_right table tr td {
+        font-size: 13px;
+    }
+
+    .coin_right {
+        padding: 24px;
+    }
+
+    .coin_cnt span {
+        font-size: 16px;
+    }
+
+    .project_coin {
+        padding-bottom: 40px;
+    }
+
+    .complete_project_s table tr td {
+        font-size: 13px;
+    }
+
+    .complete_project_s table tr th {
+        font-size: 13px;
+    }
+
+    .crypto_listing_cnt .block_listing h5 {
+        font-size: 16px;
+    }
+
+    .crypto_listing_cnt span.small {
+        font-size: 15px;
+        padding-top: 10px;
+    }
+
+    .crypto_listing_cnt .block_listing {
+        padding: 24px;
+    }
+
+    .single_announcement .announcement_content h3 {
+        padding: 18px 24px;
+        font-size: 20px;
+    }
+
+    .topic_block ul {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: 30px;
+    }
+
+    .topic_block ul li {
+        min-height: 100%;
+    }
+
+    .topic_block ul li .cryptocurrency_icon {
+        width: 75px;
+        height: 75px;
+    }
+
+    .rightsidebar {
+        width: 100%;
+    }
+
+    .countdown_timer {
+        margin: 10px 0px;
+    }
+
+    .countdown_value {
+        font-size: 24px;
+    }
+
+    .project_cycle_header {
+        margin-bottom: 10px !important;
+    }
+
+    .rightside_detail {
+        gap: 30px;
+    }
+
+.top_header_dash .profile_id {
+    white-space: nowrap;
+}
+
+}
+
+
+@media screen and (max-width:991px) {
+
+    .coin_single .mt-4 {
+        margin-top: 5px !important;
+    }
+
+    .coin_single h1 {
+        font-size: 32px;
+    }
+
+     .top_header_dash { margin-bottom: 10px; }
+
+    .coin_block {
+    height: 285px;
+}
+
+       .top_header_dash {
+        padding-bottom: 10px;
+    }
+
+    .single_announcement {
+        padding: 30px 0px 0px;
+    }
+
+    .buy_now_btn {
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    .receivedblock .receivedblock_left h5 {
+        font-size: 14px;
+        margin: 0px;
+    }
+
+    ul.duration_data .duration_box .countdown_timer {
+        flex-wrap: wrap;
+    }
+
+    .coin_lft ul li.duration_box .countdown_timer {
+        gap: 6px;
+    }
+
+    .coin_right {
+        padding: 15px;
+    }
+
+    .timeline_s ul li h6 {
+        font-size: 14px;
+    }
+
+    .cnt_topic {
+        width: 260px;
+    }
+
+    .single_announcement h1 {
+        font-size: 24px;
+    }
+
+    .block_cnt ul li {
+        font-size: 14px;
+    }
+
+    .single_left_s h4 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .topic_block ul {
+        gap: 24px;
+    }
+
+    .readbtn button {
+        font-size: 13px;
+        padding: 8px 28px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .launchpad_hero_s p {
+        margin: 10px 0px;
+        font-size: 15px;
+    }
+
+    .receivedblock {
+        padding: 20px;
+    }
+
+    .coin_tbl {
+        font-size: 15px;
+    }
+
+    .timeline_s ul li {
+        font-size: 14px;
+    }
+
+    .timeline_s ul li h6 {
+        font-size: 14px;
+    }
+
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: 95%;
+    }
+
+    .h2,
+    h2 {
+        font-size: 24px;
+    }
+
+    .h3,
+    h3 {
+        font-size: 18px;
+    }
+
+    .faq_section .accordion .accordion-button {
+        font-size: 18px;
+        padding: 0px 15px;
+    }
+
+    .faq_section .accordion-body {
+        font-size: 13px;
+    }
+
+
+    .project_coin::before {
+        display: none;
+    }
+
+}
+
+
+@media screen and (max-width:767px) {
+
+    .filter_tab_btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+        .coin_block {
+        height: 100%;
+    }
+
+    .modal-footer {
+        margin-top: 5px;
+    }
+
+    .modal-footer button.btn.btn-secondary {
+        font-size: 13px;
+    }
+
+    .receivedblock.flexreceive {
+        gap: 0px;
+    }
+
+    .filter_tabs button.btn {
+        min-width: 100px;
+    }
+
+    /* ==== Current Progress Section Responsive Fix ==== */
+    .receivedblock {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+
+
+    .receivedblock_left h5 {
+        font-size: 14px !important;
+        margin: 6px 0 !important;
+    }
+
+    .receivedblock_right img {
+        /* width: 80% !important; */
+        height: auto !important;
+        margin-top: 15px !important;
+        border-radius: 10px !important;
+    }
+
+    .participation_bl h2 {
+        font-size: 18px !important;
+        /* text-align: center !important; */
+        margin-bottom: 10px !important;
+    }
+
+    ul.duration_data .countdown_timer {
+        row-gap: 11px;
+        flex-wrap: wrap;
+    }
+
+    .timeandate {
+        padding: 0px 20px;
+    }
+
+    .add_banner {
+        height: 100%;
+        width: 100%;
+    }
+
+    .coin_data_table .coin_top {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+
+
+    .coin_top {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .coin_cnt {
+        margin-top: 10px;
+    }
+
+    .countdown_timer {
+        justify-content: center;
+    }
+
+    .trade_btn {
+        width: 100%;
+    }
+
+
+    ul.duration_data .countdown_value {
+        font-size: 22px;
+    }
+
+    .announcement_tabs li button.nav-link {
+        padding: 5px 20px;
+        font-size: 12px;
+    }
+
+    .cnt_topic {
+        width: 100%;
+    }
+
+    .single_announcement h1 {
+        font-size: 22px;
+    }
+
+    .receivedblock {
+        padding: 15px;
+    }
+
+    span.subtext {
+        font-size: 14px;
+    }
+
+    .announcement_section .row.pt-5 {
+        padding-top: 20px !important;
+    }
+
+    .articles_blog h3 {
+        font-size: 18px;
+    }
+
+    .block_cnt {
+        margin-bottom: 24px;
+    }
+
+    .rightsidebar {
+        gap: 24px;
+    }
+
+    .announcement_section .col-sm-4 {
+        width: 100%;
+    }
+
+    .topic_block ul li .cryptocurrency_icon {
+        width: 65px;
+        height: 65px;
+        padding: 10px;
+    }
+
+    .announcement_hero_s .col-sm-4 {
+        width: 100%;
+    }
+
+    .announcement_vector {
+        max-width: 250px;
+        margin: 0 auto;
+    }
+
+    .topic_block ul li p {
+        margin: 0px 0px 5px;
+    }
+
+    .cnt_topic {
+        padding-top: 30px;
+    }
+
+    .announcement_hero_s {
+        padding: 20px 0px;
+        text-align: center;
+    }
+
+    .search_info input {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .search_info button {
+        padding: 5px 0px 5px 10px;
+    }
+
+    .crypto_listing_cnt .block_listing h5 {
+        font-size: 14px;
+    }
+
+    .crypto_listing_cnt span.small {
+        font-size: 13px;
+    }
+
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .leftside_detail {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .coin_single h1 img {
+        width: 32px;
+        height: 32px;
+        border-radius: 100px;
+    }
+
+    .coin_single h2 {
+        font-size: 20px;
+    }
+
+    .detail_pool table tr th {
+        padding: 15px;
+    }
+
+    .detail_pool table tr td {
+        font-size: 13px;
+        padding: 10px 15px;
+    }
+
+    .coin_tbl {
+        font-size: 13px;
+    }
+
+    .coin_single h1 {
+        font-size: 24px;
+    }
+
+    .coin_single .col-sm-4 {
+        width: 100%;
+    }
+
+    .rightside_detail {
+        gap: 32px;
+        margin-top: 30px;
+    }
+
+    .project_summary ul li a {
+        font-size: 12px;
+        padding: 7px;
+    }
+
+    .coin_data_table .row {
+        flex-direction: column;
+    }
+
+    .coin_data_table .row .col-sm-4,
+    .col-sm-8 {
+        width: 100%;
+    }
+
+    .coin_right {
+        padding: 0px 10px;
+        border: none;
+    }
+
+    .receivedblock_left {
+        width: 100%;
+        gap: 5px;
+        padding: 12px 20px 0px;
+    }
+
+    .receivedblock_right {
+        width: 100%;
+    }
+
+    .complete_project_s .coin_lft {
+        padding: 20px;
+    }
+
+    .coin {
+        width: 40px;
+        height: 40px;
+    }
+
+    .announcement_hero_s p {
+        width: 100%;
+        font-size: 15px;
+    }
+
+    .project_cycle_timeline {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .receivedblock.flexreceive {
+        flex-direction: column;
+    }
+
+    img {
+        /* width: 100%; */
+        height: 100%;
+    }
+
+    .coin_lft ul li.duration_box {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .timeline_connector {
+        width: 2px;
+        height: 40px;
+        margin: 0;
+    }
+
+    .timeline_item {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .timeline_content h5 {
+        font-size: 14px;
+    }
+
+    .timeline_content span {
+        font-size: 12px;
+    }
+
+    .highlight_row {
+        padding: 15px 20px;
+    }
+
+    .highlight_label,
+    .highlight_value {
+        font-size: 14px;
+    }
+
+    /* Mobile Countdown Timer */
+    .countdown_timer {
+        padding: 12px;
+        gap: 5px;
+    }
+
+    .countdown_value {
+        font-size: 24px;
+    }
+
+    .countdown_label {
+        font-size: 10px;
+    }
+
+    .countdown_separator {
+        font-size: 24px;
+        padding-bottom: 5px;
+    }
+
+    .coin_data_table {
+        margin-top: 0px;
+    }
+
+}
+
+@media screen and (max-width:660px) {
+
+    .complete_project_s .coin_data_table {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+    }
+
+    .project_coin button {
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+    }
+
+    .highlight_row {
+        padding: 12px 10px;
+    }
+
+    .highlight_label,
+    .highlight_value {
+        font-size: 13px;
+    }
+
+    .rightside_detail {
+        gap: 20px;
+        margin-top: 15px;
+    }
+
+    .countdown_timer {
+        padding: 10px;
+        gap: 14px;
+    }
+
+    .modal_overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .modal_content {
+        background: #1f2937;
+        color: #fff;
+        width: 80%;
+        max-width: 800px;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(243, 187, 43, 0.5);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .modal_header h3 {
+        color: #f3bb2b;
+    }
+
+    .close_btn {
+        background: none;
+        border: none;
+        color: #f3bb2b;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .subscription_table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+    .subscription_table th {
+        background: #f3bb2b;
+        color: #000;
+        padding: 10px;
+    }
+
+    .subscription_table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid rgba(243, 187, 43, 0.2);
+    }
+
+    .status_badge {
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .status_badge.active {
+        background: #22c55e;
+    }
+
+    .status_badge.expired {
+        background: #ef4444;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+
+    .cnt_topic {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .coin_right table tr td .trade_btn {
+        font-size: 14px;
+        padding: 6px 20px;
+    }
+
+    .topic_block ul {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .project_coin {
+        padding-bottom: 30px;
+    }
+
+    .faq_section .accordion .accordion-button {
+        font-size: 16px;
+        padding: 0px 10px;
+    }
+
+    .faq_section .accordion .accordion-item {
+        padding: 15px 0px;
+    }
+
+    .view_morebtn {
+        margin: 20px 0px 10px;
+    }
+
+
+
+    .coin {
+        width: 30px;
+        height: 30px;
+    }
+
+    .cnt_banner {
+        text-align: center;
+    }
+
+}
+
+
+@media screen and (max-width:580px) {
+
+    .announcement_section .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: start !important;
+    }
+
+    .announcement_tabs {
+        width: 100%;
+    }
+
+    .filter_tabs button.btn {
+        min-width: 100px;
+    }
+
+    .cnt_topic {
+        padding: 40px 20px 30px;
+    }
+
+    .topic_block ul li {
+        padding: 0px 18px;
+        width: 100%;
+        min-height: 100%;
+        background-size: 320px;
+    }
+
+    .search_info {
+        width: 100%;
+    }
+
+    .crypto_listing_cnt .block_listing {
+        padding: 20px;
+    }
+
+    .crypto_listing_cnt span.small {
+        padding-top: 5px;
+    }
+
+    .single_announcement .announcement_content h3 {
+        padding: 15px 24px;
+        font-size: 18px;
+    }
+
+    nav.pagination {
+        padding: 24px;
+    }
+
+}
+
+@media screen and (max-width:360px) {
+
+    .topic_block ul li h3 {
+        margin-bottom: 2px;
+    }
+
+    .readbtn button {
+        font-size: 12px;
+        padding: 7px 24px;
+    }
+
+    .filter_tabs button.btn {
+        min-width: 80px;
+    }
+
+    .topic_block ul {
+        gap: 15px;
+    }
+
+    .view_morebtn {
+        margin: 20px 0px 0px;
+    }
+
+}
+
+
+
+/* Mobile Responsive for Project Cycle */

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_light.svg" />
+
+  <title>
+    Wrathcode | Buy & Sell USDT, Trade, Earn
+  </title>
+
+  <!-- CSS FILES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Bundle JS (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- Font -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"> -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+
+  <!--CLOUDFARE CDN LINK -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    integrity="sha512-XcIsjKMcuVe0Ucj/xgIXQnytNwBttJbNjltBV18IOnru2lDPe9KRRyvCXw6Y5H415vbBLRm8+q6fmLUU7DfO6Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" charset="UTF-8"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+
+
+
+  <!-- <link href="/css/bootstrap.min.css" rel="stylesheet" /> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css-new/bootstrap.min.css">
+  <link rel="stylesheet" href="/css-new/bootstrap.css">
+  <link rel="stylesheet" href="/css-new/style.css">
+  <link rel="stylesheet" href="/css-new/slick.css">
+
+  <!-- Javascript -->
+  <script type="text/javascript" src="/js-new/jquery.min.js"></script>
+  <script type="text/javascript" src="/js-new/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js-new/bootstrap.bundle.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js"></script>
+
+<script>
+$(document).ready(function(){
+  $(".data_option_calls table tr td").on("click", function(){
+    $(".rightdata_s.mobileview").toggleClass("active");
+  });
+
+
+  $(".product_name").on("click", function(){
+    $(".rightdata_s.mobileview").removeClass("active");
+  });
+});
+</script>
+
+<script>
+  function toggleViewDataClass() {
+    if ($(".rightdata_s.mobileview.active").length > 0) {
+        $(".view_data").addClass("remove");
+    } else {
+        $(".view_data").removeClass("remove");
+    }
+}
+
+toggleViewDataClass();
+
+$(document).on("click", function () {
+    toggleViewDataClass();
+});
+</script>
+
+</head>
+
+<script>
+$(document).ready(function () {
+  $(".limit_tabs li.positions_two").addClass("active");
+  $(".cnt_table_two.positions_two").addClass("active");
+
+  $(".limit_tabs li").on("click", function () {
+    var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
+
+    $(".limit_tabs li").removeClass("active");
+    $(this).addClass("active");
+
+    $(".cnt_table_two").removeClass("active");
+    $(".cnt_table_two." + tabClass).addClass("active");
+  });
+});
+</script>
+
+
+
+<script>
+$(document).ready(function () {
+  $(".position_list li.positions").addClass("active");
+  $(".cnt_table.positions").addClass("active");
+
+  $(".position_list li").on("click", function () {
+    var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
+
+    $(".position_list li").removeClass("active");
+    $(this).addClass("active");
+
+    $(".cnt_table").removeClass("active");
+    $(".cnt_table." + tabClass).addClass("active");
+  });
+});
+</script>
+
+
+
+<script>
+$(document).ready(function () {
+    $('.trade_account_summary_assets .nav-tabs .nav-item').on('click', function (e) {
+        e.preventDefault();
+
+        var $container = $(this).closest('.trade_account_summary_assets');
+
+        if ($(this).hasClass('active')) {
+            return;
+        }
+
+        $container.find('.nav-tabs .nav-item').removeClass('active');
+        $container.find('.tab-pane').removeClass('active show');
+
+        $(this).addClass('active');
+        var target = $(this).find('a').attr('href');
+        $container.find(target).addClass('active show');
+    });
+
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.toggle2').addClass('showactive');
+    $(document).on('click', '.tab-pane.fade', function() {
+        $('.toggle2').removeClass('showactive');
+    });
+});
+
+</script>
+
+
+
+<script>
+
+$(document).ready(function () {
+    $('.trade_movers_tb .nav-tabs .nav-item').on('click', function (e) {
+        e.preventDefault();
+
+        var $container = $(this).closest('.trade_movers_tb');
+
+        if ($(this).hasClass('active')) {
+            return; 
+        }
+
+        $container.find('.nav-tabs .nav-item').removeClass('active');
+        $container.find('.tab-pane').removeClass('active show');
+
+        $(this).addClass('active');
+        var target = $(this).find('a').attr('href');
+        $container.find(target).addClass('active show');
+    });
+});
+
+</script>
+
+<script>
+
+$(document).ready(function () {
+    $('.market_spot_form .nav-tabs .nav-item').on('click', function (e) {
+        e.preventDefault();
+
+        var $container = $(this).closest('.market_spot_form');
+        if ($(this).hasClass('active')) {
+            return;
+        }
+
+        $container.find('.nav-tabs .nav-item').removeClass('active');
+        $container.find('.tab-pane').removeClass('active show');
+
+        $(this).addClass('active');
+        var target = $(this).find('a').attr('href');
+        $container.find(target).addClass('active show');
+    });
+});
+
+</script>
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    let lastPath = window.location.pathname;
+    function updateBodyClass() {
+      if (window.location.pathname === "/login") {
+        $("body").addClass("loginbg");
+      } else {
+        $("body").removeClass("loginbg");
+      }
+    }
+
+    updateBodyClass();
+
+    setInterval(function () {
+      if (window.location.pathname !== lastPath) {
+        lastPath = window.location.pathname;
+        updateBodyClass();
+      }
+    }, 500);
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    let lastPath = window.location.pathname;
+    function updateBodyClass() {
+      if (window.location.pathname === "/signup") {
+        $("body").addClass("signupbg");
+      } else {
+        $("body").removeClass("signupbg");
+      }
+    }
+
+    updateBodyClass();
+
+    setInterval(function () {
+      if (window.location.pathname !== lastPath) {
+        lastPath = window.location.pathname;
+        updateBodyClass();
+      }
+    }, 500);
+  });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.0/lottie.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    $(".custom-tabs li:first-child").addClass("activepop");
+    $(".custom-tabs li a").click(function (e) {
+      e.preventDefault();
+      $(".custom-tabs li").removeClass("activepop");
+      $(this).parent("li").addClass("activepop");
+    });
+  });
+</script>
+
+<!-- <script>
+  $(document).ready(function () {
+    setInterval(function () {
+      if ($('.bs_dropbox.d-lg-block.false').length > 0) {
+        $('body').addClass('lightbox_two');
+      } else {
+        $('body').removeClass('lightbox_two');
+      }
+    }, 200);
+  });
+</script> -->
+<!-- 
+<script>
+  $(document).ready(function () {
+    $('.buy-button-selector').on('click', function () {
+      $('.bs_dropbox').addClass('active');
+      $('body').addClass('.lightbox_two');
+    });
+
+    $('.close-popup-button').on('click', function () {
+      $('.bs_dropbox').removeClass('active');
+      $('body').removeClass('.lightbox_two');
+    });
+  });
+</script> -->
+
+<script>
+  $(document).ready(function () {
+    $('.topheading_footer').on('click', function () {
+      const section = $(this).closest('.footer_section');
+      const isActive = section.hasClass('active');
+      $('.footer_section').removeClass('active');
+      if (!isActive) {
+        section.addClass('active');
+      }
+    });
+  });
+</script>
+
+<script>
+  $(window).on('scroll', function () {
+    if ($(window).scrollTop() > 0) {
+      $('.leftside_menu').addClass('sticky_menu');
+    } else {
+      $('.leftside_menu').removeClass('sticky_menu');
+    }
+  });
+</script>
+
+
+<script>
+  $(document).ready(function () {
+    $('.navbar-toggler').click(function () {
+      if ($('#mainNavbar').hasClass('togglemenu')) {
+        $('#mainNavbar').removeClass('togglemenu');
+      } else {
+        $('#mainNavbar').addClass('togglemenu');
+      }
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('.accordion-item .accordion-header').on('click', function () {
+      var parentItem = $(this).closest('.accordion-item');
+
+      if (parentItem.hasClass('active')) {
+        parentItem.removeClass('active');
+      } else {
+        $('.accordion-item').removeClass('active');
+        parentItem.addClass('active');
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+  $(document).ready(function () {
+    if (localStorage.getItem("theme") === "light") {
+      $("body").addClass("light_theme");
+    }
+    $(".themecolor_icon").click(function () {
+      $("body").toggleClass("light_theme");
+      if ($("body").hasClass("light_theme")) {
+        localStorage.setItem("theme", "light");
+      } else {
+        localStorage.removeItem("theme");
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+  $(document).ready(function () {
+    $("#toggleBtn").click(function () {
+      $("#content").toggleClass("active");
+    });
+
+
+    $(".user_login a").click(function () {
+      $(".login_profile_header").toggleClass("active");
+    });
+
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $(".bitcoin_cate_list ul").on("scroll", function () {
+      let scrollTop = $(this).scrollTop();
+
+      console.log("Scroll position:", scrollTop);
+
+      if (scrollTop > 50) {
+        $("body").addClass("scrolled");
+      } else {
+        $("body").removeClass("scrolled");
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+  const select = document.querySelector('.custom-select');
+  const selected = select.querySelector('.selected-option');
+  const options = select.querySelectorAll('.option');
+
+  selected.addEventListener('click', () => {
+    select.classList.toggle('open');
+  });
+
+  options.forEach(option => {
+    option.addEventListener('click', () => {
+      selected.innerHTML = option.innerHTML;
+      select.classList.remove('open');
+    });
+  });
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('.nav-link').on('click', function () {
+      $('.nav-link').removeClass('active');
+      $(this).addClass('active');
+      localStorage.setItem('activeMenu', $(this).attr('href'));
+    });
+
+    var activeHref = localStorage.getItem('activeMenu');
+    if (activeHref) {
+      $('.nav-link').each(function () {
+        if ($(this).attr('href') === activeHref) {
+          $(this).addClass('active');
+        }
+      });
+    }
+  });
+</script>
+
+<!-- <script>
+  $(document).ready(function () {
+    $(".close-btn").click(function () {
+      $("#popup-overlay").toggleClass("active");
+    });
+  });
+</script> -->
+
+
+<!-- <script>
+    const closeBtn = document.querySelector(".close-btn");
+    // const okayBtn = document.querySelector(".okay-btn");
+    const popupOverlay = document.getElementById("popup-overlay");
+
+    closeBtn.addEventListener("click", function () {
+      popupOverlay.classList.toggle("active");
+    });
+
+    // okayBtn.addEventListener("click", function () {
+    //   popupOverlay.classList.toggle("active");
+    // });
+  </script> -->
+
+
+<body>
+
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="/js-new/slick.js"></script>
+  <script>
+    $('.autoplay').slick({
+      slidesToShow: 8,
+      slidesToScroll: 1,
+      arrows: false,
+      autoplay: true,
+      autoplaySpeed: 700,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 5,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 4,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 3,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 576,
+          settings: {
+            arrows: false,
+            slidesToShow: 2,
+            infinite: true
+          }
+        }
+      ]
+    });
+
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script>
+    AOS.init({
+      duration: 2000,
+      once: true
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('.toggle_dotted').on('click', function () {
+        $('.orderbook_lightbox').toggleClass('active');
+      }),
+
+        $('.all_tabs_toggle').on('click', function () {
+          $('.toggleactive').toggleClass('active');
+        });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('.dropdown-menu a[data-bs-toggle="tab"]').on('click', function (e) {
+        e.preventDefault();
+
+        let $clicked = $(this);
+        let target = $clicked.attr("href");
+        let selectedText = $clicked.text();
+
+        // Find the closest dropdown
+        let $dropdown = $clicked.closest('.dropdown');
+        let $dropdownToggle = $dropdown.find('.dropdown-toggle');
+
+        // Update the dropdown button text
+        $dropdownToggle.text(selectedText).addClass('active');
+
+        // Find the tab container related to this tab
+        let $tabContainer = $clicked.closest('.tab-wrapper'); // use wrapper to scope
+
+        // Deactivate all tabs in that container
+        $tabContainer.find('.nav-link').removeClass('active');
+        $tabContainer.find('.tab-pane').removeClass('show active');
+
+        // Activate selected tab
+        $(target).addClass('show active');
+      });
+    });
+  </script>
+
+
+  <script>
+       jQuery('.marketslide').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            arrows: false,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 2,
+                        infinite: true
+                    }
+                },
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 2,
+                        infinite: true
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                        infinite: true
+                    }
+                },
+                {
+                    breakpoint: 767,
+                    settings: {
+                        arrows: false,
+                        slidesToShow: 1,
+                        infinite: true
+                    }
+                }
+            ]
+        });
+
+        $('a[data-bs-toggle="pill"], button[data-bs-toggle="pill"]').on('shown.bs.tab', function () {
+            $('.marketslide').slick('setPosition');
+        });
+    </script>
+
+<script>
+$(document).ready(function () {
+    $(document).on('click', '.form-check', function () {
+        $(this).toggleClass('active'); // Click पर खुद पर active class toggle होगा
+    });
+});
+</script>
+
+
+</body>
+
+</html>

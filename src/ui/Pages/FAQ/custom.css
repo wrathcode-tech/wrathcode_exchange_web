@@ -1,0 +1,41 @@
+section.faq_banner {
+    padding: 260px 0px 240px 0px;
+    background: url(../images/faq_banner.png), linear-gradient(180deg, #12174E 0%, #12174E 100%);
+    /* background: ; */
+    color: #fff;
+}
+
+.faq_banner .sec_title {
+    margin-bottom: 0;
+    color: #fff;
+}
+
+.faq_cards {
+    margin-top: -150px;
+    margin-bottom: 100px;
+}
+
+.faq_cards .card {
+    box-shadow: none;
+    padding: 35px 30px 42px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+    /* text-align: left; */
+}
+
+.faq_cards .card h5 {
+    /* color: #0E1133; */
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 0;
+}
+
+.faq .card .card-body ul li {
+    margin-bottom: 10px;
+    color: #444;
+    line-height: 1.5;
+    font-size: 14px;
+}

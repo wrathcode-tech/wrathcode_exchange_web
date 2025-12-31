@@ -1,0 +1,1165 @@
+.herobanner2 .scan_block {
+  background-color: #0C0900;
+  margin: -10px auto;
+}
+
+.banner_add_slide {
+  margin: 80px 0px 60px;
+  position: relative;
+  z-index: 6666;
+}
+
+.banner_add_slide .heighlightcnt img {
+  border-radius: 13px;
+}
+
+.banner_add_slide .slick-dots li button:before {
+  font-size: 0px;
+  background-color: #FFFBFB;
+  left: 0;
+  width: 10px;
+  border-radius: 50px;
+  height: 10px;
+}
+
+body .banner_add_slide .slick-dots li.slick-active button:before {
+  width: 24px;
+  background-color: #F3BB2B;
+}
+
+#popup-box.popup-box.homepop_box {
+    width: 700px;
+}
+
+body .banner_add_slide .slick-dots li button {
+  width: auto;
+  height: auto;
+}
+
+body .banner_add_slide .slick-dots li {
+  width: auto;
+  height: auto;
+}
+
+body .banner_add_slide .slick-dots li.slick-active {
+  width: 24px;
+}
+
+
+.herobanner2 {
+  font-family: "Afacad", sans-serif;
+  background-image: url('../../../../public/images/new_img/hero_bannerbg2.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+h2 {
+  font-family: "Afacad", sans-serif;
+}
+
+h3 {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li p {
+  font-size: 22px;
+}
+
+.herobanner2 .banner_cnt {
+  padding-top: 100px;
+}
+
+.herobanner2 .banner_cnt h3 {
+  font-size: 35px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.herobanner2 .banner_cnt h1 span {
+  color: #f3bb2b;
+}
+
+.uptates_sm.market_update_outer h2 span {
+  color: #f3bb2b;
+}
+
+.uptates_sm .trade_btn button {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.services_block {
+  font-family: "Afacad", sans-serif;
+}
+
+.services_block h4 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.services_block p {
+  line-height: 24px;
+}
+.started_trading_s {
+  position: relative;
+}
+
+.started_trading_s::before {
+  position: absolute;
+  right: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/get_standerdbg_after.svg');
+  background-size: 28%;
+  background-repeat: no-repeat;
+  background-position: right;
+  top: -620px;
+  z-index: 333;
+  left: inherit;
+  width: 100%;
+}
+
+.started_trading_s .how_get_account_ot .trade_btn button {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.started_trading_s .trading_platform_section {
+  background-color: transparent;
+  position: relative;
+  z-index: 666;
+}
+
+.started_trading_s .trading_platform_section h2 span {
+  color: #f3bb2b;
+  display: inline;
+  padding-right: 10px;
+}
+
+.started_trading_s .services_block:hover {
+  background-color: transparent;
+}
+
+.started_trading_s::after {
+  position: absolute;
+  left: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/get_standerdbg_before.svg');
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  bottom: -300px;
+  z-index: 333;
+  right: inherit;
+  width: 100%;
+  opacity: 0.6;
+}
+
+body.light_theme .rounded_effect_bottom {
+  opacity: 0.2;
+}
+
+.started_trading_s .how_get_account_ot {
+  z-index: 666;
+  position: relative;
+  background-image: none !important;
+  background-color: transparent;
+}
+
+
+.how_get_account_ot h2 span {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s h2 {
+  letter-spacing: -1px;
+}
+
+.newhome_maximizeprofit_s {
+  z-index: 666;
+  background-color: transparent;
+}
+
+.newhome_maximizeprofit_s h2 span {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .right_costs_rg ul li {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .cta_register_s ul.social_media {
+  margin: 100px 0px 20px;
+}
+
+.newhome_maximizeprofit_s .trade_btn button {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid #f3bb2b;
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s ul.social_media a {
+  background-color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s button.learnbtn a {
+  background-color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .profit_cost_cnt {
+  padding: 0px 0px 0px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #111;
+}
+
+
+.newhome_maximizeprofit_s::after {
+  position: absolute;
+  right: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/ctabg_after.svg');
+  background-size: 600px;
+  background-repeat: no-repeat;
+  background-position: right top;
+  top: -27%;
+  z-index: 333;
+  left: inherit;
+  width: 100%;
+}
+
+.newhome_maximizeprofit_s .container {
+  position: relative;
+  z-index: 666;
+}
+
+.row.cta_register_s {
+  align-items: center;
+}
+
+.newhome_maximizeprofit_s .row.cta_register_s .profit_cost_cnt {
+  padding-top: 40px;
+}
+
+.newhome_maximizeprofit_s .trusted_partner {
+  padding: 100px 0px;
+}
+
+.vector_currency.one {
+  top: 0px;
+}
+
+.banner_animation_vector.rightside .vector_currency.one {
+  top: 0px;
+}
+
+
+body.light_theme .herobanner2 .scan_block {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .join_group_s button.joinbtn {
+  color: #222222;
+}
+
+body.light_theme .herobanner2 button.morebtn {
+  color: #222;
+}
+
+body.light_theme .herobanner2 .scan_cnt {
+  color: #222;
+}
+
+body.light_theme .herobanner2 .banner_cnt .scan_block p {
+  color: #222;
+}
+
+body.light_theme .banner_add_slide .slick-dots li button:before {
+  background-color: #747474;
+}
+
+.market_update_outer .container {
+  position: relative;
+  z-index: 666;
+}
+
+body.light_theme .how_get_account_ot.bgtransparrent_s {
+  background-color: transparent;
+}
+
+body.light_theme .profit_costs_cta_outer.newhome_maximizeprofit_s {
+  background-color: transparent;
+}
+
+body.light_theme .started_trading_s .how_get_account_ot {
+  background-color: transparent;
+}
+
+body.light_theme .trading_platform_section h2 {
+  color: #0C0900;
+}
+
+body.light_theme .services_block {
+  border: 1px solid #dddddd;
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+body.light_theme .services_block p {
+  color: #000;
+}
+
+body.light_theme .faq_cta_outer .accordion-item {
+  color: #141414;
+}
+
+body.light_theme .faq_cta_outer .accordion-item h3 button.accordion-button {
+  color: #141414;
+  border-bottom: 1px solid #a9a9a9;
+}
+
+body.light_theme .faq_cta_outer .accordion-item .collapse.show {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .faq_cta_outer .accordion-item.active h3 button.accordion-button[aria-expanded="true"] {
+  background-color: #f5f5f5;
+  border-color: #f5f5f5 !important;
+}
+
+img.light_m {
+  display: none;
+}
+
+body.light_theme img.light_m {
+  display: flex;
+  margin: 0 auto;
+}
+
+body.light_theme img.drak_d {
+  display: none;
+}
+
+body.light_theme .scan_left_s img.light_m {
+  margin-left: 0px;
+  margin: inherit;
+}
+
+
+
+
+
+@media screen and (max-width:1440px) {
+
+  .hero_section.herobanner2 {
+    height: 100%;
+    min-height: 100%;
+    padding-top: 20px;
+    padding-bottom: 15px;
+  }
+
+  .banner_animation_vector {
+    top: 90px;
+  }
+
+  .hero_section.herobanner2 .slick-track {
+    gap: 20px;
+  }
+
+  .banner_add_slide {
+    margin: 60px 0px 40px;
+  }
+
+  .rounded_effect_bottom {
+    bottom: 190px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s {
+    margin-top: 80px;
+  }
+
+}
+
+@media screen and (max-width:1200px) {
+
+  .trading_img {
+    width: 110px;
+  }
+
+  #popup-box.popup-box.homepop_box {
+    width: 600px;
+    margin: 0 auto;
+}
+
+  .newhome_maximizeprofit_s::after {
+    background-size: 400px;
+    top: -15%;
+  }
+
+  .how_get_account_ot ul li p {
+    font-size: 18px;
+  }
+
+
+}
+
+@media screen and (max-width:991px) {
+
+  .banner_img {
+    width: 50%;
+  }
+
+  .herobanner2 .banner_cnt h3 {
+    font-size: 30px;
+  }
+
+  .herobanner2 .banner_cnt h1 {
+    font-size: 24px;
+  }
+
+  .newhome_maximizeprofit_s .trusted_partner {
+    padding: 60px 0px;
+  }
+
+
+}
+
+@media screen and (max-width:767px) {
+
+  #popup-box.popup-box.homepop_box {
+    width: 70%;
+}  
+
+  .vector_currency img {
+    width: 20px;
+    opacity: 0.7;
+  }
+
+  .services_block p {
+    line-height: 20px;
+    padding-top: 5px;
+  }
+
+  .herobanner2 .banner_cnt h1 {
+    font-size: 18px;
+  }
+
+  .herobanner2 .banner_cnt h3 {
+    font-size: 22px;
+  }
+
+  .how_get_account_ot ul li p {
+    font-size: 15px;
+  }
+
+  .herobanner2 .scan_block {
+    margin: -20px auto;
+  }
+
+  .rounded_effect_bottom {
+    display: none;
+  }
+
+  .banner_add_slide .heighlightcnt img {
+    height: 100%;
+  }
+
+  .hero_section.herobanner2 {
+    padding-bottom: 0px;
+  }
+
+  .trading_img {
+    right: inherit;
+    text-align: center;
+    left: inherit;
+    margin: 0 auto;
+    position: relative;
+    top: 0px;
+  }
+
+  .services_block {
+    text-align: center;
+    align-items: center;
+  }
+
+  .how_get_account_ot .row .col-sm-4 {
+    width: 100%;
+  }
+
+  .how_get_account_ot .row .col-sm-8 {
+    width: 100%;
+  }
+
+  .services_block h4 {
+    font-size: 18px;
+    margin-top: 24px;
+  }
+
+  .newhome_maximizeprofit_s .profit_cost_cnt {
+    text-align: center;
+  }
+
+  .newhome_maximizeprofit_s .row .col-sm-4 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s .row .col-sm-8 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s button.learnbtn {
+    margin: 0 auto;
+  }
+
+  .newhome_maximizeprofit_s .trade_btn button {
+    margin: 0 auto;
+  }
+
+  .how_get_account_ot .row .col-sm-6 {
+    width: 100%;
+  }
+
+  .main_marker_summary .row.align-items-center .col-sm-8 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s .trusted_partner {
+    padding: 30px 0px 10px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s .profit_cost_cnt {
+    padding-top: 0px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s {
+    margin-top: 30px;
+  }
+
+  .newhome_maximizeprofit_s {
+    padding-top: 15px;
+  }
+
+  .newhome_maximizeprofit_s::after {
+    background-size: 300px;
+    opacity: 0.5;
+  }
+
+  .services_block {
+    min-height: 100%;
+  }
+
+  .newhome_maximizeprofit_s .cta_vector {
+    padding-top: 24px;
+  }
+
+  .how_get_account_ot.trade_app__app {
+    padding-top: 15px;
+  }
+
+
+}
+
+.herobanner2 .scan_block {
+  background-color: #0C0900;
+  margin: -10px auto;
+}
+
+.banner_add_slide {
+  margin: 80px 0px 60px;
+  position: relative;
+  z-index: 6666;
+}
+
+.banner_add_slide .heighlightcnt img {
+  border-radius: 13px;
+}
+
+.banner_add_slide .slick-dots li button:before {
+  font-size: 0px;
+  background-color: #FFFBFB;
+  left: 0;
+  width: 10px;
+  border-radius: 50px;
+  height: 10px;
+}
+
+body .banner_add_slide .slick-dots li.slick-active button:before {
+  width: 24px;
+  background-color: #F3BB2B;
+}
+
+body .banner_add_slide .slick-dots li button {
+  width: auto;
+  height: auto;
+}
+
+body .banner_add_slide .slick-dots li {
+  width: auto;
+  height: auto;
+}
+
+body .banner_add_slide .slick-dots li.slick-active {
+  width: 24px;
+}
+
+
+.herobanner2 {
+  font-family: "Afacad", sans-serif;
+  background-image: url('../../../../public/images/new_img/hero_bannerbg2.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+h2 {
+  font-family: "Afacad", sans-serif;
+}
+
+h3 {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li p {
+  font-size: 22px;
+}
+
+.herobanner2 .banner_cnt {
+  padding-top: 100px;
+}
+
+.herobanner2 .banner_cnt h3 {
+  font-size: 40px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.herobanner2 .banner_cnt h1 span {
+  color: #f3bb2b;
+}
+
+.uptates_sm.market_update_outer h2 span {
+  color: #f3bb2b;
+}
+
+.uptates_sm .trade_btn button {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.services_block {
+  font-family: "Afacad", sans-serif;
+}
+
+.services_block h4 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.services_block p {
+  line-height: 24px;
+}
+
+
+.started_trading_s {
+  position: relative;
+}
+
+.started_trading_s::before {
+  position: absolute;
+  right: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/get_standerdbg_after.svg');
+  background-size: 28%;
+  background-repeat: no-repeat;
+  background-position: right;
+  top: -620px;
+  z-index: 333;
+  left: inherit;
+  width: 100%;
+}
+
+.started_trading_s .how_get_account_ot .trade_btn button {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.started_trading_s .trading_platform_section {
+  background-color: transparent;
+  position: relative;
+  z-index: 666;
+}
+
+.started_trading_s .trading_platform_section h2 span {
+  color: #f3bb2b;
+  display: inline;
+  padding-right: 10px;
+}
+
+.started_trading_s .services_block:hover {
+  background-color: transparent;
+}
+
+.started_trading_s::after {
+  position: absolute;
+  left: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/get_standerdbg_before.svg');
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  bottom: -300px;
+  z-index: 333;
+  right: inherit;
+  width: 100%;
+  opacity: 0.6;
+}
+
+body.light_theme .rounded_effect_bottom {
+  opacity: 0.2;
+}
+
+.started_trading_s .how_get_account_ot {
+  z-index: 666;
+  position: relative;
+  background-image: none !important;
+  background-color: transparent;
+}
+
+
+.how_get_account_ot h2 span {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s h2 {
+  letter-spacing: -1px;
+}
+
+.newhome_maximizeprofit_s {
+  z-index: 666;
+  background-color: transparent;
+}
+
+.newhome_maximizeprofit_s h2 span {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .right_costs_rg ul li {
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .cta_register_s ul.social_media {
+  margin: 100px 0px 20px;
+}
+
+.newhome_maximizeprofit_s .trade_btn button {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid #f3bb2b;
+  color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s ul.social_media a {
+  background-color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s button.learnbtn a {
+  background-color: #f3bb2b;
+}
+
+.newhome_maximizeprofit_s .profit_cost_cnt {
+  padding: 0px 0px 0px;
+}
+
+
+.newhome_maximizeprofit_s::after {
+  position: absolute;
+  right: 0px;
+  content: "";
+  height: 100%;
+  background-image: url('../../../../public/images/new_img/ctabg_after.svg');
+  background-size: 600px;
+  background-repeat: no-repeat;
+  background-position: right top;
+  top: -27%;
+  z-index: 333;
+  left: inherit;
+  width: 100%;
+}
+
+.newhome_maximizeprofit_s .container {
+  position: relative;
+  z-index: 666;
+}
+
+.row.cta_register_s {
+  align-items: center;
+}
+
+.newhome_maximizeprofit_s .row.cta_register_s .profit_cost_cnt {
+  padding-top: 40px;
+}
+
+.newhome_maximizeprofit_s .trusted_partner {
+  padding: 100px 0px;
+}
+
+.vector_currency.one {
+  top: 0px;
+}
+
+.banner_animation_vector.rightside .vector_currency.one {
+  top: 0px;
+}
+
+
+body.light_theme .herobanner2 .scan_block {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .join_group_s button.joinbtn {
+  color: #222222;
+}
+
+body.light_theme .herobanner2 button.morebtn {
+  color: #222;
+}
+
+body.light_theme .herobanner2 .scan_cnt {
+  color: #222;
+}
+
+body.light_theme .herobanner2 .banner_cnt .scan_block p {
+  color: #222;
+}
+
+body.light_theme .banner_add_slide .slick-dots li button:before {
+  background-color: #747474;
+}
+
+.market_update_outer .container {
+  position: relative;
+  z-index: 666;
+}
+
+body.light_theme .how_get_account_ot.bgtransparrent_s {
+  background-color: transparent;
+}
+
+body.light_theme .profit_costs_cta_outer.newhome_maximizeprofit_s {
+  background-color: transparent;
+}
+
+body.light_theme .started_trading_s .how_get_account_ot {
+  background-color: transparent;
+}
+
+body.light_theme .trading_platform_section h2 {
+  color: #0C0900;
+}
+
+body.light_theme .services_block {
+  border: 1px solid #dddddd;
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+body.light_theme .services_block p {
+  color: #000;
+}
+
+body.light_theme .faq_cta_outer .accordion-item {
+  color: #141414;
+}
+
+body.light_theme .faq_cta_outer .accordion-item h3 button.accordion-button {
+  color: #141414;
+  border-bottom: 1px solid #a9a9a9;
+}
+
+body.light_theme .faq_cta_outer .accordion-item .collapse.show {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .faq_cta_outer .accordion-item.active h3 button.accordion-button[aria-expanded="true"] {
+  background-color: #f5f5f5;
+  border-color: #f5f5f5 !important;
+}
+
+img.light_m {
+  display: none;
+}
+
+body.light_theme img.light_m {
+  display: flex;
+  margin: 0 auto;
+}
+
+body.light_theme img.drak_d {
+  display: none;
+}
+
+body.light_theme .scan_left_s img.light_m {
+  margin-left: 0px;
+  margin: inherit;
+}
+
+
+
+
+
+@media screen and (max-width:1440px) {
+
+  .hero_section.herobanner2 {
+    height: 100%;
+    min-height: 100%;
+    padding-top: 20px;
+    padding-bottom: 15px;
+  }
+
+  .banner_animation_vector {
+    top: 90px;
+  }
+
+  .hero_section.herobanner2 .slick-track {
+    gap: 20px;
+  }
+
+  .banner_add_slide {
+    margin: 60px 0px 40px;
+  }
+
+  .rounded_effect_bottom {
+    bottom: 190px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s {
+    margin-top: 80px;
+  }
+
+}
+
+@media screen and (max-width:1200px) {
+
+  .trading_img {
+    width: 110px;
+  }
+
+  .newhome_maximizeprofit_s::after {
+    background-size: 400px;
+    top: -15%;
+  }
+
+  .how_get_account_ot ul li p {
+    font-size: 18px;
+  }
+
+
+}
+
+@media screen and (max-width:991px) {
+
+  .banner_img {
+    width: 50%;
+  }
+
+  .herobanner2 .banner_cnt h3 {
+    font-size: 30px;
+  }
+
+  .herobanner2 .banner_cnt h1 {
+    font-size: 24px;
+  }
+
+  .newhome_maximizeprofit_s .trusted_partner {
+    padding: 60px 0px;
+  }
+
+
+}
+
+@media screen and (max-width:767px) {
+
+  .vector_currency img {
+    width: 20px;
+    opacity: 0.7;
+  }
+
+  .banner_img {
+    width: 65% !important;
+}
+
+  body .newhome_maximizeprofit_s .row.cta_register_s {
+    margin-top: 15px;
+  }
+
+  .services_block p {
+    line-height: 20px;
+    padding-top: 5px;
+  }
+
+  .herobanner2 .banner_cnt h1 {
+    font-size: 18px;
+  }
+
+  .herobanner2 .banner_cnt h3 {
+    font-size: 22px;
+  }
+
+  .how_get_account_ot ul li p {
+    font-size: 15px;
+  }
+
+  .herobanner2 .scan_block {
+    margin: -20px auto;
+  }
+
+  .rounded_effect_bottom {
+    display: none;
+  }
+
+  .banner_add_slide .heighlightcnt img {
+    height: 100%;
+  }
+
+  .hero_section.herobanner2 {
+    padding-bottom: 0px;
+  }
+
+  .trading_img {
+    right: inherit;
+    text-align: center;
+    left: inherit;
+    margin: 0 auto;
+    position: relative;
+    top: 0px;
+  }
+
+  .services_block {
+    text-align: center;
+    align-items: center;
+  }
+
+  .how_get_account_ot .row .col-sm-4 {
+    width: 100%;
+  }
+
+  .how_get_account_ot .row .col-sm-8 {
+    width: 100%;
+  }
+
+  .services_block h4 {
+    font-size: 18px;
+    margin-top: 24px;
+  }
+
+  .newhome_maximizeprofit_s .profit_cost_cnt {
+    text-align: center;
+  }
+
+  .newhome_maximizeprofit_s .row .col-sm-4 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s .row .col-sm-8 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s button.learnbtn {
+    margin: 0 auto;
+  }
+
+  .newhome_maximizeprofit_s .trade_btn button {
+    margin: 0 auto;
+  }
+
+  .how_get_account_ot .row .col-sm-6 {
+    width: 100%;
+  }
+
+  .main_marker_summary .row.align-items-center .col-sm-8 {
+    width: 100%;
+  }
+
+  .newhome_maximizeprofit_s .trusted_partner {
+    padding: 30px 0px 10px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s .profit_cost_cnt {
+    padding-top: 0px;
+  }
+
+  .newhome_maximizeprofit_s .row.cta_register_s {
+    margin-top: 30px;
+  }
+
+  .newhome_maximizeprofit_s {
+    padding-top: 15px;
+  }
+
+  .newhome_maximizeprofit_s::after {
+    background-size: 300px;
+    opacity: 0.5;
+  }
+
+  .services_block {
+    min-height: 100%;
+  }
+
+  .newhome_maximizeprofit_s .cta_vector {
+    padding-top: 24px;
+  }
+
+  .how_get_account_ot.trade_app__app {
+    padding-top: 15px;
+  }
+
+
+}
+
+
+@media screen and (max-width:580px) { 
+
+  #popup-box.popup-box.homepop_box {
+        width: 85%;
+    }
+
+  }

@@ -1,0 +1,12 @@
+.custom-interval-button {
+  margin-left: 8px;
+  border: 1px solid #2f2f35;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: #1b1b1f;
+  color: #eaeaea;
+  cursor: pointer;
+}
+.custom-interval-button:hover {
+  background: #2a2a30;
+}

@@ -1,0 +1,9 @@
+#TVChartContainer {
+	/* background-color: #0c0917 !important; */
+	height: 100%;
+	width: 100%;
+}
+#TVChartContainer > * {
+    width: 100%;
+}
+
