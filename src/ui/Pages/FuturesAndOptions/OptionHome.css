@@ -3362,45 +3362,6 @@ button.bn-button.button__buy.sellbtn {
     margin-top: 15px;
 }
 
-.software_trading_bl {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    border: 1px solid #1e1e1e;
-    border-radius: 24px;
-    transition: 2ms;
-}
-
-.after_top_vector {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    opacity: 0;
-}
-
-.software_trading_bl img {
-    width: 100%;
-}
-
-.software_trading_cnt {
-    position: absolute;
-    bottom: 28px;
-    max-width: 80%;
-    margin: 0 auto;
-    left: 0px;
-    right: 0px;
-}
-
-.software_trading_bl h6 {
-    font-size: 18px;
-    margin-bottom: 0px;
-}
-
-.software_trading_bl:hover .after_top_vector {
-    opacity: 1;
-}
-
 .option_highlight_section {
     padding: 30px 0px 120px;
     position: relative;

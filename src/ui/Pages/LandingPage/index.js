@@ -35,6 +35,10 @@ const LandingPage = () => {
   const [googleToken, setGoogleToken] = useState();
   const { setLoginDetails } = useContext(ProfileContext);
   const googlecaptchaRef = useRef(null);
+  const [coinData, setCoinData] = useState([]);
+  const [topGainers, setTopGainers] = useState([]);
+  const [topLosers, setTopLosers] = useState([]);
+
 
   const [email, setEmail] = useState("");
 
@@ -176,9 +180,9 @@ const LandingPage = () => {
 
   const tabOptions = [
     { id: "hotspot", label: "Hot Spot" },
-    { id: "gainers", label: "Gainers" },
-    { id: "newest", label: "Newest" },
-    { id: "meme", label: "Meme" },
+    // { id: "gainers", label: "Gainers" },
+    // { id: "newest", label: "Newest" },
+    // { id: "meme", label: "Meme" },
   ];
 
   // Dummy filters (replace with real logic)
@@ -256,8 +260,43 @@ const LandingPage = () => {
     }
 
   }
+  const gainerElementRef = useRef(null);
+  const handleTabClick = (itemName) => {
+    setActiveTab(itemName);
+    if (gainerElementRef.current) {
+      gainerElementRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
 
+  useEffect(() => {
+    let interval;
+    if (socket) {
+      let payload = {
+        'message': 'market',
+      }
+      socket.emit('message', payload);
+      interval = setInterval(() => {
+        let payload = {
+          'message': 'market',
+        }
+        socket.emit('message', payload);
+      }, 2000)
+
+      socket.on('message', (data) => {
+        setCoinData(data?.pairs);
+        const topGainers = [...data?.pairs || []]
+          .sort((a, b) => b.change_percentage - a.change_percentage)
+        const topLosers = [...data?.pairs || []]
+          .sort((a, b) => a.change_percentage - b.change_percentage)
+          .slice(0, 4); setTopGainers(topGainers);
+        setTopLosers(topLosers);
+      });
+    }
+    return (() => {
+      clearInterval(interval)
+    })
+  }, [socket]);
   return (
 
     <>
@@ -279,7 +318,7 @@ const LandingPage = () => {
 
 
 
-      <div
+      {/* <div
         class="modal fade homebonuspop"
         id="bonusPopup"
         tabindex="-1"
@@ -290,7 +329,7 @@ const LandingPage = () => {
           <div class="modal-content popup-box homepop_box">
             <div class="modal-body text-center position-relative">
 
-              {/* <!-- Close button --> */}
+            
               <button
                 type="button"
                 class="btn-close position-absolute top-0 end-0 m-2"
@@ -299,11 +338,11 @@ const LandingPage = () => {
                 onClick={handleApkDonwload}
               ></button>
 
-              {/* <!-- SLIDER START (NO ARROWS) --> */}
+          
               <div id="bonusSlider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
                 <div class="carousel-inner">
 
-                  {/* <!-- Slide 1 --> */}
+               
                   <div class="carousel-item active">
                     <a href={authToken ? "/user_profile/giveaway" : "/login"}>
                       <img
@@ -314,7 +353,7 @@ const LandingPage = () => {
                     </a>
                   </div>
 
-                  {/* <!-- Slide 2 --> */}
+                
                   <div class="carousel-item ">
                     <a onClick={handleApkDonwload} href={ApiConfig?.baseUrl + apkLink}>
                       <img
@@ -327,380 +366,152 @@ const LandingPage = () => {
 
                 </div>
               </div>
-              {/* <!-- SLIDER END --> */}
+           
 
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
 
 
       <div class="hero_section_main">
         <video
-          ref={videoRef}
-          className="video-bg"
-          src="/images/hero_bg.mp4"
+          className="bg-video"
           autoPlay
           loop
           muted
           playsInline
-        />
+          preload="auto"
+        >
+          <source
+            src="https://img.bgstatic.com/video/msg/herobanner-1732092714.webm"
+            type="video/webm"
+          />
+        </video>
+
         <div class="container">
           <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-7">
-              <div class="banner_content">
-                <span class="sub_heading">Welcome to Wrathcode</span>
-                <h1>The Most Efficient<br />
-                  <span>Crypto</span> Trading and<br />
-                  {" "}  Investment Platform</h1>
-                {/* <p><img src="images/user_gift_vector.svg" alt="gift" /> New User Exclusive Event! Get 100USDT!</p> */}
+            <div class="banner_content">
+              <h1>The Smarter Way to Buy, <span className="sub_heading">Trade & Invest</span> in Crypto</h1>
+              <p>A powerful crypto platform designed for speed, security, and smarter investing — all in one place.</p>
 
-                <div className="t_shirts_add_s">
-                  <div className="tshirts_vector">
-                    <img src="images/t-shirts_bnr.svg" alt="tshirts" />
-                  </div>
-                  <div className="cnt_tshirts">
-                    <span>IT'S TIME FOR</span>
-                    <h3>Giveaway</h3>
-                    <p>Join & Win a Premium Wrathcode T-shirts</p>
-                    <ul>
-                      <li>Register</li>
-                      <li>Complete KYC</li>
-                      <li>Deposit $10</li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* <button type="button" class="btn btn-primary homelightbox2" data-bs-toggle="modal" data-bs-target="#bonusPopup">
-  Open Popup
-</button> */}
-                {!authToken &&
-                  <div class="sign_form_btn">
-                    <div class="sign_form">
-                      <input type="text" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} value={email} />
-                      <input type="button" value="Sign Up" onClick={signupPage} />
-                    </div>
-                    <ul>
-                      <li><a class="icon_google" href="#/" type="button" onClick={() => loginWithGoogle()}><img src="images/google_icon2.svg" alt="google" /></a></li>
-                      <li><a class="icon_google" href="https://t.me/Wrathcode" target="_blank" rel="noreferrer" ><img src="images/telegram_icon.svg" alt="telegram" /></a></li>
-                      <li><a class="icon_google" href="#/" onClick={signupPage}><img src="images/apple_icon2.svg" alt="apple" /></a></li>
-                    </ul>
-                  </div>
-                }
-                <div className="d-flex scan_button">
-
-
-                </div>
-
+              <div className="d-flex download_button">
+                <button className="btn">Download App</button>
+                <button className="btn platform">Explore Platform</button>
               </div>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-5">
-              <div class="banner_img">
-                {/* <div className="dashbaordchart_mid">
-                <TVChartContainer symbol={`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`} />
-</div> */}
-                <img src="images/hero_img.svg" alt="banner" />
-                <div className="dashboard_summary">
 
-                </div>
-                <Link className="more_btn" to="/market">{""}</Link>
+            </div>
+            <div class="banner_img">
+              <img className="bitcoin_right animation" src="images/new-images/banner_vectror_ani.svg" />
+              <img className="crypto_cntr animation" src="images/new-images/banner_vectror_ani3.svg" />
+              <div className="banner_img">
+                <img src="images/new-images/banner_img.svg" alt="banner" />
               </div>
-            </div>
-          </div>
-
-
-          <div className="banner_effect_bottom">
-            <img src="images/herobanner_after.svg" alt="banner" />
-
-          </div>
-          <div class="annousment_s">
-
-            <div class="annousment_left">
-              <img src="images/notification_icon.png" />
-              {authToken ? <marquee> Deposit any amount for the first time and enjoy an instant $0.50 reward.</marquee>
-                : <marquee>Wrathcode Giveaway is LIVE! Complete Registration, KYC & Deposit $10 to grab your Premium T-Shirt!</marquee>
-              }
+              <img className="bitcoin_left animation" src="images/new-images/banner_vectror_ani2.svg" />
 
             </div>
-
-            {/* <div class="more_btn"><a href="#">More<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-            </svg></a></div> */}
-
           </div>
 
 
         </div>
       </div>
-
-      {/* <div className="hero_section herobanner2">
-
-        <div className="banner_animation_vector">
-
-          <div className="vector_currency one">
-            <img src="images/bitcon_icon.png" alt="bitcon" />
-          </div>
-
-          <div className="vector_currency two">
-            <img src="images/tether_icon.png" alt="tether" />
-          </div>
-
-
-          <div className="vector_currency three">
-            <img src="images/solana_icon.png" alt="solana" />
-          </div>
-
-
-          <div className="vector_currency four">
-            <img src="images/xrp_icon.png" alt="xrp" />
-          </div>
-
-        </div>
-
-
-
-
-        <div className="banner_animation_vector rightside">
-
-          <div className="vector_currency one">
-            <img src="images/bitcon_icon.png" alt="bitcon" />
-          </div>
-
-          <div className="vector_currency two">
-            <img src="images/tether_icon.png" alt="tether" />
-          </div>
-
-
-          <div className="vector_currency three">
-            <img src="images/solana_icon.png" alt="solana" />
-          </div>
-
-
-          <div className="vector_currency four">
-            <img src="images/xrp_icon.png" alt="xrp" />
-          </div>
-
-        </div>
-
-
-        <div className="container">
-          <div className="banner_cnt">
-            <h1>The Most Efficient <span>Crypto Exchange</span></h1>
-            <h3>start today and build your crypto portfolio</h3>
-            <div className="banner_img">
-              <img className="drak_d" src="images/new_img/banner_mobile_vector.svg" alt="banner images" />
-              <img className="light_m" src="images/new_img/banner_mobile_light_vector.svg" alt="banner images" />
-            </div>
-            <div className="scan_block">
-
-              <ul>
-                <li>
-                  <div className="user_icon">
-                    <img src="images/referral_commission.svg" alt="referral" />
-                  </div>
-                  <h6>500%</h6>
-                  <span>Referral Commission</span>
-                </li>
-                <li>
-                  <div className="user_icon">
-                    <img src="images/register_user_icon.svg" alt="referral" />
-                  </div>
-                  <h6>1Million +</h6>
-                  <span>Registered Users</span>
-                </li>
-                <li>
-                  <div className="user_icon">
-                    <img src="images/lowest_fees_icon.svg" alt="referral" />
-                  </div>
-                  <h6>0.50%</h6>
-                  <span>Lowest Transaction Fees</span>
-                </li>
-              </ul>
-
-             
-            </div>
-
-          </div>
-
-          <div className="banner_add_slide">
-            <Slider {...addbannerslider}>
-              {slides.map((slide, index) => (
-                <div className="currency_list_b" key={index}>
-                  <div className="heighlightcnt">
-                    <img src={slide.img} alt={`banner ${index}`} />
-                    <h2>{slide.title}</h2>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-          <div className="rounded_effect_bottom">
-            <img src="images/benner_afterbg.png" alt="rounded img" />
-          </div>
-        </div>
-      </div> */}
-      {/* <div className="market_update_outer" data-aos="fade-up" data-aos-duration="2000">
-        <div className="container">
-          <h2>Market <span>Update</span></h2>
-          <div className="main_marker_summary">
-            <div className="row align-items-center">
-              <div className="col-md-3 col-sm-12">
-                <div className="currency_left_dtl">
-                  <div className="mobileview">
-                    <div className="currency_tp_s">
-                      <img src={ApiConfig?.baseImage + hoveredItem?.icon_path} alt="eth currency" width="50px" />
-                      <h4>{hoveredItem?.base_currency_fullname}<sup>#{(hoveredItem?.index + 1) || 1}</sup></h4>
-                    </div>
-                    <div className="mu_pr_mark">
-                      <h3>{hoveredItem?.buy_price}</h3>
-                      {hoveredItem?.change_percentage > 0 ? <div className="pr_data text-success">
-                        <i className="ri-arrow-up-s-fill me-1"></i>{hoveredItem?.change_percentage}%
-                      </div> : <div className="pr_data text-danger">
-                        <i className="ri-arrow-down-s-fill me-1"></i>{hoveredItem?.change_percentage}%
-                      </div>}
-
-                    </div>
-
-                    <div className="trade_btn">
-                      <button><Link to={`/trade/${hoveredItem?.base_currency}_${hoveredItem?.quote_currency}`}>trade now <span> <img src="images/trade_arrow.svg" alt="trade arrow" /></span></Link></button></div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-9 col-sm-12">
-                <div className="market_summary_right_tp">
-                  <div className="summary_cnt_markert_r">
-                    <div className="mr_data text-success">
-                      <span>24 High <img src="images/info_icon.svg" alt="info" /></span>
-                      <h5>{hoveredItem?.high}</h5>
-
-                    </div>
-                    <div className="mr_data">
-                      <span>Volume Base<img src="images/info_icon.svg" alt="info" /></span>
-                      <h5>{hoveredItem?.volume}  {hoveredItem?.base_currency}</h5>
-
-                    </div>
-                  </div>
-                  <div className="summary_cnt_markert_r">
-                    <div className="mr_data text-danger">
-                      <span>24 Low <img src="images/info_icon.svg" alt="info" /></span>
-                      <h5>{hoveredItem?.low}</h5>
-
-                    </div>
-                    <div className="mr_data">
-                      <span>Volume Quote  <img src="images/info_icon.svg" alt="info" /></span>
-                      <h5>{hoveredItem?.volumeQuote} {hoveredItem?.quote_currency}</h5>
-
-                    </div>
-                  </div>
-                  <div className="summary_cnt_markert_r lastchild">
-                    <div className="currency_img_mr">
-                      <img src={ApiConfig?.baseImage + hoveredItem?.icon_path} alt="eth currency" width="80px" />
-                    </div>
-                  </div>
-                  <div className="rectangle_bottom_eft">
-                    <img src="images/rectangle_ri_bottom.png" alt="rectangle" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row align-items-center">
-              <div className="market_tab_scroll_ot">
-                <ul>
-                  {socketData?.map((item, index) => {
-                    return (
-                      <li key={item?.id || index}
-                        onMouseEnter={() => setHoveredItem({ ...item, index })}>
-                        <div className="currency_icon">
-                          <img src={ApiConfig?.baseImage + item?.icon_path} alt={item?.base_currency} width="40px" />
-                        </div>
-                        <div className="currency_tag_cnt">
-                          {item?.base_currency} <span>   /{item?.quote_currency}</span>
-                        </div>
-                        <div className="price_tag">{item?.buy_price}</div>
-                      </li>
-                    )
-                  })}
-
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-
 
       <div className="currency_logo">
-        <div className="container">
-          <ul>
-            <li><img src="images/currency_icon.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon2.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon3.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon4.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon5.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon6.png" alt="currency logo" /></li>
-            <li><img src="images/currency_icon7.png" alt="currency logo" /></li>
-          </ul>
-        </div>
+        <ul>
+          <li>
+            <div className="cnt">
+              <span>Instantly Convert</span>
+              <h3>USDT to INR</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <span>Spend and Earn upto 100%</span>
+              <h3>Crypto Cashback</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector2.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <span>Experience Seamless</span>
+              <h3>Crypto Withdrawals</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector3.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <h3>Buy USDT (Tether)</h3>
+              <span>at Lowest Price</span>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector4.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <span>Registered with</span>
+              <h3>F.I.U. of India</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector5.png" alt="crypto" />
+            </div>
+          </li>
+        </ul>
       </div>
 
 
 
-      <div className="crypto_section market_update_outer" data-aos="fade-up" data-aos-duration="2000">
+      <div className="crypto_section trending_crypto" data-aos="fade-up" data-aos-duration="2000">
         <div className="container">
-          <h2>
-            Market <span>Update</span>
-          </h2>
+          <h2>Trending Cryptocurrencies</h2>
+          <p>Real-time market movers powered by live data and smart analytics.</p>
 
           <div className="crypto_dashboard">
+            {/* Trending */}
             <div className="hot_spot_outer">
               <div className="top_heading">
-                <div className="d-flex gap-4 overflowx_scroll">
-                  {tabOptions.map((tab) => (
-                    <h4
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={activeTab === tab.id ? "active" : ""}
-                    >
-                      {tab.label}{" "}
-                      {tab.label === "Meme" && (
-                        <i className="ri-gemini-line yellow_font"></i>
-                      )}
-                    </h4>
-                  ))}
-                </div>
-                <Link className="more_btn" to="/market">
-                  View More{">"}
-                </Link>
+                <h4>Trending</h4>
               </div>
-
               <div className="hot_trading_s">
-                <table>
-                  <thead>
-                    <tr className="top_tradeing_t">
-                      <th>Trading Pairs</th>
-                      <th>Last Price</th>
-                      <th className="desktop_view">24h Changes(%)</th>
-                      <th className="mobile_view">24h(%)</th>
-                      <th className="m_none">24H Change</th>
-                      <th className="right_t right_0 m_none">Action</th>
-                    </tr>
-                  </thead>
 
-                  <tbody>
-                    {getFilteredData()?.length > 0 ? (
-                      getFilteredData()
-                        .slice(0, 9)
-                        .map((item, index) => (
-                          <tr key={item?._id || index} onClick={() => nextPage(item)}>
+                <div className="table-responsive">
+                  <table>
+                    <thead>
+                      <tr>
+                        {/* <th>#</th> */}
+                        <th>Name</th>
+                        <th className="text-end" >Price</th>
+                        {/* <th className="text-end" >24h</th> */}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {coinData && coinData.length <= 0 ? (
+                        <tr>
+                          <td colSpan="3" className="p-0">
+                            <div className="d-flex justify-content-center align-items-center">
+                              <div className="spinner-border text-primary" role="status" />
+                            </div>
+                          </td>
+                        </tr>
+                      ) : coinData && coinData.length > 0 ? (
+                        coinData.slice(0, 5).map((item, index) => (
+                          <tr key={index} onClick={() => nextPage(item)}>
+                            {/* NAME */}
                             <td className="first_coloum">
                               <div className="td_first">
                                 <div className="icon">
                                   <img
                                     alt=""
                                     src={ApiConfig.baseImage + item?.icon_path}
-                                    width="30"
+                                    width="28"
                                     className="img-fluid icon_img coinimg me-2"
                                   />
                                 </div>
@@ -710,66 +521,59 @@ const LandingPage = () => {
                               </div>
                             </td>
 
-                            <td>
-                              {item?.buy_price} {item?.quote_currency}
-                            </td>
-
-                            <td
-                              className={
-                                item?.change_percentage > 0 ? "green" : "red"
-                              }
-                            >
-                              {item?.change_percentage?.toFixed(2)}%
-                            </td>
-
-                            <td
-                              className={
-                                item?.change > 0
-                                  ? "green m_none"
-                                  : "red m_none"
-                              }
-                            >
-                              {item?.change?.toFixed(2)}
-                            </td>
-
-                            <td className="right_t right_0 m_none">
-                              <a href="#/">Trade</a>
+                            {/* PRICE + % (Top Gainers Style) */}
+                            <td className="price_right_top text-end">
+                              {formatNumber(item?.buy_price, 5)}
+                              <span
+                                className={item?.change_percentage >= 0 ? "green" : "red"}
+                              >
+                                {" "}
+                                {item?.change_percentage >= 0 ? "▲" : "▼"}{" "}
+                                {formatNumber(item?.change_percentage, 3)}%
+                              </span>
                             </td>
                           </tr>
                         ))
-                    ) : (
-                      <tr>
-                        <td colSpan="6">
-                          <div className="no_data_s text-center">
-                            <img
-                              src="/images/no_data_vector.svg"
-                              className="img-fluid"
-                              alt="no data"
-                              width="52"
-                            />
-                            <small>No data</small>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      ) : (
+                        <tr>
+                          <td colSpan="3" className="p-0">
+                            <div className="favouriteData text-center">
+                              <img
+                                src="/images/no_data_vector.svg"
+                                className="img-fluid"
+                                width="96"
+                                height="96"
+                                alt=""
+                              />
+                              <p>No Data Available</p>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+
+                  </table>
+                </div>
               </div>
             </div>
+            {/* TOP GAINERS */}
+            <div className="hot_spot_outer">
+              <div className="top_heading">
+                <h4>Top Gainers</h4>
 
-            {/* RIGHT DASHBOARD */}
-            <div className="right_dashboard">
-              {/* TOP GAINERS */}
-              <div className="top_gainers">
-                <div className="top_heading">
-                  <h4>Top Gainers</h4>
-                  <Link className="more_btn" to="/market">
-                    View More{">"}
-                  </Link>
-                </div>
+              </div>
 
-                <div className="hot_trading_s top_gainers">
+              <div className="hot_trading_s">
+                <div className="table-responsive">
                   <table>
+                    <thead>
+                      <tr>
+                        {/* <th>#</th> */}
+                        <th>Name</th>
+                        <th className="text-end" >Price</th>
+                        {/* <th className="text-end" >24h</th> */}
+                      </tr>
+                    </thead>
                     <tbody>
                       {socketData?.length > 0 ? (
                         [...socketData].reverse().map((item, index) => (
@@ -821,18 +625,25 @@ const LandingPage = () => {
                   </table>
                 </div>
               </div>
+            </div>
+            {/* NEW LISTINGS */}
+            <div className="hot_spot_outer">
+              <div className="top_heading">
+                <h4>New Listings</h4>
 
-              {/* NEW LISTINGS */}
-              <div className="top_gainers losser_stock">
-                <div className="top_heading">
-                  <h4>New Listings</h4>
-                  <Link className="more_btn" to="/market">
-                    View More{">"}
-                  </Link>
-                </div>
+              </div>
 
-                <div className="hot_trading_s top_gainers">
+              <div className="hot_trading_s">
+                <div className="table-responsive">
                   <table>
+                    <thead>
+                      <tr>
+                        {/* <th>#</th> */}
+                        <th>Name</th>
+                        <th className="text-end" >Price</th>
+                        {/* <th className="text-end" >24h</th> */}
+                      </tr>
+                    </thead>
                     <tbody>
                       {socketData?.length > 0 ? (
                         [...socketData]
@@ -892,387 +703,147 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+
+          <div className="viewmorebtn">
+            <a href="/market">View More <i class="ri-arrow-right-line"></i></a>
+          </div>
+
         </div>
       </div>
 
-      <div className="">
-        <div className="how_get_account_ot bgtransparrent_s">
-          <div className="container">
-            <h2>How to Get <span>Started</span></h2>
-            {/* <p className="sub_text">Our comprehensive range of services is designed to help businesses thrive
-              in today’s fast-paced digital world.</p> */}
 
 
-            <div class="row">
-              <div class="col-sm-4">
-                <div class="services_block_infor">
-                  <div class="services_info_icon">
-                    <img src="images/creat_account_icon.svg" alt="Software Development" />
-                  </div>
-                  <div class="cnt_block">
-                    <h4>Create an Account</h4>
-                    <p>Register and claim exclusive newcomer rewards.</p>
-                    <div class="readbtn">
-                      <Link to="/signup">Sign Up Now <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
-                        <path d="M8.72903 2.56148C8.57686 2.40931 8.50077 2.23539 8.50077 2.03974C8.50077 1.82235 8.57686 1.6267 8.72903 1.45279L9.28338 0.931046C9.43555 0.757133 9.60946 0.670177 9.80512 0.670177C10.0225 0.670177 10.2073 0.757133 10.3595 0.931046L14.7942 5.33322C14.9464 5.48539 15.0225 5.67018 15.0225 5.88757C15.0225 6.10496 14.9464 6.28974 14.7942 6.44192L10.3595 10.8441C10.2073 11.018 10.0225 11.105 9.80512 11.105C9.60946 11.105 9.43555 11.018 9.28338 10.8441L8.72903 10.3224C8.57686 10.1484 8.50077 9.96365 8.50077 9.768C8.50077 9.55061 8.57686 9.36583 8.72903 9.21365L10.8486 7.06148H1.19642C0.97903 7.06148 0.794247 6.98539 0.642073 6.83322C0.489899 6.68105 0.413812 6.49626 0.413812 6.27887V5.49626C0.413812 5.27887 0.489899 5.09409 0.642073 4.94192C0.794247 4.78974 0.97903 4.71365 1.19642 4.71365H10.8486L8.72903 2.56148Z" fill="white"></path>
-                      </svg></Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <section className="crypto_exchange_section">
+        <div className="container">
+          <div className="cryptofuture_s">
+            <div className="crypto_future_cnt">
+              <h2>A Crypto Exchange Built for <span>the Future</span></h2>
+              <p>Securely store, manage, and grow your digital assets with next-generation wallet technology
+                designed for speed, privacy, and total control.</p>
+              <ul className="listcrypto">
+                <li><i class="ri-checkbox-circle-fill"></i> Lowest transaction fees in the market</li>
+                <li><i class="ri-checkbox-circle-fill"></i> Instant deposits and withdrawals</li>
+                <li><i class="ri-checkbox-circle-fill"></i> Advanced 256-bit encryption security</li>
+                <li><i class="ri-checkbox-circle-fill"></i> Real-time portfolio tracking</li>
+                <li><i class="ri-checkbox-circle-fill"></i> Multi-asset wallet support</li>
+              </ul>
+              <button className="downloadbtn">Download App</button>
+            </div>
 
-              <div class="col-sm-4">
-                <div class="services_block_infor">
-                  <div class="services_info_icon">
-                    <img src="images/deposit_account.svg" alt="Software Development" />
-                  </div>
-                  <div class="cnt_block">
-                    <h4>Deposit to Account</h4>
-                    <p>Quick top-up in a few easy steps.</p>
-                    <div class="readbtn">
-                      <Link to="/asset_managemnet/deposit">Deposit Now <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
-                        <path d="M8.72903 2.56148C8.57686 2.40931 8.50077 2.23539 8.50077 2.03974C8.50077 1.82235 8.57686 1.6267 8.72903 1.45279L9.28338 0.931046C9.43555 0.757133 9.60946 0.670177 9.80512 0.670177C10.0225 0.670177 10.2073 0.757133 10.3595 0.931046L14.7942 5.33322C14.9464 5.48539 15.0225 5.67018 15.0225 5.88757C15.0225 6.10496 14.9464 6.28974 14.7942 6.44192L10.3595 10.8441C10.2073 11.018 10.0225 11.105 9.80512 11.105C9.60946 11.105 9.43555 11.018 9.28338 10.8441L8.72903 10.3224C8.57686 10.1484 8.50077 9.96365 8.50077 9.768C8.50077 9.55061 8.57686 9.36583 8.72903 9.21365L10.8486 7.06148H1.19642C0.97903 7.06148 0.794247 6.98539 0.642073 6.83322C0.489899 6.68105 0.413812 6.49626 0.413812 6.27887V5.49626C0.413812 5.27887 0.489899 5.09409 0.642073 4.94192C0.794247 4.78974 0.97903 4.71365 1.19642 4.71365H10.8486L8.72903 2.56148Z" fill="white"></path>
-                      </svg></Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="exchange_future_s">
+              <img className="animation_effect summary_data" src="images/new-images/crypto_summry.svg" />
+              <img src="images/new-images/crypto_mobile.svg" alt="crypto exchange" />
+              <img className="animation_effect bitcoin" src="images/new-images/crypto_bitcoin.svg" />
+            </div>
 
-              <div class="col-sm-4">
-                <div class="services_block_infor">
-                  <div class="services_info_icon">
-                    <img src="images/trading_account.svg" alt="Software Development" />
-                  </div>
-                  <div class="cnt_block">
-                    <h4>Start Trading</h4>
-                    <p>Sell and buy crypto, copy trade, and more.</p>
-                    <div class="readbtn">
-                      <Link to="trade/landing">Trade Now <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
-                        <path d="M8.72903 2.56148C8.57686 2.40931 8.50077 2.23539 8.50077 2.03974C8.50077 1.82235 8.57686 1.6267 8.72903 1.45279L9.28338 0.931046C9.43555 0.757133 9.60946 0.670177 9.80512 0.670177C10.0225 0.670177 10.2073 0.757133 10.3595 0.931046L14.7942 5.33322C14.9464 5.48539 15.0225 5.67018 15.0225 5.88757C15.0225 6.10496 14.9464 6.28974 14.7942 6.44192L10.3595 10.8441C10.2073 11.018 10.0225 11.105 9.80512 11.105C9.60946 11.105 9.43555 11.018 9.28338 10.8441L8.72903 10.3224C8.57686 10.1484 8.50077 9.96365 8.50077 9.768C8.50077 9.55061 8.57686 9.36583 8.72903 9.21365L10.8486 7.06148H1.19642C0.97903 7.06148 0.794247 6.98539 0.642073 6.83322C0.489899 6.68105 0.413812 6.49626 0.413812 6.27887V5.49626C0.413812 5.27887 0.489899 5.09409 0.642073 4.94192C0.794247 4.78974 0.97903 4.71365 1.19642 4.71365H10.8486L8.72903 2.56148Z" fill="white"></path>
-                      </svg></Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          </div>
+
+          <div className="cryptofuture_s reverse_security">
+
+            <div className="exchange_future_s">
+              <img src="images/new-images/verification_mobile.svg" alt="Bulletproof" />
+              <img className="animation_effect bitcoin" src="images/new-images/lock_vector.svg" />
+            </div>
+
+            <div className="crypto_future_cnt">
+              <h2><span>Bulletproof</span> Security, Built by Design</h2>
+              <p>Your assets and data are protected by industry-leading security protocols, advanced encryption, and continuous monitoring — so you can trade with complete peace of mind.</p>
+
+              <ul className="security_list">
+                <li>
+                  <h3>0.</h3>
+                  <p>Security Incidents</p>
+                </li>
+                <li>
+                  <h3>256<span>bits</span></h3>
+                  <p>AES Encryption</p>
+                </li>
+                <li>
+                  <h3>100<span>%</span></h3>
+                  <p>Encrypted Data</p>
+                </li>
+                <li>
+                  <h3>CISA<span>+</span></h3>
+                  <p>Security Compliance</p>
+                </li>
+              </ul>
 
             </div>
 
-
-            {/* <ul>
-                  <li>
-                    <span>1.</span>
-                    <div className="get_started_cnt">
-                      <h3>Create an Account</h3>
-                      <p>Register and claim exclusive newcomer rewards.</p>
-
-                      <div className="trade_btn">
-
-                        <Link to="/signup">     <button class="register-btn">
-
-                          Register Now <span><img src="images/trade_arrow.svg" alt="Arrow" /></span>
-
-                        </button></Link>
-                      </div>
-
-                    </div>
-                  </li>
-                  <li>
-                    <span>2.</span>
-                    <div className="get_started_cnt">
-                      <h3>Deposit to Account</h3>
-                      <p>Quick top-up in a few easy steps.</p>
-                      <div className="trade_btn">
-                        <Link to="/asset_managemnet/deposit">
-                          <button>
-                            Deposit Now <span> <img src="images/trade_arrow.svg" alt="trade arrow" /></span>
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <span>3.</span>
-                    <div className="get_started_cnt">
-                      <h3>Start Trading</h3>
-                      <p>Sell and buy crypto, copy trade, and more.</p>
-
-                      <div className="trade_btn">
-                        <a href="/trade/landing">
-                          <button>
-                            Trade Now <span> <img src="images/trade_arrow.svg" alt="trade arrow" /></span>
-                          </button>
-                        </a>
-
-                      </div>
-
-                    </div>
-                  </li>
-                </ul> */}
           </div>
 
-
-          {/* <div className="col-sm-6">
-                <div className="crypto_bitcoin_vector">
-                  <img src="images/balance_ac_vector.png" alt="balance" />
-                </div>
-              </div> */}
 
         </div>
-
-
-
-        {/* <div className="trading_platform_section">
-          <div className="container">
-
-            <h2><span>World</span>
-              Class Trading Platform</h2>
-
-            <div className="trading_services">
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/exchange_icon.svg" alt="Exchange" />
-                </div>
-                <h4>Crypto Exchange</h4>
-                <p>Experience lightning-fast crypto trading with Wrathcode. Buy, sell, and swap your favorite digital assets seamlessly on a secure and intuitive platform.</p>
-              </div>
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/high_performance_icon.svg" alt="High Performance" />
-                </div>
-                <h4>High Performance</h4>
-                <p>Trade with zero delays. Our high-performance engine ensures fast order execution and real-time updates to keep you ahead of the market.</p>
-              </div>
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/fast_kyc_vector.svg" alt="Super Fast KYC" />
-                </div>
-                <h4>Instant KYC</h4>
-                <p>Get verified in minutes with our lightning-fast KYC process. Start trading without the wait and access the full power of Wrathcode immediately.</p>
-              </div>
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/order_type_icon.svg" alt="Order Types" />
-                </div>
-                <h4>Advanced Order Types</h4>
-                <p>From market to stop-limit orders, Wrathcode supports multiple order types to give you full control over your trading strategy.</p>
-              </div>
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/interface_icon.svg" alt="Interface" />
-                </div>
-                <h4>User-Friendly Interface</h4>
-                <p>Enjoy a clean, minimal, and responsive design built for both beginners and pro traders. Navigate your dashboard effortlessly on any device.</p>
-              </div>
-
-              <div className="services_block">
-                <div className="trading_img">
-                  <img src="images/new_img/secure_icon.svg" alt="Safe and Secure" />
-                </div>
-                <h4>Secure Trading</h4>
-                <p>Your security is our top priority. With advanced encryption, cold storage, and multi-layer protection, your assets stay safe at all times.</p>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-        <div className="how_get_account_ot trade_app__app">
-
-          <div className="effect_left_circle">
-            <img src="images/trade_app_left_after.png" alt="circle" />
-          </div>
-          <div className="container">
-
-            <div className="row">
-              <div className="col-sm-6">
-                <div className="crypto_bitcoin_vector">
-                  <img src="images/crypto_app_mobile.svg" alt="app mobile" />
-                </div>
-              </div>
-
-              <div className="col-sm-6">
-                <div className="anytime_anywhere">
-
-                  <h2><span>Trade Crypto</span> Anytime,Anywhere</h2>
-                  <h5>Welcome to the future of crypto - trade Instantly and effortlessly with  Wrathcode</h5>
-                  {/* <p>Welcome to the future of crypto - trade Instantly and effortlessly with  Wrathcode
-                  </p>
-                  <p><strong> Fast. Secure. Limitless.</strong></p> */}
-                  <div className="d-flex scan_button">
-
-                    <div className="scan_code_bl">
-                      <div className="code_scan">
-                        <QRCode
-                          value={apkLink ? `${ApiConfig?.baseUrl}${apkLink}` : "APK will available soon to download"} // ✅ dynamic link
-                          size={80} // QR size in px
-                          bgColor="#ffffff"
-                          fgColor="#000000"
-                          includeMargin={false}
-                        />
-                      </div>
-                      <div className="scan_cnt">
-                        <h6>Android</h6>
-                        <p>Scan to Download</p>
-                      </div>
-                    </div>
-
-                    <div className="app_btn">
-                      <button className="desktop">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37" fill="none">
-                          <g clip-path="url(#clip0_300_4137)">
-                            <g clip-path="url(#clip1_300_4137)">
-                              <g clip-path="url(#clip2_300_4137)">
-                                <path d="M27.4868 19.0368C27.5204 16.3496 28.9154 13.807 31.1286 12.3995C29.7324 10.3368 27.3938 9.02898 24.9608 8.95024C22.3657 8.66847 19.85 10.5565 18.5276 10.5565C17.1797 10.5565 15.1436 8.97821 12.9512 9.02488C10.0934 9.12038 7.42924 10.8011 6.03888 13.3856C3.05015 18.7383 5.27947 26.605 8.14243 30.9317C9.57482 33.0504 11.2489 35.4169 13.4394 35.3331C15.5829 35.2411 16.3835 33.9192 18.9709 33.9192C21.5343 33.9192 22.2853 35.3331 24.5202 35.2797C26.8203 35.2411 28.2695 33.1516 29.6516 31.0129C30.6808 29.5032 31.4727 27.8348 31.9981 26.0693C29.2952 24.8866 27.49 22.0727 27.4868 19.0368Z" fill="black" />
-                                <path d="M23.2655 6.1048C24.5196 4.54745 25.1374 2.54575 24.9878 0.52478C23.0718 0.732948 21.302 1.6802 20.031 3.17779C18.7881 4.64101 18.1412 6.6075 18.2634 8.55123C20.1802 8.57164 22.0645 7.65007 23.2655 6.1048Z" fill="black" />
-                              </g>
-                            </g>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_300_4137">
-                              <rect width="35.8064" height="35.8064" fill="white" transform="translate(0.822021 0.52478)" />
-                            </clipPath>
-                            <clipPath id="clip1_300_4137">
-                              <rect width="35.8064" height="35.8064" fill="white" transform="translate(0.822021 0.52478)" />
-                            </clipPath>
-                            <clipPath id="clip2_300_4137">
-                              <rect width="28.2111" height="35.8064" fill="white" transform="translate(4.61963 0.52478)" />
-                            </clipPath>
-                          </defs>
-                        </svg>App Store</button>
-                      {/* Download from<br />  */}
-                      <button className="mobile">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37" fill="none">
-                          <g clip-path="url(#clip0_300_4137)">
-                            <g clip-path="url(#clip1_300_4137)">
-                              <g clip-path="url(#clip2_300_4137)">
-                                <path d="M27.4868 19.0368C27.5204 16.3496 28.9154 13.807 31.1286 12.3995C29.7324 10.3368 27.3938 9.02898 24.9608 8.95024C22.3657 8.66847 19.85 10.5565 18.5276 10.5565C17.1797 10.5565 15.1436 8.97821 12.9512 9.02488C10.0934 9.12038 7.42924 10.8011 6.03888 13.3856C3.05015 18.7383 5.27947 26.605 8.14243 30.9317C9.57482 33.0504 11.2489 35.4169 13.4394 35.3331C15.5829 35.2411 16.3835 33.9192 18.9709 33.9192C21.5343 33.9192 22.2853 35.3331 24.5202 35.2797C26.8203 35.2411 28.2695 33.1516 29.6516 31.0129C30.6808 29.5032 31.4727 27.8348 31.9981 26.0693C29.2952 24.8866 27.49 22.0727 27.4868 19.0368Z" fill="black" />
-                                <path d="M23.2655 6.1048C24.5196 4.54745 25.1374 2.54575 24.9878 0.52478C23.0718 0.732948 21.302 1.6802 20.031 3.17779C18.7881 4.64101 18.1412 6.6075 18.2634 8.55123C20.1802 8.57164 22.0645 7.65007 23.2655 6.1048Z" fill="black" />
-                              </g>
-                            </g>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_300_4137">
-                              <rect width="35.8064" height="35.8064" fill="white" transform="translate(0.822021 0.52478)" />
-                            </clipPath>
-                            <clipPath id="clip1_300_4137">
-                              <rect width="35.8064" height="35.8064" fill="white" transform="translate(0.822021 0.52478)" />
-                            </clipPath>
-                            <clipPath id="clip2_300_4137">
-                              <rect width="28.2111" height="35.8064" fill="white" transform="translate(4.61963 0.52478)" />
-                            </clipPath>
-                          </defs>
-                        </svg> App Store</button>
-                      {/* Get On <br /> */}
-
-                      <button className="desktop" onClick={DownloadApkButton}><img src="images/playstore_icon.png" alt="google icon" />Google Play</button>
-                      {/* Download from <br /> */}
-                      <button className="mobile" onClick={DownloadApkButton}><img src="images/playstore_icon.png" alt="google icon" />Google Play</button>
-                      {/* Get On <br /> */}
-
-                      <button className="desktop" onClick={DownloadApkButton}><img src="images/apk_icon.svg" alt="APK" />APK</button>
-                      {/* Download from <br /> */}
-                      <button className="mobile" onClick={DownloadApkButton}><img src="images/apk_icon.svg" alt="APK" />APK</button>
-
-                      <button className="desktop"><img src="images/api_icon.svg" alt="API" />API</button>
-                      {/* Download from <br /> */}
-                      <button className="mobile"><img src="images/api_icon.svg" alt="API" />API</button>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div >
+      </section>
 
 
       <div className="profit_costs_cta_outer platform_trading_s">
         <div className="container">
-          <h2><span>World</span> Class Trading Platform</h2>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img.svg" alt="Exchange" />
-                <div class="software_trading_cnt">
-                  <h6>Exchange</h6>
-                  <p>Empower your business to thrive with our tailored web design solutions.</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img2.svg" alt="Super Fast KYC" />
-                <div class="software_trading_cnt">
-                  <h6>Super Fast KYC</h6>
-                  <p>Join a community of satisfied clients benefiting from our proven excellence.</p>
-                </div>
-              </div>
-            </div>
 
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img3.svg" alt="High Performance" />
-                <div class="software_trading_cnt">
-                  <h6>High Performance</h6>
-                  <p>Stay ahead with innovative web designs crafted by Arise.</p>
-                </div>
-              </div>
+          <div className="d-flex invest_tradetop">
+            <h2>Fully Equipped to Buy, <span>Trade & Invest</span> in Crypto.</h2>
+            <div class="d-flex download_button">
+              <button class="btn">Download App</button>
+              <button class="btn platform">Browse All Features</button>
             </div>
-
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img4.svg" alt="Order Types" />
-                <div class="software_trading_cnt">
-                  <h6>Order Types</h6>
-                  <p>Empower your business to thrive with our tailored web design solutions.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img5.svg" alt="Minimal Interface" />
-                <div class="software_trading_cnt">
-                  <h6>Minimal Interface</h6>
-                  <p>Join a community of satisfied clients benefiting from our proven excellence.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4">
-              <div class="software_trading_bl">
-                <div className="after_top_vector">
-                  <img src="images/platform_after_top.svg" alt="after" />
-                </div>
-                <img src="images/trading_platfarm_img6.svg" alt="Multi-Access Role" />
-                <div class="software_trading_cnt">
-                  <h6>Multi-Access Role</h6>
-                  <p>Stay ahead with innovative web designs crafted by Arise.</p>
-                </div>
-              </div>
-            </div>
-
           </div>
+
+
+<section class="features-grid">
+
+  <div class="card large">
+    <div class="content">
+      <h3>Buy 100+ Crypto Assets</h3>
+      <p>
+        Trade top cryptocurrencies and emerging tokens with deep liquidity
+        and real-time pricing across global markets.
+      </p>
+      <a href="#">Learn more →</a>
+    </div>
+    <img src="phone.png" alt="Crypto App" class="phone"/>
+  </div>
+
+  <div class="card wallet">
+    <img src="wallet-icon.png" alt=""/>
+    <h4>Secure & Encrypted Wallet</h4>
+    <p>
+      Protect your assets with enterprise-grade security, multi-layer encryption,
+      and full ownership of your funds.
+    </p>
+  </div>
+
+  <div class="card">
+    <img src="send-icon.png" alt=""/>
+    <h4>Send & Receive Instantly</h4>
+    <p>
+      Transfer crypto effortlessly with fast confirmations, low fees,
+      and seamless wallet-to-wallet transactions.
+    </p>
+  </div>
+
+  <div class="card">
+    <img src="coin-icon.png" alt=""/>
+    <h4>Invest in Real Time</h4>
+    <p>
+      Track market movements, execute trades instantly,
+      and manage your investments as the market evolves.
+    </p>
+  </div>
+
+  <div class="card">
+    <img src="chart-icon.png" alt=""/>
+    <h4>Watch & Analyze Charts</h4>
+    <p>
+      Make informed decisions using advanced charts,
+      live indicators, and professional-grade analytics tools.
+    </p>
+  </div>
+
+</section>
+
+
+
+
 
           <div className="row cta_register_s">
             <div className="col-sm-8">

@@ -40,10 +40,10 @@ const Market = () => {
       socket.on('message', (data) => {
         setCoinData(data?.pairs);
         const topGainers = [...data?.pairs || []]
-        .sort((a, b) => b.change_percentage - a.change_percentage)
+          .sort((a, b) => b.change_percentage - a.change_percentage)
         const topLosers = [...data?.pairs || []]
-        .sort((a, b) => a.change_percentage - b.change_percentage)
-        .slice(0, 4);        setTopGainers(topGainers);
+          .sort((a, b) => a.change_percentage - b.change_percentage)
+          .slice(0, 4); setTopGainers(topGainers);
         setTopLosers(topLosers);
       });
     }
@@ -130,19 +130,19 @@ const Market = () => {
 
   return (
     <>
-     <Helmet>
-    <title>Wrathcode Market – Live Crypto Prices & Trading Pairs</title>
+      <Helmet>
+        <title>Wrathcode Market – Live Crypto Prices & Trading Pairs</title>
 
-    <meta
-        name="description"
-        content="Explore live market data on Wrathcode. View real-time prices, volumes and trading pairs for Bitcoin, Ethereum and top altcoins. Start trading today."
-    />
+        <meta
+          name="description"
+          content="Explore live market data on Wrathcode. View real-time prices, volumes and trading pairs for Bitcoin, Ethereum and top altcoins. Start trading today."
+        />
 
-    <meta
-        name="keywords"
-        content="crypto market, live crypto prices, bitcoin ethereum trading pairs, Wrathcode market"
-    />
-</Helmet>
+        <meta
+          name="keywords"
+          content="crypto market, live crypto prices, bitcoin ethereum trading pairs, Wrathcode market"
+        />
+      </Helmet>
 
       <section className="section-padding login_bg  login_sec  market_page">
         <section className="live_prices mt-0 market_prices market_update_sec market_update_table ">
@@ -180,17 +180,17 @@ const Market = () => {
                           {topGainers.length <= 0 ?
                             <tr >
                               <td colSpan="4" className="p-0" >
-                              <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
+                                <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
                               </td>
                             </tr> :
                             topGainers
                               ? topGainers
                                 .slice(0, 4).map((item, index) => {
-                                  return <tr key={index}  onClick={() => nextPage(item)} >
+                                  return <tr key={index} onClick={() => nextPage(item)} >
                                     <td>
                                       <div className="spotName">
                                         <div className="symblecurrency">
-                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
+                                          <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
                                           {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
                                         </div>
                                       </div>
@@ -249,17 +249,17 @@ const Market = () => {
                           {topLosers && topLosers.length <= 0 ?
                             <tr >
                               <td colSpan="4" className="p-0" >
-                              <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
+                                <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
                               </td>
                             </tr> :
                             topLosers
                               ? topLosers.slice(0, 4).map((item, index) => {
                                 return (
-                                  <tr key={index}  onClick={() => nextPage(item)} >
+                                  <tr key={index} onClick={() => nextPage(item)} >
                                     <td>
                                       <div className="spotName">
                                         <div className="symblecurrency">
-                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
+                                          <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
                                           {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
                                         </div>
                                       </div>
@@ -317,27 +317,27 @@ const Market = () => {
                           {coinData && coinData.length <= 0 ?
                             <tr >
                               <td colSpan="4" className="p-0" >
-                              <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
+                                <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
                               </td>
                             </tr> :
                             coinData && coinData?.length > 0 ? (
                               coinData?.slice(0, 4)?.map((item, index) => {
                                 return (
-                                  <tr key={index}  onClick={() => nextPage(item)} >
-                                  <td>
-                                    <div className="spotName">
-                                      <div className="symblecurrency">
-                                      <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
-                                        {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
+                                  <tr key={index} onClick={() => nextPage(item)} >
+                                    <td>
+                                      <div className="spotName">
+                                        <div className="symblecurrency">
+                                          <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
+                                          {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                  <td className="text-end">{formatNumber(item?.buy_price, 5)}</td>
-                                  <td className={item?.change_percentage >= 0 ? "text-success text-end" : "text-danger text-end"} ><b>
-                                    <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                    {formatNumber(item?.change_percentage, 5)}%</b>
-                                  </td>
-                                </tr>
+                                    </td>
+                                    <td className="text-end">{formatNumber(item?.buy_price, 5)}</td>
+                                    <td className={item?.change_percentage >= 0 ? "text-success text-end" : "text-danger text-end"} ><b>
+                                      <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
+                                      {formatNumber(item?.change_percentage, 5)}%</b>
+                                    </td>
+                                  </tr>
                                 );
                               })
                             ) : (
@@ -381,29 +381,29 @@ const Market = () => {
                           {coinData && coinData.length <= 0 ?
                             <tr >
                               <td colSpan="4" className="p-0" >
-                              <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
+                                <div className=" d-flex justify-content-center align-items-center"><div className="spinner-border text-primary" role="status" /></div>
                               </td>
                             </tr> :
                             coinData && coinData?.length > 0 ? (
                               coinData?.reverse()?.slice(0, 4)?.map((item, index) => {
-                   
+
                                 // }
                                 return (
                                   <tr key={index} onClick={() => nextPage(item)} >
-                                  <td>
-                                    <div className="spotName">
-                                      <div className="symblecurrency">
-                                      <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
-                                        {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
+                                    <td>
+                                      <div className="spotName">
+                                        <div className="symblecurrency">
+                                          <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg" />
+                                          {item?.base_currency}/{item?.quote_currency} <span className="text-muted"></span>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                  <td className="text-end">{formatNumber(item?.buy_price, 5)}</td>
-                                  <td className={item?.change_percentage >= 0 ? "text-success text-end" : "text-danger text-end"} ><b>
-                                    <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                    {formatNumber(item?.change_percentage, 5)}%</b>
-                                  </td>
-                                </tr>
+                                    </td>
+                                    <td className="text-end">{formatNumber(item?.buy_price, 5)}</td>
+                                    <td className={item?.change_percentage >= 0 ? "text-success text-end" : "text-danger text-end"} ><b>
+                                      <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
+                                      {formatNumber(item?.change_percentage, 5)}%</b>
+                                    </td>
+                                  </tr>
                                 );
                               })
                             ) : (
@@ -616,7 +616,7 @@ const Market = () => {
                                   .map((item, index) => {
                                     return <tr key={index} onClick={() => nextPage(item)}  >
                                       <td className="">
-                                        {index+1}
+                                        {index + 1}
                                       </td>
                                       <td>
                                         <div className="td_div">
@@ -670,23 +670,23 @@ const Market = () => {
                               <tbody>
                                 {topLosers
                                   ? topLosers.map((item, index) => {
-                                    return  <tr key={index}  onClick={() => nextPage(item)} >
-                                    <td className="">
-                                      {index+1}
-                                    </td>
-                                    <td>
-                                      <div className="td_div">
-                                        {item?.base_currency}
-                                        <small>&nbsp; | {item?.symbol}</small>&nbsp;
-                                        {item?.quote_currency}
-                                      </div>
-                                    </td>
-                                    <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
-                                    <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
-                                      <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                      {formatNumber(item?.change_percentage, 5)}%</b> </td>
-                                    <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
-                                  </tr>
+                                    return <tr key={index} onClick={() => nextPage(item)} >
+                                      <td className="">
+                                        {index + 1}
+                                      </td>
+                                      <td>
+                                        <div className="td_div">
+                                          {item?.base_currency}
+                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
+                                          {item?.quote_currency}
+                                        </div>
+                                      </td>
+                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
+                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
+                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
+                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
+                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
+                                    </tr>
                                   })
                                   : null
                                 }
@@ -725,11 +725,11 @@ const Market = () => {
                               </thead>
                               <tbody>
                                 {coinData?.reverse().map((item, index) => {
-                      
+
                                   return (
                                     <tr key={index} onClick={() => nextPage(item)} >
                                       <td className="">
-                                        {index+1}
+                                        {index + 1}
                                       </td>
                                       <td>
                                         <div className="td_div">

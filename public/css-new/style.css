@@ -3,7 +3,6 @@
 body {
     font-family: "Inter", sans-serif;
     background-color: #0a0a0a;
-    zoom: 1;
 }
 
 h1 {
@@ -237,54 +236,18 @@ header .row {
 
 }
 
-/* .herobanner2 .scan_block ul li h6 {
-    font-size: 20px;
-    margin: 0px;
-}
-
-.herobanner2 .scan_block ul li span {
-    font-size: 18px;
-} */
-
-/* .hero_section_main {
-    width: 100%;
-    background-color: #0A0A0A;
-    display: flex;
-    padding-top: 100px;
-    justify-content: start;
-    align-items: start;
-    text-align: center;
-    min-height: 814px;
-    position: relative;
-        background-image: url("../images/bg.gif");
-    background-position: center top;
-    background-size: cover;
-    background-repeat: no-repeat;
-    justify-content: center;
-} */
-
 
 .hero_section_main {
     position: relative;
     width: 100%;
-    min-height: 814px;
+    min-height: 780px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding-top: 50px;
-    background-color: #0A0A0A;
+    background-color: #000;
     overflow: hidden;
     text-align: center;
-}
-
-.video-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
 }
 
 .hero_content {
@@ -293,33 +256,11 @@ header .row {
     color: white;
 }
 
-
-.hero_section_main:after {
-    width: 100%;
-    height: 100%;
-    background-color: #00000021;
-    position: absolute;
-    content: "";
-    left: 0;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-}
-
 .banner_content {
     text-align: left;
     color: #fff;
-    width: 90%;
-}
-
-.annousment_left {
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-span.sub_heading {
-    font-size: 25px;
+    width: 600px;
+    max-width: 100%;
 }
 
 header .col-lg-2.logo_s {
@@ -327,134 +268,18 @@ header .col-lg-2.logo_s {
 }
 
 .banner_content h1 {
-    font-size: 60px;
     line-height: 110%;
     font-weight: 800;
-    margin-top: 14px;
 }
 
 .banner_content h1 span {
-    display: inline-block;
     color: #F3BB2B;
-    background-color: #393939;
-    padding: 0px 20px 10px;
-    border-radius: 100px;
-    border-left: 1px solid #fff;
-    border-right: 1px solid #fff;
 }
 
 .banner_content p {
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 18px;
     margin-top: 20px;
-}
-
-.sign_form_btn {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
-
-.sign_form input {
-    border: none;
-    border-radius: 50px;
-    background-color: transparent;
-}
-
-.sign_form_btn ul {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.sign_form_btn ul li {
-    width: 58px;
-    height: 58px;
-    border-radius: 50px;
-    background-color: #393939;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sign_form [type="text"] {
-    font-size: 18px;
-    color: #6b6b6b;
-    padding: 0px 15px;
-}
-
-.sign_form [type="text"]:focus {
-    border: none;
-    outline: none;
-}
-
-.hero_section_main .row {
-    position: relative;
-    z-index: 666;
-    padding-bottom: 90px;
-    align-items: center;
-}
-
-.sign_form [type="button"] {
-    background-color: #F3BB2B;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-    padding: 12px 32px;
-    border-radius: 100px;
-}
-
-.sign_form [type="button"]:hover {
-    background-color: #d49d11;
-}
-
-.banner_effect_bottom {
-    position: absolute;
-    left: -80px;
-    bottom: -60px;
-    right: 0px;
-}
-
-/* Keyframes for up & down effect */
-/* @keyframes floatUpDown {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-15px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
-} */
-
-.annousment_s {
-    background-color: #1A1A1A;
-    color: #ffffff;
-    border: 1px solid #a37d1a85;
-    border-radius: 70px 70px 0px 0px;
-    position: absolute;
-    width: 850px;
-    max-width: 100%;
-    margin: 0 auto;
-    margin-top: 0px;
-    left: 0;
-    padding: 20px 48px 17px;
-    bottom: 0px;
-    right: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.more_btn a {
-    font-size: 18px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    color: #C0C0C0;
 }
 
 
@@ -788,19 +613,49 @@ button.btn.btn-danger {
 .currency_logo {
     max-width: 100%;
     display: block;
-    padding: 75px 0px 50px;
+    padding: 0px 0px 20px;
 }
 
 .currency_logo ul {
+    gap: 20px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 0px;
+    align-items: center;
 }
 
-.currency_logo ul li img {
-    max-width: 90px;
-    height: 100%;
+.currency_logo ul li {
+    display: flex;
+    align-items: center;
+    background-color: #0B0B0B;
+    min-height: 154px;
+    width: 350px;
+    padding: 10px 0px 10px 24px;
+    border-radius: 8px;
+    color: #CBCBCB;
+    justify-content: space-between;
+}
+
+.currency_logo ul li span {
+    font-size: 13px;
+}
+
+.currency_logo ul li h3 {
+    font-size: 20px;
+    margin: 0px;
+}
+
+.currency_logo ul li .icon_crypto {
+    width: 124px;
+}
+
+.viewmorebtn {
+    width: 100%;
+    display: block;
+    margin-top: 50px;
+}
+
+.viewmorebtn a {
+    color: #F3BB2B;
 }
 
 ul.social_media a {
@@ -922,33 +777,15 @@ ul.social_media a {
     cursor: pointer;
 }
 
-.hot_trading_s table tbody tr:hover {
+/* .hot_trading_s table tbody tr:hover {
     box-shadow: 0px 0px 20px #f3ba2b49;
     transform: scale(1.1);
-}
+} */
 
 .hot_trading_s table tbody tr:hover .right_t a {
     background-color: #f3bb2b;
     color: #000;
     border: 1px solid #f3bb2b;
-}
-
-.how_get_account_ot {
-    display: block;
-    position: relative;
-    z-index: 999;
-    text-align: center;
-    width: 100%;
-    background-color: #0a0a0a;
-    color: #fff;
-    padding: 80px 0px 40px;
-}
-
-.how_get_account_ot p.sub_text {
-    font-size: 20px;
-    color: #d2d2d2;
-    max-width: 720px;
-    margin: 0 auto;
 }
 
 .profit_costs_cta_outer.costouterbg {
@@ -975,42 +812,16 @@ button.learnbtn a:hover {
     z-index: 1;
 }
 
-.how_get_account_ot .container {
-    position: relative;
-    z-index: 666;
+.profit_costs_cta_outer h2 { width: 50%;
 }
 
-.how_get_account_ot h2 {
-    font-weight: 600;
-    text-align: left;
-}
-
-.how_get_account_ot ul li {
-    display: flex;
-    align-items: normal;
-    gap: 24px;
-}
-
-.profit_costs_cta_outer h2 {
-    font-weight: 600;
-}
-
-.how_get_account_ot ul li span {
-    font-size: 40px;
-    font-weight: 500;
-}
-
-.how_get_account_ot ul li h3 {
-    font-size: 32px;
-    /* font-weight: 500; */
+.invest_tradetop {
+    gap: 32px;
+    justify-content: space-between;
 }
 
 .profit_costs_cta_outer.homecta {
     padding-top: 0px;
-}
-
-.how_get_account_ot ul li p {
-    font-size: 20px;
 }
 
 .homecta .profit_cost_cnt h2 {
@@ -1019,88 +830,15 @@ button.learnbtn a:hover {
     font-weight: 500;
 }
 
-.how_get_account_ot .trade_btn button {
-    border: 1px solid #A6A6A6;
-    color: #A6A6A6;
-    font-size: 16px;
-    padding: 5px 26px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-
-.how_get_account_ot .trade_btn button:hover {
-    border: 1px solid #f3bb2b;
-    color: #000;
-}
-
-.how_get_account_ot .trade_btn button:hover span {
-    background: linear-gradient(152deg, rgba(255, 220, 136, 1) 0%, rgba(220, 143, 27, 1) 100%);
-}
-
-.how_get_account_ot .trade_btn button span {
-    background: linear-gradient(152deg, rgba(166, 166, 166, 1) 0%, rgba(98, 97, 96, 1) 100%);
-    width: 24px;
-    height: 24px;
-}
-
-
-.how_get_account_ot ul {
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-    padding-top: 40px;
-}
-
-.app_btn {
-    display: flex;
-    gap: 30px;
-    margin-top: 36px;
-}
-
-.app_btn button {
-    border: 1px solid #f3bb2b;
-    background-color: transparent;
-    display: flex;
-    color: #fff;
-    padding: 11px 23px;
-    font-weight: 400;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 18px;
-    text-align: left;
-    gap: 15px;
-    align-items: center;
-}
-
-.app_btn button img {
-    width: 36px;
-}
-
-.how_get_account_ot .row {
-    align-items: center;
-    margin-top: 50px;
-}
-
 .crypto_bitcoin_vector {
     max-width: 745px;
     float: right;
-}
-
-.how_get_account_ot h2 span {
-    color: #f3bb2b;
 }
 
 .trade_app__app .crypto_bitcoin_vector {
     float: left;
 }
 
-.how_get_account_ot h5 {
-    margin: 20px 0px;
-    font-size: 24px;
-    font-weight: 400;
-}
 
 .trade_btn {
     margin-top: 30px;
@@ -1117,6 +855,11 @@ button.learnbtn a:hover {
     font-size: 16px;
     color: #fff;
 }
+
+
+
+
+
 
 
 .main_marker_summary:hover .market_summary_right_tp {
@@ -1285,8 +1028,6 @@ button.learnbtn a:hover {
 
 .profit_costs_cta_outer {
     padding: 80px 0px 100px;
-    /* min-height: 100%; */
-    background-color: #0a0a0a;
     color: #fff;
     position: relative;
 }
@@ -1319,50 +1060,8 @@ button.learnbtn a:hover {
     opacity: 0.4;
 }
 
-.software_trading_bl {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    border: 1px solid #f2ccff6b;
-    border-radius: 24px;
-    transition: 2ms;
-}
-
-.software_trading_cnt {
-    position: absolute;
-    bottom: 35px;
-    max-width: 80%;
-    margin: 0 auto;
-    left: 0px;
-    right: 0px;
-}
-
-.software_trading_bl h6 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
 .centerbox {
     height: 100% !important;
-}
-
-.profit_costs_cta_outer.platform_trading_s .row {
-    padding: 40px 0px 110px;
-    row-gap: 24px;
-}
-
-.software_trading_bl p {
-    font-size: 20px;
-    color: #A6A6A6;
-    margin: 0px;
-}
-
-.after_top_vector {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    opacity: 0;
 }
 
 .no_data_s {
@@ -1374,20 +1073,13 @@ button.learnbtn a:hover {
     justify-content: center;
 }
 
-:focus-visible{ outline: none; }
-
-.software_trading_bl:hover {
-    border-color: #af7e00;
+:focus-visible {
+    outline: none;
 }
 
-.homepop_box.popup-box { border: none !important; border-radius: 0px !important; }
-
-.software_trading_bl:hover .after_top_vector {
-    opacity: 1;
-}
-
-.software_trading_bl img {
-    width: 100%;
+.homepop_box.popup-box {
+    border: none !important;
+    border-radius: 0px !important;
 }
 
 .tursest_faq_home_s {
@@ -1533,13 +1225,6 @@ footer .row .col-sm-12.col-md-4.col-lg-6 p {
     display: flex;
     text-align: left;
     justify-content: end;
-}
-
-.profit_costs_cta_outer.platform_trading_s .row.cta_register_s {
-    margin-top: 0px;
-    border: 1px solid #835C00;
-    border-radius: 20px;
-    padding: 10px 10px 11px 48px;
 }
 
 .row.cta_register_s .profit_cost_cnt h2 {
@@ -1719,13 +1404,6 @@ ul.social_media {
     display: flex;
     justify-content: space-between;
     gap: 32px;
-}
-
-
-.sign_form_btn {
-    display: flex;
-    align-items: center;
-    gap: 18px;
 }
 
 .blog_img {
@@ -2055,47 +1733,9 @@ section.hot_articles_s .row {
     border-radius: 10px;
 }
 
-.sign_form {
-    display: flex;
-    justify-content: space-between;
-    background-color: #393939;
-    padding: 4px;
-    border-radius: 100px;
-}
-
 .dashboard_listing_section.top_p {
     margin-top: 0px;
 }
-
-/* .sign_form input {
-    border: none;
-    border-radius: 50px;
-    background-color: transparent;
-}
-
-.sign_form [type="text"] {
-    font-size: 16px;
-    color: #6b6b6b;
-    padding: 0px 15px;
-}
-
-.sign_form [type="text"]:focus {
-    border: none;
-    outline: none;
-}
-
-.sign_form [type="button"] {
-    background-color: #f3bb2b;
-    color: #000;
-    font-size: 18px;
-    font-weight: 400;
-    padding: 12px 32px;
-    border-radius: 100px;
-}
-
-.sign_form [type="button"]:hover {
-    background-color: #5c11b2;
-} */
 
 
 .themecolor_icon i {
@@ -3359,55 +2999,158 @@ ul.ac_wallet_info li a {
     z-index: 2;
 }
 
-@keyframes banner_move-up-down-best__Nigcl {
-    0% {
-        transform: translateY(6px)
-    }
+img.bitcoin_left {
+    position: absolute;
+    left: 160px;
+    bottom: 0px;
+    animation: banner_move_left_right 10s ease-in-out infinite;
+}
 
-    20% {
-        transform: translateY(0)
+@keyframes banner_move_left_right {
+    0% {
+        transform: translateX(0);
     }
 
     50% {
-        transform: translateY(-6px)
+        transform: translateX(50px);
+        /* right side */
     }
 
-    75% {
-        transform: translateY(0)
-    }
-
-    to {
-        transform: translateY(6px)
+    100% {
+        transform: translateX(0);
+        /* back to left */
     }
 }
 
+
+.bg-video {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero_section_main .container {
+    position: relative;
+    z-index: 666;
+}
+
+.hero_section_main:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(to right,
+            rgba(0, 0, 0, 1),
+            rgba(0, 0, 0, 0.90),
+            rgba(0, 0, 0, 0.60),
+            rgba(0, 0, 0, 0));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero_section_main:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(to left,
+            rgba(0, 0, 0, 1),
+            rgba(0, 0, 0, 0.90),
+            rgba(0, 0, 0, 0.20),
+            rgba(0, 0, 0, 0));
+    z-index: 1;
+    pointer-events: none;
+}
+
+
+
 .banner_img {
-    max-width: 450px;
-    /* margin: 0 auto; */
+    max-width: 760px;
     float: right;
+    position: relative;
+}
+
+.animation {
+    position: absolute;
+    content: "";
+    z-index: 666;
+}
+
+@keyframes crypto_center_circle {
+    0% {
+        transform: translate(0, -20px);
+    }
+
+    25% {
+        transform: translate(20px, 0);
+    }
+
+    50% {
+        transform: translate(0, 25px);
+    }
+
+    75% {
+        transform: translate(-20px, 0);
+    }
+
+    100% {
+        transform: translate(0, -20px);
+    }
+}
+
+img.crypto_cntr {
+    position: absolute;
+    left: 50px;
+    right: 0;
+    margin: 0 auto;
+    top: -40px;
+
+    animation-name: crypto_center_circle;
+    animation-duration: 24s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+
+
+
+
+
+
+img.bitcoin_right {
+    position: absolute;
+    right: -30px;
+    top: 45px;
+    width: 122px;
+    animation: banner_move_up_hero 10s ease-in-out infinite;
 }
 
 @keyframes banner_move_up_hero {
     0% {
-        transform: translateY(6px)
-    }
-
-    20% {
-        transform: translateY(0)
+        transform: translateY(0);
     }
 
     50% {
-        transform: translateY(-6px)
+        transform: translateY(-40px);
+        /* upar jayega */
     }
 
-    75% {
-        transform: translateY(0)
-    }
-
-    to {
-        transform: translateY(6px)
+    100% {
+        transform: translateY(0);
+        /* wapas niche */
     }
 }
+
 
 
 .vector_currency {
@@ -4205,10 +3948,6 @@ body form.searchinput input:focus {
     border: none !important;
 }
 
-.app_btn button:hover {
-    background-color: transparent;
-}
-
 .login_section .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {
     border: none !important;
@@ -4928,12 +4667,27 @@ body .red {
 
 .hot_trading_s table tr td {
     color: #b4b4b4;
+    font-size: 15px;
+    border: none;
 }
 
 .hot_trading_s table tr th {
     color: #b4b4b4;
 }
 
+.trending_crypto td.price_right_top {
+    text-align: right;
+}
+
+.trending_crypto span.green {
+    justify-content: end;
+}
+
+.trending_crypto .hot_trading_s table tr th {
+    font-size: 14px;
+    padding: 5px 12px !important;
+    border: none
+}
 
 .modal.fade .modal-dialog {
     min-width: 730px;
@@ -5403,40 +5157,29 @@ section.faq_cards .row {
     top: 160px;
 } */
 
-.d-flex.scan_button {
-    justify-content: space-between;
-    gap: 32px;
+.d-flex.download_button {
+    gap: 22px;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 24px;
 }
 
-.d-flex.scan_button .app_btn {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin: 0px;
-    gap: 12px;
+.d-flex.download_button button.btn {
+    background-color: #F3BB2B;
+    font-size: 16px;
+    border: 1px solid #F3BB2B;
+    color: #060606;
+    font-weight: 500;
+    line-height: 24px;
+    width: 190px;
+    border-radius: 50px;
+    padding: 11px 10px;
 }
 
-.how_get_account_ot.trade_app__app {
-    background: linear-gradient(170deg, rgb(0 0 0) 20%, rgba(30, 42, 116, 1) 130%);
-    padding-bottom: 80px;
-}
-
-.scan_button .app_btn button {
-    border: none;
-    background-color: #fff;
-    box-shadow: 2px 3px #bbb6b6;
-    color: #000000;
-    padding: 6px 21px;
-    font-weight: 400;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 18px;
-    text-align: left;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    min-height: 58px;
+.d-flex.download_button button.btn.platform {
+    background-color: #ffffff00;
+    border-color: #fff;
+    font-size: 16px;
+    color: #fff;
 }
 
 .scan_code_bl {
@@ -5646,32 +5389,25 @@ section.faq_sec {
 }
 
 .crypto_section {
-    padding: 50px 0px;
-    background-color: #0a0a0a;
-    color: #fff;
+    padding: 70px 0px;
+    color: #eaecef;
+    text-align: center;
 }
 
 .crypto_section h2 {
-    font-weight: 600;
+    font-weight: 500;
+}
+
+.crypto_section p {
+    color: #929292;
+    padding-top: 15px;
 }
 
 .crypto_dashboard {
-    border: 1px solid #454952;
-    border-radius: 15px;
-    padding: 0px;
-    margin-top: 32px;
+    gap: 36px;
+    margin-top: 50px;
     justify-content: space-between;
     display: flex;
-}
-
-.top_gainers {
-    overflow: hidden;
-    overflow: auto;
-}
-
-.right_dashboard .hot_trading_s table tbody tr:hover {
-    box-shadow: none;
-    transform: scale(1);
 }
 
 .coin_view_top {
@@ -5894,6 +5630,7 @@ input.input_filed:focus {
     font-weight: 600;
 }
 
+
 body.light_theme .tradebtn {
     background: #dfdfdf;
 }
@@ -6062,10 +5799,6 @@ body.light_theme .amount_sysmble span {
 
 .sidebar_deposit .deposit_list a:hover {
     box-shadow: 0px 1px 4px #f3bb2b;
-}
-
-.app_btn .mobile {
-    display: none;
 }
 
 .os_sec .custom-btn,
@@ -6488,32 +6221,9 @@ select#royality {
     align-items: center;
 }
 
-.hot_trading_s.top_gainers .first_coloum {
-    width: auto;
-    text-align: left !important;
-    padding-right: 15px !important;
-}
-
-.hot_trading_s.top_gainers .td_first {
-    font-size: 14px;
-    font-weight: 400;
-}
-
-.crypto_section .hot_trading_s.top_gainers th,
-td {
-    font-size: 14px;
-}
-
-.hot_trading_s.top_gainers .price_right_top {
-    text-align: right;
-}
 
 table .green {
     color: #1ead60;
-}
-
-.crypto_section .hot_trading_s.top_gainers td span {
-    display: block;
 }
 
 .custom-tab-content .table>thead th {
@@ -6525,10 +6235,6 @@ table .green {
     background-color: #1a1a1a;
     padding: 15px 0px;
     border-radius: 0px 20px 0px 0px;
-}
-
-.crypto_section .hot_spot_outer {
-    width: 75%;
 }
 
 .crypto_section table {
@@ -6557,10 +6263,6 @@ td.green {
     margin-top: 0px;
 }
 
-.hot_trading_s {
-    height: 610px;
-}
-
 .crypto_section table .right_t a:hover {
     background-color: #f3bb2b;
     color: #000;
@@ -6568,9 +6270,9 @@ td.green {
 }
 
 .crypto_section .top_heading h4 {
-    font-size: 18px;
-    font-weight: 600;
-    padding-bottom: 7px;
+    font-size: 22px;
+    font-weight: 400;
+    color: #F3F3F3;
     cursor: pointer;
 }
 
@@ -6578,11 +6280,11 @@ td.green {
     border-bottom: 3px solid #F3BB2B;
 }
 
-.crypto_section .top_heading a.more_btn {
-    font-size: 16px;
-    color: #F3BB2B;
-    font-weight: 400;
+.crypto_section .table-responsive {
+    min-height: 200px;
+    max-height: 360px;
 }
+
 
 .crypto_section table .right_t a {
     font-size: 16px;
@@ -6598,34 +6300,21 @@ td {
     text-align: left;
 }
 
-.right_dashboard {
-    width: 25%;
-    padding: 32px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    border-left: 1px solid #454952;
-}
-
-.hot_trading_s.top_gainers {
-    height: 250px;
-}
-
 .losser_stock {
     border-top: 1px solid #454952;
     padding-top: 30px;
 }
 
 .hot_spot_outer {
-    padding: 32px;
+    width: 100%;
+    padding: 32px 24px;
+    border: 1px solid #ffffff15;
+    border-radius: 28px;
 }
 
-.icon_google {
-    display: flex;
-    gap: 12px;
+.icon_notificaton_r .annousment_left:hover {
+    background-color: transparent;
 }
-
-.icon_notificaton_r .annousment_left:hover{ background-color: transparent; }
 
 form.buysellform.data-buy .form-control {
     border: none !important;
@@ -6635,91 +6324,9 @@ form.buysellform.data-sell .form-control {
     border: none !important;
 }
 
-.services_block_infor {
-    background-image: url(../images/get_started_img.png);
-    background-repeat: no-repeat;
-    text-align: center;
-    background-position: center;
-    background-size: cover;
-    width: 100%;
-    transition: 1s;
-    background-color: transparent;
-    min-height: 405px;
-    width: 468px;
-}
-
-.services_block_infor:hover {
-    transform: scale(1.1);
-}
-
-.services_info_icon {
-    width: 104px;
-    height: 104px;
-    margin: 0 auto;
-    background-color: #353333;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.services_block_infor .cnt_block {
-    padding: 80px 40px 0px;
-}
-
-.services_block_infor h4 {
-    font-size: 24px;
-    font-weight: 500;
-}
-
-.services_block_infor .cnt_block p {
-    font-size: 17px;
-    color: #939292;
-    margin: 15px 0px 20px;
-    max-width: 100%;
-}
-
 .anytime_anywhere h5 {
     margin-top: 0px;
 }
-
-.services_block_infor .readbtn {
-    justify-content: center;
-    display: flex;
-    padding-top: 10px;
-    align-items: center;
-}
-
-.services_block_infor .readbtn a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #353333;
-    padding: 14px 32px;
-    border-radius: 50px;
-    transition: 1s;
-}
-
-.services_block_infor:hover .readbtn a {
-    background-color: #f3bb2b;
-    color: #000;
-}
-
-.services_block_infor:hover path {
-    fill: #000;
-}
-
-.services_block_infor:hover .services_info_icon {
-    background-color: #f3bb2b;
-}
-
-.services_block_infor:hover .services_info_icon img {
-    filter: brightness(0) invert(0);
-}
-
 
 .trading_platform_section {
     padding: 70px 0px;
@@ -7014,6 +6621,139 @@ form.buysellform.data-sell .form-control {
     margin-top: 30px;
     gap: 24px;
 }
+
+section.crypto_exchange_section {
+    width: 100%;
+    display: block;
+    padding: 80px 0px;
+}
+
+.cryptofuture_s {
+    width: 1064px;
+    max-width: 100%;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    color: #fff;
+}
+
+.crypto_future_cnt {
+    width: 470px;
+    max-width: 100%;
+}
+
+.crypto_future_cnt h2 span {
+    color: #F3BB2B;
+}
+
+.crypto_future_cnt p {
+    color: #C0C0C0;
+    margin: 20px 0px;
+}
+
+.crypto_future_cnt ul.listcrypto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 15px 0px;
+}
+
+.crypto_future_cnt ul.listcrypto li {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.crypto_future_cnt ul.listcrypto li i {
+    font-size: 24px;
+    color: #F3BB2B;
+}
+
+.security_list {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    margin-top: 30px;
+    border: 1px solid #2F2F2F;
+    border-radius: 24px;
+}
+
+.security_list li {
+    min-height: 170px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #2F2F2F;
+    border-bottom: 1px solid #2F2F2F;
+    align-items: center;
+    flex-direction: column;
+}
+
+.security_list li:nth-child(2n+2) { border-right: none;  }
+.security_list li:nth-child(3n+3) { border-bottom: none;  }
+.security_list li:last-child { border-bottom: none;  }
+
+.security_list li p {
+    margin: 0px;
+}
+
+.security_list li h3 {
+    font-size: 40px;
+}
+
+.security_list li h3 span {
+    color: #F3BB2B;
+}
+
+.reverse_security .exchange_future_s {
+    width: 460px;
+    text-align: left;
+}
+
+.reverse_security img.animation_effect.bitcoin {
+    bottom: 20px;
+    top: inherit;
+    right: 0px;
+    left: inherit;
+}
+
+.cryptofuture_s.reverse_security {
+    margin-top: 130px;
+}
+
+button.downloadbtn {
+    background-color: #F3BB2B;
+    font-size: 16px;
+    border: 1px solid #F3BB2B;
+    color: #060606;
+    font-weight: 500;
+    margin-top: 24px;
+    line-height: 24px;
+    width: 190px;
+    border-radius: 50px;
+    padding: 11px 10px;
+}
+
+.exchange_future_s {
+    width: 460px;
+    position: relative;
+    max-width: 100%;
+    text-align: right;
+}
+
+.animation_effect {
+    position: absolute;
+    left: 0px;
+    top: 90px;
+}
+
+img.animation_effect.bitcoin {
+    bottom: 60px;
+    top: inherit;
+    left: 120px;
+}
+
 
 .trade_crypto_cnt {
     width: 629px;
@@ -7798,8 +7538,9 @@ body .recommendations_block ul li a:hover {
 
 .top_heading {
     display: flex;
-    margin-bottom: 20px;
-    justify-content: space-between;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .crypto_section .hot_trading_s .td_first {
@@ -7855,11 +7596,6 @@ body .recommendations_block ul li a:hover {
     border-radius: 12px;
 }
 
-a.more_btn {
-    font-size: 14px;
-    color: #fff;
-    font-weight: 700;
-}
 
 .listing_left_outer .dashboard_summary ul li {
     padding: 0px;
@@ -7953,7 +7689,7 @@ a.more_btn {
 }
 
 body {
-    background-color: #0a0a0a !important;
+    background-color: #000;
 }
 
 .navi_sidebar li a {
@@ -9984,13 +9720,6 @@ button.transfer_btn {
     position: relative;
 }
 
-.banner_img a.more_btn {
-    position: absolute;
-    bottom: 18px;
-    right: 40px;
-    width: 210px;
-    height: 30px;
-}
 
 
 ƒ .user_img img {
@@ -10616,50 +10345,6 @@ button.subscribe_btn::after {
     margin-bottom: 24px;
     display: flex;
     justify-content: end;
-}
-
-
-.t_shirts_add_s {
-    display: flex;
-    gap: 20px;
-    margin: 24px 0px 32px;
-    align-items: center;
-}
-
-.tshirts_vector {
-    width: 160px;
-}
-
-.t_shirts_add_s ul {
-    display: flex;
-    gap: 15px;
-}
-
-.t_shirts_add_s ul li {
-    font-size: 14px;
-    border-right: 1px solid #fff;
-    line-height: 16px;
-    padding-right: 12px;
-}
-
-.t_shirts_add_s ul li:last-child {
-    border-right: none;
-}
-
-.t_shirts_add_s span {
-    font-size: 13px;
-}
-
-.t_shirts_add_s h3 {
-    font-size: 36px;
-    color: #f3bb2b;
-    font-weight: 600;
-}
-
-.banner_content .t_shirts_add_s p {
-    font-size: 18px;
-    font-weight: 400;
-    margin: 10px 0px;
 }
 
 
@@ -12669,21 +12354,8 @@ body.light_theme .market_tab_scroll_ot::before {
     background-color: #f5f5f5;
 }
 
-body.light_theme .how_get_account_ot {
-    background-color: #FFF;
-    color: #000;
-}
-
 body.light_theme .trade_btn button a {
     color: #000;
-}
-
-body.light_theme .app_btn button {
-    color: #000;
-}
-
-body.light_theme .how_get_account_ot h2 span {
-    color: #F4B609;
 }
 
 body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu {
@@ -13049,14 +12721,6 @@ body.light_theme .right_costs_rg ul li {
 
 body.light_theme ul.social_media a {
     background-color: #f4b609;
-}
-
-.app_btn button path {
-    fill: #1d1d1d;
-}
-
-body.light_theme .app_btn button path {
-    fill: #303030;
 }
 
 body.light_theme .login_bg.login_sec.market_page {
@@ -13673,11 +13337,6 @@ body.light_theme .tradebtn:hover {
     background: #F4B609;
 }
 
-body.light_theme .how_get_account_ot .trade_btn button:hover {
-    border: 1px solid #F4B609;
-    background-color: #F4B609;
-}
-
 body.light_theme .trade_add_view .graybg {
     background-color: #f1f1f1;
     color: #000;
@@ -13981,17 +13640,6 @@ td.tb_background {
     margin-bottom: 20px;
 }
 
-.annousment_left:hover {
-    background-color: #30373b;
-
-}
-
-.annousment_left.active {
-    cursor: pointer;
-    background: #111214;
-    border-radius: 5px;
-    padding: 8px 6px;
-}
 
 .user_login.dashbtn a {
     color: #0ecb70;
@@ -14542,22 +14190,9 @@ button.btn_claim:active {
         font-size: 18px;
     }
 
-    .how_get_account_ot ul li h3 {
-        font-size: 28px;
-    }
-
-    .how_get_account_ot ul li p {
-        font-size: 20px;
-    }
-
     .navigation nav ul li a {
         font-size: 14px;
     }
-
-    .services_block_infor {
-        width: 100%;
-    }
-
 
     .serurity_vector {
         max-width: 320px;
@@ -14635,23 +14270,8 @@ button.btn_claim:active {
         font-size: 13px;
     }
 
-    .scan_button .app_btn button {
-        padding: 6px 16px;
-        gap: 6px;
-    }
-
-    .services_block_infor {
-        background-size: contain;
-        min-height: 352px;
-        width: 400px;
-    }
-
     .navigation nav ul li a {
         font-size: 13px;
-    }
-
-    .services_block_infor .cnt_block {
-        padding: 40px 40px 0px;
     }
 
     html,
@@ -14779,15 +14399,6 @@ button.btn_claim:active {
         padding-top: 60px;
     }
 
-    .services_block_infor {
-        min-height: 348px;
-        width: 100%;
-    }
-
-    .software_trading_bl {
-        min-height: 410px;
-    }
-
     .register_verified_form h1 {
         font-size: 36px;
     }
@@ -14869,12 +14480,6 @@ button.btn_claim:active {
         font-size: 28px;
     }
 
-
-
-    span.sub_heading {
-        font-size: 20px;
-    }
-
     .hero_section {
         min-height: 920px;
         padding-bottom: 60px;
@@ -14884,14 +14489,6 @@ button.btn_claim:active {
         margin-top: 0px;
     }
 
-    .sign_form [type="button"] {
-        font-size: 15px;
-        padding: 8px 24px;
-    }
-
-    .sign_form [type="text"] {
-        width: 62%;
-    }
 
     .crypto_section {
         padding: 10px 0px 40px;
@@ -14966,12 +14563,6 @@ button.btn_claim:active {
         gap: 20px;
     }
 
-    .sign_form_btn ul li {
-        width: 42px;
-        padding: 7px;
-        height: 42px;
-    }
-
     .banner_content {
         width: 95%;
     }
@@ -15009,14 +14600,6 @@ button.btn_claim:active {
     .giveaway_top_list ul li span {
         width: 24px;
         height: 24px;
-    }
-
-    .how_get_account_ot {
-        padding: 40px 0px 30px;
-    }
-
-    .how_get_account_ot .row {
-        margin-top: 30px;
     }
 
     .currency_logo {
@@ -15209,14 +14792,10 @@ button.btn_claim:active {
         gap: 20px;
     }
 
-    .d-flex.scan_button {
+    .d-flex.download_button {
         align-items: start;
         margin-top: 30px;
         flex-direction: column;
-    }
-
-    .how_get_account_ot h5 {
-        font-size: 16px;
     }
 
     .effect_left_circle {
@@ -15326,75 +14905,18 @@ button.btn_claim:active {
         margin: 50px 0px 20px;
     }
 
-    .banner_content h1 span {
-        padding: 5px 20px 7px;
-    }
-
     .hero_section_main {
         padding-top: 50px;
         min-height: 650px;
-    }
-
-    .crypto_section .top_heading a.more_btn {
-        font-size: 14px;
-    }
-
-    .services_block_infor {
-        background-size: contain;
-        min-height: 270px;
-        width: 100%;
-    }
-
-    .services_info_icon {
-        width: 75px;
-        height: 75px;
-    }
-
-    .services_info_icon img {
-        width: 45px;
     }
 
     .currency_img_mr {
         left: -20px;
     }
 
-    .software_trading_bl p {
-        font-size: 16px;
-    }
-
-    .services_block_infor h4 {
-        font-size: 16px;
-    }
-
-    .services_block_infor .readbtn a {
-        font-size: 14px;
-        padding: 10px 32px;
-    }
-
     .dashboard_deposit_s {
         width: 80%;
         margin-left: 0px;
-    }
-
-    .services_block_infor .cnt_block p {
-        margin: 10px 0px 7px;
-        font-size: 15px;
-    }
-
-    .services_block_infor .cnt_block {
-        padding: 40px 20px 0px;
-    }
-
-    .software_trading_cnt {
-        bottom: 20px;
-    }
-
-    .software_trading_bl {
-        min-height: 320px;
-    }
-
-    .software_trading_bl h6 {
-        font-size: 20px;
     }
 
     .dashboard_deposit_s h1 {
@@ -15612,19 +15134,6 @@ button.btn_claim:active {
         gap: 18px;
         padding-left: 0px;
         padding-top: 10px;
-    }
-
-    .how_get_account_ot ul li h3 {
-        font-size: 24px;
-    }
-
-    .how_get_account_ot ul li p {
-        font-size: 18px;
-    }
-
-    .how_get_account_ot ul {
-        gap: 32px;
-        padding-top: 20px;
     }
 
     .banner_img {
@@ -15865,15 +15374,6 @@ button.btn_claim:active {
     .crypto_section .hot_trading_s .td_first {
         font-size: 12px;
         gap: 4px;
-    }
-
-    .crypto_section .hot_trading_s.top_gainers th,
-    td {
-        font-size: 13px;
-    }
-
-    .right_dashboard {
-        padding: 20px 18px;
     }
 
     .how_work_s {
@@ -16290,11 +15790,6 @@ button.btn_claim:active {
         padding-top: 0px;
     }
 
-    .hot_trading_s {
-        height: 350px;
-        overflow: auto;
-    }
-
     body form.searchinput input {
         font-size: 12px;
     }
@@ -16467,60 +15962,17 @@ button.btn_claim:active {
         padding: 7px 22px;
     }
 
-
-    .how_get_account_ot .row {
-        flex-direction: column;
-        gap: 32px;
-    }
-
     .anytime_anywhere {
         padding-left: 0px;
         text-align: center;
     }
 
-    .how_get_account_ot.trade_app__app h2 {
-        text-align: center;
-    }
-
-    .d-flex.scan_button {
+    .d-flex.download_button {
         align-items: center;
     }
 
     .login_section {
         max-width: 90%;
-    }
-
-    .software_trading_bl {
-        min-height: 290px;
-    }
-
-    .how_get_account_ot.trade_app__app {
-        padding-top: 0px;
-    }
-
-    .services_block_infor {
-        max-width: 340px;
-    }
-
-    .how_get_account_ot .row .col-sm-4 {
-        width: 100%;
-    }
-
-    .software_trading_bl p {
-        font-size: 14px;
-    }
-
-    .software_trading_bl h6 {
-        font-size: 20px;
-    }
-
-    .services_block_infor {
-        margin: 0 auto;
-        margin-bottom: 20px;
-    }
-
-    .how_get_account_ot.trade_app__app .col-sm-6 {
-        width: 100%;
     }
 
     .bs_dropbox .price_card {
@@ -16579,11 +16031,6 @@ button.btn_claim:active {
     .login-header {
         margin-left: 0px;
         width: 100%;
-    }
-
-    .crypto_section .hot_trading_s.top_gainers th,
-    td {
-        font-size: 13px;
     }
 
     .form_block_login form {
@@ -16906,21 +16353,6 @@ button.btn_claim:active {
         padding-top: 20px;
     }
 
-    .sign_form_btn {
-        justify-content: center;
-    }
-
-    .hero_section_main .row {
-        gap: 40px;
-        padding-bottom: 10px;
-    }
-
-    .annousment_s {
-        position: relative;
-        margin-top: 20px !important;
-        top: 0px;
-    }
-
     header .button_outer {
         align-items: start;
     }
@@ -16937,20 +16369,12 @@ button.btn_claim:active {
         max-width: 90%;
     }
 
-    .how_get_account_ot {
-        padding: 30px 0px;
-    }
-
     .crypto_section {
         padding: 10px 0px 20px;
     }
 
     .currency_logo {
         padding: 40px 0px 30px;
-    }
-
-    .profit_costs_cta_outer.platform_trading_s .row {
-        padding: 20px 0px 60px;
     }
 
     .top_header_dash {
@@ -17192,10 +16616,6 @@ button.btn_claim:active {
         font-size: 36px;
     }
 
-    span.sub_heading {
-        font-size: 20px;
-    }
-
     .banner_content p {
         font-size: 16px;
         margin-top: 10px;
@@ -17238,13 +16658,6 @@ button.btn_claim:active {
     .crypto_section .hot_spot_outer {
         width: 100%;
     }
-
-    .right_dashboard {
-        width: 100%;
-        border-left: none;
-        border-top: 1px solid #E2C9FF;
-    }
-
 
     .how_work_s ul {
         max-width: 100%;
@@ -17436,25 +16849,12 @@ button.btn_claim:active {
         justify-content: start !important;
     }
 
-    .t_shirts_add_s {
-        justify-content: center;
-    }
-
-    .cnt_tshirts {
-        text-align: left;
-    }
-
 }
 
 @media screen and (max-width:767px) {
 
     body .cnt_first_t .icon_currency img {
         width: 24px;
-    }
-
-    .tshirts_vector {
-        min-width: 140px;
-        width: 140px;
     }
 
     .overview_summary_currency .slick-dots {
@@ -17791,21 +17191,15 @@ button.btn_claim:active {
         padding: 10px 30px 20px;
     }
 
-    .d-flex.scan_button {
+    .d-flex.download_button {
         gap: 24px;
         flex-direction: column;
         margin-top: 30px;
     }
 
-    .profit_costs_cta_outer.platform_trading_s .row.cta_register_s {
-        padding: 10px 15px 11px 15px;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .hot_trading_s table tbody tr:hover {
+    /* .hot_trading_s table tbody tr:hover {
         transform: scale(1);
-    }
+    } */
 
     .login_btn input[type="button"] {
         font-size: 14px;
@@ -17829,63 +17223,14 @@ button.btn_claim:active {
         background-color: #fff;
     }
 
-    .sign_form_btn ul {
-        display: none;
-    }
-
     .hot_trading_s tr .m_none {
         display: none;
-    }
-
-    .annousment_s {
-        position: relative;
-        border-radius: 40px 40px 0px 0px;
-        padding: 10px 16px 12px;
-        margin-top: 36px;
     }
 
     .profit_costs_cta_outer.platform_trading_s {
         padding-bottom: 10px;
     }
 
-    .how_get_account_ot p.sub_text {
-        font-size: 14px;
-        max-width: 90%;
-    }
-
-    .services_block_infor {
-        background-size: contain;
-        width: 428px;
-        margin: 0 auto;
-    }
-
-    .services_block_infor .cnt_block p {
-        font-size: 14px;
-        margin: 12px 0px 12px;
-        max-width: 100%;
-    }
-
-    .services_block_infor .readbtn a {
-        font-size: 13px;
-        padding: 10px 24px;
-    }
-
-
-    .how_get_account_ot.trade_app__app .row {
-        flex-direction: column-reverse;
-        margin-top: 20px;
-        gap: 30px;
-    }
-
-    .how_get_account_ot.trade_app__app {
-        padding-bottom: 32px;
-    }
-
-    .scan_button .app_btn button {
-        padding: 2px 21px;
-        gap: 10px;
-        min-height: 46px;
-    }
 
     .code_scan {
         max-width: 90px;
@@ -17893,33 +17238,14 @@ button.btn_claim:active {
         border-radius: 5px;
     }
 
-    .annousment_left {
-        font-size: 14px;
-    }
-
     .hero_section_main {
         padding: 30px 0px 0px;
         min-height: 100%;
     }
 
-    .banner_content h1 span {
-        padding: 5px 20px 5px;
-        margin: 0px 2px 0px 10px;
-    }
-
-    .banner_effect_bottom {
-        opacity: 0.5;
-        left: -240px;
-        bottom: -10px;
-    }
-
     .banner_content p {
         font-size: 14px;
         margin: 15px 0px;
-    }
-
-    .banner_content p img {
-        width: 40px;
     }
 
     .sign_form [type="button"] {
@@ -17932,16 +17258,8 @@ button.btn_claim:active {
         font-size: 13px;
     }
 
-    span.sub_heading {
-        font-size: 18px;
-    }
-
     .crypto_dashboard {
         flex-direction: column-reverse;
-    }
-
-    .right_dashboard {
-        border: none;
     }
 
     .crypto_section tr.top_tradeing_t th {
@@ -18001,10 +17319,6 @@ button.btn_claim:active {
 
     .anytime_anywhere {
         padding-left: 0px;
-        text-align: center;
-    }
-
-    .how_get_account_ot h2 {
         text-align: center;
     }
 
@@ -18291,18 +17605,6 @@ button.btn_claim:active {
 
     .navbar-toggler {
         top: 6px;
-    }
-
-    .app_btn .desktop {
-        display: none;
-    }
-
-    .app_btn .mobile {
-        display: flex;
-    }
-
-    .app_btn button img {
-        width: 24px;
     }
 
     .bs_dropbox .row {
@@ -18974,10 +18276,6 @@ button.btn_claim:active {
         background-size: 80%;
     }
 
-    .how_get_account_ot ul {
-        gap: 50px;
-    }
-
     header {
         padding: 10px 0px;
     }
@@ -18993,11 +18291,6 @@ button.btn_claim:active {
         margin: 0 auto;
     }
 
-    .how_get_account_ot {
-        padding: 30px 0px 20px;
-        text-align: center;
-    }
-
     .right_costs_rg {
         margin-top: 40px;
         justify-content: center;
@@ -19010,21 +18303,6 @@ button.btn_claim:active {
 
     .profit_costs_cta_outer.costouterbg .profit_cost_cnt {
         text-align: center;
-    }
-
-    .how_get_account_ot ul li {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .how_get_account_ot ul li span {
-        display: none;
-    }
-
-    .how_get_account_ot .trade_btn {
-        display: flex;
-        justify-content: center;
     }
 
     .right_costs_rg ul {
@@ -19522,14 +18800,6 @@ button.btn_claim:active {
         display: none;
     }
 
-    .hero_section .annousment_s {
-        left: 0;
-        font-size: 15px;
-        padding: 0px 18px 0px;
-        bottom: 0px;
-        height: 54px;
-    }
-
     body .hero_section {
         padding-bottom: 50px;
     }
@@ -19847,15 +19117,6 @@ button.btn_claim:active {
         font-size: 13px;
     }
 
-    .hot_trading_s {
-        height: 400px;
-        overflow: auto;
-    }
-
-    .hot_trading_s.top_gainers {
-        height: 160px;
-    }
-
     .dashboard_summary th,
     td {
         padding: 8px 7px;
@@ -19895,10 +19156,6 @@ button.btn_claim:active {
         margin-bottom: 8px;
     }
 
-    .icon_google {
-        width: 70px;
-    }
-
     .copyright {
         text-align: center;
     }
@@ -19936,38 +19193,6 @@ button.btn_claim:active {
     .ranking_outer ul {
         gap: 16px;
         flex-direction: column;
-    }
-
-    .more_btn a {
-        font-size: 14px;
-    }
-
-    .sign_form_btn {
-        align-items: start;
-        justify-content: center;
-    }
-
-    .icon_google img {
-        width: 18px;
-    }
-
-    .icon_google {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .sign_form [type="text"] {
-        font-size: 13px;
-        padding: 0px 10px;
-    }
-
-    .sign_form_btn ul li {
-        width: 32px;
-        height: 32px;
-    }
-
-    .icon_notificaton_r {
-        display: none;
     }
 
     .dashboard {
@@ -20040,10 +19265,6 @@ button.btn_claim:active {
 
     .estimated_balance .select_price {
         text-align: center;
-    }
-
-    .app_btn {
-        justify-content: center;
     }
 
     footer .row .mobile_grid_list .col-sm-3 {
@@ -20212,22 +19433,10 @@ button.btn_claim:active {
         font-weight: 300;
     }
 
-    .crypto_section .hot_trading_s.top_gainers th,
-    td {
-        font-size: 12px;
-        font-weight: 300;
-    }
-
     .crypto_section table .right_t a {
         font-size: 12px;
         border-radius: 6px;
         padding: 7px 20px;
-    }
-
-    .crypto_section .top_heading a.more_btn {
-        font-size: 12px;
-        white-space: nowrap;
-
     }
 
     .crypto_section .top_heading h4 {
@@ -20339,42 +19548,12 @@ button.btn_claim:active {
         display: block;
     }
 
-    .right_dashboard {
-        display: none;
-    }
-
-    .how_get_account_ot .row {
-        margin-top: 35px;
-        gap: 32px;
-    }
-
     .anytime_anywhere p {
         font-size: 14px;
     }
 
-    .how_get_account_ot h5 {
-        font-size: 18px;
-    }
-
-    .profit_costs_cta_outer.platform_trading_s .row {
-        padding: 20px 0px 50px;
-    }
-
-    .software_trading_bl p {
-        font-size: 14px;
-    }
-
-    .software_trading_bl h6 {
-        font-size: 20px;
-        margin: 10px 0px;
-    }
-
     .trade_btn button a {
         font-size: 14px;
-    }
-
-    .services_block_infor h4 {
-        font-size: 18px;
     }
 
     .crypto_section {
@@ -20756,10 +19935,6 @@ button.btn_claim:active {
         margin-top: 5px;
     }
 
-    .crypto_section .hot_trading_s.top_gainers th {
-        white-space: nowrap;
-    }
-
     .listing_left_outer.full_width {
         margin-top: 22px;
     }
@@ -20848,11 +20023,6 @@ button.btn_claim:active {
         float: none;
     }
 
-    .hero_section_main .row {
-        gap: 32px;
-        padding-bottom: 0px;
-    }
-
     .losser_stock {
         display: none;
     }
@@ -20898,14 +20068,6 @@ button.btn_claim:active {
 
     .factor_bl {
         gap: 15px;
-        font-size: 12px;
-    }
-
-    .t_shirts_add_s ul {
-        gap: 8px;
-    }
-
-    .t_shirts_add_s ul li {
         font-size: 12px;
     }
 
@@ -21054,15 +20216,6 @@ button.btn_claim:active {
         width: 100%;
     }
 
-    .scan_button .app_btn button {
-        padding: 2px 12px;
-        min-height: 40px;
-    }
-
-    .app_btn button img {
-        width: 20px;
-    }
-
     .support_form_s .d-flex-between.mb-3.custom_dlflex {
         padding-top: 0px;
     }
@@ -21075,35 +20228,16 @@ button.btn_claim:active {
         min-width: 92%;
     }
 
-    .how_get_account_ot h5 {
-        font-size: 14px;
-    }
-
     #popup-box {
         width: 85%;
-    }
-
-    .services_block_infor h4 {
-        font-size: 16px;
     }
 
     .profit_costs_cta_outer h2 {
         text-align: center;
     }
 
-    .scan_button .app_btn button {
-        padding: 2px 12px;
-        min-height: 32px;
-        box-shadow: 1px 2px #bbb6b6;
-        max-height: 32px;
-    }
-
     .agreetext .forgot_password {
         font-size: 12px !important;
-    }
-
-    .annousment_left img {
-        width: 24px;
     }
 
     .agreetext p {
@@ -21114,31 +20248,8 @@ button.btn_claim:active {
         font-size: 14px !important;
     }
 
-
-    .services_block_infor {
-        width: 100%;
-        min-height: 280px;
-    }
-
-    .services_block_infor .cnt_block {
-        padding: 40px 20px 0px;
-    }
-
-    .services_info_icon {
-        width: 80px;
-        height: 80px;
-    }
-
-    .services_info_icon img {
-        width: 50px;
-    }
-
     .currency_logo ul li img {
         max-width: 26px !important;
-    }
-
-    .sign_form_btn ul {
-        gap: 8px;
     }
 
     .banner_img {
@@ -21807,34 +20918,10 @@ button.btn_claim:active {
         display: inline-block;
     }
 
-    .how_get_account_ot {
-        padding: 32px 0px 20px;
-        text-align: center;
-    }
-
-    .how_get_account_ot ul li span {
-        font-size: 28px;
-        display: none;
-    }
-
-    .how_get_account_ot ul li {
-        justify-content: center;
-    }
-
-    .how_get_account_ot ul li h3 {
-        font-size: 20px;
-    }
 
     .trade_app__app .crypto_bitcoin_vector {
         float: none;
         padding-top: 10px;
-    }
-
-    .app_btn button {
-        justify-content: center;
-        color: #ffffffba;
-        padding: 11px 23px;
-        font-size: 12px;
     }
 
     .profit_cost_cnt p {
@@ -21852,11 +20939,6 @@ button.btn_claim:active {
 
     .profit_cost_cnt {
         text-align: center;
-    }
-
-    .how_get_account_ot ul li p {
-        font-size: 14px;
-        margin: 0px;
     }
 
     .trade_btn {
@@ -21914,18 +20996,9 @@ button.btn_claim:active {
         width: auto;
     }
 
-    .app_btn {
-        gap: 15px;
-        margin-top: 20px;
-    }
-
     .right_costs_rg ul li {
         font-size: 40px;
         line-height: 36px;
-    }
-
-    .app_btn button {
-        padding: 6px 20px;
     }
 
     .profit_costs_cta_outer.costouterbg {
@@ -22057,11 +21130,6 @@ button.btn_claim:active {
         font-size: 22px;
         line-height: 150%;
     }
-
-    .banner_content h1 span {
-        padding: 0px 12px 2px;
-    }
-
 
     .card_pp {
         width: 100%;
@@ -22206,22 +21274,8 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
-    .app_btn_s {
-        flex-direction: column;
-        margin-top: 20px;
-        gap: 14px;
-    }
-
-    .trading_cta_s .app_btn_s a br {
-        display: none;
-    }
-
     .trading_platform_section {
         padding: 30px 0px;
-    }
-
-    .annousment_s {
-        margin-top: 20px !important;
     }
 
     .overflowx_scroll {
@@ -22231,13 +21285,6 @@ button.btn_claim:active {
 
     .top_heading {
         margin-bottom: 20px;
-    }
-
-    .crypto_section .top_heading a.more_btn {
-        font-size: 11px;
-        white-space: nowrap;
-        min-width: 80px;
-        text-align: right;
     }
 
     .footer_section {
@@ -22342,26 +21389,12 @@ button.btn_claim:active {
         gap: 10px;
     }
 
-    .crypto_section .hot_trading_s.top_gainers th,
-    td {
-        font-size: 10px;
-    }
-
     header .col-lg-2.logo_s {
         max-width: 250px;
     }
 
     .login_section {
         min-height: calc(100vh - 54px) !important;
-    }
-
-    .t_shirts_add_s h3 {
-        font-size: 30px;
-    }
-
-    .banner_content .t_shirts_add_s p {
-        font-size: 14px;
-        margin: 6px 0px;
     }
 
 }
@@ -22372,15 +21405,11 @@ button.btn_claim:active {
         max-width: 210px;
     }
 
-    .profit_costs_cta_outer.platform_trading_s .row {
-        padding: 10px 0px 30px;
-    }
-
     .deposit_crypto_left::before {
         height: 230px;
     }
 
-        .withdrawal_outer::before {
+    .withdrawal_outer::before {
         height: 74%;
     }
 
@@ -22421,15 +21450,9 @@ button.btn_claim:active {
         width: 15px;
     }
 
-    .t_shirts_add_s ul {
-        display: none;
-    }
-
     body .cnt_first_t .icon_currency img {
         width: 24px;
     }
-
-
 
     .login_section {
         min-height: calc(100vh - 54px) !important;
@@ -22437,11 +21460,6 @@ button.btn_claim:active {
 
     .walletbalance_t .coin_right {
         flex-direction: column;
-    }
-
-    body .crypto_section .hot_trading_s.top_gainers th,
-    td {
-        font-size: 11px !important;
     }
 
     body .modal.currency_popup_s .modal-dialog {
@@ -22477,7 +21495,7 @@ button.btn_claim:active {
         line-height: 16px;
     }
 
-    .d-flex.scan_button {
+    .d-flex.download_button {
         margin-top: 22px;
     }
 
@@ -22517,10 +21535,6 @@ button.btn_claim:active {
     .kyc_form_multistep .gender_radio .form-check-label {
         padding: 5px 15px;
         font-size: 11px;
-    }
-
-    .services_block_infor .readbtn {
-        padding-top: 0px;
     }
 
     .modal.search_form table tr td {
@@ -22609,10 +21623,6 @@ button.btn_claim:active {
     }
 
     body .spot-list-search .ivu-input input {
-        font-size: 12px;
-    }
-
-    .ant-card-head-wrapper .btn {
         font-size: 12px;
     }
 
@@ -22827,10 +21837,6 @@ button.btn_claim:active {
         padding-bottom: 20px;
     }
 
-    .scan_button .app_btn button svg {
-        width: 21px;
-    }
-
     .currency_logo ul li img {
         max-width: 20px !important;
     }
@@ -22975,10 +21981,6 @@ button.btn_claim:active {
         margin-top: 0px;
     }
 
-    .software_trading_bl h6 {
-        font-size: 18px;
-    }
-
     .selected-option {
         font-size: 12px;
         padding: 10px 15px;
@@ -23018,22 +22020,8 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
-    .scan_button .app_btn button {
-        font-size: 11px;
-        gap: 5px;
-    }
-
-    .services_block_infor .readbtn a {
-        font-size: 12px;
-        padding: 8px 20px;
-    }
-
     .crypto_section .top_heading h4 {
         font-size: 10px;
-    }
-
-    .services_block_infor .cnt_block p {
-        font-size: 13px;
     }
 
     .header_right a .ri-search-line {
@@ -23050,21 +22038,8 @@ button.btn_claim:active {
         gap: 5px;
     }
 
-    .services_block_infor .readbtn a {
-        font-size: 11px;
-        padding: 6px 16px;
-    }
-
     .profit_costs_cta_outer {
         padding: 30px 0px;
-    }
-
-    .how_get_account_ot h5 {
-        font-size: 13px;
-    }
-
-    .software_trading_bl p {
-        font-size: 13px;
     }
 
     .check_bar {
@@ -23077,34 +22052,16 @@ button.btn_claim:active {
 
 @media screen and (max-width:360px) {
 
-    .services_block_infor {
-        min-height: 220px;
-    }
-
     .deposit_crypto_left::before {
         height: 250px;
     }
-        .withdrawal_outer::before {
+
+    .withdrawal_outer::before {
         height: 74%;
     }
 
     .afterloginheader .navbar-toggler {
         top: 4px;
-    }
-
-    .services_block_infor .cnt_block {
-        padding: 30px 20px 0px;
-    }
-
-    .services_info_icon {
-        width: 60px;
-        height: 60px;
-        padding: 10px;
-    }
-
-    .how_get_account_ot .row {
-        margin-top: 24px;
-        gap: 30px;
     }
 
     header .logo {
