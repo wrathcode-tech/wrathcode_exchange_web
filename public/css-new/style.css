@@ -259,7 +259,7 @@ header .row {
 .banner_content {
     text-align: left;
     color: #fff;
-    width: 600px;
+    width: 44%;
     max-width: 100%;
 }
 
@@ -614,21 +614,37 @@ button.btn.btn-danger {
     max-width: 100%;
     display: block;
     padding: 0px 0px 20px;
+    overflow: hidden;
 }
 
 .currency_logo ul {
     gap: 20px;
     display: flex;
     justify-content: space-between;
+    animation: cryptoScroll 40s linear infinite;
     align-items: center;
 }
+
+/* animation */
+@keyframes cryptoScroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 
 .currency_logo ul li {
     display: flex;
     align-items: center;
     background-color: #0B0B0B;
     min-height: 154px;
-    width: 350px;
+    width: 354px;
+    min-width: 354px;
+    max-width: 100%;
     padding: 10px 0px 10px 24px;
     border-radius: 8px;
     color: #CBCBCB;
@@ -727,45 +743,6 @@ ul.social_media a {
     font-size: 32px;
 }
 
-.trade_btn button {
-    border: 1px solid #f3bb2b;
-    color: #f3bb2b;
-    letter-spacing: 2px;
-    transition: 1s all;
-    font-size: 16px;
-    background-color: transparent;
-    text-transform: capitalize;
-    border-radius: 50px;
-    padding: 0px;
-}
-
-
-.trade_btn button a {
-    color: #000;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    font-size: 20px;
-    letter-spacing: 0px;
-    background-color: #f3bb2b;
-    border-radius: 50px;
-    padding: 18px 42px;
-}
-
-.trade_btn button:hover a {
-    color: #000;
-}
-
-.trade_btn button span {
-    background: linear-gradient(152deg, rgba(255, 220, 136, 1) 0%, rgba(220, 143, 27, 1) 100%);
-    width: 24px;
-    height: 24px;
-    display: flex;
-    border-radius: 50px;
-    align-items: center;
-    justify-content: center;
-}
-
 .summary_cnt_markert_r {
     display: flex;
     flex-direction: column;
@@ -812,12 +789,14 @@ button.learnbtn a:hover {
     z-index: 1;
 }
 
-.profit_costs_cta_outer h2 { width: 50%;
+.profit_costs_cta_outer h2 {
+    width: 100%;
 }
 
 .invest_tradetop {
     gap: 32px;
     justify-content: space-between;
+    align-items: end;
 }
 
 .profit_costs_cta_outer.homecta {
@@ -856,9 +835,103 @@ button.learnbtn a:hover {
     color: #fff;
 }
 
+.crypto_features {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #2F2F2F;
+    border-radius: 30px;
+    color: #fff;
+    margin-top: 40px;
+}
+
+.crypto_features .card {
+    border-radius: 0px;
+    width: 33.33%;
+    padding: 24px;
+    border-bottom: 1px solid #2F2F2F;
+    text-align: center;
+    min-height: 430px;
+    justify-content: center;
+}
+
+.crypto_features .border_btm {
+    border-bottom: none;
+}
+
+.crypto_features .borderlft {
+    border-right: 1px solid #2F2F2F;
+}
+
+.crypto_features h4 {
+    font-size: 24px;
+    line-height: 140%;
+    color: #fff;
+}
+
+.crypto_features p {
+    color: #C0C0C0;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    line-height: 150%;
+}
+
+.crypto_features .trade_icon {
+    max-width: 113px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.card.borderlft.assetstrade {
+    text-align: left;
+    overflow: hidden;
+    padding: 40px;
+    position: relative;
+    width: 66.66%;
+}
+
+.card.assetstrade .crypto_app_mbl {
+    position: relative;
+    right: -62px;
+    bottom: -40px;
+    display: flex;
+    justify-content: end;
+    margin-top: -110px;
+}
+
+.card.assetstrade .crypto_app_mbl img {
+    max-width: 540px;
+}
 
 
+.card.borderlft.assetstrade p {
+    width: 50%;
+}
 
+.learnbtn {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 20px;
+
+}
+
+.learnbtn i {
+    color: #F3BB2B;
+}
+
+
+.resources_news .learnbtn {
+    font-weight: 400;
+}
+
+.latest_resources .row {
+    margin-top: 44px;
+}
 
 
 
@@ -1235,19 +1308,14 @@ footer .row .col-sm-12.col-md-4.col-lg-6 p {
     padding: 48px 0px 0px;
 }
 
-.trade_btn button:hover {
-    background-color: #f3bb2b;
-    color: #000;
-    border-color: #f3bb2b;
-}
-
 .row.cta_register_s h5 {
     font-size: 20px;
     font-weight: 300;
 }
 
-.cta_vector {
-    max-width: 420px;
+.supportvector {
+    max-width: 835px;
+    position: relative;
 }
 
 .fipnext_logo_m {
@@ -1255,6 +1323,84 @@ footer .row .col-sm-12.col-md-4.col-lg-6 p {
 }
 
 .platform_trading_s span {
+    color: #F3BB2B;
+}
+
+img.animation_effect.bitcoin3 {
+    top: 38%;
+    left: 39%;
+}
+
+img.animation_effect.bitcoin2 {
+    right: 150px;
+    left: inherit;
+    top: 49%;
+}
+
+img.animation_effect.bitcoin1 {
+    /* bottom: 0px; */
+    top: 53%;
+    left: 20%;
+}
+
+.profit_costs_cta_outer .invest_tradetop h2 {
+    width: 50%;
+}
+
+.latest_resources {
+    width: 100%;
+    display: block;
+    color: #fff;
+    padding: 40px 0px;
+}
+
+.latest_resources h2 span {
+    color: #F3BB2B;
+}
+
+.resourceslft {
+    width: 60%;
+}
+
+.resourceslft p {
+    color: #C0C0C0;
+    margin: 0px;
+}
+
+.resources_news {
+    width: 100%;
+    border: 1px solid #2F2F2F;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.resources_cnt {
+    padding: 48px;
+}
+
+.date {
+    font-size: 13px;
+    margin-bottom: 20px;
+    color: #C0C0C0;
+}
+
+.resources_news h3 {
+    line-height: 130%;
+}
+
+.resources_news .news_img {
+    height: 442px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.resources_news .news_img img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.latest_resources .d-flex.download_button button.btn.platform {
+    border-color: #F3BB2B;
     color: #F3BB2B;
 }
 
@@ -1296,13 +1442,6 @@ ul.social_media {
     text-align: center;
 }
 
-.trusted_partner h2 {
-    color: #fff;
-    font-weight: 500;
-    padding-bottom: 20px;
-    text-shadow: rgb(255, 220, 136) 0px 4px 50px;
-}
-
 .partner_logos {
     display: flex;
     overflow: hidden;
@@ -1317,20 +1456,11 @@ ul.social_media {
 
 .partner_logos .logos_slide {
     display: flex;
-    width: 200%;
-    animation: scrollLeft 15s linear infinite;
+    animation: scrollLeft 80s linear infinite;
     gap: 24px;
     padding: 10px 0px;
 }
 
-.partner_logos .logos_slide img {
-    width: 245px;
-    background-color: #45484D;
-    height: auto;
-    padding: 8px 24px;
-    border-radius: 20px;
-    box-shadow: 0px 0px 15px #00000014;
-}
 
 @keyframes scrollLeft {
     from {
@@ -3075,9 +3205,13 @@ img.bitcoin_left {
 
 
 .banner_img {
-    max-width: 760px;
+    max-width: 56%;
     float: right;
     position: relative;
+}
+
+.banner_img_main {
+    max-width: 750px;
 }
 
 .animation {
@@ -3121,10 +3255,23 @@ img.crypto_cntr {
     animation-timing-function: linear;
 }
 
+.summary_data {
+    animation: banner_move_up_hero 10s ease-in-out infinite;
+}
 
+.reverse_security .bitcoin {
+    animation: banner_move_up_hero 10s ease-in-out infinite;
+}
 
+.exchange_future_s .bitcoin2 {
+    animation: banner_move_left_right 10s ease-in-out infinite;
+}
 
-
+.exchange_future_s img.animation_effect.bitcoin2 {
+    right: 250px;
+    left: inherit;
+    top: 54%;
+}
 
 
 img.bitcoin_right {
@@ -3133,6 +3280,18 @@ img.bitcoin_right {
     top: 45px;
     width: 122px;
     animation: banner_move_up_hero 10s ease-in-out infinite;
+}
+
+.bitcoin2 {
+    animation: banner_move_up_hero 10s ease-in-out infinite;
+}
+
+.bitcoin1 {
+    animation: banner_move_left_right 10s ease-in-out infinite;
+}
+
+.bitcoin3 {
+    animation: banner_move_left_right 20s ease-in-out infinite;
 }
 
 @keyframes banner_move_up_hero {
@@ -5178,7 +5337,6 @@ section.faq_cards .row {
 .d-flex.download_button button.btn.platform {
     background-color: #ffffff00;
     border-color: #fff;
-    font-size: 16px;
     color: #fff;
 }
 
@@ -5891,13 +6049,13 @@ button.sc-gjLLEI.kuPCgf svg>path {
     margin-bottom: 15px;
 }
 
-.lastchildfooter .address_cnt {
-    margin-top: -32px;
-}
-
 .hand_shake_cntr {
     position: relative;
     left: 90px;
+}
+
+.copyright-text a {
+    color: #f3bb2b;
 }
 
 .lastchildfooter.address_footer h5 {
@@ -6690,9 +6848,17 @@ section.crypto_exchange_section {
     flex-direction: column;
 }
 
-.security_list li:nth-child(2n+2) { border-right: none;  }
-.security_list li:nth-child(3n+3) { border-bottom: none;  }
-.security_list li:last-child { border-bottom: none;  }
+.security_list li:nth-child(2n+2) {
+    border-right: none;
+}
+
+.security_list li:nth-child(3n+3) {
+    border-bottom: none;
+}
+
+.security_list li:last-child {
+    border-bottom: none;
+}
 
 .security_list li p {
     margin: 0px;
@@ -6745,6 +6911,7 @@ button.downloadbtn {
 .animation_effect {
     position: absolute;
     left: 0px;
+    height: auto;
     top: 90px;
 }
 
@@ -6861,8 +7028,8 @@ img.animation_effect.bitcoin {
 
 
 footer {
-    padding: 50px 0px 0px;
-    background-color: #0a0a0a;
+    padding: 80px 0px 0px;
+    background-color: #000;
     align-items: center;
     color: #fff;
     overflow: hidden;
@@ -12387,10 +12554,6 @@ body.light_theme .right_costs_rg ul li span {
     color: #000000f5;
 }
 
-body.light_theme .trusted_partner h2 {
-    color: #000;
-}
-
 body.light_theme .faq_cta_outer .card h2 button.accordion-button {
     color: #000000;
 }
@@ -12464,6 +12627,38 @@ body.light_theme .copyright p span {
 
 body.light_theme .footer_logo .lightlogo {
     display: block;
+}
+
+.gallery_crypto {
+    width: 100%;
+    border: 1px solid #191C21;
+    border-radius: 30px;
+    background: linear-gradient(90deg, rgba(48, 44, 34, 1) 0%, rgba(7, 7, 7, 1) 25%, rgba(16, 15, 13, 1) 75%, rgba(48, 44, 34, 1) 100%);
+    padding: 24px;
+    text-align: center;
+    min-height: 310px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    justify-content: center;
+}
+
+.gallery_crypto h4 {
+    margin: 0px;
+    font-weight: 600;
+}
+
+.gallery_crypto p {
+    margin: 0px;
+}
+
+.gallery_crypto .cryptoicon {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    margin-bottom: 15px;
 }
 
 .footer_logo .darklogo {
@@ -14154,10 +14349,7 @@ button.btn_claim:active {
         padding: 11px 10px;
     }
 
-    .banner_img {
-        top: -10px;
-        max-width: 850px;
-    }
+
 
     .scan_block {
         max-width: 744px;
@@ -14210,6 +14402,14 @@ button.btn_claim:active {
 
     .navigation {
         padding-left: 0px;
+    }
+
+    .security_list li h3 {
+        font-size: 32px;
+    }
+
+    .resources_news h3 {
+        font-size: 24px;
     }
 
     .giveway_hero ul li h2 {
@@ -14563,16 +14763,12 @@ button.btn_claim:active {
         gap: 20px;
     }
 
-    .banner_content {
-        width: 95%;
-    }
-
     .crypto_section .top_heading h4 {
         font-size: 15px;
     }
 
     .hot_spot_outer {
-        padding: 22px;
+        padding: 20px;
     }
 
     .navigation nav ul {
@@ -14591,6 +14787,79 @@ button.btn_claim:active {
 
     .giveway_hero ul li h2 {
         font-size: 20px;
+    }
+
+    .hot_trading_s table tr td {
+        font-size: 13px;
+    }
+
+    .dashboard_summary th,
+    td {
+        padding: 7px 9px;
+    }
+
+    .crypto_dashboard {
+        gap: 18px;
+        margin-top: 30px;
+    }
+
+    .crypto_future_cnt ul.listcrypto li {
+        font-size: 16px;
+    }
+
+    .reverse_security img.animation_effect.bitcoin {
+        width: 130px;
+    }
+
+    .card.assetstrade .crypto_app_mbl img {
+        max-width: 400px;
+    }
+
+    .card.borderlft.assetstrade {
+        padding: 30px;
+    }
+
+    .crypto_features h4 {
+        font-size: 20px;
+    }
+
+    .crypto_features .card {
+        min-height: 350px;
+    }
+
+    .crypto_features .trade_icon {
+        max-width: 80px;
+        margin-bottom: 20px;
+    }
+
+    img.animation_effect.bitcoin1 {
+        width: 80px;
+    }
+
+    img.animation_effect.bitcoin2 {
+        width: 80px;
+        right: 100px;
+    }
+
+    img.animation_effect.bitcoin3 {
+        width: 80px;
+        left: 30%;
+    }
+
+    .profit_cost_cnt h2 {
+        padding-bottom: 10px;
+    }
+
+    .resources_news .news_img {
+        height: 290px;
+    }
+
+    .partner_logos {
+        margin-top: 0px;
+    }
+
+    .crypto_features p {
+        font-size: 15px;
     }
 
     .giveaway_top_list ul li {
@@ -14794,8 +15063,7 @@ button.btn_claim:active {
 
     .d-flex.download_button {
         align-items: start;
-        margin-top: 30px;
-        flex-direction: column;
+        gap: 12px;
     }
 
     .effect_left_circle {
@@ -14834,12 +15102,6 @@ button.btn_claim:active {
 
     .highlights_crypto_s .vector_icon_slide {
         width: 100%;
-    }
-
-    .trade_btn button a {
-        gap: 10px;
-        font-size: 14px;
-        padding: 8px 28px;
     }
 
     .refrefer_earn_outer .trade_btn {
@@ -14906,8 +15168,8 @@ button.btn_claim:active {
     }
 
     .hero_section_main {
-        padding-top: 50px;
-        min-height: 650px;
+        padding: 70px 0px 40px;
+        min-height: 100%;
     }
 
     .currency_img_mr {
@@ -15136,8 +15398,19 @@ button.btn_claim:active {
         padding-top: 10px;
     }
 
-    .banner_img {
-        max-width: 720px;
+    img.crypto_cntr {
+        width: 120px;
+        top: -20px;
+    }
+
+
+    img.bitcoin_right {
+        right: -15px;
+        width: 80px;
+    }
+
+    img.bitcoin_left {
+        width: 70px;
     }
 
     .password_security_s .row {
@@ -15969,6 +16242,7 @@ button.btn_claim:active {
 
     .d-flex.download_button {
         align-items: center;
+        justify-content: center;
     }
 
     .login_section {
@@ -16303,11 +16577,6 @@ button.btn_claim:active {
         gap: 10px;
     }
 
-    .trade_btn button a {
-        padding: 7px 18px;
-        gap: 8px;
-    }
-
 
     .market_summary_right_tp {
         padding: 20px 24px;
@@ -16317,20 +16586,11 @@ button.btn_claim:active {
         max-width: 100px;
     }
 
-    .partner_logos .logos_slide img {
-        width: 160px;
-    }
-
-    .partner_logos .logos_slide_right img {
-        width: 160px;
-    }
-
     .profit_costs_cta_outer {
         padding: 40px 0px;
     }
 
     .profit_cost_cnt h2 {
-        letter-spacing: -1px;
         padding-bottom: 12px;
     }
 
@@ -16374,7 +16634,7 @@ button.btn_claim:active {
     }
 
     .currency_logo {
-        padding: 40px 0px 30px;
+        padding: 15px 0px 20px;
     }
 
     .top_header_dash {
@@ -16394,6 +16654,44 @@ button.btn_claim:active {
         width: 100%;
     }
 
+    .currency_logo ul {
+        animation: cryptoScroll 24s linear infinite;
+    }
+
+    .currency_logo ul li {
+        min-height: 120px;
+        width: 320px;
+        min-width: 320px;
+    }
+
+    .currency_logo ul li .icon_crypto {
+        width: 80px;
+    }
+
+    .viewmorebtn {
+        margin-top: 20px;
+    }
+
+    section.crypto_exchange_section {
+        padding: 40px 0px;
+    }
+
+    .crypto_future_cnt ul.listcrypto li {
+        font-size: 14px;
+    }
+
+    .animation_effect {
+        width: 160px;
+    }
+
+    .cryptofuture_s.reverse_security {
+        margin-top: 80px;
+    }
+
+    .security_list li h3 {
+        font-size: 24px;
+    }
+
     .serurity_vector {
         max-width: 240px;
         top: -10px;
@@ -16401,8 +16699,36 @@ button.btn_claim:active {
         left: 0px;
     }
 
+    .card.assetstrade .crypto_app_mbl img {
+        max-width: 340px;
+    }
+
     .deposit_crypto_block_coin h2 {
         font-size: 18px;
+    }
+
+    .profit_cost_cnt p {
+        font-size: 15px;
+    }
+
+    .profit_costs_cta_outer.platform_trading_s {
+        padding-bottom: 10px;
+    }
+
+    .resources_news .news_img {
+        height: 220px;
+    }
+
+    .resources_cnt {
+        padding: 24px;
+    }
+
+    .resources_news h3 {
+        font-size: 20px;
+    }
+
+    .trusted_partner {
+        padding: 30px 0px;
     }
 
     .search_icon_s {
@@ -16613,7 +16939,13 @@ button.btn_claim:active {
     }
 
     .banner_content h1 {
-        font-size: 36px;
+        font-size: 30px;
+    }
+
+    .d-flex.download_button button.btn {
+        font-size: 14px;
+        line-height: 20px;
+        padding: 10px 10px;
     }
 
     .banner_content p {
@@ -16623,8 +16955,10 @@ button.btn_claim:active {
     }
 
     body .banner_img {
-        width: 70%;
+        width: 80%;
         left: 0px;
+        max-width: 80%;
+        margin-top: 40px;
     }
 
     .ranking_outer ul li {
@@ -16828,10 +17162,6 @@ button.btn_claim:active {
         padding-bottom: 10px;
     }
 
-    .lastchildfooter .address_cnt {
-        margin-top: -10px;
-    }
-
     .kyc_approval_s.activity_logs .price_heading {
         font-size: 12px;
     }
@@ -16857,6 +17187,212 @@ button.btn_claim:active {
         width: 24px;
     }
 
+    .profit_cost_cnt h2 {
+        padding-bottom: 2px;
+    }
+
+    .cryptofuture_s {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    img.animation_effect.bitcoin1 {
+        width: 50px;
+        left: 5%;
+    }
+
+    img.animation_effect.bitcoin2 {
+        width: 50px;
+        right: 40px;
+    }
+
+    img.animation_effect.bitcoin3 {
+        width: 50px;
+        left: 24%;
+    }
+
+    section.crypto_exchange_section {
+        padding: 20px 0px;
+    }
+
+    .resourceslft {
+        width: 100%;
+        text-align: center;
+    }
+
+    .latest_resources {
+        padding: 10px 0px 20px;
+    }
+
+    .latest_resources .row {
+        margin-top: 30px;
+        gap: 24px;
+    }
+
+    .hero_section_main .d-flex.download_button {
+        margin-top: 20px;
+    }
+
+    .resources_news h3 {
+        font-size: 18px;
+    }
+
+    .date {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    button.downloadbtn {
+        font-size: 14px;
+        margin-top: 10px;
+        line-height: 18px;
+        width: 180px;
+        padding: 8px 10px;
+    }
+
+    .exchange_future_s {
+        width: 80%;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .row.cta_register_s {
+        flex-direction: column;
+    }
+
+    .row.cta_register_s .col-sm-5 {
+        width: 100%;
+    }
+
+    .latest_resources .row .col-sm-6{ width: 100%; }
+
+    .row.cta_register_s .col-sm-7 {
+        width: 100%;
+    }
+
+    .exchange_future_s img.animation_effect.bitcoin2 {
+        right: 0px;
+        top: 65%;
+        width: 45px;
+    }
+
+    .reverse_security .exchange_future_s {
+        width: 80%;
+        text-align: center;
+    }
+
+    .cryptofuture_s.reverse_security {
+        margin-top: 40px;
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .security_list li {
+        min-height: 140px;
+    }
+
+    .animation_effect {
+        top: 150px;
+    }
+
+    .reverse_security img.animation_effect.bitcoin {
+        width: 80px;
+        right: -20px;
+    }
+
+    .invest_tradetop {
+        gap: 18px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .crypto_features {
+        flex-direction: column;
+        margin-top: 24px;
+    }
+
+    .card.borderlft.assetstrade {
+        padding: 24px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .card.borderlft.assetstrade p {
+        width: 100%;
+    }
+
+    .card.assetstrade .crypto_app_mbl {
+        margin-top: -10px;
+    }
+
+    .learnbtn {
+        font-size: 14px;
+        justify-content: center;
+        margin-top: 12px;
+    }
+
+    .crypto_features .card {
+        padding: 32px 24px;
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .profit_costs_cta_outer .invest_tradetop h2 {
+        width: 100%;
+        margin: 0px;
+    }
+
+    .currency_logo ul li {
+        width: 300px;
+        min-width: 300px;
+    }
+
+    .crypto_features .borderlft {
+        border-right: none;
+    }
+
+    .crypto_features .border_btm {
+        border-bottom: 1px solid #2F2F2F;
+    }
+
+    .crypto_features p {
+        margin: 0px;
+    }
+
+    .crypto_features .border_btm:last-child {
+        border-bottom: none;
+    }
+
+    .currency_logo ul li h3 {
+        font-size: 18px;
+    }
+
+    .currency_logo ul li span {
+        font-size: 11px;
+    }
+
+    .currency_logo ul {
+        animation: cryptoScroll 10s linear infinite;
+    }
+
+    img.crypto_cntr {
+        width: 50px;
+        top: -40px;
+        left: 25px;
+    }
+
+    img.bitcoin_left {
+        width: 40px;
+        left: 20px;
+        bottom: -60px;
+    }
+
+    img.bitcoin_right {
+        right: -15px;
+        width: 40px;
+        top: 0px;
+    }
+
     .overview_summary_currency .slick-dots {
         display: none !important;
     }
@@ -16880,10 +17416,6 @@ button.btn_claim:active {
 
     .modal.search_form .btn_profile_list {
         margin-top: 15px;
-    }
-
-    .trade_btn button span img {
-        width: 12px;
     }
 
     .homebonuspop.modal.fade .modal-dialog {
@@ -17192,9 +17724,18 @@ button.btn_claim:active {
     }
 
     .d-flex.download_button {
-        gap: 24px;
-        flex-direction: column;
-        margin-top: 30px;
+        gap: 7px;
+        margin-top: 0px;
+    }
+
+    .d-flex.download_button button.btn {
+        font-size: 13px;
+        line-height: 16px;
+        padding: 9px 7px;
+    }
+
+    .banner_img_main {
+        max-width: 100%;
     }
 
     /* .hot_trading_s table tbody tr:hover {
@@ -17245,7 +17786,7 @@ button.btn_claim:active {
 
     .banner_content p {
         font-size: 14px;
-        margin: 15px 0px;
+        margin: 8px 0px 0px;
     }
 
     .sign_form [type="button"] {
@@ -17395,11 +17936,6 @@ button.btn_claim:active {
 
     .crypto_cta .row .col-sm-3 {
         width: 100%;
-    }
-
-    .trade_btn button {
-        font-size: 13px;
-        margin: 0 auto;
     }
 
     .refrefer_earn_outer .ref_body {
@@ -17999,8 +18535,17 @@ button.btn_claim:active {
         width: auto;
     }
 
-    footer .row .col-sm-12.col-md-4.col-lg-6 p {
+    footer .row .col-sm-5 {
         width: 100%;
+    }
+
+    
+    footer .row .col-sm-7 {
+        width: 100%;
+    }
+
+        span.green {
+        font-size: 13px !important;
     }
 
     .cta_register_s ul.social_media {
@@ -19309,7 +19854,7 @@ button.btn_claim:active {
         justify-content: center;
     }
 
-    .cta_vector {
+    .supportvector {
         max-width: 300px;
         margin: 0 auto;
     }
@@ -19440,7 +19985,7 @@ button.btn_claim:active {
     }
 
     .crypto_section .top_heading h4 {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .dashboard_right_side.profileslider .slick-slide {
@@ -19552,10 +20097,6 @@ button.btn_claim:active {
         font-size: 14px;
     }
 
-    .trade_btn button a {
-        font-size: 14px;
-    }
-
     .crypto_section {
         padding: 10px 0px 20px;
     }
@@ -19606,10 +20147,6 @@ button.btn_claim:active {
 
     .revolutionizing_btn {
         margin: 10px 0px;
-    }
-
-    .currency_logo ul li img {
-        max-width: 32px !important;
     }
 
     .currency_logo {
@@ -19795,7 +20332,7 @@ button.btn_claim:active {
     }
 
     .row.cta_register_s {
-        padding: 10px 10px 11px 18px;
+        padding: 20px 0px;
     }
 
     section.pb-5.kyc_form_s {
@@ -20071,6 +20608,11 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
+
+    .d-flex.download_button button.btn {
+        width: 150px;
+    }
+
     #claimModal.modal.fade .modal-dialog {
         min-width: 90%;
     }
@@ -20246,10 +20788,6 @@ button.btn_claim:active {
 
     .login_section .agreetext p {
         font-size: 14px !important;
-    }
-
-    .currency_logo ul li img {
-        max-width: 26px !important;
     }
 
     .banner_img {
@@ -20913,12 +21451,6 @@ button.btn_claim:active {
         text-align: left;
     }
 
-    .trade_btn {
-        text-align: center;
-        display: inline-block;
-    }
-
-
     .trade_app__app .crypto_bitcoin_vector {
         float: none;
         padding-top: 10px;
@@ -20939,10 +21471,6 @@ button.btn_claim:active {
 
     .profit_cost_cnt {
         text-align: center;
-    }
-
-    .trade_btn {
-        margin-top: 15px;
     }
 
     .crypto_bitcoin_vector {
@@ -21008,10 +21536,6 @@ button.btn_claim:active {
 
     .fipnext_logo_m {
         margin-top: -30px;
-    }
-
-    .row.cta_register_s {
-        padding: 24px;
     }
 
     .header_right .button_outer .login_btn {
@@ -21324,11 +21848,6 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
-    .trade_btn button a {
-        font-size: 13px;
-        padding: 5px 18px;
-    }
-
     .grid {
         gap: 20px;
     }
@@ -21495,16 +22014,14 @@ button.btn_claim:active {
         line-height: 16px;
     }
 
-    .d-flex.download_button {
-        margin-top: 22px;
-    }
-
     /* .code_scan {
         max-width: 60px;
     } */
 
     body .banner_img {
-        width: 80% !important;
+        width: 90% !important;
+        max-width: 90%;
+        margin-top: 30px;
     }
 
     .kyc_approval_s.activity_logs .cnt p {
@@ -21837,10 +22354,6 @@ button.btn_claim:active {
         padding-bottom: 20px;
     }
 
-    .currency_logo ul li img {
-        max-width: 20px !important;
-    }
-
     .upload-area label span {
         font-size: 12px;
     }
@@ -22018,10 +22531,6 @@ button.btn_claim:active {
 
     .price_max_total input[type="number"] {
         font-size: 12px;
-    }
-
-    .crypto_section .top_heading h4 {
-        font-size: 10px;
     }
 
     .header_right a .ri-search-line {

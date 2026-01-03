@@ -405,7 +405,7 @@ const LandingPage = () => {
             <div class="banner_img">
               <img className="bitcoin_right animation" src="images/new-images/banner_vectror_ani.svg" />
               <img className="crypto_cntr animation" src="images/new-images/banner_vectror_ani3.svg" />
-              <div className="banner_img">
+              <div className="banner_img_main">
                 <img src="images/new-images/banner_img.svg" alt="banner" />
               </div>
               <img className="bitcoin_left animation" src="images/new-images/banner_vectror_ani2.svg" />
@@ -429,6 +429,42 @@ const LandingPage = () => {
             </div>
           </li>
           <li>
+            <div className="cnt">
+              <span>Spend and Earn upto 100%</span>
+              <h3>Crypto Cashback</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector2.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <span>Experience Seamless</span>
+              <h3>Crypto Withdrawals</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector3.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <h3>Buy USDT (Tether)</h3>
+              <span>at Lowest Price</span>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector4.png" alt="crypto" />
+            </div>
+          </li>
+          <li>
+            <div className="cnt">
+              <span>Registered with</span>
+              <h3>F.I.U. of India</h3>
+            </div>
+            <div className="icon_crypto">
+              <img src="images/new-images/cryptoadd_vector5.png" alt="crypto" />
+            </div>
+          </li>
+             <li>
             <div className="cnt">
               <span>Spend and Earn upto 100%</span>
               <h3>Crypto Cashback</h3>
@@ -733,7 +769,7 @@ const LandingPage = () => {
             <div className="exchange_future_s">
               <img className="animation_effect summary_data" src="images/new-images/crypto_summry.svg" />
               <img src="images/new-images/crypto_mobile.svg" alt="crypto exchange" />
-              <img className="animation_effect bitcoin" src="images/new-images/crypto_bitcoin.svg" />
+              <img className="animation_effect bitcoin2" src="images/new-images/crypto_bitcoin.svg" />
             </div>
 
           </div>
@@ -788,86 +824,70 @@ const LandingPage = () => {
             </div>
           </div>
 
+          <section class="crypto_features">
+            <div class="card borderlft assetstrade">
+              <div class="content">
+                <h4>Buy 100+ Crypto Assets</h4>
+                <p>Trade top cryptocurrencies and emerging tokens with deep liquidity and real-time pricing across global markets.</p>
+                <a className="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+              </div>
+              <div className="crypto_app_mbl"><img src="images/new-images/crypto_assets.png" alt="Crypto App" class="phone" /></div>
+            </div>
 
-<section class="features-grid">
+            <div class="card">
+              <div className="trade_icon"><img src="images/new-images/secure_wallet.png" alt="Secure & Encrypted Wallet" class="phone" /></div>
+              <h4>Secure & Encrypted Wallet</h4>
+              <p>Protect your assets with enterprise-grade security, multi-layer encryption, and full ownership of your funds.</p>
+            </div>
 
-  <div class="card large">
-    <div class="content">
-      <h3>Buy 100+ Crypto Assets</h3>
-      <p>
-        Trade top cryptocurrencies and emerging tokens with deep liquidity
-        and real-time pricing across global markets.
-      </p>
-      <a href="#">Learn more →</a>
-    </div>
-    <img src="phone.png" alt="Crypto App" class="phone"/>
-  </div>
+            <div class="card borderlft border_btm">
+              <div className="trade_icon"><img src="images/new-images/receive_send.png" alt="Send & Receive Instantly" class="phone" /></div>
+              <h4>Send & Receive Instantly</h4>
+              <p>Transfer crypto effortlessly with fast confirmations, low fees, and seamless wallet-to-wallet transactions.</p>
+            </div>
 
-  <div class="card wallet">
-    <img src="wallet-icon.png" alt=""/>
-    <h4>Secure & Encrypted Wallet</h4>
-    <p>
-      Protect your assets with enterprise-grade security, multi-layer encryption,
-      and full ownership of your funds.
-    </p>
-  </div>
+            <div class="card borderlft border_btm">
+              <div className="trade_icon"><img src="images/new-images/invest_icon.png" alt="Invest in Real Time" class="phone" /></div>
+              <h4>Invest in Real Time</h4>
+              <p>Track market movements, execute trades instantly, and manage your investments as the market evolves.</p>
+            </div>
 
-  <div class="card">
-    <img src="send-icon.png" alt=""/>
-    <h4>Send & Receive Instantly</h4>
-    <p>
-      Transfer crypto effortlessly with fast confirmations, low fees,
-      and seamless wallet-to-wallet transactions.
-    </p>
-  </div>
+            <div class="card border_btm">
+              <div className="trade_icon"><img src="images/new-images/invest_icon.png" alt="Watch & Analyze Charts" class="phone" /></div>
+              <h4>Watch & Analyze Charts</h4>
+              <p>Make informed decisions using advanced charts, live indicators, and professional-grade analytics tools.</p>
+            </div>
 
-  <div class="card">
-    <img src="coin-icon.png" alt=""/>
-    <h4>Invest in Real Time</h4>
-    <p>
-      Track market movements, execute trades instantly,
-      and manage your investments as the market evolves.
-    </p>
-  </div>
-
-  <div class="card">
-    <img src="chart-icon.png" alt=""/>
-    <h4>Watch & Analyze Charts</h4>
-    <p>
-      Make informed decisions using advanced charts,
-      live indicators, and professional-grade analytics tools.
-    </p>
-  </div>
-
-</section>
-
-
-
+          </section>
 
 
           <div className="row cta_register_s">
-            <div className="col-sm-8">
+            <div className="col-sm-5">
               <div className="profit_cost_cnt">
-                <h2>Start your journey now and win</h2>
-                <h5>Explore our products, gain real-time insights, and unlock your potential!</h5>
-                <div className="trade_btn">
-                  <button><Link to="/signup">Register Now <span><img src="images/trade_arrow.svg" alt="trade arrow" /></span></Link></button>
+                <h2>Built to Support the Most Trusted <span>Cryptocurrencies</span></h2>
+                <p>Seamlessly buy, store, and trade leading digital assets through native blockchain integrations designed for speed, reliability, and performance.</p>
+
+                <div class="d-flex download_button">
+                  <button class="btn">Download App</button>
+                  <button class="btn platform">Browse All Cryptos</button>
                 </div>
 
-                <ul className="social_media">
+                {/* <ul className="social_media">
                   <li><a href="https://www.linkedin.com/company/Wrathcode/" target="_blank" rel="noreferrer"><i class="ri-linkedin-fill"></i></a></li>
                   <li><a href="https://x.com/Wrathcode" target="_blank" rel="noreferrer"><i class="ri-twitter-x-line"></i></a></li>
-                  {/* <li><a href="#"><i class="ri-instagram-line"></i></a></li> */}
+                  <li><a href="#"><i class="ri-instagram-line"></i></a></li>
                   <li><a href="https://t.me/Wrathcode" target="_blank" rel="noreferrer"><i class="ri-telegram-2-fill"></i></a></li>
-                  {/* <li><a href="#"><i class="ri-youtube-line"></i></a></li> */}
-                </ul>
+                  <li><a href="#"><i class="ri-youtube-line"></i></a></li>
+                </ul> */}
 
               </div>
             </div>
-            <div className="col-sm-4">
-              <div className="cta_vector">
-                <img className="drak_d" src="images/new_img/cta_img2.svg" alt="cta img" />
-                <img className="light_m" src="images/new_img/light_cta_img2.svg" alt="cta img" />
+            <div className="col-sm-7">
+              <div className="supportvector">
+                <img className="animation_effect bitcoin1" src="images/new-images/bitcoin_crypto2.png" />
+                <img className="bitcoin" src="images/new-images/support_crypto_vector.png" />
+                <img className="animation_effect bitcoin2" src="images/new-images/bitcoin_crypto3.png" />
+                <img className="animation_effect bitcoin3" src="images/new-images/bitcoin_crypto4.png" />
               </div>
             </div>
 
@@ -875,130 +895,161 @@ const LandingPage = () => {
         </div>
 
 
-        {/* <div className="trusted_partner">
-          <div className="container">
-            <h2>Trusted by Partner</h2>
-            <div className="partner_logos">
-              <div className="logos_slide">
-                <img src="images/partner_logo.png" alt="Logo 1" />
-                <img src="images/partner_logo2.png" alt="Logo 2" />
-                <img src="images/partner_logo3.png" alt="Logo 3" />
-                <img src="images/partner_logo4.png" alt="Logo 4" />
-                <img src="images/partner_logo5.png" alt="Logo 5" />
-                <img src="images/partner_logo.png" alt="Logo 1" />
-                <img src="images/partner_logo2.png" alt="Logo 2" />
-                <img src="images/partner_logo3.png" alt="Logo 3" />
-                <img src="images/partner_logo4.png" alt="Logo 4" />
-                <img src="images/partner_logo5.png" alt="Logo 5" />
+      </div>
+
+      <div className="latest_resources">
+        <div className="container">
+          <div className="d-flex invest_tradetop">
+            <div className="resourceslft">
+              <h2>Latest <span>Resources.</span></h2>
+              <p>Stay informed with expert insights, product updates, and deep-dive guides designed to help you trade smarter and stay ahead in the crypto market.</p>
+            </div>
+            <div class="d-flex download_button"><button class="btn platform">Find out more <i class="ri-arrow-right-line"></i></button></div>
+
+          </div>
+
+          <div className="row">
+            <div className="col-sm-6">
+              <div className="resources_news">
+                <div className="news_img">
+                  <img className="blogimg" src="images/new-images/platform_trade.png" />
+                </div>
+                <div className="resources_cnt">
+                  <div className="date"><span>Apps</span> - Jan 1, 2026 </div>
+                  <h3>The Best Platform to Trade Bitcoin on Your Phone</h3>
+                  <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+                </div>
               </div>
             </div>
 
-            <div className="partner_logos top_space">
-              <div className="logos_slide_right">
-                <img src="images/partner_logo.png" alt="Logo 1" />
-                <img src="images/partner_logo2.png" alt="Logo 2" />
-                <img src="images/partner_logo3.png" alt="Logo 3" />
-                <img src="images/partner_logo4.png" alt="Logo 4" />
-                <img src="images/partner_logo5.png" alt="Logo 5" />
-                <img src="images/partner_logo.png" alt="Logo 1" />
-                <img src="images/partner_logo2.png" alt="Logo 2" />
-                <img src="images/partner_logo3.png" alt="Logo 3" />
-                <img src="images/partner_logo4.png" alt="Logo 4" />
-                <img src="images/partner_logo5.png" alt="Logo 5" />
+
+            <div className="col-sm-6">
+              <div className="resources_news">
+                <div className="news_img">
+                  <img className="blogimg" src="images/new-images/secure_crypto.png" />
+                </div>
+                <div className="resources_cnt">
+                  <div className="date"><span>Apps</span> - Jan 1, 2026 </div>
+                  <h3>What Is the Most Secure Crypto Wallet in 2026?</h3>
+                  <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+                </div>
               </div>
-
-
             </div>
 
           </div>
-        </div> */}
 
-
-        {/* <div className="faq_cta_outer mt-5">
-          <div className="container">
-
-            <div className="faq_section">
-
-              <h2>FAQ'S</h2>
-
-
-              <div className="accordion" id="accordionExample">
-                <div className="accordion-item">
-                  <h3 className="accordion-header" id="headingOne">
-                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      What is Wrathcode and how does it work?
-                    </button>
-                  </h3>
-                  <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div className="accordion-body">
-                      Wrathcode is a secure cryptocurrency exchange platform that allows users to buy, sell, and trade digital assets like Bitcoin, Ethereum, and many trading pairs. We support spot trading — all with advanced charting tools and robust security infrastructure.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="accordion-item">
-                  <h3 className="accordion-header" id="headingTwo">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      How do I deposit or withdraw funds on Wrathcode?
-                    </button>
-                  </h3>
-                  <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                    <div className="accordion-body">
-                      Deposits and withdrawals can be made via crypto wallets. Simply navigate to the “Wallet” section, choose the asset you want to deposit or withdraw, and follow the on-screen instructions. Please make sure to double-check wallet addresses and network selection to avoid errors.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="accordion-item">
-                  <h3 className="accordion-header" id="headingThree">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Is Wrathcode safe to use?
-                    </button>
-                  </h3>
-                  <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                    <div className="accordion-body">
-                      Yes, security is a top priority at Wrathcode. We use multi-layer security protocols including 2FA, cold wallet storage, encrypted user data, and real-time monitoring to keep your funds and data safe at all times.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="accordion-item">
-                  <h3 className="accordion-header" id="headingFour">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                      What trading features does Wrathcode offer?
-                    </button>
-                  </h3>
-                  <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                    <div className="accordion-body">
-                      Wrathcode offers a wide range of trading features including spot trading, limit & market orders, real-time price charts, and live order books — all designed for fast execution and optimized for both desktop and mobile users.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="accordion-item">
-                  <h3 className="accordion-header" id="headingFive">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                      How can I get help or support?
-                    </button>
-                  </h3>
-                  <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-                    <div className="accordion-body">
-                      If you need assistance, our support team is available 24/7. You can submit a ticket through the Help Center, use live chat, or email us at support@wrathcode.com. We aim to resolve all queries as quickly as possible.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-
-          </div>
-        </div> */}
-
-
+        </div>
       </div>
 
 
+
+      <div className="trusted_partner">
+        <div className="partner_logos">
+          <div className="logos_slide">
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery.png" />
+              <h4>P2P</h4>
+              <p>Maximize your capital
+                efficiency</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery2.png" />
+              <h4>Launchpad</h4>
+              <p>Lowest prices across the
+                network</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery3.png" />
+              <h4>Earning</h4>
+              <p>One-click trading for all
+                memes</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" />
+              <h4>Staking</h4>
+              <p>Trade US stock tokens with
+                USDT</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" />
+              <h4>Futures Trading</h4>
+              <p>Ultra-low latency, seamless
+                execution</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" />
+              <h4>Spot Trading</h4>
+              <p>Over 100+ tokens at your
+                fingertips</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" />
+              <h4>Earn</h4>
+              <p>Up to 36% APY in USDT with
+                zero risk</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+
+                 <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" />
+              <h4>Staking</h4>
+              <p>Trade US stock tokens with
+                USDT</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" />
+              <h4>Futures Trading</h4>
+              <p>Ultra-low latency, seamless
+                execution</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" />
+              <h4>Spot Trading</h4>
+              <p>Over 100+ tokens at your
+                fingertips</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+            <div className="gallery_crypto">
+              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" />
+              <h4>Earn</h4>
+              <p>Up to 36% APY in USDT with
+                zero risk</p>
+              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
 
     </>
   );

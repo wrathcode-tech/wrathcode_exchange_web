@@ -167,7 +167,6 @@ const AuthHeader = (props) => {
           <div className="row">
             <div className="col-sm-12 col-md-12 col-lg-2 logo_s">
               <div className="logo "><NavLink to="/">
-                <img className='eaglelogo' src="/images/Eagle.svg" alt="eaglelogo" />
                 <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
               </NavLink></div>
             </div>

@@ -15,34 +15,34 @@ const Footer = () => {
             <footer>
                 <div className="container">
                     <div className="row">
-                        <div className="col-sm-12 col-md-3 col-lg-4">
+                        <div className="col-sm-5 col-md-5 col-lg-5">
                             <div className="footer_logo">
                                 <img className='lightlogo' src="/images/footer_logo.svg" alt="logo" />
                                 <img className='darklogo' src="/images/footer_logo.svg" alt="logo" />
                             </div>
                             <p>Wrathcode is a blockchain-based banking platform for crypto traders and investors, and aims to connect the world of traditional finance and cryptocurrencies.</p>
-                            {/* <ul className="social_media">
+                            <ul className="social_media">
                                 <li><a href="#"><i className="ri-facebook-circle-line"></i></a></li>
                                 <li><a href="#"><i className="ri-twitter-x-line"></i></a></li>
                                 <li><a href="#"><i className="ri-instagram-line"></i></a></li>
                                 <li><a href="#"><i className="ri-telegram-2-fill"></i></a></li>
                                 <li><a href="#"><i className="ri-youtube-line"></i></a></li>
-                            </ul> */}
+                            </ul>
                         </div>
-                        <div className="col-sm-12 col-md-9 col-lg-8">
+                        <div className="col-sm-7 col-md-7 col-lg-7">
                             <div className="row">
 
-                                <div className="col-sm-4">
+                                <div className="col-sm-6">
                                     <div className="address_footer">
-                                        <h5><span>Overview</span> </h5>
+                                        <h5><span>Head Office</span></h5>
                                         <div className="address_cnt">
-                                            <p>Wrathcode is a next-gen crypto exchange offering secure, fast, and user-friendly trading experiences.</p>
+                                            <p>1st floor, JDA Complex, Plot no. 11, Sector 4, Vidyadhar Nagar, Jaipur, Rajasthan 302039</p>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div className="col-sm-4">
+                                <div className="col-sm-6">
                                     <div className="address_footer">
                                         <h5>Contact Us</h5>
                                         <div className="address_cnt">
@@ -52,21 +52,6 @@ const Footer = () => {
                                     </div>
                                 </div>
 
-
-                                <div className="col-sm-4">
-                                    <div className="address_footer lastchildfooter">
-                                        <h5><span>Office Address</span> </h5>
-                                        <div className="address_cnt">
-                                            <div className="hand_shake_cntr">
-                                                <img className='lightlogo' src="/images/hand_shake.svg" alt="logo" />
-                                            </div>
-                                            <div className="footerlogo3"><img className='lightlogo2' src="/images/footer_img.svg" alt="logo" /></div>
-                                            <p>P3, 01, Churchill Executive Tower Dubai-United Arab Emirates
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -162,7 +147,7 @@ const Footer = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-lg-12 col-12 mt-4 text-center">
-                                        <p className="copyright-text"> Copyright © 2024 <b className="Wrathcode" > Wrathcode </b>. All rights reserved</p>
+                                        <p className="copyright-text"> Copyright © 2026 <b className="Wrathcode" ><a href="#">Wrathcode</a> </b>. All rights reserved</p>
                                     </div>
                                 </div>
                             </div>
