@@ -17,8 +17,7 @@ const Footer = () => {
                     <div className="row">
                         <div className="col-sm-5 col-md-5 col-lg-5">
                             <div className="footer_logo">
-                                <img className='lightlogo' src="/images/footer_logo.svg" alt="logo" />
-                                <img className='darklogo' src="/images/footer_logo.svg" alt="logo" />
+                                <img className='darklogo' src="/images/logo_light.svg" alt="logo" />
                             </div>
                             <p>Wrathcode is a blockchain-based banking platform for crypto traders and investors, and aims to connect the world of traditional finance and cryptocurrencies.</p>
                             <ul className="social_media">
