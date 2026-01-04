@@ -222,7 +222,7 @@ const SignupPage = () => {
     useEffect(() => {
 
         return () => {
-            window.location.reload()
+          //  window.location.reload()
 
         };
     }, []);
