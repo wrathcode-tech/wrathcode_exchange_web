@@ -613,16 +613,20 @@ $(document).ready(function () {
     });
 });
 </script>
-
 <script>
-  $(document).ready(function () {
+  function initCryptoFuture() {
 
     $(".cryptofuture_s").each(function () {
 
       const $section = $(this);
+
+      // duplicate binding se bachne ke liye
+      if ($section.data("binded")) return;
+      $section.data("binded", true);
+
       const $images = $section.find(".exchange_future_s img");
 
-      $section.on("mousemove", function (e) {
+      $section.on("mousemove.crypto", function (e) {
 
         const offset = $section.offset();
         const width = $section.outerWidth();
@@ -638,7 +642,7 @@ $(document).ready(function () {
         const moveY = ((y - centerY) / centerY) * 60;
 
         $images.each(function (index) {
-          const depth = (index + 1) * 0.5; // slow depth
+          const depth = (index + 1) * 0.5;
           $(this).css(
             "transform",
             `translate(${moveX * depth}px, ${moveY * depth}px)`
@@ -646,14 +650,29 @@ $(document).ready(function () {
         });
       });
 
-      $section.on("mouseleave", function () {
+      $section.on("mouseleave.crypto", function () {
         $images.css("transform", "translate(0px, 0px)");
       });
 
     });
+  }
 
+  // first load
+  $(document).ready(function () {
+    initCryptoFuture();
+  });
+
+  // React SPA route change / DOM update detect
+  const observer = new MutationObserver(function () {
+    initCryptoFuture();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
   });
 </script>
+
 
 
 

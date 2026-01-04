@@ -2829,7 +2829,7 @@ canvas.qr_img.img-fluid {
 
 .login_fullhieght {
 
-    padding: 60px 0px;
+    padding: 60px 0px 90px;
     background-color: #181A20;
 }
 
@@ -3697,7 +3697,7 @@ body.light_theme .modal.search_form input:focus {
 
 
 .form_block_login .pass_conditions {
-     color: #b5b5b5;
+    color: #b5b5b5;
     margin-top: 5px;
 }
 
@@ -3800,10 +3800,11 @@ button:disabled {
 .sign_in_form_s {
     display: flex;
     width: 1100px;
+    max-width: 100%;
     margin: 0 auto;
     color: #fff;
     align-items: center;
-    gap:24px;
+    gap: 24px;
 }
 
 .sign_in_form_s .rewards_vector {
@@ -3819,8 +3820,14 @@ button:disabled {
     text-align: center;
 }
 
-.sign_rewards h2 { font-size: 32px; line-height: 140%; }
-.sign_rewards h2 span{ color: #F0B90B; }
+.sign_rewards h2 {
+    font-size: 32px;
+    line-height: 140%;
+}
+
+.sign_rewards h2 span {
+    color: #F0B90B;
+}
 
 /* input:focus {
     border: 1px solid #f3bb2b !important;
@@ -4077,7 +4084,7 @@ body form.searchinput input:focus {
     font-weight: 700;
     color: #fff;
     box-shadow: none !important;
-    margin-top:24px;
+    margin-top: 24px;
 }
 
 .login_section .nav-tabs .nav-item.show .nav-link,
@@ -11341,7 +11348,8 @@ input:-ms-input-placeholder {
     color: #bfbfbf;
 }
 
-.login_section .lightlogo, .login_section  .darklogo {
+.login_section .lightlogo,
+.login_section .darklogo {
     width: 180px;
     margin-bottom: 30px;
 }
@@ -14089,8 +14097,20 @@ button.btn_claim:active {
         gap: 20px;
     }
 
+    .sign_in_form_s {
+        padding: 0px 32px;
+    }
+
+    .form_block_login h2 {
+        font-size: 24px;
+    }
+
     .progress_list ul {
         gap: 20px;
+    }
+
+    .sign_rewards h2 {
+        font-size: 24px;
     }
 
     .crypto_section .top_heading h4 {
@@ -15587,7 +15607,7 @@ button.btn_claim:active {
     }
 
     .login_section {
-        max-width: 90%;
+        max-width: 60%;
     }
 
     .bs_dropbox .price_card {
@@ -16227,7 +16247,7 @@ button.btn_claim:active {
     }
 
     .form_block_login h2 {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .login_cnt {
@@ -16527,6 +16547,10 @@ button.btn_claim:active {
 
     .animation {
         height: auto;
+    }
+
+    .sign_rewards {
+        display: none;
     }
 
     .crypto_future_cnt p {
@@ -16912,7 +16936,7 @@ button.btn_claim:active {
     }
 
     .header_right {
-        top: 15px;
+        top: 9px;
     }
 
     .lastchildfooter.address_footer h5 {
@@ -17390,11 +17414,12 @@ button.btn_claim:active {
     }
 
     .login_section .nav-tabs {
-        margin-top: 18px;
+        margin-top: 15px;
+        gap: 20px !important;
     }
 
     body .login_section .login-pills li .nav-link {
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .login_section .nav.nav-tabs li button {
@@ -17495,7 +17520,7 @@ button.btn_claim:active {
     }
 
     .navbar-toggler {
-        top: 6px;
+        top: 0px;
     }
 
     .bs_dropbox .row {
@@ -17916,7 +17941,7 @@ button.btn_claim:active {
         min-height: 100%;
         margin: 0px;
         height: 100%;
-        background-color: #fff;
+        background-color: #ffffff00;
         padding-bottom: 20px;
     }
 
@@ -17934,7 +17959,7 @@ button.btn_claim:active {
     }
 
     .login_form_right {
-        background-color: #fff;
+        background-color: #ffffff00;
     }
 
     .googlebtn button {
@@ -18742,7 +18767,7 @@ button.btn_claim:active {
     }
 
     .form_block_login h2 {
-        font-size: 30px;
+        font-size: 21px;
     }
 
     .meme_coin_top h1 {
@@ -18855,13 +18880,13 @@ button.btn_claim:active {
     .login_section {
         gap: 0px;
         flex-direction: column;
+        padding-bottom: 0px;
+        width: 70%;
+        margin: 0 auto;
     }
 
-    .login_section {
-        border-radius: 0px;
+    .sign_in_form_s {
         padding: 0px;
-        border: none;
-        box-shadow: none;
     }
 
     .login_cnt.register_form {
@@ -19904,8 +19929,8 @@ button.btn_claim:active {
     }
 
     .login_fullhieght .form_block_login {
-        padding-bottom: 0px !important;
-        margin-bottom: 0px !important;
+        padding: 22px;
+        margin: 0px !important;
     }
 
     .row.cta_register_s h5 {
@@ -19947,6 +19972,21 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
+    .gallery_crypto h4 {
+        font-size: 18px;
+    }
+
+    .login_fullhieght {
+        padding: 30px 0px;
+    }
+
+    .login_section {
+        width: 85%;
+    }
+
+    .form_block_login h2 {
+        font-size: 18px;
+    }
 
     .d-flex.download_button button.btn {
         width: 150px;
@@ -20405,11 +20445,11 @@ button.btn_claim:active {
 
     .header_right {
         right: 41px;
-        top: 16px;
+        top: 12px;
     }
 
     .navbar-toggler {
-        top: 10px;
+        top: 6px;
     }
 
     section.hot_articles_s.recent_blog .row .col-sm-3 {
@@ -21267,6 +21307,11 @@ button.btn_claim:active {
         max-width: 210px;
     }
 
+    .learnbtn {
+        font-size: 13px;
+        margin-top: 7px;
+    }
+
     .security_list li h3 {
         font-size: 22px;
         margin: 7px;
@@ -21344,7 +21389,7 @@ button.btn_claim:active {
     }
 
     .navbar-toggler {
-        top: 8px;
+        top: 4px;
     }
 
     .blog_detail h2 {
