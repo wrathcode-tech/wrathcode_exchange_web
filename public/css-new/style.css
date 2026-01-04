@@ -880,13 +880,18 @@ button.learnbtn a:hover {
     max-width: 113px;
     margin: 0 auto;
     margin-bottom: 30px;
-     transition: transform 0.8s ease-out;
+    transition: transform 0.8s ease-out;
 }
 
-.crypto_features .trade_icon img{     transition: transform 0.6s ease-out;
-  will-change: transform; }
+.crypto_features .trade_icon img {
+    transition: transform 0.6s ease-out;
+    will-change: transform;
+}
 
-.crypto_features .card:hover .trade_icon { transform: translateY(-20px); position: relative; }
+.crypto_features .card:hover .trade_icon {
+    transform: translateY(-20px);
+    position: relative;
+}
 
 .card.borderlft.assetstrade {
     text-align: left;
@@ -2709,11 +2714,8 @@ body.light_theme .login_section .login-pills li .nav-link {
     justify-content: center;
     padding: 23px 12px;
     background: transparent;
-    color: var(--white-color);
     border-radius: 0;
-    font-weight: bold;
-    border-bottom: 3px solid #ffffff0f;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .login-pills li .nav-link.active {
@@ -2722,8 +2724,7 @@ body.light_theme .login_section .login-pills li .nav-link {
 }
 
 body .login_section .login-pills li .nav-link.active {
-    border-bottom: 3px solid #1a1a1a !important;
-    color: #1a1a1a !important;
+    color: #fff !important;
     font-weight: 600;
 }
 
@@ -2817,15 +2818,19 @@ canvas.qr_img.img-fluid {
 
 .login_section {
     justify-content: space-between;
-    max-width: 920px;
+    max-width: 430px;
     display: flex;
-    margin: 100px auto;
-    border-radius: 32px;
+    margin: 0 auto;
+    border-radius: 24px;
     overflow: hidden;
     padding: 0px;
-    border: 1px solid #3666;
-    box-shadow: 0px 2px 20px #ffffff20;
-    background-color: #000;
+    border: 1px solid #333B47;
+}
+
+.login_fullhieght {
+
+    padding: 60px 0px;
+    background-color: #181A20;
 }
 
 .icon_notificaton_r ul li.wallet_tb:hover .wallet_profile_tab {
@@ -2927,63 +2932,9 @@ ul.ac_wallet_info li a {
     text-align: center;
 }
 
-.left_bar_login ul {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: #b4b4b4;
-    font-size: 17px;
-    padding-top: 2px;
-}
-
-.left_bar_login ul li span {
-    color: #f3bb2b;
-}
-
-.allchains {
-    font-size: 19px;
-}
-
-.left_bar_login p.registertext {
-    font-weight: 600;
-    color: #cea029;
-}
-
-.left_bar_login {
-    position: relative;
-    width: 40%;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.left_bar_login::before {
-    width: 100%;
-    height: 44px;
-    background-color: #000;
-    content: "";
-    position: absolute;
-    bottom: 17%;
-    filter: blur(15px);
-}
-
-.left_bar_login h1 {
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.left_bar_login p {
-    padding-top: 8px;
-    color: #cccccc;
-    font-size: 16px;
-    font-weight: 300;
-}
-
 .registration__info p a {
-    font-weight: 700;
-    color: #af8354;
+    font-weight: 600;
+    color: #F0B90B;
 }
 
 .rewards_vector {
@@ -3030,8 +2981,7 @@ ul.ac_wallet_info li a {
 }
 
 .login_form_right {
-    width: 55%;
-    background-color: #fff;
+    width: 100%;
 }
 
 .meme_coin_top {
@@ -3448,26 +3398,26 @@ button.btn.btn-sm.otpinput {
 
 /* Placeholder text black karne ke liye */
 .input_filed::placeholder {
-    color: #000 !important;
+    color: #707A8A !important;
     opacity: 1;
     /* Some browsers reduce opacity by default */
 }
 
 /* For cross-browser compatibility */
 .input_filed::-webkit-input-placeholder {
-    color: #000 !important;
+    color: #707A8A !important;
 }
 
 .input_filed:-moz-placeholder {
-    color: #000 !important;
+    color: #707A8A !important;
 }
 
 .input_filed::-moz-placeholder {
-    color: #000 !important;
+    color: #707A8A !important;
 }
 
 .input_filed:-ms-input-placeholder {
-    color: #000 !important;
+    color: #707A8A !important;
 }
 
 .disclaimer {
@@ -3684,18 +3634,14 @@ section.faq_sec .section-title {
 }
 
 .form_block_login h2 {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 600;
-    color: #0d0e0f;
-    /* text-align: center; */
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    padding-bottom: 0px;
+    color: #fff;
     margin: 0px;
 }
 
 .form_block_login form {
-    margin-top: 36px;
+    margin-top: 15px;
 }
 
 .form_block_login .row {
@@ -3736,47 +3682,48 @@ body.light_theme .modal.search_form input:focus {
 .form_block_login .input_filed {
     width: 100%;
     color: #000;
-    border: 1px solid #dee6e9;
+    border: 1px solid #707A8A;
     font-size: 13px;
     padding: 14px 12px;
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #ffffff00 !important;
 }
 
 .login_section .form_block_login {
-    padding: 40px 50px;
+    padding: 36px;
     color: #F5F5F5;
+    background-color: #181A20;
 }
 
 
 .form_block_login .pass_conditions {
-    color: #0d0d0d;
+     color: #b5b5b5;
+    margin-top: 5px;
 }
-
 
 .listing_left_outer .market_section {
     margin-top: 32px;
 }
 
 .form_block_login .input_filed {
-    color: #000;
+    color: #707A8A;
     font-size: 13px;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #ffffff00;
 }
 
-a.forgot_password {
-    color: #af8354;
-    width: 100%;
+.forgot_password a {
+    color: #F0B90B;
     font-weight: 500;
-    text-decoration: underline;
-    text-align: right;
-    justify-content: end;
-    align-items: center;
-    display: inline;
-    gap: 5px;
     font-size: 14px;
     margin-top: -12px;
+}
+
+.forgot_password {
+    text-align: right;
+    justify-content: end;
+    display: flex;
+    gap: 5px;
 }
 
 button:disabled {
@@ -3813,11 +3760,11 @@ button:disabled {
 }
 
 .login_section input:focus {
-    border: 1px solid #242424 !important;
+    border: 1px solid #F0B90B !important;
 }
 
 ::placeholder {
-    color: #aaa;
+    color: #707A8A;
 }
 
 .phone-input-wrapper {
@@ -3828,27 +3775,52 @@ button:disabled {
 
 .phone-input-wrapper select {
     border: none;
-    color: #555b63;
+    color: #707A8A;
 }
 
 .login_btn input[type="button"] {
     padding: 12px;
-    border-radius: 50px;
+    border-radius: 8px;
     cursor: pointer;
-    color: #414141;
+    color: #000;
     border: none;
     width: 100%;
-    background: #f3bb2b !important;
+    background: #FCD535 !important;
 }
 
 .login_section .btn-link {
-    color: #af8354;
+    color: #F0B90B;
+    text-decoration: none;
 }
 
 .login_btn input[type="button"]:hover {
     opacity: 0.9;
 }
 
+.sign_in_form_s {
+    display: flex;
+    width: 1100px;
+    margin: 0 auto;
+    color: #fff;
+    align-items: center;
+    gap:24px;
+}
+
+.sign_in_form_s .rewards_vector {
+    max-width: 490px;
+    width: 100%;
+    margin: 20px auto;
+    opacity: 1;
+    padding: 0px;
+}
+
+.sign_rewards {
+    width: 100%;
+    text-align: center;
+}
+
+.sign_rewards h2 { font-size: 32px; line-height: 140%; }
+.sign_rewards h2 span{ color: #F0B90B; }
 
 /* input:focus {
     border: 1px solid #f3bb2b !important;
@@ -4077,18 +4049,18 @@ body form.searchinput input:focus {
 }
 
 .google_btn {
-    font-size: 13px;
-    color: #86888b;
+    font-size: 14px;
+    color: #EAECEF;
     width: 100%;
-    background-color: #ffffff;
-    border: 1px solid #dee6e9;
+    background-color: #ffffff00;
+    border: 1px solid #434C5A;
     text-align: center;
-    border-radius: 50px;
+    border-radius: 10px;
     align-items: center;
     display: flex;
     justify-content: center;
-    gap: 6px;
-    padding: 10px;
+    gap: 8px;
+    padding: 13px 10px;
 }
 
 .login_section button:hover {
@@ -4105,7 +4077,7 @@ body form.searchinput input:focus {
     font-weight: 700;
     color: #fff;
     box-shadow: none !important;
-    margin-top: 32px;
+    margin-top:24px;
 }
 
 .login_section .nav-tabs .nav-item.show .nav-link,
@@ -4125,11 +4097,10 @@ body form.searchinput input:focus {
     justify-content: space-between;
     padding: 11px 0px !important;
     background: transparent;
-    color: #87909f !important;
+    color: #707A8A !important;
     border-radius: 0;
     font-weight: 400;
-    border-bottom: 2px solid #fff !important;
-    font-size: 18px;
+    font-size: 16px;
     border: none;
 }
 
@@ -6801,27 +6772,29 @@ section.crypto_exchange_section {
     justify-content: space-between;
     gap: 36px;
     color: #fff;
-      position: relative;
+    position: relative;
 }
 
 .exchange_future_s {
-  position: relative;
+    position: relative;
 }
 
 .exchange_future_s img {
-  transition: transform 0.6s ease-out;
-  will-change: transform;
+    transition: transform 0.6s ease-out;
+    will-change: transform;
 }
 
 /* optional depth effect */
 .exchange_future_s img:nth-child(1) {
-  transform: translateZ(0);
+    transform: translateZ(0);
 }
+
 .exchange_future_s img:nth-child(2) {
-  transform: translateZ(0);
+    transform: translateZ(0);
 }
+
 .exchange_future_s img:nth-child(3) {
-  transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .crypto_future_cnt {
@@ -11325,6 +11298,29 @@ section.st_sec .card-body {
     margin: 0px;
 }
 
+/* Normal placeholder */
+input::placeholder {
+    color: #9ca3af;
+    /* light gray */
+    opacity: 1;
+    /* Firefox fix */
+}
+
+/* Chrome / Edge / Safari */
+input::-webkit-input-placeholder {
+    color: #9ca3af;
+}
+
+/* Firefox */
+input::-moz-placeholder {
+    color: #9ca3af;
+}
+
+/* IE / Old Edge */
+input:-ms-input-placeholder {
+    color: #9ca3af;
+}
+
 ::-webkit-input-placeholder {
     color: #bfbfbf;
 }
@@ -11345,7 +11341,10 @@ section.st_sec .card-body {
     color: #bfbfbf;
 }
 
-
+.login_section .lightlogo, .login_section  .darklogo {
+    width: 180px;
+    margin-bottom: 30px;
+}
 
 .field-otp-box button {
     /* top: 11px; */
@@ -12787,322 +12786,6 @@ body.light_theme .currency_list_b ul li:hover {
     box-shadow: 0px 2px 10px #66666647;
 }
 
-body.light_theme .pagination_list ul a.page-link {
-    background-color: transparent;
-    color: #000;
-    border: 1px solid #f4b609 !important;
-}
-
-body.light_theme .pagination_list ul li.active a.page-link {
-    background-color: #f4b609 !important;
-}
-
-body.light_theme .dashboard_recent_s {
-    background-color: #f5f5f5;
-    border: 1px solid #cdcdcd9c;
-    color: #000;
-}
-
-body.light_theme .earningrecent .earning_section_cate {
-    border: none;
-}
-
-body.light_theme .user_list_l.earning_section_cate.responsive-table {
-    border: none;
-}
-
-body.light_theme form.searchinput input {
-    color: #000;
-}
-
-body.light_theme .dashboard_recent_s table thead tr th {
-    color: #000;
-}
-
-body.light_theme form.searchinput {
-    background-color: transparent;
-}
-
-body.light_theme .earning_section_cate .nav-tabs .nav-link.active {
-    color: #f4b609;
-}
-
-body.light_theme .login_section {
-    background-position: right;
-    max-width: 100%;
-}
-
-body.light_theme .login_section .form_block_login {
-    color: #000000;
-    border: 1px solid #c9c9c9;
-    background-color: #F5F5F5;
-}
-
-body.light_theme .form_block_login .input_filed {
-    color: #000;
-}
-
-body.light_theme .form_block_login h2 {
-    color: #cb940f;
-}
-
-
-body.light_theme ::-webkit-input-placeholder {
-    color: #000;
-}
-
-body.light_theme form.searchinput button i {
-    color: #000;
-}
-
-body.light_theme ::-moz-placeholder {
-    color: #000;
-}
-
-body.light_theme :-ms-input-placeholder {
-    color: #000;
-}
-
-body.light_theme :-moz-placeholder {
-    color: #000;
-}
-
-body.light_theme a.forgot_password {
-    color: #cb940f;
-}
-
-body.light_theme .form_block_login label {
-    color: #cb940f;
-}
-
-body.light_theme .blog_section_b {
-    color: #000;
-    background-color: #ffffff;
-}
-
-
-body.light_theme .search_outer_blog {
-    background-color: #f1f1f1;
-}
-
-body.light_theme .subscribe_form {
-    background-color: #f3f3f3;
-}
-
-body.light_theme .earning_calculator_section {
-    background-color: #fff;
-    color: #000;
-}
-
-body.light_theme .earining_calculator_form input {
-    color: #000000;
-}
-
-body.light_theme .earining_calculator_form .note_text label {
-    color: #000;
-}
-
-body.light_theme .earning_section_cate {
-    color: #000;
-}
-
-body.light_theme .dashboard_recent_s table thead tr th {
-    color: #2e2e2e;
-}
-
-body.light_theme .earningrecent form.searchinput {
-    background-color: #ededed;
-    gap: 10px;
-    color: #666;
-}
-
-
-
-body.light_theme .get_otp2 {
-    background-color: #F4B609;
-}
-
-body.light_theme .dashboard_deposit_s .btn.btn-gradient {
-    background-color: #F4B609;
-}
-
-body.light_theme button.btn.btn-sm.otpinput {
-    background-color: #F4B609 !important;
-}
-
-body.light_theme .earining_calculator_form label {
-    color: #f4b609;
-}
-
-body.light_theme .calculator_top_cnt {
-    background: #e1e1e1;
-}
-
-body.light_theme .right_costs_rg ul li {
-    color: #f4b609;
-}
-
-body.light_theme ul.social_media a {
-    background-color: #f4b609;
-}
-
-body.light_theme .login_bg.login_sec.market_page {
-    color: #000;
-    background-color: #ffffff;
-}
-
-body.light_theme .ant-card {
-    background-color: #f5f5f5;
-    border: 1px solid #cfcfcf;
-    color: #000;
-}
-
-body.light_theme .table>:not(caption)>*>* {
-    color: #000;
-}
-
-body.light_theme .market_page .mt_table .table tr th {
-    color: #000;
-}
-
-body.light_theme .market_update_table .table tbody tr:hover {
-    background-color: #e1e1e1 !important;
-}
-
-body.light_theme .market_update_table .custom-tab-content .card {
-    background: transparent;
-}
-
-body.light_theme .custom-btn,
-.btn-gradient {
-    background: transparent;
-    color: #000 !important;
-}
-
-body.light_theme section.faq_cards .card {
-    background: #F5F5F5;
-    border: 1px solid #3c3c3c24;
-    color: #1a1a1a;
-}
-
-body.light_theme .text-gradient {
-    color: #f4b609;
-}
-
-body.light_theme section.termsofuse {
-    color: #000;
-}
-
-body.light_theme .hero-banner-style.top-section-gap {
-    color: #161616;
-}
-
-body.light_theme section.termsofuse h1.text-center {
-    color: #f4b609;
-}
-
-body.light_theme .os_sec .custom-btn,
-.btn-gradient {
-    background: #f4b609;
-}
-
-body.light_theme .searchBar.custom-tabs {
-    border: 1px solid #0000001f !important;
-}
-
-body.light_theme .market_tabs .nav-link {
-    background: #f5f5f5;
-}
-
-body.light_theme .market_tabs .nav-link.active,
-.market_tabs .nav-pills .show>.nav-link {
-    background: #f4b609;
-    color: #000 !important;
-}
-
-body.light_theme button.btn_submit {
-    background-color: #f4b609;
-}
-
-body.light_theme .joc_social {
-    background: #f4b609;
-    border: 1px solid #f4b609;
-}
-
-body.light_theme .trade-wrapper.spot {
-    color: #000;
-    background-color: #ffffff;
-}
-
-body.light_theme .trade_card,
-.spotLists {
-    background: #F5F5F5;
-    border: 1px solid #7d7d7d12;
-    color: #000;
-}
-
-body.light_theme #TVChartContainer {
-    background-color: #F5F5F5
-}
-
-body.light_theme .btn-group.btn-group-mini * {
-    opacity: 0.9;
-    color: #000;
-}
-
-body.light_theme a.more_btn {
-    color: #000;
-}
-
-body.light_theme .assets_list ul {
-    color: #000;
-}
-
-body.light_theme .buysellform .input-group {
-    background-color: #e5e5e5;
-}
-
-body.light_theme .market_update_outer h2 span {
-    color: #F4B609;
-}
-
-body.light_theme .tch_main_tab {
-    background-color: #111114;
-}
-
-body.light_theme .trade-wrapper select,
-.trade-wrapper .nice-select {
-    color: #000 !important;
-}
-
-body.light_theme .buy_sell_cards ul.nav.custom-tabs li a {
-    color: #000;
-    background-color: #0a0a0a1a !important;
-}
-
-body.light_theme .user_login svg.round_img {
-    border: 1px solid #0a0a0a;
-    border-radius: 50px;
-}
-
-body.light_theme .user_login path {
-    fill: #2f2f2f;
-}
-
-body.light_theme .icon_notificaton_r ul li path {
-    fill: #000;
-}
-
-body.light_theme .dashboard {
-    color: #000;
-    background-color: #ffffff;
-}
-
-body.light_theme .themecolor_icon .ri-sun-line {
-    display: none;
-    color: #666;
-}
-
 body .themecolor_icon .ri-sun-fill {
     display: none;
     color: #fff;
@@ -13197,259 +12880,8 @@ body.light_theme .login_profile_header {
     color: #000;
 }
 
-body.light_theme .form-control:focus {
-    border: 1px solid #ffffff1c;
-    color: #000 !important;
-}
-
-body.light_theme .Security_factor {
-    border-color: #1c1c1c24;
-    background-color: #f5f5f5;
-}
-
-body.light_theme .security_form form.row {
-    border: 1px solid #29292933;
-    background-color: #ffffff94;
-}
-
-body.light_theme .Overview_mid .dashboard_summary a {
-    color: #000;
-}
-
-body.light_theme header {
-    background-color: #fffffff2;
-}
-
-body.light_theme select#royality {
-    background-color: transparent;
-}
-
-body.light_theme button.morebtn {
-    color: #fff;
-}
-
-body.light_theme .login_profile_header .user_profile_cnt h3 {
-    color: #292929;
-}
-
-body.light_theme a.startbtn {
-    background: #F4B609;
-}
-
-body.light_theme .blog_section_b h1 {
-    color: #F4B609;
-}
-
-body.light_theme .security_form form.row input[type="button"] {
-    background: #f4b609;
-}
-
-body.light_theme .arbitrage_subscriptions_block {
-    color: #000;
-}
-
-body.light_theme .arbitrage_subscriptions_block ul li .pricetag {
-    color: #f4b609;
-}
-
-body.light_theme .navi_sidebar li ul li a:hover {
-    color: #f4b609;
-}
-
-body.light_theme .overview_cate_section .nav-tabs .nav-link {
-    color: #3c3c3c;
-}
-
-body.light_theme .overview_cate_section .nav-tabs .nav-link.active {
-    color: #f4b609;
-}
-
-body.light_theme .estimated_balance_bl {
-    color: #080808;
-}
-
-body.light_theme .slick-slider .estimated_balance_bl {
-    background-color: #f1f1f1;
-    border-color: #f1f1f1;
-}
-
-body.light_theme .assets_wallets_section {
-    color: #1c1c1c;
-}
-
 a.search_icon i {
     font-size: 15px;
-}
-
-body.light_theme .form_select select {
-    color: #000;
-}
-
-
-body.light_theme .header_right .button_outer .login_btn.deposit-btn {
-    border: 1px solid #f4b609;
-    color: #f4b609;
-}
-
-
-body.light_theme .section-padding.feature_bg.pc_bg {
-    color: #000;
-    background-color: #F5F5F5;
-}
-
-body.light_theme .breadcrumb li {
-    color: #000 !important;
-}
-
-body.light_theme .coin_list_outer_s {
-    color: #1e1e1e;
-    background-color: #F5F5F5;
-}
-
-body.light_theme section.os_sec {
-    color: #1e1e1e;
-}
-
-body.light_theme .trade-wrapper.spot {
-    color: #000;
-    background-color: #ffffff;
-}
-
-body.light_theme .os_sec .card-body p {
-    color: #000;
-}
-
-body.light_theme .os_sec .card-body i {
-    color: #0000009e;
-}
-
-body.light_theme .card.f_card {
-    color: #000;
-}
-
-body.light_theme .sidebar_deposit {
-    color: #000;
-    background-color: #F5F5F5;
-}
-
-
-body.light_theme .sidebar_deposit .deposit_list a {
-    color: #000000;
-}
-
-body.light_theme .leftside_menu .navi_sidebar li svg path {
-    fill: #3c3c3c;
-}
-
-body.light_theme .coin_items_list {
-    background-color: #f5f5f5;
-}
-
-body.light_theme .deposit_crypto_left::before {
-    background-color: #0a0a0a2b;
-}
-
-body.light_theme .deposit_crypto_left h2:before {
-    background-color: #bdbdbd;
-}
-
-body.light_theme .deposit_crypto_right button.accordion-button {
-    color: #040404;
-}
-
-body.light_theme .recent_deposit_list table tr:hover {
-    background-color: transparent;
-}
-
-body.light_theme .dashboard_deposit_s {
-    background-color: #f5f5f5;
-    border: 1px solid #e7e7e7;
-}
-
-body.light_theme .dashboard_deposit_s .form-group input {
-    border: 1px solid rgb(40 40 40 / 15%);
-}
-
-body.light_theme .field-otp-box input {
-    border: 1px solid #00000024;
-    background-color: #fff;
-}
-
-body.light_theme input.form-control::placeholder {
-    color: #000 !important;
-}
-
-body.light_theme .recent_deposit_list table tr td {
-    color: #2a2a2a;
-}
-
-body.light_theme .recent_deposit_list table tr td span {
-    color: #2a2a2a;
-}
-
-body.light_theme .sidebar_deposit .deposit_list a svg path {
-    fill: #2c2c2c;
-}
-
-body.light_theme .close-btn {
-    color: black;
-}
-
-body.light_theme .header_notification {
-    color: #000;
-    background-color: #f5f5f5;
-    border: 1px solid #e1e1e1;
-}
-
-body.light_theme .header_notification .more_btn a {
-    color: #000;
-}
-
-body.light_theme .wallet_profile_tab {
-    background-color: #f5f5f5;
-    border: 1px solid #e3e3e3;
-    color: #000;
-}
-
-body.light_theme ul.ac_wallet_info li a {
-    color: #000;
-}
-
-body.light_theme .afterloginheader .header_right .button_outer .login_btn.deposit-btn {
-    background-color: transparent;
-}
-
-body.light_theme .dashboardsummary_bottom a.btn {
-    background-color: #F4B609 !important;
-    color: #000 !important;
-    line-height: 15px;
-}
-
-body.light_theme .recommendations_block ul li button:hover {
-    background-color: #F4B609;
-    border-color: #F4B609;
-}
-
-body.light_theme .dashboard_summary td a {
-    color: #F4B609;
-}
-
-body.light_theme .partner_logos .logos_slide img {
-    background-color: #f5f5f5;
-}
-
-body.light_theme .partner_logos .logos_slide_right img {
-    background-color: #f5f5f5;
-}
-
-.light_theme .hero_section::before {
-    width: 100%;
-    position: absolute;
-    height: 100%;
-    content: "";
-    background-color: #ffffffc9;
-    left: 0px;
-    right: 0px;
 }
 
 .highlights_crypto_s {
@@ -13508,172 +12940,8 @@ body.light_theme .partner_logos .logos_slide_right img {
     width: 250px;
 }
 
-body.light_theme .highlights_crypto_s .slide_highlights {
-    background-color: #f5f5f5;
-}
-
-body.light_theme .highlights_crypto_s h2 {
-    color: #000;
-}
-
-body.light_theme .referral_recent_s .earning_section_cate {
-    color: #000;
-    border: none;
-}
-
-body.light_theme .search_form .modal-content {
-    background: #f5f5f5;
-    color: #000;
-}
-
-body.light_theme .search_form input {
-    border: 1px solid #00000026;
-}
-
-body.light_theme .deposit_crypto_right .accordion-body {
-    color: #000000;
-}
-
-body.light_theme .bankpop_up_d ul#myTab li button {
-    color: #000;
-}
-
-body.light_theme .bankpop_up_d ul#myTab li button.active {
-    color: #f4b609;
-}
-
-body.light_theme .bankdetail_tabs .row {
-    background-color: #f5f5f5 !important;
-}
-
 .modal-backdrop.show {
     opacity: 0 !important;
-}
-
-body.light_theme .header_right .button_outer .login_btn {
-    background: #F4B609;
-    border-color: #F4B609;
-}
-
-
-body.light_theme .tradebtn:hover {
-    background: #F4B609;
-}
-
-body.light_theme .trade_add_view .graybg {
-    background-color: #f1f1f1;
-    color: #000;
-    border: 1px solid #4343433b;
-}
-
-body.light_theme .assets_wallets_section .market_section {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .my_assets_summary_t {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .selected-option {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .currency_td .selected-option {
-    border: none;
-}
-
-body.light_theme .form_select {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .price_max_total {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .listing_left_outer.full_width {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .estimated_balance_bl {
-    border: 1px solid #43434345;
-}
-
-body.light_theme .assets_wallets_section .coin_view_top .search_icon input[type="search"] {
-    background: #fff;
-    border: 1px solid #9999998f;
-}
-
-body.light_theme .main_spot_balance P span {
-    color: #F4B609;
-}
-
-body.light_theme .faq_cards .faq_list .card.faq_item {
-    color: #000;
-}
-
-body.light_theme .faq_cards .faq_list .card.faq_item i {
-    color: #000;
-}
-
-body.light_theme .faq_cards .faq {
-    background: transparent;
-    border: none;
-    border-radius: 0px;
-    margin: 0px;
-    padding: 0px 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-
-body.light_theme .kyc_form_multistep {
-    background-color: transparent;
-    color: #000;
-    padding: 32px;
-}
-
-body.light_theme .kyc_form_multistep .form_bl_step {
-    border: 1px solid #2c2c2c26;
-}
-
-body.light_theme .kyc_form_multistep .step-buttons button {
-    background: #F4B609;
-    border: 1px solid #F4B609 !important;
-}
-
-body.light_theme .kyc_form_multistep .inquery_fill select {
-    color: #000;
-}
-
-body.light_theme .kyc_form_multistep .inquery_fill input[type="text"] {
-    color: #000;
-}
-
-body.light_theme .kyc_form_multistep .gender_radio {
-    background-color: rgb(116 116 116 / 8%);
-}
-
-body.light_theme .kyc_form_multistep .gender_radio .form-check-label {
-    color: #000;
-}
-
-body.light_theme .doc_img {
-    background: #f5f5f5;
-    color: #000;
-}
-
-
-body.light_theme .review_information .text-muted {
-    color: #373737 !important;
-}
-
-body.light_theme .review_information .text-dark {
-    color: #373737 !important;
-}
-
-body.light_theme .earining_calculator_form select {
-    color: #000;
 }
 
 .earining_calculator_form select option {
@@ -16000,7 +15268,7 @@ button.btn_claim:active {
 
 @media screen and (max-width:991px) {
 
-.profit_costs_cta_outer .d-flex.download_button button.btn {
+    .profit_costs_cta_outer .d-flex.download_button button.btn {
         font-size: 12px;
         line-height: 20px;
         padding: 8px 9px;
@@ -16962,10 +16230,6 @@ button.btn_claim:active {
         font-size: 24px;
     }
 
-    .left_bar_login h1 {
-        font-size: 24px;
-    }
-
     .login_cnt {
         padding: 30px;
     }
@@ -17192,10 +16456,6 @@ button.btn_claim:active {
 
     .verify_btn a {
         font-size: 14px;
-    }
-
-    .left_bar_login p {
-        font-size: 16px;
     }
 
     .dashboard_deposit_s {
@@ -19516,10 +18776,6 @@ button.btn_claim:active {
         padding: 20px;
     }
 
-    .left_bar_login p {
-        font-size: 14px;
-    }
-
     .kyc_approval_s .cnt {
         width: 100%;
     }
@@ -19601,12 +18857,6 @@ button.btn_claim:active {
         flex-direction: column;
     }
 
-    .left_bar_login {
-        display: none;
-        width: 100%;
-        height: 100%;
-    }
-
     .login_section {
         border-radius: 0px;
         padding: 0px;
@@ -19620,10 +18870,6 @@ button.btn_claim:active {
 
     .login_form_right {
         width: 100%;
-    }
-
-    .rewards_vector {
-        width: 70%;
     }
 
     .help_support_s h4 {
@@ -21762,10 +21008,6 @@ button.btn_claim:active {
         flex-direction: column;
     }
 
-    .rewards_vector {
-        width: 90%;
-    }
-
     .meme_coin_cnt {
         text-align: center;
         padding-top: 22px;
@@ -22025,7 +21267,7 @@ button.btn_claim:active {
         max-width: 210px;
     }
 
-        .security_list li h3 {
+    .security_list li h3 {
         font-size: 22px;
         margin: 7px;
     }

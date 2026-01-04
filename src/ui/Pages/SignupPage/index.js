@@ -222,7 +222,7 @@ const SignupPage = () => {
     useEffect(() => {
 
         return () => {
-          //  window.location.reload()
+            //  window.location.reload()
 
         };
     }, []);
@@ -244,237 +244,230 @@ const SignupPage = () => {
                 />
             </Helmet>
 
+            <div className="login_fullhieght">
 
-            <div className="login_section bgsignup">
-                <div class="left_bar_login">
+                <div className="sign_in_form_s">
 
-                    <div class="login_cnt">
+                    <div className="sign_rewards">
+                        <h2>Up to <span>100 USD</span><br/>
+                            Sign Up Rewards</h2>
 
-                        <h1>Exciting Welcome Rewards</h1>
-                        <p>Grab up to $100 Welcome Rewards to kickstart your crypto investing journey!</p>
-                        <ul>
-                            <li>     Create your account today and we’ll top you up with  <span>$0.50 </span>instantly</li>
-                        </ul>
-
-                        <div class="rewards_vector">
-                            <img src="/images/loginBg.png" />
+                        <div className="rewards_vector">
+                            <img className='rewards_vector' src="/images/new-images/rewards_vector.png" alt="rewards" />
                         </div>
-                        <div className="allchains">All Chains, All Coins</div>
-
-                        <p>Register Now,Enjoy Surprise Rates</p>
+                        <p><img className='lock' src="/images/new-images/lock_sign.svg" alt="rewards" /> No.1 In Trading Volume & Customer Asset</p>
                     </div>
-                </div>
-                <div className="login_form_right">
-                    <div className="form_block_login">
-                        <h2>Register to Wrathcode</h2>
+
+                    <div className="login_section bgsignup">
+
+                        <div className="login_form_right">
+                            <div className="form_block_login">
+
+                                <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
+
+                                <h2>Welcome to Wrathcode</h2>
+
+                                <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
+                                    <li className="nav-item" role="presentation">
+                                        <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                                            role="tab" aria-controls="home" aria-selected="true" onClick={tabChange}>
+                                            Email</button>
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                        <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                            type="button" role="tab" aria-controls="profile" aria-selected="false" onClick={tabChange}>
+                                            Mobile</button>
+                                    </li>
+                                </ul>
 
 
-                        <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                                    role="tab" aria-controls="home" aria-selected="true" onClick={tabChange}>
-                                    Email</button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile" aria-selected="false" onClick={tabChange}>
-                                    Mobile</button>
-                            </li>
-                        </ul>
+
+                                <div className="tab-content" id="myTabContent">
+                                    <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
 
+                                        <form>
+                                            <div className="row">
 
-                        <div className="tab-content" id="myTabContent">
-                            <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                <div className="col-sm-12 input_block">
+                                                    <div className="email_code">
+                                                        <input className="input_filed" type="email" placeholder="Please enter your email" value={signId} onChange={(e) => setSignId(e.target.value)} onBlur={(e) => setSignId(e.target.value.trim())} />
+                                                    </div>
 
-
-                                <form>
-                                    <div className="row">
-
-                                        <div className="col-sm-12 input_block">
-                                            <label>Email Address*</label>
-                                            <div className="email_code">
-                                                <input className="input_filed" type="email" placeholder="Please enter your email" value={signId} onChange={(e) => setSignId(e.target.value)} onBlur={(e) => setSignId(e.target.value.trim())} />
-                                            </div>
-
-                                        </div>
-
-                                        <div className="col-sm-12 input_block">
-                                            <label>Password*</label>
-                                            <div className="email_code">
-                                                <input className="input_filed" placeholder="Please enter your password" type={passwordInputType}
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    onClick={() => setshowPassModal(true)} />
-
-
-                                                <div className='get_otp otp2' onClick={handleTogglePassword}  >
-
-                                                    {
-                                                        showPassword ?
-                                                            <i className="ri-eye-line"></i>
-                                                            :
-                                                            <i className="ri-eye-close-line"></i>
-                                                    }
                                                 </div>
-                                                <div className="pass_conditions" style={{ display: showPassModal ? '' : 'none' }}>
-                                                    <div className="d-flex align-items-center">
-                                                        <i className={isNumb ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 number</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center"><i className={specialCharacter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 special character</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center"><i className={capitalLetter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 capital (uppercase) letter</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <i className={passLength ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>Minimum 8 characters</span>
+
+                                                <div className="col-sm-12 input_block">
+                                                    <div className="email_code">
+                                                        <input className="input_filed" placeholder="Please enter your password" type={passwordInputType}
+                                                            value={password}
+                                                            onChange={(e) => setPassword(e.target.value)}
+                                                            onClick={() => setshowPassModal(true)} />
+
+
+                                                        <div className='get_otp otp2' onClick={handleTogglePassword}  >
+
+                                                            {
+                                                                showPassword ?
+                                                                    <i className="ri-eye-line"></i>
+                                                                    :
+                                                                    <i className="ri-eye-close-line"></i>
+                                                            }
+                                                        </div>
+                                                        <div className="pass_conditions" style={{ display: showPassModal ? '' : 'none' }}>
+                                                            <div className="d-flex align-items-center">
+                                                                <i className={isNumb ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 number</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center"><i className={specialCharacter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 special character</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center"><i className={capitalLetter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 capital (uppercase) letter</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center">
+                                                                <i className={passLength ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>Minimum 8 characters</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div className="col-sm-12 input_block">
+                                                    <input className="input_filed" type="text" placeholder="Invite Code (Optional)" value={invitation} onChange={(e) => setInvitation(e.target.value)} disabled={ref} />
+                                                </div>
+
+                                                <div className="col-sm-12 agreetext">
+                                                    <label className="termsbox"><input type="checkbox" checked={checkButton} onClick={() => setCheckButton((checkButton) => !checkButton)} /> I agree to Wrathcode <a target="_blank" rel="noreferrer" href="/TermsofUse" className="btn-link"> Terms and Use </a>
+                                                    </label>
+                                                </div>
+
+                                                <div className="col-sm-12 input_block">
+                                                    <ReCAPTCHA
+                                                        theme="light"
+                                                        ref={recaptchaRef}
+                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
+                                                    />
+                                                </div>
+
+                                                <div className="col-sm-12 login_btn">
+                                                    {/* <input type="button" value=" Signup – Coming Soon" /> */}
+                                                    <input type="button" value="Register" onClick={() => { handleEmailRegister() }} />
+                                                </div>
+                                                <div class="col-sm-12"><button class="google_btn" type="button" onClick={SignupwithGoogle}><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
+
+                                                <div className="col-sm-12 registration__info agreetext">
+                                                    <p>Already have an account? <Link to="/login">Login</Link></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-12 input_block">
-                                            <label>Invite Code (Optional)</label>
-                                            <input className="input_filed" type="text" placeholder="Invite Code (Optional)" value={invitation} onChange={(e) => setInvitation(e.target.value)} disabled={ref} />
-                                        </div>
+                                        </form>
 
-                                        <div className="col-sm-12 agreetext">
-                                            <label className="forgot_password"><input type="checkbox" checked={checkButton} onClick={() => setCheckButton((checkButton) => !checkButton)} /> I agree to Wrathcode <a target="_blank" rel="noreferrer" href="/TermsofUse" className="btn-link"> Terms and Use </a>
-
-                                            </label>
-                                        </div>
-
-                                        <div className="col-sm-12 input_block">
-                                            <ReCAPTCHA
-                                                theme="light"
-                                                ref={recaptchaRef}
-                                                sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                                            />
-                                        </div>
-
-                                        <div className="col-sm-12 login_btn">
-                                            {/* <input type="button" value=" Signup – Coming Soon" /> */}
-                                            <input type="button" value="Register" onClick={() => { handleEmailRegister() }} />
-                                        </div>
-                                        <div class="col-sm-12"><button class="google_btn" type="button" onClick={SignupwithGoogle}><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
-
-                                        <div className="col-sm-12 registration__info agreetext">
-                                            <p>Already have an account? <Link to="/login">Login</Link></p>
-                                        </div>
                                     </div>
-                                </form>
+                                    <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                                        <form>
+                                            <div className="row">
+
+                                                <div className="col-sm-12 input_block" autoComplete="off">
+                                                    <div>
+                                                        <Select
+                                                            styles={customStyles}
+                                                            inputId="countryCode"         // needed to connect label
+                                                            name="country_code_select"    // use non-sensitive name
+                                                            options={countriesList}
+                                                            onChange={(selected) => setCountryCode(selected?.value)}
+                                                            value={countriesList.find(option => option.value === countryCode)}
+                                                        />
+                                                    </div>
+
+                                                </div>
+
+                                                <div className="col-sm-12 input_block">
+
+                                                    <div class="phone-input-wrapper">
+
+                                                        <input className="input_filed" type="number" onWheel={(e) => e.target.blur()} placeholder="Enter mobile number" value={signId} onChange={(e) => setSignId(e.target.value)} />
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div className="col-sm-12 input_block">
+                                                    <div className="email_code">
+                                                        <input className="input_filed" placeholder="Please enter your password" type={passwordInputType}
+                                                            value={password}
+                                                            onChange={(e) => setPassword(e.target.value)}
+                                                            onClick={() => setshowPassModal(true)} />
+
+
+                                                        <div className='get_otp otp2' onClick={handleTogglePassword}  >
+
+                                                            {
+                                                                showPassword ?
+                                                                    <i className="ri-eye-line"></i>
+                                                                    :
+                                                                    <i className="ri-eye-close-line"></i>
+                                                            }
+                                                        </div>
+                                                        <div className="pass_conditions" style={{ display: showPassModal ? '' : 'none' }}>
+                                                            <div className="d-flex align-items-center">
+                                                                <i className={isNumb ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 number</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center"><i className={specialCharacter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 special character</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center"><i className={capitalLetter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>At least 1 capital (uppercase) letter</span>
+                                                            </div>
+                                                            <div className="d-flex align-items-center">
+                                                                <i className={passLength ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
+                                                                <span style={{ fontSize: "small" }}>Minimum 8 characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div className="col-sm-12 input_block">
+                                                    <input className="input_filed" type="text" placeholder="Invite Code (Optional)" value={invitation} onChange={(e) => setInvitation(e.target.value)} disabled={ref} />
+                                                </div>
+
+                                                <div className="col-sm-12 agreetext">
+                                                    <label className="termsbox"><input type="checkbox" checked={checkButton2} onClick={() => setCheckButton2((checkButton2) => !checkButton2)} /> I agree to Wrathcode <a target="_blank" rel="noreferrer" href="/TermsofUse" className="btn-link"> Terms and Use </a>
+
+                                                    </label>
+                                                </div>
+
+                                                <div className="col-sm-12 input_block">
+                                                    <ReCAPTCHA
+                                                        theme="light"
+                                                        ref={recaptchaRef2}
+                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
+                                                    />
+                                                </div>
+
+                                                <div className="col-sm-12 login_btn">
+                                                    {/* <input type="button" value=" Signup – Coming Soon" /> */}
+                                                    <input type="button" value="Register" onClick={() => { handlePhoneRegister() }} />
+                                                </div>
+                                                <div class="col-sm-12"><button class="google_btn" type="button"><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
+
+                                                <div className="col-sm-12 registration__info agreetext">
+                                                    <p>Already have an account? <Link to="/login">Login</Link></p>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
 
                             </div>
-                            <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-                                <form>
-                                    <div className="row">
-
-                                        <div className="col-sm-12 input_block" autoComplete="off">
-                                            <label>Country Code*</label>
-
-                                            <div>
-                                                <Select
-                                                    styles={customStyles}
-                                                    inputId="countryCode"         // needed to connect label
-                                                    name="country_code_select"    // use non-sensitive name
-                                                    options={countriesList}
-                                                    onChange={(selected) => setCountryCode(selected?.value)}
-                                                    value={countriesList.find(option => option.value === countryCode)}
-                                                />
-                                            </div>
-
-                                        </div>
-
-                                        <div className="col-sm-12 input_block">
-                                            <label>Mobile Number*</label>
-
-                                            <div class="phone-input-wrapper">
-
-                                                <input className="input_filed" type="number" onWheel={(e) => e.target.blur()} placeholder="Enter mobile number" value={signId} onChange={(e) => setSignId(e.target.value)} />
-                                            </div>
-
-                                        </div>
-
-
-                                        <div className="col-sm-12 input_block">
-                                            <label>Password*</label>
-                                            <div className="email_code">
-                                                <input className="input_filed" placeholder="Please enter your password" type={passwordInputType}
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    onClick={() => setshowPassModal(true)} />
-
-
-                                                <div className='get_otp otp2' onClick={handleTogglePassword}  >
-
-                                                    {
-                                                        showPassword ?
-                                                            <i className="ri-eye-line"></i>
-                                                            :
-                                                            <i className="ri-eye-close-line"></i>
-                                                    }
-                                                </div>
-                                                <div className="pass_conditions" style={{ display: showPassModal ? '' : 'none' }}>
-                                                    <div className="d-flex align-items-center">
-                                                        <i className={isNumb ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 number</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center"><i className={specialCharacter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 special character</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center"><i className={capitalLetter ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>At least 1 capital (uppercase) letter</span>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <i className={passLength ? "ri-check-double-line text-success" : "ri-close-fill text-danger"}></i>
-                                                        <span style={{ fontSize: "small" }}>Minimum 8 characters</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-                                        <div className="col-sm-12 input_block">
-                                            <label>Invite Code (Optional)</label>
-                                            <input className="input_filed" type="text" placeholder="Invite Code (Optional)" value={invitation} onChange={(e) => setInvitation(e.target.value)} disabled={ref} />
-                                        </div>
-
-                                        <div className="col-sm-12 agreetext">
-                                            <label className="forgot_password"><input type="checkbox" checked={checkButton2} onClick={() => setCheckButton2((checkButton2) => !checkButton2)} /> I agree to Wrathcode <a target="_blank" rel="noreferrer" href="/TermsofUse" className="btn-link"> Terms and Use </a>
-
-                                            </label>
-                                        </div>
-
-                                        <div className="col-sm-12 input_block">
-                                            <ReCAPTCHA
-                                                theme="light"
-                                                ref={recaptchaRef2}
-                                                sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                                            />
-                                        </div>
-
-                                        <div className="col-sm-12 login_btn">
-                                            {/* <input type="button" value=" Signup – Coming Soon" /> */}
-                                            <input type="button" value="Register" onClick={() => { handlePhoneRegister() }} />
-                                        </div>
-                                        <div class="col-sm-12"><button class="google_btn" type="button"><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
-
-                                        <div className="col-sm-12 registration__info agreetext">
-                                            <p>Already have an account? <Link to="/login">Login</Link></p>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
-
-
-
                     </div>
+
                 </div>
+
             </div>
 
             <div className="modal fade scaner_pop_up thankyou_s" id="Confirmation_model" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

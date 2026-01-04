@@ -251,35 +251,13 @@ const LoginPage = () => {
 
 
 
-
-      <div className="login_section login_fullhieght">
-
-        <div class="left_bar_login">
-
-          <div class="login_cnt">
-
-
-            <h1>Exciting Welcome Rewards</h1>
-            <p>Grab up to $100 Welcome Rewards to kickstart your crypto investing journey!</p>
-            <ul>
-              <li>     Get verified, get rewarded! Complete KYC and  <span>grab $0.50 </span></li>
-            </ul>
-
-            <div class="rewards_vector">
-              <img src="/images/loginBg.png" />
-            </div>
-
-            <div className="allchains">All Chains, All Coins</div>
-
-            <p className="registertext">Register Now,Enjoy Surprise Rates</p>
-
-          </div>
-
-        </div>
+<div className="login_fullhieght">
+      <div className="login_section ">
 
         <div className="login_form_right">
           <div className="form_block_login">
-            <h2>Welcome To Wrathcode</h2>
+             <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
+            <h2>Login</h2>
             <div className="login-header">
               <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
@@ -299,12 +277,11 @@ const LoginPage = () => {
                 <form>
                   <div className="row">
                     <div className="col-sm-12 input_block">
-                      <label>Email*</label>
+                 
                       <input className="input_filed" type="email" placeholder="Please enter your email" value={signId} onChange={(e) => setSignId(e.target.value)} onBlur={(e) => setSignId(e.target.value.trim())} />
 
                     </div>
                     <div className="col-sm-12 input_block">
-                      <label>Password*</label>
                       <div className="email_code">
 
                         <input className="input_filed" type={`${showPassword ? "text" : "password"}`} placeholder="Please enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -319,8 +296,8 @@ const LoginPage = () => {
                       </div>
                     </div>
 
-                    <div className="col-sm-12">
-                      <Link to="/forgot_password" className="forgot_password">Forgot Password?</Link>
+                    <div className="col-sm-12 forgot_password">
+                      <Link to="/forgot_password">Forgot Password?</Link>
                     </div>
 
                     <div className="col-sm-12 input_block">
@@ -364,8 +341,6 @@ const LoginPage = () => {
                 <form>
                   <div className="row">
                     <div className="col-sm-12 input_block" autoComplete="off">
-                      <label>Country Code*</label>
-
                       <div>
                         <Select
                           styles={customStyles}
@@ -379,16 +354,13 @@ const LoginPage = () => {
 
                     </div>
                     <div className="col-sm-12 input_block">
-                      <label>Mobile*</label>
 
                       <div class="phone-input-wrapper">
-
                         <input className="input_filed" type="number" placeholder="Enter mobile number" onWheel={(e) => e.target.blur()} value={signId} onChange={(e) => setSignId(e.target.value)} onBlur={(e) => setSignId(e.target.value.trim())} />
                       </div>
 
                     </div>
                     <div className="col-sm-12 input_block">
-                      <label>Password*</label>
                       <div className="email_code">
 
                         <input className="input_filed" type={`${showPassword ? "text" : "password"}`} placeholder="Please enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -402,8 +374,8 @@ const LoginPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-sm-12">
-                      <Link to="/forgot_password" className="forgot_password">Forgot Password?</Link>
+                    <div className="col-sm-12 forgot_password">
+                      <Link to="/forgot_password">Forgot Password?</Link>
                     </div>
 
                     <div className="col-sm-12 input_block">
@@ -433,7 +405,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-
+</div>
       {/* <div className="modal fade" id="Confirmation_model" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <form className="modal-content" onSubmit={mySubmitFunction}>
