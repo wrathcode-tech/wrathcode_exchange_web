@@ -464,7 +464,7 @@ const LandingPage = () => {
               <img src="images/new-images/cryptoadd_vector5.png" alt="crypto" />
             </div>
           </li>
-             <li>
+          <li>
             <div className="cnt">
               <span>Spend and Earn upto 100%</span>
               <h3>Crypto Cashback</h3>
@@ -510,9 +510,17 @@ const LandingPage = () => {
           <h2>Trending Cryptocurrencies</h2>
           <p>Real-time market movers powered by live data and smart analytics.</p>
 
+          <div className="crypto_tabs_mbl">
+                                        <ul>
+                                          <li className="active"><button>Trending</button></li>
+                                          <li><button>Top Gainers</button></li>
+                                          <li><button>New Listings</button></li>
+                                        </ul>
+          </div>
+
           <div className="crypto_dashboard">
             {/* Trending */}
-            <div className="hot_spot_outer">
+            <div className="hot_spot_outer active">
               <div className="top_heading">
                 <h4>Trending</h4>
               </div>
@@ -1011,7 +1019,7 @@ const LandingPage = () => {
             </div>
 
 
-                 <div className="gallery_crypto">
+            <div className="gallery_crypto">
               <img className="cryptoicon" src="images/new-images/cryptogallery4.png" />
               <h4>Staking</h4>
               <p>Trade US stock tokens with

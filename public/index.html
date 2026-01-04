@@ -614,6 +614,49 @@ $(document).ready(function () {
 });
 </script>
 
+<script>
+  $(document).ready(function () {
+
+    $(".cryptofuture_s").each(function () {
+
+      const $section = $(this);
+      const $images = $section.find(".exchange_future_s img");
+
+      $section.on("mousemove", function (e) {
+
+        const offset = $section.offset();
+        const width = $section.outerWidth();
+        const height = $section.outerHeight();
+
+        const x = e.pageX - offset.left;
+        const y = e.pageY - offset.top;
+
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        const moveX = ((x - centerX) / centerX) * 60;
+        const moveY = ((y - centerY) / centerY) * 60;
+
+        $images.each(function (index) {
+          const depth = (index + 1) * 0.5; // slow depth
+          $(this).css(
+            "transform",
+            `translate(${moveX * depth}px, ${moveY * depth}px)`
+          );
+        });
+      });
+
+      $section.on("mouseleave", function () {
+        $images.css("transform", "translate(0px, 0px)");
+      });
+
+    });
+
+  });
+</script>
+
+
+
 
 </body>
 

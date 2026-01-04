@@ -880,7 +880,13 @@ button.learnbtn a:hover {
     max-width: 113px;
     margin: 0 auto;
     margin-bottom: 30px;
+     transition: transform 0.8s ease-out;
 }
+
+.crypto_features .trade_icon img{     transition: transform 0.6s ease-out;
+  will-change: transform; }
+
+.crypto_features .card:hover .trade_icon { transform: translateY(-20px); position: relative; }
 
 .card.borderlft.assetstrade {
     text-align: left;
@@ -6795,6 +6801,27 @@ section.crypto_exchange_section {
     justify-content: space-between;
     gap: 36px;
     color: #fff;
+      position: relative;
+}
+
+.exchange_future_s {
+  position: relative;
+}
+
+.exchange_future_s img {
+  transition: transform 0.6s ease-out;
+  will-change: transform;
+}
+
+/* optional depth effect */
+.exchange_future_s img:nth-child(1) {
+  transform: translateZ(0);
+}
+.exchange_future_s img:nth-child(2) {
+  transform: translateZ(0);
+}
+.exchange_future_s img:nth-child(3) {
+  transform: translateZ(0);
 }
 
 .crypto_future_cnt {
@@ -6913,6 +6940,7 @@ button.downloadbtn {
     left: 0px;
     height: auto;
     top: 90px;
+    z-index: 666;
 }
 
 img.animation_effect.bitcoin {
@@ -14333,6 +14361,40 @@ button.btn_claim:active {
     filter: invert(41%) sepia(75%) saturate(724%) hue-rotate(360deg) brightness(103%) contrast(101%);
 }
 
+
+.crypto_tabs_mbl {
+    width: 100%;
+    margin-top: 0px;
+    display: none;
+}
+
+.crypto_tabs_mbl ul {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+
+.crypto_tabs_mbl ul li button {
+    background-color: #F3BB2B00;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    width: 190px;
+    border-radius: 50px;
+    padding: 11px 10px;
+}
+
+.crypto_tabs_mbl ul li.active button {
+    background-color: #F3BB2B;
+    border: 1px solid #F3BB2B;
+    color: #060606;
+}
+
+
+
 @media screen and (max-width:1700px) {
 
     .refrefer_earn_outer {
@@ -15937,6 +15999,17 @@ button.btn_claim:active {
 }
 
 @media screen and (max-width:991px) {
+
+.profit_costs_cta_outer .d-flex.download_button button.btn {
+        font-size: 12px;
+        line-height: 20px;
+        padding: 8px 9px;
+    }
+
+    .crypto_tabs_mbl {
+        display: inline-block;
+    }
+
     .scaner_pop_up input.input_text {
         width: 46%;
     }
@@ -16991,6 +17064,11 @@ button.btn_claim:active {
 
     .crypto_section .hot_spot_outer {
         width: 100%;
+        display: none;
+    }
+
+    .crypto_section .hot_spot_outer.active {
+        display: block;
     }
 
     .how_work_s ul {
@@ -17187,6 +17265,21 @@ button.btn_claim:active {
         width: 24px;
     }
 
+    .animation {
+        height: auto;
+    }
+
+    .crypto_future_cnt p {
+        margin: 5px 0px 10px;
+    }
+
+    .crypto_tabs_mbl ul li button {
+        font-size: 14px;
+        line-height: 20px;
+        width: 130px;
+        padding: 8px 8px;
+    }
+
     .profit_cost_cnt h2 {
         padding-bottom: 2px;
     }
@@ -17264,7 +17357,9 @@ button.btn_claim:active {
         width: 100%;
     }
 
-    .latest_resources .row .col-sm-6{ width: 100%; }
+    .latest_resources .row .col-sm-6 {
+        width: 100%;
+    }
 
     .row.cta_register_s .col-sm-7 {
         width: 100%;
@@ -17377,20 +17472,20 @@ button.btn_claim:active {
 
     img.crypto_cntr {
         width: 50px;
-        top: -40px;
-        left: 25px;
+        top: -10px;
+        left: 20px;
     }
 
     img.bitcoin_left {
         width: 40px;
         left: 20px;
-        bottom: -60px;
+        bottom: 0px;
     }
 
     img.bitcoin_right {
         right: -15px;
         width: 40px;
-        top: 0px;
+        top: 40px;
     }
 
     .overview_summary_currency .slick-dots {
@@ -18539,20 +18634,18 @@ button.btn_claim:active {
         width: 100%;
     }
 
-    
+
     footer .row .col-sm-7 {
         width: 100%;
     }
 
-        span.green {
+    span.green {
         font-size: 13px !important;
     }
 
     .cta_register_s ul.social_media {
         display: none;
     }
-
-
 
     .email_code .get_otp.otpcode {
         font-size: 13px;
@@ -20098,7 +20191,7 @@ button.btn_claim:active {
     }
 
     .crypto_section {
-        padding: 10px 0px 20px;
+        padding: 10px 0px 15px;
     }
 
     .crypto_exchange_s .services_block h4 {
@@ -21094,7 +21187,11 @@ button.btn_claim:active {
     }
 
     .crypto_section h2 {
-        font-size: 24px;
+        font-size: 22px;
+    }
+
+    body h2 {
+        font-size: 22px;
     }
 
     .crypto_dashboard {
@@ -21820,7 +21917,7 @@ button.btn_claim:active {
     }
 
     footer h3 {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     footer address {
@@ -21916,12 +22013,21 @@ button.btn_claim:active {
         min-height: calc(100vh - 54px) !important;
     }
 
+    .crypto_section p {
+        padding-top: 5px;
+    }
+
 }
 
 @media screen and (max-width:480px) {
 
     footer .row .footer_logo {
         max-width: 210px;
+    }
+
+        .security_list li h3 {
+        font-size: 22px;
+        margin: 7px;
     }
 
     .deposit_crypto_left::before {
@@ -21959,6 +22065,16 @@ button.btn_claim:active {
         padding: 0px;
         border-radius: 0px;
         border: none;
+    }
+
+    .crypto_tabs_mbl ul {
+        gap: 5px;
+    }
+
+    .crypto_tabs_mbl ul li button {
+        font-size: 13px;
+        width: 105px;
+        padding: 7px 5px;
     }
 
 }
@@ -22563,6 +22679,12 @@ button.btn_claim:active {
 
     .deposit_crypto_left::before {
         height: 250px;
+    }
+
+    .crypto_tabs_mbl ul li button {
+        font-size: 12px;
+        width: 95px;
+        padding: 5px 5px;
     }
 
     .withdrawal_outer::before {
