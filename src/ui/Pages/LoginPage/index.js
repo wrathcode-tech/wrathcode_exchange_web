@@ -217,16 +217,16 @@ const LoginPage = () => {
     setShowPassword(false);
   }
 
-  useEffect(() => {
-    const currentRecaptchaRef = recaptchaRef.current;
+//  useEffect(() => {
+ //   const currentRecaptchaRef = recaptchaRef.current;
 
-    return () => {
-      window.location.reload()
-      if (currentRecaptchaRef) {
-        currentRecaptchaRef.reset();
-      }
-    };
-  }, []);
+  //  return () => {
+    //  window.location.reload()
+  //    if (currentRecaptchaRef) {
+    //   currentRecaptchaRef.reset();
+    //  }
+  //  };
+//  }, []);
 
 
 
