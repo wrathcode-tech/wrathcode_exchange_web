@@ -6767,6 +6767,10 @@ form.buysellform.data-sell .form-control {
 section.crypto_exchange_section {
     width: 100%;
     display: block;
+    background-image: url(../images/new-images/cryptobg_affect.jpg);
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
     padding: 80px 0px;
 }
 
