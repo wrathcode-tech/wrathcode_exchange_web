@@ -78,7 +78,7 @@ const ProfilePage = (props) => {
               <Link to="dashboard">
                 <img className='darkicon' src="/images/dasboard_home.svg" alt="home" />
                 <img className='lighticon' src="/images/dasboard_home_light.svg" alt="home" /> <div className="dashboard_menu_hd"> Dashboard
-                  <p>View your balances, latest features, and market overview at a glance. </p>
+                  {/* <p>View your balances, latest features, and market overview at a glance. </p> */}
                 </div>
 
               </Link>
@@ -93,7 +93,7 @@ const ProfilePage = (props) => {
                 <img className='lighticon' src="/images/dashboard_assets_light.svg" alt="assets" />
                 <div className={`dashboard_menu_hd ${currentPage === "Overview" && "active_ul"}`}>
                   Assets
-                  <p>Manage your crypto holdings, track values, and monitor your asset portfolio.</p>
+                  {/* <p>Manage your crypto holdings, track values, and monitor your asset portfolio.</p> */}
                 </div>
                 <span>
                   <i className="ri-arrow-down-s-line"></i>
@@ -119,7 +119,8 @@ const ProfilePage = (props) => {
                 <img className='lighticon' src="/images/dashboard_order_light.svg" alt="orders" />
                 <div className={`dashboard_menu_hd ${(currentPage === "Spot Order" || currentPage === "Open Order" || currentPage === "Transaction History" || currentPage === "Swap History" || currentPage === "Earning Plan History") && "active_ul"}`}>
                   Orders
-                  <p>Check your transaction history and spot orders.</p></div>
+                  {/* <p>Check your transaction history and spot orders.</p> */}
+                  </div>
                 <span>
                   <i className="ri-arrow-down-s-line"></i>
                 </span>
@@ -181,7 +182,7 @@ const ProfilePage = (props) => {
                 <img className='lighticon' src="/images/dashboard_profile_light.svg" alt="profile" />
                 <div className={`dashboard_menu_hd ${(currentPage === "Settings" || currentPage === "kyc" || currentPage === "Currency Preference" || currentPage === "Support") && "active_ul"}`}>
                   Profile
-                  <p>Update your personal info, manage account details and portofilio currency.</p>
+                  {/* <p>Update your personal info, manage account details and portofilio currency.</p> */}
                 </div>
                 <span>
                   <i className="ri-arrow-down-s-line"></i>
@@ -229,7 +230,7 @@ const ProfilePage = (props) => {
                 <img className='darkicon' src="/images/earning_icon3.svg" alt="Earning" width={26} />
                 <div className="dashboard_menu_hd">
                   Earning
-                  <p>Monitor earnings from staking, referrals, and trading activities.</p>
+                  {/* <p>Monitor earnings from staking, referrals, and trading activities.</p> */}
                 </div>
               </Link>
             </li>
@@ -238,7 +239,7 @@ const ProfilePage = (props) => {
                 <img className='darkicon' src="/images/earning_icon3.svg" alt="giveaway" width={26} />
                 <div className="dashboard_menu_hd">
                   Giveaways
-                  <p>Participate in exclusive events and earn exciting rewards instantly.</p>
+                  {/* <p>Participate in exclusive events and earn exciting rewards instantly.</p> */}
                 </div>
               </Link>
             </li>
@@ -269,7 +270,7 @@ const ProfilePage = (props) => {
                 <img className='lighticon' src="/images/dashboard_security_light.svg" alt="security" />
                 <div className={`dashboard_menu_hd ${(currentPage === "Two Factor Authentication" || currentPage === "Reset Password") && "active_ul"}`}>
                   Security
-                  <p>Manage two-factor authentication, passwords, and other security settings.</p>
+                  {/* <p>Manage two-factor authentication, passwords, and other security settings.</p> */}
                 </div>
                 <span>
                   <i className="ri-arrow-down-s-line"></i>
@@ -309,7 +310,7 @@ const ProfilePage = (props) => {
                 <div className="dashboard_menu_hd">
                   Quick Swap
 
-                  <p>Instantly swap your cryptocurrencies with real-time conversion rates.</p>
+                  {/* <p>Instantly swap your cryptocurrencies with real-time conversion rates.</p> */}
                 </div>
 
               </Link>
@@ -321,7 +322,7 @@ const ProfilePage = (props) => {
                 <img className='lighticon' src="/images/dashboard_notification_light.svg" alt="security" />
                 <div className="dashboard_menu_hd">
                   Notification
-                  <p>Stay updated with alerts, trade notifications, system updates, and news.</p>
+                  {/* <p>Stay updated with alerts, trade notifications, system updates, and news.</p> */}
                 </div>
               </Link>
             </li>
@@ -333,7 +334,7 @@ const ProfilePage = (props) => {
                 <div className="dashboard_menu_hd">
                   Activity logs
 
-                  <p>Review your login history, device access logs, and recent account activity.</p>
+                  {/* <p>Review your login history, device access logs, and recent account activity.</p> */}
                 </div>
               </Link>
             </li>

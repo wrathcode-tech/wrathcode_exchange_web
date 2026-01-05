@@ -861,7 +861,7 @@ const LandingPage = () => {
             </div>
 
             <div class="card border_btm">
-              <div className="trade_icon"><img src="images/new-images/invest_icon.png" alt="Watch & Analyze Charts" class="phone" /></div>
+              <div className="trade_icon"><img src="images/new-images/analyze_charts.png" alt="Watch & Analyze Charts" class="phone" /></div>
               <h4>Watch & Analyze Charts</h4>
               <p>Make informed decisions using advanced charts, live indicators, and professional-grade analytics tools.</p>
             </div>

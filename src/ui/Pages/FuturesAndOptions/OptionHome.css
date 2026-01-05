@@ -3199,7 +3199,7 @@ button.bn-button.button__buy.sellbtn {
 
 .hero_section_option {
     background-position: right center;
-    background-image: url(/public/images//option_home_img/hero_img.svg);
+    /* background-image: url(/public/images/option_home_img/hero_img.svg); */
     background-repeat: no-repeat;
     background-size: 1075px;
     min-height: 840px;

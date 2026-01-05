@@ -429,7 +429,7 @@ const Market = () => {
               <ul className="nav nav-pills mb-2 overflowx_scroll funds_tab  market_tabs">
                 <li className="nav-item">
                   <button className={`nav-link ${activeTab === "Fav" ? 'active' : ""}`} onClick={() => setActiveTab('Fav')}>
-                    <i className="ri-star-s-line me-2 ri-xl"></i> favourite
+                    <i className="ri-star-s-line me-2 ri-xl"></i> Favourite
                   </button>
                 </li>
                 <li className="nav-item">
@@ -440,18 +440,7 @@ const Market = () => {
                 <li className="nav-item">
                   <button className={`nav-link ${activeTab === "Gainers" ? 'active' : ""}`} onClick={() => setActiveTab('Gainers')}>
                     <i className="ri-arrow-right-up-line me-2"></i>
-                    Gainers
-                  </button>
-                </li>
-                <li className="nav-item">
-                  <button className={`nav-link ${activeTab === "Losers" ? 'active' : ""}`} onClick={() => setActiveTab('Losers')}>
-                    <i className="ri-arrow-right-down-line me-2"></i>
-                    Losers
-                  </button>
-                </li>
-                <li className="nav-item">
-                  <button className={`nav-link ${activeTab === "Trending" ? 'active' : ""}`} onClick={() => setActiveTab('Trending')}>
-                    <i className="ri-fire-fill me-2"></i> Trending
+                    Futures
                   </button>
                 </li>
               </ul>
@@ -466,8 +455,10 @@ const Market = () => {
               }
             </div>
             <div className="tab-content custom-tab-content p-0">
+
               {/* Favourite */}
               <div className={`tab-pane ${activeTab === "Fav" ? 'active' : ""}`}>
+
                 <div className="card py-2">
                   <div className="card-body p-0">
                     <div className="table-responsive">
@@ -532,6 +523,19 @@ const Market = () => {
               </div>
               {/* Spot */}
               <div className={`tab-pane ${activeTab === "Spot" ? 'active' : ""}`}>
+
+                <ul className="tbltabs">
+                  <li>
+                    <select>
+                    <option>USDT</option>
+                  </select>
+                  </li>
+                  <li><button>All</button></li>
+                  <li><button>Gainners</button></li>
+                  <li><button>Lossers</button></li>
+                  <li><button>Trending</button></li>
+                </ul>
+
                 <div className="card  py-2 spot_table">
                   <div className="card-body p-0">
                     <div className="mrt_row">
@@ -648,15 +652,15 @@ const Market = () => {
                 </div>
               </div>
 
-              {/* Biggest Losers */}
-              <div className={`tab-pane ${activeTab === "Losers" ? 'active' : ""}`}>
+
+              {/* <div className={`tab-pane ${activeTab === "Losers" ? 'active' : ""}`}>
                 <div className="card  py-2">
                   <div className="card-body p-0 losers_table">
                     <div className="table-responsive">
                       {
                         topLosers && topLosers?.length > 0 ? (
                           <>
-                            {/* <h5 className="text-center">Biggest Losers</h5> */}
+                       
                             <table className="table ">
                               <thead>
                                 <tr>
@@ -702,17 +706,17 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              {/* Trending */}
-              <div className={`tab-pane ${activeTab === "Trending" ? 'active' : ""}`}>
+
+              {/* <div className={`tab-pane ${activeTab === "Trending" ? 'active' : ""}`}>
                 <div className="card  py-2">
                   <div className="card-body p-0 trending_table">
                     <div className="table-responsive">
                       {
                         coinData && coinData?.length > 0 ? (
                           <>
-                            {/* <h5 className="text-center"> Top Trending</h5> */}
+                       
                             <table className="table ">
                               <thead>
                                 <tr>
@@ -759,7 +763,7 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

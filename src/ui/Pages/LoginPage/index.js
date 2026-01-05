@@ -302,7 +302,7 @@ const LoginPage = () => {
 
                     <div className="col-sm-12 input_block">
                       <ReCAPTCHA
-                        theme="light"
+                        theme="dark"
                         ref={recaptchaRef}
                         sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
                         onErrored={handleRecaptchaError}

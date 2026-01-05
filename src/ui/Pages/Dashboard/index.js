@@ -292,7 +292,7 @@ const Dashboard = (props) => {
                                       <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
                                     </div>
                                   </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
                                   <td>{formatNumber(item?.high, 5)}</td>
                                   {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
                                   <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
@@ -554,9 +554,9 @@ const Dashboard = (props) => {
                       {props?.userDetails?.kycVerified === 0 ? (
                         <Link to="/user_profile/kyc">Verify</Link>
                       ) : props?.userDetails?.kycVerified === 1 ? (
-                        <span style={{ color: "#fea903", fontWeight: "bold" }}>KYC Pending</span>
+                        <span  className='kycpendingbtn'>KYC Pending</span>
                       ) : props?.userDetails?.kycVerified === 2 ? (
-                        <span style={{ color: "#fea903", fontWeight: "bold" }}>KYC Approved</span>
+                        <span className='kycapprovedbtn'>KYC Approved</span>
                       ) : props?.userDetails?.kycVerified === 3 ? (
                         <span style={{ color: "red", fontWeight: "bold" }}>KYC Rejected</span>
                       ) : null}
