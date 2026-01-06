@@ -4829,6 +4829,7 @@ body .red {
 
 .trending_crypto span.green {
     justify-content: end;
+    display: block;
 }
 
 .trending_crypto .hot_trading_s table tr th {
@@ -6387,6 +6388,7 @@ table .green {
 
 .crypto_section table .red {
     color: #e04457;
+    display: block;
 }
 
 /* .first_coloum {
