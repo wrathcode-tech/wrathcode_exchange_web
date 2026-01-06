@@ -363,8 +363,17 @@ body.light_theme .price_max_total input[type="number"] {
 
 .button_outer {
     display: flex;
-    gap: 18px;
+    gap: 12px;
     align-items: center;
+}
+
+.button_outer .downloadtabs {
+    padding: 0px 5px;
+}
+
+.button_outer .scantophdr {
+    right: 32px;
+    padding-top: 24px;
 }
 
 .header_right .button_outer .login_btn {
@@ -1368,12 +1377,16 @@ img.animation_effect.bitcoin1 {
 }
 
 .resourceslft {
-    width: 60%;
+    width: 100%;
 }
 
 .resourceslft p {
     color: #C0C0C0;
     margin: 0px;
+}
+
+.navigation nav ul li.mbl {
+    display: none;
 }
 
 .resources_news {
@@ -4838,6 +4851,44 @@ body .red {
     border: none
 }
 
+.scantophdr {
+    position: absolute;
+    right: -6px;
+    padding-top: 15px;
+    top: 28px;
+    display: none;
+}
+
+.qrcode {
+    background-color: #202630;
+    border: 1px solid #2D333C;
+    border-radius: 10px;
+    padding: 15px;
+    width: 190px;
+    color: #fff;
+    text-align: center;
+}
+
+.downloadtabs.active .scantophdr {
+    display: block;
+}
+
+.qrcode p {
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.qrcode button.btn {
+    background-color: #f3bb2b;
+    font-size: 11px;
+}
+
+.qrcode .scan_img {
+    background-color: #fff;
+    padding: 10px;
+}
+
 .modal.fade .modal-dialog {
     min-width: 730px;
     width: 100%;
@@ -5218,6 +5269,7 @@ td.right_t.price_tb span {
 
 .icon_notificaton_r ul li {
     position: relative;
+    padding: 0px 6px;
 }
 
 .header_notification {
@@ -8412,7 +8464,7 @@ tr th {
 
 .icon_notificaton_r ul {
     display: flex;
-    gap: 20px;
+    gap: 8px;
 }
 
 
@@ -9755,8 +9807,8 @@ span.arrow {
 }
 
 .earningpopup .btn-close {
-  filter: invert(1);
-  opacity: 1;
+    filter: invert(1);
+    opacity: 1;
 }
 
 .modal.earningpopup h3 {
@@ -9813,7 +9865,13 @@ ul.launchpadlist {
     justify-content: space-between;
     margin-top: 32px;
 }
-ul.launchpadlist li span{ font-size: 15px; color: #949AA4; font-weight: 300; }
+
+ul.launchpadlist li span {
+    font-size: 15px;
+    color: #949AA4;
+    font-weight: 300;
+}
+
 ul.launchpadlist li {
     font-size: 24px;
     color: #F2F4F6;
@@ -9827,7 +9885,10 @@ ul.launchpadlist li {
     width: 85%;
 }
 
-.project_coin h2 { font-size: 24px; color: #F2F4F6; }
+.project_coin h2 {
+    font-size: 24px;
+    color: #F2F4F6;
+}
 
 .coin_lft {
     display: flex;
@@ -10018,7 +10079,10 @@ ul.daylist li {
     font-size: 10px;
 }
 
-ul.daylist li.active{ border: 1px solid #fff; color: #fff; }
+ul.daylist li.active {
+    border: 1px solid #fff;
+    color: #fff;
+}
 
 ul.daylist li span {
     font-size: 7px;
@@ -14104,21 +14168,18 @@ button.btn_claim:active {
 }
 
 .crypto_tabs_mbl ul li button {
-    background-color: #F3BB2B00;
-    border: 1px solid #fff;
+background-color: transparent;
+    border: none;
     color: #fff;
     font-size: 16px;
     font-weight: 500;
-    line-height: 24px;
-    width: 190px;
-    border-radius: 50px;
-    padding: 11px 10px;
+    padding: 11px 10px 15px;
+    border-bottom:2px solid #ffffff00;
 }
 
 .crypto_tabs_mbl ul li.active button {
-    background-color: #F3BB2B;
-    border: 1px solid #F3BB2B;
-    color: #060606;
+    color: #F3BB2B;
+    border-bottom:2px solid #F3BB2B;
 }
 
 .wallet_balance_tb {
@@ -14135,7 +14196,7 @@ button.btn_claim:active {
     }
 
     .navigation nav ul {
-        gap: 18px;
+        gap: 12px;
     }
 
 
@@ -14188,6 +14249,10 @@ button.btn_claim:active {
 
     .giveway_hero h1 {
         font-size: 48px;
+    }
+
+    .button_outer .scantophdr {
+        padding-top: 34px;
     }
 
 }
@@ -14449,11 +14514,11 @@ button.btn_claim:active {
     }
 
     .navigation nav ul li a {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .navigation nav ul {
-        gap: 15px;
+        gap: 8px;
     }
 
     .user_login .active {
@@ -14552,6 +14617,10 @@ button.btn_claim:active {
 
     .top_total_bar {
         gap: 20px;
+    }
+
+    .button_outer .scantophdr {
+        padding-top: 28px;
     }
 
     .sign_in_form_s {
@@ -14705,7 +14774,6 @@ button.btn_claim:active {
 
     .afterloginheader .user_login {
         position: relative;
-        top: -2px;
     }
 
 
@@ -14862,6 +14930,7 @@ button.btn_claim:active {
     .user_login.dashbtn a {
         font-size: 10px;
         padding: 5px 9px;
+        height: 24px;
     }
 
     ul.active_package_top {
@@ -15496,7 +15565,7 @@ button.btn_claim:active {
     }
 
     .navigation nav ul li a {
-        font-size: 11px;
+        font-size: 9px;
     }
 
     .dashboardsummary_bottom a.btn {
@@ -15508,7 +15577,7 @@ button.btn_claim:active {
     }
 
     .navigation nav ul {
-        gap: 10px;
+        gap: 8px;
     }
 
     button.btn_claim {
@@ -15555,11 +15624,25 @@ button.btn_claim:active {
     }
 
     .header_right {
-        gap: 10px;
+        gap: 5px;
+    }
+
+    .icon_notificaton_r ul li {
+        padding: 0px 2px;
+        width: 30px;
+        min-width: 30px;
+    }
+
+    li.downloadtabs {
+        text-align: center;
     }
 
     .icon_notificaton_r ul {
-        gap: 8px;
+        gap: 5px;
+    }
+
+    header {
+        padding: 12px 10px;
     }
 
     .slick-slide {
@@ -15740,10 +15823,44 @@ button.btn_claim:active {
 
 @media screen and (max-width:991px) {
 
+    .icon_notificaton_r ul li.downloadtabs {
+        display: none;
+    }
+
+    .button_outer .downloadtabs {
+        display: none;
+    }
+
+.header_right .themeicon {
+    display: none;
+}
+
+    .icon_notificaton_r ul li.themetbs {
+        display: none;
+    }
+
     .profit_costs_cta_outer .d-flex.download_button button.btn {
         font-size: 12px;
         line-height: 20px;
         padding: 8px 9px;
+    }
+
+    .navigation nav ul li.mbl {
+        display: block;
+    }
+
+    .navigation nav ul li.mbl a {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .scantophdr {
+        padding-top: 7px;
+    }
+
+    .button_outer .scantophdr {
+        padding-top: 11px;
     }
 
     .crypto_tabs_mbl {
@@ -16889,7 +17006,12 @@ button.btn_claim:active {
     }
 
     .icon_notificaton_r ul li {
-        width: 20px;
+        width: 18px;
+        min-width: 18px;
+    }
+
+    .icon_notificaton_r ul li svg {
+        width: 18px;
     }
 
     .kyc_approval_s .cnt p {
@@ -17000,7 +17122,6 @@ button.btn_claim:active {
     .crypto_tabs_mbl ul li button {
         font-size: 14px;
         line-height: 20px;
-        width: 130px;
         padding: 8px 8px;
     }
 
@@ -17362,8 +17483,8 @@ button.btn_claim:active {
     }
 
     .afterloginheader .navbar-toggler {
-        right: 4px;
-        top: 8px;
+        right: 6px;
+        top: 2px;
     }
 
     .hand_shake_cntr {
@@ -17461,8 +17582,9 @@ button.btn_claim:active {
     }
 
     .user_login.dashbtn a {
-        height: 31px;
+        height: 25px;
         display: block;
+        padding: 3px 10px;
     }
 
 
@@ -17956,6 +18078,7 @@ button.btn_claim:active {
 
     .navbar-toggler {
         top: 0px;
+        padding: 0px;
     }
 
     .bs_dropbox .row {
@@ -18018,7 +18141,11 @@ button.btn_claim:active {
     }
 
     .afterloginheader .header_right {
-        right: 62px;
+        right: 44px;
+    }
+
+    .navigation .navbar-toggler img {
+        width: 18px;
     }
 
     .earning_calculator_section {
@@ -18060,8 +18187,8 @@ button.btn_claim:active {
 
     .header_right .button_outer .login_btn {
         font-size: 10px;
-        padding: 5px 14px;
-        min-height: 24px;
+        padding: 2px 14px;
+        min-height: 20px;
     }
 
     section.termsofuse {
@@ -18845,12 +18972,13 @@ button.btn_claim:active {
         font-size: 14px;
     }
 
-    .col-lg-6 {
-        margin-top: 24px;
-    }
-
     .os_sec h3 {
         margin-bottom: 20px;
+    }
+
+    .button_outer .scantophdr {
+        padding-top: 7px;
+        right: 22px;
     }
 
     section.st_sec {
@@ -20390,6 +20518,10 @@ button.btn_claim:active {
         font-size: 12px;
     }
 
+        .header_right {
+        top: 10px;
+    }
+
     .gallery_crypto h4 {
         font-size: 18px;
     }
@@ -20842,11 +20974,14 @@ button.btn_claim:active {
     }
 
     .afterloginheader .header_right {
-        right: 32px;
-        top: 16px;
+        right: 34px;
+        top: 9px;
+        gap: 3px;
     }
 
-
+    .afterloginheader .navbar-toggler {
+        top: 2px;
+    }
 
     .pagination_list {
         margin-top: 5px;
@@ -20858,8 +20993,8 @@ button.btn_claim:active {
     }
 
     .header_right {
-        right: 41px;
-        top: 12px;
+        right: 38px;
+        top: 9px;
     }
 
     .navbar-toggler {
@@ -21712,6 +21847,16 @@ button.btn_claim:active {
         max-width: 210px;
     }
 
+
+    .button_outer .scantophdr {
+        padding-top: 4px;
+    }
+
+    header .logo {
+        min-width: 115px !important;
+        max-width: 115px;
+    }
+
     .learnbtn {
         font-size: 13px;
         margin-top: 7px;
@@ -21759,13 +21904,8 @@ button.btn_claim:active {
         border: none;
     }
 
-    .crypto_tabs_mbl ul {
-        gap: 5px;
-    }
-
     .crypto_tabs_mbl ul li button {
         font-size: 13px;
-        width: 105px;
         padding: 7px 5px;
     }
 
@@ -21794,8 +21934,10 @@ button.btn_claim:active {
     }
 
     .navbar-toggler {
-        top: 4px;
+        top: 0px;
+        right: 7px;
     }
+
 
     .blog_detail h2 {
         font-size: 20px;
@@ -22360,40 +22502,51 @@ button.btn_claim:active {
         height: 250px;
     }
 
+    .header_right {
+        top: 8px;
+    }
+
+    .afterloginheader .header_right .button_outer .login_btn {
+        font-size: 8px;
+        padding: 1px 5px;
+        height: 22px;
+    }
+
+    .afterloginheader .user_login.dashbtn a {
+        padding: 1px 5px;
+        align-items: center;
+        height: 22px;
+        font-size: 8px;
+    }
+
     .crypto_tabs_mbl ul li button {
         font-size: 12px;
-        width: 95px;
-        padding: 5px 5px;
+        padding: 5px 7px;
     }
+
+    .crypto_tabs_mbl ul {
+    gap: 10px; }
 
     .withdrawal_outer::before {
         height: 74%;
     }
 
     .afterloginheader .navbar-toggler {
-        top: 4px;
+        top: 1px;
     }
 
     header .logo {
-        min-width: 140px !important;
-        max-width: 140px;
+        min-width: 120px !important;
+        max-width: 120px;
     }
 
     .lightlogo,
     .darklogo {
-        width: 100px !important;
-    }
-
-    .header_right {
-        top: 12px;
-    }
-
-    .navbar-toggler {
-        top: 4px;
+        width: 80px !important;
     }
 
     .afterloginheader .header_right {
-        top: 12px;
+        top: 8px;
     }
 
     .afterloginheader .lightlogo,
@@ -22403,6 +22556,10 @@ button.btn_claim:active {
 
     header.afterloginheader .logo img.eaglelogo {
         width: 16px;
+    }
+
+    .header_right a .ri-search-line {
+        font-size: 11px;
     }
 
     .login_section {

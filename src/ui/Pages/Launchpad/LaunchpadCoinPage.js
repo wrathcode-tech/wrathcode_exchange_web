@@ -225,12 +225,57 @@ const LaunchpadCoinPage = () => {
                 />
             </Helmet>
 
-            <section class="coin_single">
+
+            <div className="launchpad_detail_s">
+                <div className="container">
+                    <ul className="backbt">
+                        <li><a href="#">Launchpad</a></li>
+                        <li>/</li>
+                        <li>Lighter</li>
+                    </ul>
+
+                    <div className="detail_top_launchpad">
+
+                        <div className="dellft">
+
+                            <div class="coin_lft">
+                                <div class="coin">
+                                    <img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
+                                <div class="coin_cnt">
+                                    <h3>ZAC</h3>
+                                    <div class="hd d-flex">
+                                        <span>Initial Offering · Ended</span>
+                                        <ul class="subcate">
+                                            <li class="darkbg"><button>Official Website</button></li>
+                                            <li class="darkbg"><button>Introduction</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ul className="registration_list">
+                                <li>Registration /
+                                    Subscription Starts <span>2025-12-24 12:00</span></li>
+                                <li>Registration /
+                                    Subscription Ends <span>2025-12-24 12:00</span></li>
+                                <li>Allocation Starts <span>2025-12-24 12:00</span></li>
+                                <li>Allocation Ends <span>2025-12-24 12:00</span></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {/* <section class="coin_single">
                 <div class="container">
                     <div className="backtop_s">
-                        {/* 🔙 Back Button */}
+                       
                         <button
-                            onClick={() => navigate(-1)} // previous page par jaata hai
+                            onClick={() => navigate(-1)} 
                             style={{
                                 backgroundColor: "#f3bb2b",
                                 border: "none",
@@ -244,7 +289,7 @@ const LaunchpadCoinPage = () => {
                             ← Back
                         </button>
 
-                        {/* 🪙 Token Info */}
+                      
                         <h1 style={{ display: "flex", alignItems: "center", gap: "10px", margin: 0 }}>
                             {currentLaunchpad?.logoUrl ? (
                                 <img
@@ -322,7 +367,7 @@ const LaunchpadCoinPage = () => {
                                 <div class="participation_bl">
 
 
-                                    {/* <div class="project_cycle_timeline">
+                                    <div class="project_cycle_timeline">
                                         <div class="timeline_item">
                                             <div class="timeline_circle active">1</div>
                                             <div class="timeline_content">
@@ -346,7 +391,7 @@ const LaunchpadCoinPage = () => {
                                                 <span>2023-10-13 14:30</span>
                                             </div>
                                         </div>
-                                    </div> */}
+                                    </div>
 
                                 </div>
 
@@ -410,14 +455,14 @@ const LaunchpadCoinPage = () => {
                                                     : "N/A"}
                                             </h6>
                                         </li>
-                                        {/* <li>
+                                        <li>
                                             <h6>Official List</h6>
                                             <h6>
                                                 {currentLaunchpad?.endTime
                                                     ? new Date(currentLaunchpad.endTime).toLocaleString()
                                                     : "N/A"}
                                             </h6>
-                                        </li> */}
+                                        </li>
                                     </ul>
                                     {(currentLaunchpad?.status?.toLowerCase() === "live" || currentLaunchpad?.isLive) ? (
                                         <div className="countdown_timer">
@@ -476,10 +521,10 @@ const LaunchpadCoinPage = () => {
 
                                     </div>
 
-                                    {/* 🔹 Buy Now Button */}
+                                   
                                     <div style={{ marginTop: "20px" }}>
                                         {!sessionStorage.getItem("token") ? (
-                                            // 🔹 User not logged in → Show Login button
+                                            
                                             <button
                                                 className="buy_now_btn"
                                                 style={{
@@ -492,14 +537,14 @@ const LaunchpadCoinPage = () => {
                                                 Login to Buy
                                             </button>
                                         ) : (
-                                            // 🔹 User logged in → Show Buy Now button
+                                        
                                             <button
                                                 className="buy_now_btn"
                                                 onClick={handleOpenPopup}
-                                                // disabled={
-                                                //     currentLaunchpad?.status?.toLowerCase() === "upcoming" ||
-                                                //     currentLaunchpad?.status?.toLowerCase() === "ended"
-                                                // }
+                                                disabled={
+                                                    currentLaunchpad?.status?.toLowerCase() === "upcoming" ||
+                                                    currentLaunchpad?.status?.toLowerCase() === "ended"
+                                                }
                                                 disabled
                                                 style={{
                                                     backgroundColor: "#f3bb2b",
@@ -525,7 +570,7 @@ const LaunchpadCoinPage = () => {
 
 
 
-                                    {/* 🔹 Buy Now Popup */}
+                                  
                                     {showPopup && (
                                         <div className="modal-overlay" onClick={handleClosePopup}>
                                             <div
@@ -561,7 +606,7 @@ const LaunchpadCoinPage = () => {
                                         </div>
                                     )}
 
-                                    {/* 🔹 Modal */}
+                                  
                                     {showModal && (
                                         <div
                                             className="modal-overlay subscription_modal"
@@ -653,7 +698,7 @@ const LaunchpadCoinPage = () => {
                                         </div>
                                     )}
 
-                                    {/* 🔹 Project Summary */}
+                                   
                                     <div className="project_summary">
                                         <h2>Project Summary</h2>
                                         <p>{currentLaunchpad?.description || "No description available."}</p>
@@ -684,7 +729,7 @@ const LaunchpadCoinPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* === POPUP MODAL === */}
+                           
                             {showPopup && (
                                 <div id="popup-overlay" className="popup-overlay" onClick={handleClosePopup}>
                                     <div className="popup-box" onClick={(e) => e.stopPropagation()}>
@@ -770,10 +815,10 @@ const LaunchpadCoinPage = () => {
                     </div>
 
                 </div>
-            </section>
+            </section> */}
 
-            {/* Buy Now Modal */}
-            <div className="modal fade" id="buy_now_modal" tabIndex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+
+            {/* <div className="modal fade" id="buy_now_modal" tabIndex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -819,7 +864,7 @@ const LaunchpadCoinPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
         </>
     )

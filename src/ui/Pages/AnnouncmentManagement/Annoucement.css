@@ -55,7 +55,7 @@ header {
 .launchpad_hero_s {
     width: 100%;
     color: #fff;
-    padding: 50px 0px 40px;
+    padding: 50px 0px 20px;
     background-color: #181A20;
 }
 
@@ -101,18 +101,6 @@ header {
     background-color: #181A20;
 }
 
-.project_coin::before {
-    position: absolute;
-    left: 0px;
-    top: 15%;
-    content: "";
-    width: 150px;
-    height: 100%;
-    background-image: url(/public/images/AnnouncementImg/leftbg_after.svg);
-    background-repeat: no-repeat;
-    background-position: center bottom;
-}
-
 .project_coin.complete_project_s::before {
     display: none;
 }
@@ -126,6 +114,16 @@ header {
     position: relative;
     height: 315px;
     transition: all 0.5s;
+}
+
+.project_coin .viewmorebtn {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.project_coin .viewmorebtn a {
+    text-decoration: underline;
 }
 
 .receivedblock.flexreceive {
@@ -243,10 +241,6 @@ header {
     box-shadow: 0px 0px 15px #e7961dc5;
 }
 
-.coin_lft {
-    padding: 24px 10px;
-}
-
 .coin_top {
     display: flex;
     align-items: center;
@@ -298,14 +292,216 @@ header {
 }
 
 .total_time_ri ul {
-    display: flex; align-items: center; gap:24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
 }
 
-.total_time_ri ul li:first-child { border-right: 1px solid #000000; padding-right: 24px; }
-.total_time_ri ul li{ display: flex; flex-direction: column; font-size: 20px; font-weight: 500; }
-.total_time_ri ul li span { font-size: 14px; color: #949AA4; font-weight: 300; }
+.total_time_ri ul li:first-child {
+    border-right: 1px solid #000000;
+    padding-right: 24px;
+}
 
-.coin_lft ul.subcate li.greendark button {
+.total_time_ri ul li {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.total_time_ri ul li span {
+    font-size: 14px;
+    color: #949AA4;
+    font-weight: 300;
+}
+
+.project_crypto_bl {
+    background-color: #2B313C;
+    border-radius: 16px;
+    padding: 24px 40px;
+    margin: 30px 0px;
+}
+
+.subscribe_data_info {
+    justify-content: space-between;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.subscribe_user_bl {
+    width: 100%;
+    background-color: #3A404A;
+    border-radius: 12px;
+    padding: 32px;
+}
+
+.userinfo_top {
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center;
+}
+
+.subscribe_user_lft {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.subscribe_user_lft img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.subscribe_user_lft h4 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.subscribe_user_lft h4 span.off {
+    color: #F3BB2B;
+    font-size: 12px;
+    font-weight: 400;
+    background-color: #2C1F04;
+    padding: 7px 12px;
+    border-radius: 4px;
+}
+
+.subscribe_user_bl p {
+    color: #949AA4;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.subscribe_user_bl .user_right {
+    font-size: 14px;
+    color: #F2F4F6;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 300;
+}
+
+ul.exclusivelist {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+    gap: 20px;
+}
+
+ul.exclusivelist li {
+    width: 100%;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    color: #949AA4;
+    font-weight: 300;
+}
+
+ul.exclusivelist li span {
+    color: #fff;
+    font-size: 14px;
+}
+
+ul.exclusivelist li span.text-yellow {
+    color: #F3BB2B;
+    font-weight: 500;
+}
+
+ul.exclusivelist li span.text-yellow span.subprice {
+    font-size: 12px;
+    font-weight: 300;
+    color: #949AA4;
+    display: block;
+}
+
+button.viewdel_btn {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    border: 1px solid #FFFFFF;
+    width: 100%;
+    color: #FFFFFF;
+    font-weight: 300;
+    padding: 0px;
+    border-radius: 50px;
+    margin-top: 15px;
+}
+
+button.viewdel_btn:hover {
+    border: 1px solid #FFFFFF;
+    color: #000;
+    background-color: #fff;
+}
+
+button.viewdel_btn a {
+    color: #fff;
+    padding: 9px;
+    display: block;
+}
+
+button.viewdel_btn a:hover {
+    color: #000;
+}
+
+.launchpad_detail_s {
+    width: 100%;
+    display: block;
+    padding: 32px 0px;
+    background-color: #181A20;
+}
+
+ul.backbt {
+    display: flex;
+    gap: 12px;
+}
+
+ul.backbt li {
+    font-size: 14px;
+    font-weight: 300;
+    color: #F2F4F6;
+}
+
+ul.backbt li a {
+    color: #949AA4;
+}
+
+.detail_top_launchpad {
+    width: 100%;
+    display: flex;
+    gap: 36px;
+    margin: 32px 0px;
+    color: #F2F4F6;
+}
+
+.detail_top_launchpad .coin_cnt span {
+    color: #fff;
+    font-size: 15px;
+}
+
+.detail_top_launchpad .hd.d-flex {
+    align-items: center;
+}
+
+.detail_top_launchpad .coin_lft ul.subcate li button {
+    background-color: #272D3700;
+    border: 1px solid #272D37;
+    border-radius: 50px;
+    padding: 3px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #949AA4;
+}
+
+ul.registration_list {
+    margin-top: 24px;
+    position: relative;
+}
+
+/* .coin_lft ul.subcate li.greendark button {
     background-color: #022B1B;
     color: #9DE3C7;
 }
@@ -313,8 +509,7 @@ header {
 .coin_lft ul.subcate li.yellodark button {
     background-color: #2C1F04;
     color: #F3BB2B;
-}
-
+} */
 
 .coin_right table {
     width: 100%;
@@ -1483,16 +1678,6 @@ span.subtext {
         height: 90px;
     }
 
-    .coin_lft {
-        padding: 20px 5px;
-    }
-
-    .project_coin::before {
-        top: 0%;
-        width: 90px;
-        background-size: 100px;
-    }
-
     .receivedblock.flexreceive {
         gap: 20px;
     }
@@ -1733,10 +1918,6 @@ span.subtext {
         margin-top: 10px;
     }
 
-    .coin_lft {
-        padding: 15px 5px;
-    }
-
     .coin_right table tr td {
         font-size: 13px;
     }
@@ -1948,11 +2129,6 @@ span.subtext {
 
     .faq_section .accordion-body {
         font-size: 13px;
-    }
-
-
-    .project_coin::before {
-        display: none;
     }
 
 }

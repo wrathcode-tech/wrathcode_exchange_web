@@ -511,11 +511,11 @@ const LandingPage = () => {
           <p>Real-time market movers powered by live data and smart analytics.</p>
 
           <div className="crypto_tabs_mbl">
-                                        <ul>
-                                          <li className="active"><button>Trending</button></li>
-                                          <li><button>Top Gainers</button></li>
-                                          <li><button>New Listings</button></li>
-                                        </ul>
+            <ul>
+              <li className="active"><button>Trending</button></li>
+              <li><button>Top Gainers</button></li>
+              <li><button>New Listings</button></li>
+            </ul>
           </div>
 
           <div className="crypto_dashboard">
@@ -646,7 +646,8 @@ const LandingPage = () => {
                                 }
                               >
                                 {" "}
-                                {item?.change_percentage?.toFixed(3)}%
+                                {Number(item?.change_percentage) >= 0 ? "▲" : "▼"}{" "}
+                                {Number(item?.change_percentage).toFixed(3)}%
                               </span>
                             </td>
                           </tr>
@@ -722,7 +723,8 @@ const LandingPage = () => {
                                   }
                                 >
                                   {" "}
-                                  {item?.change_percentage?.toFixed(3)}%
+                                  {Number(item?.change_percentage ?? 0) >= 0 ? "▲" : "▼"}{" "}
+                                  {Number(item?.change_percentage ?? 0).toFixed(3)}%
                                 </span>
                               </td>
                             </tr>
@@ -912,7 +914,7 @@ const LandingPage = () => {
               <h2>Latest <span>Resources.</span></h2>
               <p>Stay informed with expert insights, product updates, and deep-dive guides designed to help you trade smarter and stay ahead in the crypto market.</p>
             </div>
-            <div class="d-flex download_button"><button class="btn platform">Find out more <i class="ri-arrow-right-line"></i></button></div>
+            {/* <div class="d-flex download_button"><button class="btn platform">Find out more <i class="ri-arrow-right-line"></i></button></div> */}
 
           </div>
 
@@ -923,9 +925,9 @@ const LandingPage = () => {
                   <img className="blogimg" src="images/new-images/platform_trade.png" />
                 </div>
                 <div className="resources_cnt">
-                  <div className="date"><span>Apps</span> - Jan 1, 2026 </div>
+                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
                   <h3>The Best Platform to Trade Bitcoin on Your Phone</h3>
-                  <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
                 </div>
               </div>
             </div>
@@ -937,9 +939,9 @@ const LandingPage = () => {
                   <img className="blogimg" src="images/new-images/secure_crypto.png" />
                 </div>
                 <div className="resources_cnt">
-                  <div className="date"><span>Apps</span> - Jan 1, 2026 </div>
+                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
                   <h3>What Is the Most Secure Crypto Wallet in 2026?</h3>
-                  <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
                 </div>
               </div>
             </div>

@@ -170,7 +170,7 @@ const AuthHeader = (props) => {
                 <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
               </NavLink></div>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-7 navigation_s">
+            <div className="col-sm-12 col-md-12 col-lg-6 navigation_s">
               <div className="navigation">
                 <nav className="navbar navbar-expand-lg" ref={dropdownRef}>
                   <div className="container-fluid">
@@ -289,7 +289,7 @@ const AuthHeader = (props) => {
                           </ul>
                         </li>
 
-   <li className="nav-item dropdown">
+                        <li className="nav-item dropdown">
                           <span
                             className="nav-link dropdown-toggle"
                             style={{ cursor: "pointer" }}
@@ -300,19 +300,19 @@ const AuthHeader = (props) => {
                           <ul className={`dropdown-menu ${openDropdown === "earning" ? "show" : ""}`}>
                             <li>
                               <a className="dropdown-item" href="/earning" onClick={closeNavbar}>
-                               Earning
+                                Earning
                               </a>
                             </li>
 
-                              <li>
+                            <li>
                               <a className="dropdown-item" href="/refer_earn" onClick={closeNavbar}>
-                                 Refer & Earn
+                                Refer & Earn
                               </a>
                             </li>
-                          
+
                           </ul>
                         </li>
-{/*                         
+                        {/*                         
 
                         <li className="nav-item">
                           <NavLink className="nav-link" to="/earning" onClick={closeNavbar}>
@@ -327,10 +327,10 @@ const AuthHeader = (props) => {
                         </li>
                         <li className="nav-item">
                           <NavLink className="nav-link" to="/launchpad" onClick={closeNavbar}>
-                            Launchpad<i class="ri-rocket-fill" style={{color:"#f3bb2c"}}></i>
+                            Launchpad<i class="ri-rocket-fill" style={{ color: "#f3bb2c" }}></i>
                           </NavLink>
                         </li>
-{/* 
+                        {/* 
                         <li className="nav-item">
                           <NavLink className="nav-link" to="/refer_earn" onClick={closeNavbar}>
                             Refer & Earn
@@ -346,6 +346,16 @@ const AuthHeader = (props) => {
                         <li className="nav-item">
                           <NavLink className="nav-link" to="/blogs" onClick={closeNavbar}>
                             Blogs & News
+                          </NavLink>
+                        </li>
+                         <li className="nav-item mbl">
+                          <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
+                             Download <img src="/images/download_icon2.svg" alt="scan" />
+                          </NavLink>
+                        </li>
+                         <li className="nav-item mbl">
+                          <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
+                            Theme <span><img src="/images/themeicon.svg" alt="theme" /></span>
                           </NavLink>
                         </li>
 
@@ -378,7 +388,7 @@ const AuthHeader = (props) => {
               </div>
             </div>
 
-            <div className="col-sm-12 col-md-3  col-lg-3">
+            <div className="col-sm-12 col-md-4  col-lg-4">
               <div className="header_right">
                 <div className="button_outer">
                   <a className="search_icon" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="ri-search-line"></i></a>
@@ -483,10 +493,22 @@ const AuthHeader = (props) => {
                         </ul>
                       </div>
                     </li>
+                    <li className='downloadtabs'>
+                      <img src="/images/download_icon2.svg" alt="download" />
+                      <div className='scantophdr'>
+                      <div className='qrcode'>
+                        <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                        <p>Scan to Download App iOS & Android</p>
+                        <button className='btn'>Download</button>
+                      </div>
+                      </div>
+                    </li>
+                    <li className='themetbs'><img src="/images/themeicon.svg" alt="theme" /></li>
                   </ul>
                 </div>
               </div>
             </div>
+
             {/* <!--Search Bar Modal --> */}
             <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog">

@@ -84,7 +84,7 @@ const UserHeader = () => {
             </div>
           </div>
 
-          <div className="col-lg-7 navigation_s">
+          <div className="col-lg-6 navigation_s">
             <div className="navigation" ref={dropdownRef}>
               <nav className="navbar navbar-expand-lg">
                 <button className="navbar-toggler" type="button" onClick={toggleNavbar}>
@@ -246,8 +246,9 @@ const UserHeader = () => {
             </div>
           </div>
 
-          <div className="col-lg-3">
+          <div className="col-lg-4">
             <div className="header_right">
+              
               <div className="button_outer">
                 <a className="search_icon" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                   <i className="ri-search-line"></i>
@@ -262,6 +263,19 @@ const UserHeader = () => {
                   <i class="ri-moon-line dark-text"></i>
                   <i class="ri-sun-line light-text"></i>
                 </div> */}
+
+                
+                    <div className="downloadtabs">
+                      <img src="/images/download_icon2.svg" alt="download" />
+                       <div className='scantophdr'>
+                      <div className='qrcode'>
+                        <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                        <p>Scan to Download App iOS & Android</p>
+                        <button className='btn'>Download</button>
+                      </div>
+                      </div>
+                      </div>
+                    <div className="themeicon"><img src="/images/themeicon.svg" alt="theme" /></div>
               </div>
             </div>
           </div>

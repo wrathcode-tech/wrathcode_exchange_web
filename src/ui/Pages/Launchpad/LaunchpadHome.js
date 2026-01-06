@@ -192,8 +192,8 @@ const LaunchpadHome = () => {
                                     <div className="hd d-flex">
                                         <h3>ZAC</h3>
                                         <ul className="subcate">
-                                            <li className="greendark"><button>Initial Offering</button></li>
-                                            <li className="yellodark"><button>Discount Buy</button></li>
+                                            {/* <li className="greendark"><button>Initial Offering</button></li> */}
+                                            {/* <li className="yellodark"><button>Discount Buy</button></li> */}
                                             <li className="darkbg"><button>Ended</button></li>
                                         </ul>
                                     </div>
@@ -204,12 +204,150 @@ const LaunchpadHome = () => {
                                 <ul>
                                     <li><span>Total Distribution</span> 17,500 LIT</li>
                                     <li><span>End Time</span> 2025.12.31 10:00</li>
-                                    <li><button>Trade <i class="ri-arrow-down-s-line"></i></button></li>
                                 </ul>
                             </div>
 
                         </div>
+                        <div className="d-flex subscribe_data_info">
+
+                            <div className="subscribe_user_bl">
+                                <div className="d-flex userinfo_top">
+                                    <div className="subscribe_user_lft">
+                                        <img src="/images/tether_icon.png" alt="USDT" />
+                                        <div className="subscribe_cnt">
+                                            <h4>USDT <span className="off">60% Off</span></h4>
+                                            <p>Commit USDT to Subscribe LIT</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="user_right">
+                                        <i class="ri-user-line"></i>529
+                                    </div>
+
+                                </div>
+
+                                <ul className="exclusivelist">
+                                    <li>Exclusive Subscription Price <span className="text-yellow">1 LIT = 1.6 USDT <span className="subprice">Sell Price: 4 USDT</span></span></li>
+                                    <li>Total Allocation <span> 12,500 LIT</span></li>
+                                    <li>Total Committed <span>1,030,485.64 USDT</span></li>
+                                </ul>
+                            <button className="viewdel_btn"><Link to={`/launchpadCoin_Details/${filteredProjects?._id}`}>View Details</Link></button>
+
+                            </div>
+
+                            <div className="subscribe_user_bl">
+                                <div className="d-flex userinfo_top">
+                                    <div className="subscribe_user_lft">
+                                        <img src="/images/tether_icon.png" alt="USDT" />
+                                        <div className="subscribe_cnt">
+                                            <h4>USDT <span className="off">60% Off</span></h4>
+                                            <p>Commit USDT to Subscribe LIT</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="user_right">
+                                        <i class="ri-user-line"></i>529
+                                    </div>
+
+                                </div>
+
+                                <ul className="exclusivelist">
+                                    <li>Exclusive Subscription Price <span className="text-yellow">1 LIT = 1.6 USDT <span className="subprice">Sell Price: 4 USDT</span></span></li>
+                                    <li>Total Allocation <span> 12,500 LIT</span></li>
+                                    <li>Total Committed <span>1,030,485.64 USDT</span></li>
+                                </ul>
+                                <button className="viewdel_btn"><Link to={`/launchpadCoin_Details/${filteredProjects?._id}`}>View Details</Link></button>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
+                    <div className="project_crypto_bl">
+                        <div className="project_top">
+                            <div class="coin_lft">
+                                <div class="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
+                                <div class="coin_cnt">
+                                    <div className="hd d-flex">
+                                        <h3>ZAC</h3>
+                                        <ul className="subcate">
+                                            {/* <li className="greendark"><button>Initial Offering</button></li> */}
+                                            {/* <li className="yellodark"><button>Discount Buy</button></li> */}
+                                            <li className="darkbg"><button>Ended</button></li>
+                                        </ul>
+                                    </div>
+                                    <span>TZAC</span>
+                                </div>
+                            </div>
+                            <div className="total_time_ri">
+                                <ul>
+                                    <li><span>Total Distribution</span> 17,500 LIT</li>
+                                    <li><span>End Time</span> 2025.12.31 10:00</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div className="d-flex subscribe_data_info">
+
+                            <div className="subscribe_user_bl">
+                                <div className="d-flex userinfo_top">
+                                    <div className="subscribe_user_lft">
+                                        <img src="/images/tether_icon.png" alt="USDT" />
+                                        <div className="subscribe_cnt">
+                                            <h4>USDT <span className="off">60% Off</span></h4>
+                                            <p>Commit USDT to Subscribe LIT</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="user_right">
+                                        <i class="ri-user-line"></i>529
+                                    </div>
+
+                                </div>
+
+                                <ul className="exclusivelist">
+                                    <li>Exclusive Subscription Price <span className="text-yellow">1 LIT = 1.6 USDT <span className="subprice">Sell Price: 4 USDT</span></span></li>
+                                    <li>Total Allocation <span> 12,500 LIT</span></li>
+                                    <li>Total Committed <span>1,030,485.64 USDT</span></li>
+                                </ul>
+                               <button className="viewdel_btn"><Link to={`/launchpadCoin_Details/${filteredProjects?._id}`}>View Details</Link></button>
+
+                            </div>
+
+                            <div className="subscribe_user_bl">
+                                <div className="d-flex userinfo_top">
+                                    <div className="subscribe_user_lft">
+                                        <img src="/images/tether_icon.png" alt="USDT" />
+                                        <div className="subscribe_cnt">
+                                            <h4>USDT <span className="off">60% Off</span></h4>
+                                            <p>Commit USDT to Subscribe LIT</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="user_right">
+                                        <i class="ri-user-line"></i>529
+                                    </div>
+
+                                </div>
+
+                                <ul className="exclusivelist">
+                                    <li>Exclusive Subscription Price <span className="text-yellow">1 LIT = 1.6 USDT <span className="subprice">Sell Price: 4 USDT</span></span></li>
+                                    <li>Total Allocation <span> 12,500 LIT</span></li>
+                                    <li>Total Committed <span>1,030,485.64 USDT</span></li>
+                                </ul>
+                                <button className="viewdel_btn"><Link to={`/launchpadCoin_Details/${filteredProjects?._id}`}>View Details</Link></button>
+                              
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="viewmorebtn"><a href="#">View More</a></div>
+
+                  
 
                     {/* === Project List === */}
 
