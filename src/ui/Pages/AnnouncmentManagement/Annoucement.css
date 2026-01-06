@@ -250,7 +250,13 @@ header {
 .coin {
     width: 70px;
     height: 70px;
-    overflow: hidden;
+    border-radius: 100px;
+    position: relative;
+}
+
+.coin img {
+    width: 70px;
+    height: 70px;
     border-radius: 100px;
 }
 
@@ -472,7 +478,7 @@ ul.backbt li a {
 .detail_top_launchpad {
     width: 100%;
     display: flex;
-    gap: 36px;
+    gap: 42px;
     margin: 32px 0px;
     color: #F2F4F6;
 }
@@ -497,8 +503,156 @@ ul.backbt li a {
 }
 
 ul.registration_list {
-    margin-top: 24px;
+    margin-top: 32px;
     position: relative;
+    display: flex;
+    gap: 20px;
+}
+
+ul.registration_list li {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #949AA4;
+    font-size: 16px;
+    position: relative;
+    border-top: 2px solid #c9c9c9;
+    padding-top: 18px;
+}
+
+ul.registration_list li::before {
+    width: 16px;
+    height: 16px;
+    content: "";
+    background-color: #c9c9c9;
+    border-radius: 50px;
+    position: absolute;
+    top: -9px;
+    left: 0px;
+    border: 4px solid #181a20;
+}
+
+ul.registration_list li span {
+    font-size: 14px;
+}
+
+.total_distribution {
+    width: 50%;
+    background-color: #2b313c26;
+    border: 1px solid #393F4F40;
+    border-radius: 16px;
+}
+
+.top_tpl ul {
+    display: flex;
+    border-bottom: 1px solid #393F4F40;
+}
+
+.top_tpl {
+    width: 100%;
+}
+
+.top_tpl ul {
+    display: flex;
+}
+
+.top_tpl ul li {
+    width: 50%;
+    display: flex;
+    font-size: 20px;
+    color: #F2F4F6;
+    font-weight: 600;
+    flex-direction: column;
+    gap: 4px;
+    border-right: 1px solid #393F4F40;
+    padding: 32px;
+}
+
+.tradetpl {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    padding: 30px;
+    justify-content: center;
+}
+
+.tradetpl button {
+    width: 100%;
+    background-color: #2B313C;
+    font-size: 16px;
+    font-weight: 400;
+    color: #F2F4F6;
+    border-radius: 50px;
+    border: none;
+}
+
+.top_tpl ul li:last-child {
+    border-right: none;
+}
+
+.top_tpl ul li span {
+    font-size: 14px;
+    color: #949AA4;
+    font-weight: 300;
+}
+
+.usdtpool_bl {
+    width: 100%;
+    display: block;
+    margin: 60px 0px;
+}
+
+.tbl_flex {
+    gap: 42px;
+}
+
+.tbl_flex button.poolbtn {
+    font-size: 24px;
+    color: #949AA4;
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+}
+
+.tbl_flex button.poolbtn.active {
+    color: #fff;
+}
+
+.tbl_flex button.poolbtn span {
+    font-size: 12px;
+    background-color: #515760;
+    color: #fff;
+    border-radius: 4px;
+    padding: 4px 7px;
+    font-weight: 300;
+    margin-left: 8px;
+    position: relative;
+    top: -2px;
+}
+
+.commit_usdt_del {
+    width: 100%;
+    background-color: #2B313C;
+    padding: 32px;
+    border-radius: 16px;
+    margin-top: 24px;
+}
+
+.commit_usdt_del .coin_lft ul.subcate li button {
+    background-color: #515760;
+    font-size: 10px;
+    padding: 3px 7px;
+}
+
+.commit_usdt_del .coin_cnt h3 {
+    margin-bottom: 12px;
+    font-size: 20px;
+    color: #FAFAFA;
+}
+
+.commit_usdt_del .coin_lft ul.subcate {
+    padding-left: 0px;
 }
 
 /* .coin_lft ul.subcate li.greendark button {
@@ -549,8 +703,28 @@ td.first_child .icon_icon {
 }
 
 .coin img {
-    height: 100%;
     object-fit: cover;
+}
+
+.useredit {
+    width: 24px;
+    position: absolute;
+    right: -5px;
+    bottom: 10px;
+    background-color: #000;
+    border-radius: 50px;
+    height: 24px;
+    border: 1px solid #999;
+}
+
+.coin .useredit img {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+}
+
+.commit_usdt_del .coin_lft {
+    gap: 20px;
 }
 
 .coin_right table tr td .trade_btn {
@@ -1408,6 +1582,31 @@ span.subtext {
     padding-left: 0px;
     font-size: 16px;
 }
+
+ul.exclusive_list {
+    width: 100%;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:32px;
+}
+
+ul.exclusive_list li {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    gap:7px;
+    font-weight: 500;
+    color: #F2F4F6;
+}
+
+ul.exclusive_list li span {
+    font-size: 14px;
+    color: #949AA4;
+    font-weight: 300;
+}
+
+ul.exclusive_list li span.sellsub{ font-size: 11px; display: block; }
 
 /* === Project Cycle & Key Highlight Styling === */
 .project_cycle_header {

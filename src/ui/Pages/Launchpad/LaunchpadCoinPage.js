@@ -263,7 +263,65 @@ const LaunchpadCoinPage = () => {
                             </ul>
                         </div>
 
+                        <div className="total_distribution">
+                            <div className="top_tpl">
+                                <ul>
+                                    <li><span>Total Distribution</span>17,500 LIT</li>
+                                    <li><span>Participants</span>18,377</li>
+                                </ul>
+                            </div>
+
+                            <div className="tradetpl">
+                                <button>Trade<i class="ri-arrow-down-s-line"></i></button>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <div className="usdtpool_bl">
+
+                        <div className="d-flex tbl_flex">
+                            <button className="poolbtn active">USDT Pool <span><i class="ri-user-3-fill"></i> NEW</span></button>
+                            <button className="poolbtn">USDT Pool</button>
+                        </div>
+
+                        <div className="commit_usdt_del">
+
+                            <div class="coin_lft">
+                                <div class="coin">
+                                    <img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" />
+                                    <div className="useredit">
+                                        <img src="images/useredit.svg" />
+                                    </div>
+                                </div>
+                                <div class="coin_cnt">
+                                    <h3>Commit USDT to Subscribe LIT</h3>
+                                    <div class="hd d-flex">
+                                        <ul class="subcate">
+                                            <li><button><i class="ri-user-3-fill"></i> New User Exclusive</button></li>
+                                            <li><button><i class="ri-user-3-fill"></i> 60% Off</button></li>
+                                            <li><button><i class="ri-user-3-fill"></i> Raise Limit</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                                <ul className="exclusive_list">
+                                    <li><span>Exclusive Subscription Price</span>1 LIT = 1.6 USDT <span className="sellsub">Sell Price: 4 USDT</span></li>
+                                    <li><span>Total Allocation</span>12,500 LIT</li>
+                                    <li><span>Total Committed</span>1,030,485.64 USDT</li>
+                                    <li><span>Subscribed</span>---</li>
+                                    <li><span>Allocated</span>---</li>
+                                    <li><span>Refunded</span>---</li>
+                                </ul>
+
+                        </div>
+
+                    </div>
+
+
 
                 </div>
 
