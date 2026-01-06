@@ -1662,38 +1662,6 @@ span.green {
     box-shadow: none;
 }
 
-.select_option {
-    width: 100%;
-    background-color: #2F2F2F;
-    border-radius: 4px;
-    padding: 15px;
-}
-
-.select_option select {
-    width: 100%;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-}
-
-.select_option input {
-    width: 100%;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-}
-
-.select_option select option {
-    color: #000;
-}
-
-.select_option select:focus-visible {
-    outline: none;
-}
-
-.select_option input:focus-visible {
-    outline: none;
-}
 
 .prediction_detail .tab-content .tab-pane {
     margin-top: 22px;
@@ -4470,10 +4438,6 @@ span.arrowmobile {
 
     .trade_summary_table_lft .tab-content {
         min-height: 100px;
-    }
-
-    .select_option {
-        padding: 10px;
     }
 
     .prediction_detail ul.nav-tabs {

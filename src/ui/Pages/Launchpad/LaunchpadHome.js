@@ -139,9 +139,15 @@ const LaunchpadHome = () => {
                     <div class="row">
                         <div class="col-sm-7">
                             <div class="cnt_banner">
-                                <h1>Discover and compare the world’s top crypto launchpad platforms.</h1>
-                                <p>Find the best place to participate in early-stage token sales, evaluate project credibility, and make informed investment decisions.
-                                    CoinLaunch helps you explore, analyze, and choose the most promising crypto launchpads with transparent insights and data-driven ratings.</p>
+                                <h1>Launchpad</h1>
+                                <p>Your Easiest Way to Top Tokens — Early or at a Discount</p>
+
+                                <ul className="launchpadlist">
+                                    <li><span>Total Raised (USDT)</span>75,668,737.3732033</li>
+                                    <li><span>Total Participants</span>285,272</li>
+                                    <li><span>Listed Projects</span>27</li>
+                                </ul>
+
                             </div>
                         </div>
                         <div class="col-sm-5">
@@ -158,62 +164,62 @@ const LaunchpadHome = () => {
                     <h2>Projects</h2>
 
                     {/* === Filter Tabs === */}
-                    <div className="filter_tabs" style={{ marginBottom: "20px" }}>
+                    <div className="filter_tabs">
 
                         <button
-                            className={`btn ${filter === "live" ? "" : ""}`}
-                            onClick={() => setFilter("live")}
-                            style={{
-                                backgroundColor: filter === "live" ? "#f3bb2b" : "transparent",
-                                color: filter === "live" ? "#000" : "#f3bb2b",
-                                border: "1px solid #f3bb2b",
-                                borderRadius: "50px",
-                                padding: "10px 24px",
-                                fontWeight: "600",
-                                transition: "all 0.3s"
-                            }}>
+                            className={`btn active ${filter === "live" ? "" : ""}`}
+                            onClick={() => setFilter("live")}>
                             Live
                         </button>
                         <button
-                            className={`btn ${filter === "upcoming" ? "" : ""}`}
-                            onClick={() => setFilter("upcoming")}
-                            style={{
-                                backgroundColor: filter === "upcoming" ? "#f3bb2b" : "transparent",
-                                color: filter === "upcoming" ? "#000" : "#f3bb2b",
-                                border: "1px solid #f3bb2b",
-                                borderRadius: "50px",
-                                padding: "10px 24px",
-                                fontWeight: "600",
-                                transition: "all 0.3s"
-                            }}>
+                            className={`btn${filter === "upcoming" ? "" : ""}`}
+                            onClick={() => setFilter("upcoming")}>
                             Upcoming
                         </button>
                         <button
-                            className={`btn ${filter === "ended" ? "" : ""}`}
+                            className={`btn${filter === "ended" ? "" : ""}`}
                             onClick={() => setFilter("ended")}
-                            style={{
-                                backgroundColor: filter === "ended" ? "#f3bb2b" : "transparent",
-                                color: filter === "ended" ? "#000" : "#f3bb2b",
-                                border: "1px solid #f3bb2b",
-                                borderRadius: "50px",
-                                padding: "10px 24px",
-                                fontWeight: "600",
-                                transition: "all 0.3s"
-                            }}
                         >
                             Ended
                         </button>
                     </div>
 
+                    <div className="project_crypto_bl">
+                        <div className="project_top">
+                            <div class="coin_lft">
+                                <div class="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
+                                <div class="coin_cnt">
+                                    <div className="hd d-flex">
+                                        <h3>ZAC</h3>
+                                        <ul className="subcate">
+                                            <li className="greendark"><button>Initial Offering</button></li>
+                                            <li className="yellodark"><button>Discount Buy</button></li>
+                                            <li className="darkbg"><button>Ended</button></li>
+                                        </ul>
+                                    </div>
+                                    <span>TZAC</span>
+                                </div>
+                            </div>
+                            <div className="total_time_ri">
+                                <ul>
+                                    <li><span>Total Distribution</span> 17,500 LIT</li>
+                                    <li><span>End Time</span> 2025.12.31 10:00</li>
+                                    <li><button>Trade <i class="ri-arrow-down-s-line"></i></button></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
                     {/* === Project List === */}
 
-                    <div className="table-responsive_tow">
+                    {/* <div className="table-responsive_tow">
                         <div className="coin_data_table">
                             {filteredProjects?.length > 0 ? (
                                 filteredProjects.map((item, index) => (
                                     <div className="coin_block" key={index}>
                                         <div className="row">
-                                            {/* === LEFT SIDE === */}
+                                     
 
                                             <div className="col-sm-4">
                                                 <div className="add_banner">
@@ -244,7 +250,7 @@ const LaunchpadHome = () => {
                                                         <div className="coin_cnt">
                                                             <h3>{item?.tokenSymbol || "N/A"}</h3>
                                                             <span>
-                                                                {/* {item?.tokensForSale?.toLocaleString()}{" "} */}
+                                                                {item?.tokensForSale?.toLocaleString()}{" "}
                                                                 {item?.tokenName}
                                                             </span>
                                                         </div>
@@ -269,7 +275,7 @@ const LaunchpadHome = () => {
                                                                 </h6>
                                                             </li>
 
-                                                            {/* Time Duration Design - Real-time */}
+                                                        
 
                                                         </ul>
                                                         <ul className="duration_data">
@@ -322,7 +328,7 @@ const LaunchpadHome = () => {
 
 
 
-                                            {/* === RIGHT SIDE === */}
+                                         
                                             <div className="col-sm-4">
                                                 <div className="coin_right">
                                                     <div className="table-responsive">
@@ -346,7 +352,7 @@ const LaunchpadHome = () => {
                                                                     </td>
                                                                     <td>
                                                                         {item?.totalRaised || "0.00"}
-                                                                        {/* <span className="value_price">≈$0.24302</span> */}
+                                                                        <span className="value_price">≈$0.24302</span>
                                                                     </td>
                                                                     <td>
                                                                         {item?.startTime
@@ -406,7 +412,7 @@ const LaunchpadHome = () => {
                                 </>
                             )}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
             {/* <section class="project_coin complete_project_s">

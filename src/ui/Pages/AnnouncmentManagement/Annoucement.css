@@ -1,6 +1,6 @@
 body {
     background-color: #000;
-     font-family: "Inter", sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 a {
@@ -55,7 +55,8 @@ header {
 .launchpad_hero_s {
     width: 100%;
     color: #fff;
-    padding: 80px 0px 40px;
+    padding: 50px 0px 40px;
+    background-color: #181A20;
 }
 
 .launchpad_hero_s .row {
@@ -97,6 +98,7 @@ header {
     display: block;
     color: #fff;
     padding-bottom: 100px;
+    background-color: #181A20;
 }
 
 .project_coin::before {
@@ -252,66 +254,67 @@ header {
 }
 
 .coin {
-    width: 48px;
-    height: 48px;
+    width: 70px;
+    height: 70px;
     overflow: hidden;
     border-radius: 100px;
 }
 
-.coin_top h3 {
+.coin_cnt h3 {
     margin-bottom: 0px;
+    font-size: 24px;
 }
 
 .coin_cnt span {
-    color: #4D5B6F;
+    color: #949AA4;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 12px;
 }
 
-.coin_lft ul {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 20px;
-    padding-left: 24px;
-    position: relative;
-}
-
-.coin_lft ul::before {
-    width: 2px;
-    height:calc(100% - 26px);
-    background-color: #D9D9D9;
-    content: "";
-    position: absolute;
-    left: -2px;
-}
-
-.coin_lft ul li {
-    font-size: 18px;
+.coin_lft ul.subcate {
     display: flex;
     gap: 12px;
+    padding-left: 12px;
+}
+
+
+.coin_lft ul.subcate li button {
+    display: flex;
+    background-color: #272D37;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 300;
+    gap: 7px;
+    color: #F2F4F6;
+    border: none;
+}
+
+.project_top {
+    display: flex;
     justify-content: space-between;
-    font-weight: 300;
-    color: #4D5B6F;
-    position: relative;
+    gap: 24px;
+    align-items: center;
 }
 
-.coin_lft ul li h6 {
-    font-size: 18px;
-    color: #fff;
-    font-weight: 300;
+.total_time_ri ul {
+    display: flex; align-items: center; gap:24px;
 }
 
-.coin_lft ul li::before {
-    width: 14px;
-    height: 14px;
-    background-color: #D9D9D9;
-    content: "";
-    position: absolute;
-    left: -32px;
-    top: 2px;
-    transform: rotate(45deg);
+.total_time_ri ul li:first-child { border-right: 1px solid #000000; padding-right: 24px; }
+.total_time_ri ul li{ display: flex; flex-direction: column; font-size: 20px; font-weight: 500; }
+.total_time_ri ul li span { font-size: 14px; color: #949AA4; font-weight: 300; }
+
+.coin_lft ul.subcate li.greendark button {
+    background-color: #022B1B;
+    color: #9DE3C7;
 }
+
+.coin_lft ul.subcate li.yellodark button {
+    background-color: #2C1F04;
+    color: #F3BB2B;
+}
+
 
 .coin_right table {
     width: 100%;
@@ -376,7 +379,7 @@ td.first_child .icon_icon {
 .filter_tabs {
     display: flex;
     gap: 12px;
-    margin-bottom: 20px;
+    margin: 15px 0px;
     border-color: transparent;
 }
 
@@ -530,20 +533,6 @@ table {
 }
 
 
-.coin_lft ul li.duration_box {
-    flex-direction: row;
-    align-items: start;
-}
-
-.coin_lft ul li.duration_box .countdown_timer {
-flex-wrap: nowrap;
-    width: auto;
-    gap: 10px;
-    margin: 0px;
-    padding: 0px;
-    background-color: transparent;
-}
-
 .faq_section .accordion .accordion-item.active {
     background-color: #45484D !important;
 }
@@ -570,23 +559,12 @@ ul.duration_data .duration_box {
     margin-top: 0px;
 }
 
-.coin_lft ul li.duration_box .countdown_value {
-    font-size: 24px;
-}
-
 ul.duration_data .countdown_timer {
     width: 80%;
     margin: 10px;
     padding: 10px;
 }
 
-.coin_lft ul.duration_data::before {
-    display: none;
-}
-
-.coin_lft ul.duration_data li::before {
-    display: none;
-}
 
 ul.duration_data .countdown_value {
     font-size: 26px;
@@ -763,7 +741,7 @@ img.icon_icon {
 
 .timeline_s ul::before {
     width: 2px;
-    height:68%;
+    height: 68%;
     background-color: #D9D9D9;
     content: "";
     position: absolute;
@@ -829,7 +807,7 @@ img.icon_icon {
 }
 
 .countdown_ended {
-    font-size:20px;
+    font-size: 20px;
     font-weight: 600;
     color: #dc3545;
     padding: 15px 0;
@@ -840,7 +818,9 @@ img.icon_icon {
     margin: 10px 0px;
 }
 
-.countdown_timer .countdown_ended{ padding: 0px; }
+.countdown_timer .countdown_ended {
+    padding: 0px;
+}
 
 .project_summary ul {
     display: grid;
@@ -850,7 +830,18 @@ img.icon_icon {
 }
 
 .filter_tabs button.btn {
-    min-width: 130px;
+    min-width: 110px;
+    font-size: 14px;
+    color: #949AA4;
+    border: 1px solid #949AA4;
+    border-radius: 50px;
+    padding: 4px 10px;
+}
+
+.filter_tabs button.btn.active {
+    background-color: #F3BB2B;
+    border: 1px solid #F3BB2B;
+    color: #000;
 }
 
 .project_summary ul li a {
@@ -1519,14 +1510,6 @@ span.subtext {
         gap: 30px;
     }
 
-    .coin_lft ul li h6 {
-        font-size: 15px;
-    }
-
-    .coin_lft ul li {
-        font-size: 15px;
-    }
-
     .coin_right table tr td {
         font-size: 15px;
     }
@@ -1556,8 +1539,6 @@ span.subtext {
         font-size: 54px;
     }
 
-    .coin_lft ul::before {
-    height: calc(100% - 14px); }
 
 }
 
@@ -1568,27 +1549,15 @@ span.subtext {
     }
 
 
-        .top_header_dash {
+    .top_header_dash {
         gap: 20px;
         overflow: auto;
         padding-bottom: 0px;
     }
 
-        .coin_lft ul::before {
-        height: calc(100% - 35px);
-    }
-
     .h2,
     h2 {
         font-size: 42px;
-    }
-
-    .coin_lft ul li h6 {
-        font-size: 16px;
-    }
-
-    .coin_lft ul li {
-        font-size: 16px;
     }
 
     .coin_right table tr td {
@@ -1600,7 +1569,7 @@ span.subtext {
     }
 
     .coin_right table tr td .trade_btn {
-       font-size: 13px;
+        font-size: 13px;
         padding: 7px 12px;
         line-height: 18px;
     }
@@ -1632,11 +1601,6 @@ span.subtext {
         gap: 20px;
     }
 
-        .coin_lft ul::before {
-        height: calc(100% - 24px);
-    }
-
-
     .filter_tabs button {
         font-size: 15px;
         padding: 6px 20px !important;
@@ -1666,20 +1630,10 @@ span.subtext {
         width: 400px;
     }
 
-    .coin_lft ul {
-        margin-top: 10px;
-    }
-
     .countdown_timer {
         font-size: 14px !important;
         font-weight: 500 !important;
     }
-
-    .coin_lft ul li.duration_box {
-        flex-direction: column;
-        align-items: start;
-    }
-
 
     ul.duration_data .countdown_timer {
         width: 100%;
@@ -1783,14 +1737,6 @@ span.subtext {
         padding: 15px 5px;
     }
 
-    .coin_lft ul li h6 {
-        font-size: 13px;
-    }
-
-    .coin_lft ul li {
-        font-size: 13px;
-    }
-
     .coin_right table tr td {
         font-size: 13px;
     }
@@ -1867,9 +1813,9 @@ span.subtext {
         gap: 30px;
     }
 
-.top_header_dash .profile_id {
-    white-space: nowrap;
-}
+    .top_header_dash .profile_id {
+        white-space: nowrap;
+    }
 
 }
 
@@ -1884,13 +1830,15 @@ span.subtext {
         font-size: 32px;
     }
 
-     .top_header_dash { margin-bottom: 10px; }
+    .top_header_dash {
+        margin-bottom: 10px;
+    }
 
     .coin_block {
-    height: 285px;
-}
+        height: 285px;
+    }
 
-       .top_header_dash {
+    .top_header_dash {
         padding-bottom: 10px;
     }
 
@@ -1910,10 +1858,6 @@ span.subtext {
 
     ul.duration_data .duration_box .countdown_timer {
         flex-wrap: wrap;
-    }
-
-    .coin_lft ul li.duration_box .countdown_timer {
-        gap: 6px;
     }
 
     .coin_right {
@@ -2021,7 +1965,7 @@ span.subtext {
         padding: 10px 20px;
     }
 
-        .coin_block {
+    .coin_block {
         height: 100%;
     }
 
@@ -2298,11 +2242,6 @@ span.subtext {
     img {
         /* width: 100%; */
         height: 100%;
-    }
-
-    .coin_lft ul li.duration_box {
-        flex-direction: column;
-        align-items: start;
     }
 
     .timeline_connector {

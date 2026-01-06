@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_light.svg" />
 
   <title>
-   Umesh Exchange | Buy & Sell USDT, Trade, Earn
+    Umesh Exchange | Buy & Sell USDT, Trade, Earn
   </title>
 
   <!-- CSS FILES -->
@@ -22,7 +22,9 @@
 
   <!-- Font -->
   <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"> -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
 
   <!--CLOUDFARE CDN LINK -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
@@ -53,104 +55,104 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js"></script>
 
-<script>
-$(document).ready(function(){
-  $(".data_option_calls table tr td").on("click", function(){
-    $(".rightdata_s.mobileview").toggleClass("active");
-  });
+  <script>
+    $(document).ready(function () {
+      $(".data_option_calls table tr td").on("click", function () {
+        $(".rightdata_s.mobileview").toggleClass("active");
+      });
 
 
-  $(".product_name").on("click", function(){
-    $(".rightdata_s.mobileview").removeClass("active");
-  });
-});
-</script>
+      $(".product_name").on("click", function () {
+        $(".rightdata_s.mobileview").removeClass("active");
+      });
+    });
+  </script>
 
-<script>
-  function toggleViewDataClass() {
-    if ($(".rightdata_s.mobileview.active").length > 0) {
+  <script>
+    function toggleViewDataClass() {
+      if ($(".rightdata_s.mobileview.active").length > 0) {
         $(".view_data").addClass("remove");
-    } else {
+      } else {
         $(".view_data").removeClass("remove");
+      }
     }
-}
 
-toggleViewDataClass();
-
-$(document).on("click", function () {
     toggleViewDataClass();
-});
-</script>
+
+    $(document).on("click", function () {
+      toggleViewDataClass();
+    });
+  </script>
 
 </head>
 
 <script>
-$(document).ready(function () {
-  $(".limit_tabs li.positions_two").addClass("active");
-  $(".cnt_table_two.positions_two").addClass("active");
+  $(document).ready(function () {
+    $(".limit_tabs li.positions_two").addClass("active");
+    $(".cnt_table_two.positions_two").addClass("active");
 
-  $(".limit_tabs li").on("click", function () {
-    var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
+    $(".limit_tabs li").on("click", function () {
+      var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
 
-    $(".limit_tabs li").removeClass("active");
-    $(this).addClass("active");
+      $(".limit_tabs li").removeClass("active");
+      $(this).addClass("active");
 
-    $(".cnt_table_two").removeClass("active");
-    $(".cnt_table_two." + tabClass).addClass("active");
+      $(".cnt_table_two").removeClass("active");
+      $(".cnt_table_two." + tabClass).addClass("active");
+    });
   });
-});
 </script>
 
 
 
 <script>
-$(document).ready(function () {
-  $(".position_list li.positions").addClass("active");
-  $(".cnt_table.positions").addClass("active");
+  $(document).ready(function () {
+    $(".position_list li.positions").addClass("active");
+    $(".cnt_table.positions").addClass("active");
 
-  $(".position_list li").on("click", function () {
-    var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
+    $(".position_list li").on("click", function () {
+      var tabClass = $(this).attr("class").split(" ").filter(c => c !== 'nav-item' && c !== 'active')[0];
 
-    $(".position_list li").removeClass("active");
-    $(this).addClass("active");
+      $(".position_list li").removeClass("active");
+      $(this).addClass("active");
 
-    $(".cnt_table").removeClass("active");
-    $(".cnt_table." + tabClass).addClass("active");
+      $(".cnt_table").removeClass("active");
+      $(".cnt_table." + tabClass).addClass("active");
+    });
   });
-});
 </script>
 
 
 
 <script>
-$(document).ready(function () {
+  $(document).ready(function () {
     $('.trade_account_summary_assets .nav-tabs .nav-item').on('click', function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        var $container = $(this).closest('.trade_account_summary_assets');
+      var $container = $(this).closest('.trade_account_summary_assets');
 
-        if ($(this).hasClass('active')) {
-            return;
-        }
+      if ($(this).hasClass('active')) {
+        return;
+      }
 
-        $container.find('.nav-tabs .nav-item').removeClass('active');
-        $container.find('.tab-pane').removeClass('active show');
+      $container.find('.nav-tabs .nav-item').removeClass('active');
+      $container.find('.tab-pane').removeClass('active show');
 
-        $(this).addClass('active');
-        var target = $(this).find('a').attr('href');
-        $container.find(target).addClass('active show');
+      $(this).addClass('active');
+      var target = $(this).find('a').attr('href');
+      $container.find(target).addClass('active show');
     });
 
-});
+  });
 </script>
 
 <script>
-$(document).ready(function() {
+  $(document).ready(function () {
     $('.toggle2').addClass('showactive');
-    $(document).on('click', '.tab-pane.fade', function() {
-        $('.toggle2').removeClass('showactive');
+    $(document).on('click', '.tab-pane.fade', function () {
+      $('.toggle2').removeClass('showactive');
     });
-});
+  });
 
 </script>
 
@@ -158,46 +160,46 @@ $(document).ready(function() {
 
 <script>
 
-$(document).ready(function () {
+  $(document).ready(function () {
     $('.trade_movers_tb .nav-tabs .nav-item').on('click', function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        var $container = $(this).closest('.trade_movers_tb');
+      var $container = $(this).closest('.trade_movers_tb');
 
-        if ($(this).hasClass('active')) {
-            return; 
-        }
+      if ($(this).hasClass('active')) {
+        return;
+      }
 
-        $container.find('.nav-tabs .nav-item').removeClass('active');
-        $container.find('.tab-pane').removeClass('active show');
+      $container.find('.nav-tabs .nav-item').removeClass('active');
+      $container.find('.tab-pane').removeClass('active show');
 
-        $(this).addClass('active');
-        var target = $(this).find('a').attr('href');
-        $container.find(target).addClass('active show');
+      $(this).addClass('active');
+      var target = $(this).find('a').attr('href');
+      $container.find(target).addClass('active show');
     });
-});
+  });
 
 </script>
 
 <script>
 
-$(document).ready(function () {
+  $(document).ready(function () {
     $('.market_spot_form .nav-tabs .nav-item').on('click', function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        var $container = $(this).closest('.market_spot_form');
-        if ($(this).hasClass('active')) {
-            return;
-        }
+      var $container = $(this).closest('.market_spot_form');
+      if ($(this).hasClass('active')) {
+        return;
+      }
 
-        $container.find('.nav-tabs .nav-item').removeClass('active');
-        $container.find('.tab-pane').removeClass('active show');
+      $container.find('.nav-tabs .nav-item').removeClass('active');
+      $container.find('.tab-pane').removeClass('active show');
 
-        $(this).addClass('active');
-        var target = $(this).find('a').attr('href');
-        $container.find(target).addClass('active show');
+      $(this).addClass('active');
+      var target = $(this).find('a').attr('href');
+      $container.find(target).addClass('active show');
     });
-});
+  });
 
 </script>
 
@@ -562,117 +564,138 @@ $(document).ready(function () {
 
 
   <script>
-       jQuery('.marketslide').slick({
-            slidesToShow: 3,
-            slidesToScroll: 1,
+    jQuery('.marketslide').slick({
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      arrows: false,
+      autoplay: true,
+      autoplaySpeed: 3000,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 2,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 2,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 767,
+          settings: {
             arrows: false,
-            autoplay: true,
-            autoplaySpeed: 3000,
-            responsive: [
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 2,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 1024,
-                    settings: {
-                        slidesToShow: 2,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 767,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 1,
-                        infinite: true
-                    }
-                }
-            ]
-        });
+            slidesToShow: 1,
+            infinite: true
+          }
+        }
+      ]
+    });
 
-        $('a[data-bs-toggle="pill"], button[data-bs-toggle="pill"]').on('shown.bs.tab', function () {
-            $('.marketslide').slick('setPosition');
-        });
-    </script>
+    $('a[data-bs-toggle="pill"], button[data-bs-toggle="pill"]').on('shown.bs.tab', function () {
+      $('.marketslide').slick('setPosition');
+    });
+  </script>
 
-<script>
-$(document).ready(function () {
-    $(document).on('click', '.form-check', function () {
+  <script>
+    $(document).ready(function () {
+      $(document).on('click', '.form-check', function () {
         $(this).toggleClass('active'); // Click पर खुद पर active class toggle होगा
+      });
     });
-});
-</script>
-<script>
-  function initCryptoFuture() {
+  </script>
+  <script>
+    function initCryptoFuture() {
 
-    $(".cryptofuture_s").each(function () {
+      $(".cryptofuture_s").each(function () {
 
-      const $section = $(this);
+        const $section = $(this);
 
-      // duplicate binding se bachne ke liye
-      if ($section.data("binded")) return;
-      $section.data("binded", true);
+        // duplicate binding se bachne ke liye
+        if ($section.data("binded")) return;
+        $section.data("binded", true);
 
-      const $images = $section.find(".exchange_future_s img");
+        const $images = $section.find(".exchange_future_s img");
 
-      $section.on("mousemove.crypto", function (e) {
+        $section.on("mousemove.crypto", function (e) {
 
-        const offset = $section.offset();
-        const width = $section.outerWidth();
-        const height = $section.outerHeight();
+          const offset = $section.offset();
+          const width = $section.outerWidth();
+          const height = $section.outerHeight();
 
-        const x = e.pageX - offset.left;
-        const y = e.pageY - offset.top;
+          const x = e.pageX - offset.left;
+          const y = e.pageY - offset.top;
 
-        const centerX = width / 2;
-        const centerY = height / 2;
+          const centerX = width / 2;
+          const centerY = height / 2;
 
-        const moveX = ((x - centerX) / centerX) * 60;
-        const moveY = ((y - centerY) / centerY) * 60;
+          const moveX = ((x - centerX) / centerX) * 60;
+          const moveY = ((y - centerY) / centerY) * 60;
 
-        $images.each(function (index) {
-          const depth = (index + 1) * 0.5;
-          $(this).css(
-            "transform",
-            `translate(${moveX * depth}px, ${moveY * depth}px)`
-          );
+          $images.each(function (index) {
+            const depth = (index + 1) * 0.5;
+            $(this).css(
+              "transform",
+              `translate(${moveX * depth}px, ${moveY * depth}px)`
+            );
+          });
         });
-      });
 
-      $section.on("mouseleave.crypto", function () {
-        $images.css("transform", "translate(0px, 0px)");
-      });
+        $section.on("mouseleave.crypto", function () {
+          $images.css("transform", "translate(0px, 0px)");
+        });
 
+      });
+    }
+
+    // first load
+    $(document).ready(function () {
+      initCryptoFuture();
     });
-  }
 
-  // first load
-  $(document).ready(function () {
-    initCryptoFuture();
-  });
+    // React SPA route change / DOM update detect
+    const observer = new MutationObserver(function () {
+      initCryptoFuture();
+    });
 
-  // React SPA route change / DOM update detect
-  const observer = new MutationObserver(function () {
-    initCryptoFuture();
-  });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  </script>
 
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-</script>
 
+  <script>
+    $(document).on("click", ".ri-search-2-line", function () {
+      const bar = $(this).closest(".searchBar");
+      bar.addClass("search_active");
+      bar.find(".custom_search").focus();
+    });
+
+    // blur
+    $(document).on("blur", ".custom_search", function () {
+      $(this).closest(".searchBar").removeClass("search_active");
+    });
+
+    // enter key
+    $(document).on("keydown", ".custom_search", function (e) {
+      if (e.key === "Enter") {
+        $(this).closest(".searchBar").removeClass("search_active");
+        this.blur();
+      }
+    });
+  </script>
 
 
 

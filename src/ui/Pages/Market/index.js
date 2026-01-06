@@ -144,14 +144,82 @@ const Market = () => {
         />
       </Helmet>
 
+
+
+
       <section className="section-padding login_bg  login_sec  market_page">
+
+
+
+        <div className="market_trade_crypto">
+          <div className="container">
+            <div className="row">
+              <div className="col-sm-4">
+                <div className="trade_marketvalue">
+                  <div className="d-flex tophd">
+                    <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png" class="img-fluid icon_img coinimg me-2" />BTC</h5>
+                    <div className="value text-green">+1.31%</div>
+                  </div>
+                  <div className="price">
+                    $88,415
+                  </div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+
+                  <div className="tradevector_r">
+                    <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                  </div>
+
+                </div>
+              </div>
+
+              <div className="col-sm-4">
+                <div className="trade_marketvalue">
+                  <div className="d-flex tophd">
+                    <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739568603-337176937.png" class="img-fluid icon_img coinimg me-2" />ETH</h5>
+                    <div className="value text-danger">-1.31%</div>
+                  </div>
+                  <div className="price">
+                    $2,974.2
+                  </div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+
+                  <div className="tradevector_r">
+                    <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                  </div>
+
+                </div>
+              </div>
+
+              <div className="col-sm-4">
+                <div className="trade_marketvalue">
+                  <div className="d-flex tophd">
+                    <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png" class="img-fluid icon_img coinimg me-2" />BCH</h5>
+                    <div className="value text-green">+1.31%</div>
+                  </div>
+                  <div className="price">
+                    $597.3
+                  </div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+
+                  <div className="tradevector_r">
+                    <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                  </div>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
         <section className="live_prices mt-0 market_prices market_update_sec market_update_table ">
           <div className="container">
             <div className="row mb-4 g-2">
 
               {/* Biggest Gainers */}
 
-              <div className="col-lg-3">
+              {/* <div className="col-lg-3">
                 <div className="ant-card ant-card-bordered ant-card-small marketRankList_rankItem__L1CvR">
                   <div className="ant-card-head-wrapper">
                     <div className="ant-card-head-title">
@@ -170,7 +238,7 @@ const Market = () => {
                       <table className="table" >
                         <thead>
                           <tr>
-                            {/* <th>#</th> */}
+                          
                             <th>Name</th>
                             <th className="text-end">Price</th>
                             <th className="text-end">24h</th>
@@ -218,9 +286,9 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* Biggest Losers */}
-              <div className="col-lg-3">
+              {/* <div className="col-lg-3">
                 <div className="ant-card ant-card-bordered ant-card-small marketRankList_rankItem__L1CvR">
                   <div className="ant-card-head-wrapper">
                     <div className="ant-card-head-title">
@@ -238,7 +306,7 @@ const Market = () => {
                       <table className="table" >
                         <thead>
                           <tr>
-                            {/* <th>#</th> */}
+                          
                             <th>Name</th>
                             <th className="text-end" >Price</th>
                             <th className="text-end" >24h</th>
@@ -288,9 +356,9 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* Trending */}
-              <div className="col-lg-3">
+              {/* <div className="col-lg-3">
                 <div className="ant-card ant-card-bordered ant-card-small marketRankList_rankItem__L1CvR">
                   <div className="ant-card-head-wrapper">
                     <div className="ant-card-head-title">
@@ -307,7 +375,7 @@ const Market = () => {
                       <table className="table" >
                         <thead>
                           <tr>
-                            {/* <th>#</th> */}
+                           
                             <th>Name</th>
                             <th className="text-end" >Price</th>
                             <th className="text-end" >24h</th>
@@ -355,8 +423,8 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-lg-3">
+              </div> */}
+              {/* <div className="col-lg-3">
                 <div className="ant-card ant-card-bordered ant-card-small marketRankList_rankItem__L1CvR">
                   <div className="ant-card-head-wrapper">
                     <div className="ant-card-head-title">
@@ -371,7 +439,7 @@ const Market = () => {
                       <table className="table" >
                         <thead>
                           <tr>
-                            {/* <th>#</th> */}
+                            
                             <th>Name</th>
                             <th className="text-end" >Price</th>
                             <th className="text-end" >24h</th>
@@ -421,7 +489,7 @@ const Market = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="container" ref={gainerElementRef}>
@@ -438,14 +506,14 @@ const Market = () => {
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button className={`nav-link ${activeTab === "Gainers" ? 'active' : ""}`} onClick={() => setActiveTab('Gainers')}>
+                  <button className={`nav-link ${activeTab === "Futures" ? 'active' : ""}`} onClick={() => setActiveTab('Futures')}>
                     <i className="ri-arrow-right-up-line me-2"></i>
                     Futures
                   </button>
                 </li>
               </ul>
               {
-                activeTab === "Fav" || activeTab === "Spot" ?
+                activeTab === "Fav" || activeTab === "Spot" || activeTab === "Futures" ?
                   <div className="searchBar custom-tabs">
                     <i className="ri-search-2-line"></i>
                     <input type="search" className="custom_search" placeholder="Search Crypto" value={search} onChange={(e) => { setsearch(e.target.value); }} />
@@ -458,7 +526,6 @@ const Market = () => {
 
               {/* Favourite */}
               <div className={`tab-pane ${activeTab === "Fav" ? 'active' : ""}`}>
-
                 <div className="card py-2">
                   <div className="card-body p-0">
                     <div className="table-responsive">
@@ -527,10 +594,10 @@ const Market = () => {
                 <ul className="tbltabs">
                   <li>
                     <select>
-                    <option>USDT</option>
-                  </select>
+                      <option>USDT</option>
+                    </select>
                   </li>
-                  <li><button>All</button></li>
+                  <li className="active"><button>All</button></li>
                   <li><button>Gainners</button></li>
                   <li><button>Lossers</button></li>
                   <li><button>Trending</button></li>
@@ -597,7 +664,18 @@ const Market = () => {
                 </div>
               </div>
               {/* Biggest Gainers */}
-              <div className={`tab-pane ${activeTab === "Gainers" ? 'active' : ""}`}>
+              <div className={`tab-pane ${activeTab === "Futures" ? 'active' : ""}`}>
+                <ul className="tbltabs">
+                  <li>
+                    <select>
+                      <option>USDT</option>
+                    </select>
+                  </li>
+                  <li className="active"><button>All</button></li>
+                  <li><button>Gainners</button></li>
+                  <li><button>Lossers</button></li>
+                  <li><button>Trending</button></li>
+                </ul>
                 <div className="card  py-2">
                   <div className="card-body p-0 gainers_table">
                     <div className="table-responsive">

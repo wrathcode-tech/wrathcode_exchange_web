@@ -290,70 +290,84 @@ function Earning() {
       </Helmet>
 
       <section className='earning_outer_s'>
-        <div className='container'>
-          <div className='earning_section_cate'>
-            <div className='row'>
-              <div className='col-sm-2'>
+        <div className='earning_section_cate'>
+
+          {/* <div className='col-sm-2'>
                 <div className='earning_tp_heading'>
                   <img src="/images/earning_vector.png" className="img-fluid" alt="earning" /><h4>Earning</h4>
                 </div>
-              </div>
-              <div className='col-sm-10'>
-                <div className='earning_right_tab'>
-                  <div className='responsive-table'>
-                    <ul className="nav nav-tabs" id="myTab" role="tablist">
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Earning</button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Earning Balance</button>
-                      </li>
-                      <li className="nav-item" role="presentation" >
+              </div> */}
+
+          <div className='earning_right_tab'>
+            <div className='toptabs_hd'>
+              <div className='container'>
+                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Earning</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Earning Dashboard</button>
+                  </li>
+                  {/* <li className="nav-item" role="presentation" >
                         <button className="nav-link" id="earning-tab" data-bs-toggle="tab" data-bs-target="#earning" type="button" role="tab" aria-controls="earning" aria-selected="false">Earning Dashboard</button>
-                      </li>
-                    </ul>
-
-                  </div>
-
-                </div>
+                      </li> */}
+                </ul>
               </div>
             </div>
+
+          </div>
+
+          <div className='container'>
 
             <div className="tab-content" id="myTabContent">
 
               <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
+                <div className='exchange_earning_bnr'>
+                  <div className='earningbnr_cnt'>
+                    <h2>Wrathcode Exchange Earning</h2>
+                    <p>New user exclusive: Up to <span>600% APR</span></p>
+                    <button className='signbtn'>Sign Up Now</button>
+                  </div>
+
+                  <div className='earning_bnr'>
+                    <img src="/images/earining_bnr_vector.png" alt="Exchange Earning" />
+                  </div>
+                </div>
 
 
-                <div className="user_search earningtop_search">
+                {/* <div className="user_search earningtop_search">
                   <form className='searchinput'>
                     <button><i className="ri-search-line"></i></button>
                     <input type="text" placeholder="Search" onChange={(e) => setSearchPackage(e.target.value)} value={searchPackage} />
 
                   </form>
 
-                </div>
+                </div> */}
 
                 <div className='earning_list_block'>
-                  {filteredPackageList?.length > 0 ? filteredPackageList?.map((packagees, groupIndex) => {
+                  {filteredPackageList?.length > 0 ? filteredPackageList.slice(0, 1).map((packagees, groupIndex) => {
                     const groupSlidesCount = packagees.length;
                     const groupSettings = {
                       ...settings,
                       dots: true,
-                      slidesToShow: groupSlidesCount >= 6 ? 6 : groupSlidesCount,
+                      arrows: false,
+                      slidesToShow: groupSlidesCount >= 3 ? 3 : groupSlidesCount,
                       responsive: [
                         {
                           breakpoint: 1366,
                           settings: {
-                            slidesToShow: groupSlidesCount >= 4 ? 4 : groupSlidesCount,
+                            slidesToShow: groupSlidesCount >= 2 ? 2 : groupSlidesCount,
                             dots: true,
+                            arrows: false,
                           },
                         },
                         {
                           breakpoint: 1024,
                           settings: {
-                            slidesToShow: groupSlidesCount >= 3 ? 3 : groupSlidesCount,
+                            slidesToShow: groupSlidesCount >= 1 ? 1 : groupSlidesCount,
                             dots: true,
+                            arrows: false,
                           },
                         },
                         {
@@ -361,6 +375,7 @@ function Earning() {
                           settings: {
                             slidesToShow: 1,
                             dots: true,
+                            arrows: false,
                           },
                         },
                       ],
@@ -378,29 +393,21 @@ function Earning() {
                                       className="img-fluid"
                                       alt={item?.currency_fullname}
                                     />
+                                    <h2>
+                                      {item?.currency}
+                                      <span>({item?.currency_fullname})</span>
+                                    </h2>
+                                    <span className='newtag'>New User Exclusive</span>
                                   </div>
-                                  <h2>
-                                    {item?.currency}
-                                    <span>({item?.currency_fullname})</span>
-                                  </h2>
-                                  <p>
-                                    {item?.duration_days} Days
-                                    <span>{item?.return_percentage?.toFixed(2)}% APY</span>
-                                  </p>
+
+                                  <ul className='usd_detail_list'>
+                                    <li> <span>{item?.duration_days}</span> Days</li>
+                                    <li className='pricevalue'><span>% APY</span>{item?.return_percentage?.toFixed(2)}</li>
+                                  </ul>
                                   <button className="subscribe_btn">
                                     {token ? <a href="#/" onClick={() => showPackageDetails(item)}>Subscribe</a> : <Link to="/login">Login</Link>}
                                   </button>
-                                  <div className="vector_bottom">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="60"
-                                      height="52"
-                                      viewBox="0 0 60 52"
-                                      fill="none"
-                                    >
-                                      <path d="M59.6296 0L60 52H0L59.6296 0Z" fill="#3B3B3B" />
-                                    </svg>
-                                  </div>
+
                                 </li>
                               </ul>
                             </div>
@@ -414,228 +421,278 @@ function Earning() {
                     </div>
                     <p>No data found</p>
                   </div>}
-                </div>
-              </div>
-              <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div className="wallet_balance_tb">
-                  <div className="user_list_top walletbalance_t">
-                    <div className="user_list_l">
-                      <h4>Earning Wallet Balance</h4>
-                    </div>
-                    <div className="user_search ">
-                      <div className="coin_right">
-                        <a className="search_icon2" href="#/"> <i class="ri-search-line"></i><input type="search" placeholder='Search coin name' value={search} onChange={(event) => setSearch(event.target.value)} /></a>
-                        <div className="checkbox">
-                          <input type="checkbox" checked={hideAssets} onChange={() => handleCheckboxChange('balance')} /> Hide 0 Balance
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='table-responsive recenttable_s'>
-                    <table>
+
+                  <div className='all_product_data'>
+                    <h3>All Products</h3>
+                    <table class="table ">
                       <thead>
                         <tr>
-                          <th>CURRENCY</th>
-                          <th>BALANCE</th>
-                          <th>INORDER-BALANCE</th>
-                          <th>ACTION</th>
+                          <th> Token</th>
+                          <th> Est. APR</th>
+                          <th> Duration</th>
+                          <th className='action_td'> Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredCoinList?.length > 0 ? filteredCoinList?.map((wallet) => {
-                          return (
-                            <tr>
-                              <td>
-                                <div className='currency_td icon'>
-                                  <img src={ApiConfig?.baseImage + wallet?.icon_path} alt="bitcoin" />
-                                  <div className='pricetag'>{wallet?.short_name}<span>{wallet?.currency}</span></div>
-                                </div> </td>
-                              <td>
-                                {wallet?.balance}
-                              </td>
-                              <td>
-                                {wallet?.locked_balance}
-                              </td>
-                              <td>
-                                <div class="td_btn_balance">
-                                  <Link to={`/asset_managemnet/deposit`}> <button class="deposit">  Deposit</button></Link>
-                                  <Link to={`/user_profile/asset_overview`}><button class="walletbtn">Wallet Transfer</button></Link>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        }) : <tr rowSpan="5">
-                          <td colSpan="12">
-                            <div className="no_data_outer">
-                              <div className="no_data_vector">
-                                <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                              </div>
-                              {token ? <p>No data found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-                            </div>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
                           </td>
-                        </tr>}
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
+
+
                 </div>
               </div>
-              <div className="tab-pane fade" id="earning" role="tabpanel" aria-labelledby="earning-tab">
-                <div className="wallet_balance_tb earningbouns_tb">
-                  {token ? <>
-                    <div className="user_list_top">
-                      <div className="user_list_l">
-                        <h4>Earning Bonus Portfolio</h4>
-                      </div>
-                      <div className="user_search">
-                        {/* <form className='searchinput'>
-                          <button><i class="ri-search-line"></i></button>
-                          <input type="text" placeholder="Search" />
-                        </form> */}
-                      </div>
-                    </div>
-                    <div className='table-responsive recenttable_s'>
-                      <table>
-                        <tbody>
-                          {portfolio?.length > 0 ? portfolio?.map((item, index) => (
-                            <tr key={index}>
-                              <td>
-                                <div className='currency_td'>
-                                  <div className="select_currency_s">
-                                    <div className="currency_option">
-                                      <div className="custom-select">
-                                        <div className="selected-option">
-                                          <img
-                                            src={ApiConfig?.baseImage + item?.icon_path}
-                                            alt={item?.currency}
-                                            className="currency_icon"
-                                          />
-                                          {item?.currency} <span>({item?.currency_fullname})</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div className='balance_td'>
-                                  {formatToNineDecimals(item?.invested_amount)} {item?.currency}
-                                </div>
-                                <div className='subtotal'>Total Subscription Amount</div>
-                              </td>
-                              <td>
-                                <div className='balance_td text-blue'>
-                                  {formatToNineDecimals(item?.running_investment)} {item?.currency}
-                                </div>
-                                <div className='subtotal'>In-Order Balance</div>
-                              </td>
-                              <td>
-                                <div className='balance_td text-blue'>
-                                  {formatToNineDecimals(item?.bonus_remaining)} {item?.currency}
-                                </div>
-                                <div className='subtotal'>Remaining Bonus </div>
-                              </td>
-                              <td>
-                                <div className='balance_td text-blue'>
-                                  {formatToNineDecimals(item?.bonus_given)} {item?.currency}
-                                </div>
-                                <div className='subtotal'>Earned Bonus </div>
-                              </td>
-                            </tr>
-                          )) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                </div>
-                                <p>No data found</p>
-                              </div>
-                            </td>
-                          </tr>}
-                        </tbody>
-                      </table>
-                    </div>
-                  </> :
-                    <div className="no_data_outer">
-                      <div className="no_data_vector">
-                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                      </div>
-                      {token ? <p>No data found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-                    </div>
-                  }
+              <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+
+                <div className='exchange_earning_bnr'>
+                  <div className='earningbnr_cnt'>
+                    <h2>Wrathcode Exchange Earning Balance</h2>
+                    <p>View your total earnings, rewards, and growth in one place.</p>
+                    <button className='signbtn'>Sign Up Now</button>
+                  </div>
+
+                  <div className='earning_bnr'>
+                    <img src="/images/earning_balance_vector.png" alt="Exchange Earning" />
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="dashboard_recent_s">
-            <div className='d-flex justify-content-between align-items-center'>
-              <h4>Recent Plans </h4>
-              <Link className="more_btn" to="/user_profile/earning_plan_history">More &gt;</Link>
-            </div>
-            <div className="user_list_top rowtable">
-              <div className="user_list_l earning_section_cate responsive-table">
-                <ul className="nav nav-tabs" id="myTab" role="tablist">
-                  <li className="nav-item" role="presentation">
-                    <button className="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="true">Active</button>
+
+                <ul className='balance_list_s'>
+                  <li>
+                    <div className='balance_cnt'>
+                      <h4>$60,230.00</h4>
+                      <p>Total Earning Balance </p>
+                    </div>
+                    <div className='balance_vector'>
+                      <img src="/images/wallet_coins_balance.svg" alt="Earning Balance" />
+                    </div>
                   </li>
-                  <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">Completed</button>
+                  <li>
+                    <div className='balance_cnt'>
+                      <h4>$23,540.00</h4>
+                      <p>Pending Reward</p>
+                    </div>
+                    <div className='balance_vector'>
+                      <img src="/images/wallet_coins_balance2.svg" alt="Earning Balance" />
+                    </div>
+                  </li>
+                  <li>
+                    <div className='balance_cnt'>
+                      <h4>$23.00</h4>
+                      <p>Yesterday Earning</p>
+                    </div>
+                    <div className='balance_vector'>
+                      <img src="/images/wallet_coins_balance3.svg" alt="Earning Balance" />
+                    </div>
+                  </li>
+                  <li>
+                    <div className='balance_cnt'>
+                      <h4>$3,540.20</h4>
+                      <p>Cumulative Earning</p>
+                    </div>
+                    <div className='balance_vector'>
+                      <img src="/images/wallet_coins_balance4.svg" alt="Earning Balance" />
+                    </div>
                   </li>
                 </ul>
-              </div>
-              <div className="user_search">
-                {/* <form className='searchinput'>
+
+
+                <div className="wallet_balance_tb">
+                  <div className="user_list_top walletbalance_t">
+                    <div className="user_list_l">
+                      <h4>Earning Assets</h4>
+                    </div>
+
+                  </div>
+
+                  <ul className='earning_assets_list'>
+                    <li><span>Total Assets</span>$3,540.20</li>
+                    <li><span>Total Earning</span>$7,230.20</li>
+                    <li><span>Total Pending Reward</span>$730.20</li>
+                    <li><span>Reward Type</span>$930.20</li>
+                    <li className='exportbtn'><button><i class="ri-download-2-line"></i> Export</button></li>
+                  </ul>
+
+
+                </div>
+
+
+                <div className="dashboard_recent_s productdata">
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <h4>Earning Balance History </h4>
+                    <div className="searchBar custom-tabs">
+                      <i className="ri-search-2-line"></i>
+                      <input type="search" className="custom_search" placeholder="Search token" value={search} onChange={(e) => { setSearch(e.target.value); }} />
+                    </div>
+                  </div>
+                  <div className="user_list_top rowtable">
+                    <div className="user_list_l earning_section_cate responsive-table">
+                      <ul className="nav nav-tabs" id="myTab" role="tablist">
+                        <li className="nav-item" role="presentation">
+                          <button className="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="true">Active</button>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                          <button className="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">Completed</button>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="user_search">
+                      {/* <form className='searchinput'>
                   <button><i class="ri-search-line"></i></button>
                   <input type="text" placeholder="Search" />
                 </form> */}
-              </div>
-            </div>
-            <div className='table-responsive recenttable_s'>
-              <div className="tab-pane fade active show" id="active" role="tabpanel" aria-labelledby="active-tab">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>S.No</th>
-                      <th>Currency</th>
-                      <th>Deducted From</th>
-                      <th>Duration</th>
-                      <th>Start date</th>
-                      <th>Mature date</th>
-                      <th>Subscription Amount</th>
-                      <th>Bonus Amount</th>
-                      <th>Receivable Amount</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subscribedActivePackages?.length > 0 ? subscribedActivePackages?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item?.currency}</td>
-                          <td className='text-warning'>{item?.wallet_type.charAt(0).toUpperCase() + item?.wallet_type.slice(1)} Wallet</td>
-                          <td>{item?.duration_days}</td>
-                          <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
-                          <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
-                          <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
-                          <td className='text-warning'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
-                          <td>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
-                          <td className='text-warning'>{item?.status}</td>
-                        </tr>
-                      )
-                    }) :
-                      <tr rowSpan="5">
-                        <td colSpan="12">
-                          <div className="no_data_outer">
-                            <div className="no_data_vector">
-                              <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                            </div>
-                            {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-                          </div>
-                        </td>
-                      </tr>}
-                  </tbody>
-                </table>
-                {/* <div className="pagination_list">
+                    </div>
+                  </div>
+                  <div className='table-responsive recenttable_s'>
+                    <div className="tab-pane fade active show" id="active" role="tabpanel" aria-labelledby="active-tab">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>S.No</th>
+                            <th>Currency</th>
+                            <th>Deducted From</th>
+                            <th>Duration</th>
+                            <th>Start date</th>
+                            <th>Mature date</th>
+                            <th>Subscription Amount</th>
+                            <th>Bonus Amount</th>
+                            <th>Receivable Amount</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {subscribedActivePackages?.length > 0 ? subscribedActivePackages?.map((item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{item?.currency}</td>
+                                <td className='text-warning'>{item?.wallet_type.charAt(0).toUpperCase() + item?.wallet_type.slice(1)} Wallet</td>
+                                <td>{item?.duration_days}</td>
+                                <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
+                                <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
+                                <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
+                                <td className='text-warning'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
+                                <td>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
+                                <td className='text-warning'>{item?.status}</td>
+                              </tr>
+                            )
+                          }) :
+                            <tr rowSpan="5">
+                              <td colSpan="12">
+                                <div className="no_data_outer">
+                                  <div className="no_data_vector">
+                                    <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                  </div>
+                                  {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                </div>
+                              </td>
+                            </tr>}
+                        </tbody>
+                      </table>
+                      {/* <div className="pagination_list">
                   <ul className="pagination">
                     <li className="page-item">
                       <a className="page-link" href="#" aria-label="Previous">
@@ -655,304 +712,194 @@ function Earning() {
                     </li>
                   </ul>
                 </div> */}
-              </div>
-              <div className="tab-pane fade " id="completed" role="tabpanel" aria-labelledby="completed-tab">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>S.No</th>
-                      <th>Currency</th>
-                      <th>Received In</th>
-                      <th>Duration</th>
-                      <th>Start date</th>
-                      <th>Mature date</th>
-                      <th>Subscription Amount</th>
-                      <th>Bonus</th>
-                      <th>Received Amount</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
+                    </div>
+                    <div className="tab-pane fade " id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>S.No</th>
+                            <th>Currency</th>
+                            <th>Received In</th>
+                            <th>Duration</th>
+                            <th>Start date</th>
+                            <th>Mature date</th>
+                            <th>Subscription Amount</th>
+                            <th>Bonus</th>
+                            <th>Received Amount</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
 
-                  <tbody>
-                    {subscribedCompletedPackage?.length > 0 ? subscribedCompletedPackage?.map((item, index) => {
-                      return (
+                        <tbody>
+                          {subscribedCompletedPackage?.length > 0 ? subscribedCompletedPackage?.map((item, index) => {
+                            return (
 
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item?.currency}</td>
-                          <td className='text-success'>{item?.credited_wallet_type.charAt(0).toUpperCase() + item?.credited_wallet_type.slice(1)} Wallet</td>
-                          <td>{item?.duration_days}</td>
-                          <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
-                          <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
-                          <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
-                          <td className='text-success'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
-                          <td className='text-success'>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
-                          <td className='text-success'>{item?.status}</td>
-                        </tr>
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{item?.currency}</td>
+                                <td className='text-success'>{item?.credited_wallet_type.charAt(0).toUpperCase() + item?.credited_wallet_type.slice(1)} Wallet</td>
+                                <td>{item?.duration_days}</td>
+                                <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
+                                <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
+                                <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
+                                <td className='text-success'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
+                                <td className='text-success'>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
+                                <td className='text-success'>{item?.status}</td>
+                              </tr>
 
-                      )
-                    }) :
-                      <tr rowSpan="5">
-                        <td colSpan="12">
-                          <div className="no_data_outer">
-                            <div className="no_data_vector">
-                              <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                            )
+                          }) :
+                            <tr rowSpan="5">
+                              <td colSpan="12">
+                                <div className="no_data_outer">
+                                  <div className="no_data_vector">
+                                    <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
 
-                            </div>
+                                  </div>
 
-                            {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                  {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
 
 
-                          </div>
+                                </div>
 
-                        </td>
-                      </tr>}
-                  </tbody>
-                </table>
+                              </td>
+                            </tr>}
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
 
             </div>
           </div>
 
+
         </div>
+
 
       </section >
 
-      {/* <!-- Modal  more details Pop Up Start --> */}
 
-      <div className="modal fade search_form order_detail_pop modelbg2 " id="package_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {/* <!-- Modal earning popup start --> */}
+
+
+      <div
+        className="modal fade earningpopup"
+        id="earningpopup"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5>Buy Package  <i className="ri-arrow-right-double-line"></i> USDT (TetherUS)</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-            <div className="modal-body modal-swap ">
 
-              <div className='row'>
-                <div className='col-sm-6'>
-                  <div className="hot_trading_t model_height">
-                    <div className='table-responsive'>
-                      <table>
-                        <tbody>
+            <div className="modal-body text-center">
+              <div className='earining_popup_exchange'>
+                <div className='lft_pop_cnt'>
+                  <h3><img src="/images/tether_icon.png" alt="usdt" />USDT</h3>
 
-                          <tr>
-                            {/* <td className="right_t price_tb">  */}
-                            <div className="form_select">
-                              <span>Choose Wallet</span>
+                  <ul className='daylist'>
+                    <li className='active'>
+                      <span>30 Day</span>600.00%
+                    </li>
+                    <li>
+                      <span>60 Day</span>600.00%
+                    </li>
+                    <li>
+                      <span>90 Day</span>600.00%
+                    </li>
+                    <li>
+                      <span>180 Day</span>600.00%
+                    </li>
+                    <li>
+                      <span>270 Day</span>600.00%
+                    </li>
+                    <li>
+                      <span>360 Day</span>600.00%
+                    </li>
 
-                              <select value={selectedWallet} onChange={(e) => setSelectedWallet(e.target.value)}>
-                                <option hidden selected>Select Wallet</option>
-                                {walletType?.length > 0 ? walletType?.map((wallet) => {
-                                  return (
-                                    <option value={wallet}>  {typeof wallet === 'string' && wallet.length > 0
-                                      ? wallet.charAt(0).toUpperCase() + wallet.slice(1)
-                                      : 'N/A'} Wallet</option>
-                                  )
-                                }) : <option>Wallet Not Available</option>}
-                              </select>
+                  </ul>
 
-                            </div>
-                            {/* </td> */}
-                          </tr>
-                          <tr>
-                            <td>{selectedWallet.charAt(0).toUpperCase() + selectedWallet.slice(1)} Balance: </td>
-                            <td className="right_t price_tb">
-                              {walletBalance} {packageDetails?.currency} </td>
-                          </tr>
+                  <ul className='termslist'>
+                    <li>Reference <span className='text-green'>3.0%</span></li>
+                    <li>Term<span><strong>30 days</strong></span></li>
+                  </ul>
 
-                          <tr>
-                            <div className="price_max_total">
-                              <input type="number" placeholder={`Enter Subscription Amount`} onWheel={(e) => e.target.blur()} name="fromSwap" value={subscriptionAmount} onChange={(e) => setSubscriptionAmount(e.target.value)} />
-                              <button onClick={() => setSubscriptionAmount(walletBalance)} >Max</button>
+                  <div className='payment_method_f'>
 
-                            </div>
-
-                          </tr>
-                          {(walletBalance < packageDetails?.min_amount || subscriptionAmount > walletBalance) &&
-                            <tr>
-                              <td className='text-danger'>Insufficient Balance
-                              </td>
-                              <td className="right_t price_tb">
-                              </td>
-                            </tr>
-                          }
-                          <tr>
-                            <td>Minimum Amount :
-                            </td>
-                            <td className="right_t price_tb">
-                              10 USDT</td>
-                          </tr>
-
-                          <tr>
-                            <td className="text-warning">
-                              <i className="ri-information-2-line"></i> Don't have enough balance? <a href='/asset_managemnet/deposit' className="text-info">  <span>Deposit Now</span></a>
-                            </td>
-                          </tr>
-
-                        </tbody>
-                      </table>
+                    <div className='payment_inquery'>
+                      <h3>Payment Method</h3>
+                      <div className='select_option'>
+                        <select>
+                          <option>MAIN</option>
+                          <option>MAIN</option>
+                        </select>
+                      </div>
                     </div>
+
+                    <div className='payment_inquery'>
+                      <h3>Subscription Amount </h3>
+                      <div className='amount_input'>
+                        <input type='text' placeholder='Enter Subscription Amount ' />
+                        <span className='max text-green'>Max</span>
+                      </div>
+                    </div>
+
                   </div>
+
+                  <ul className='termslist border-0'>
+                    <li>Funding Account <span>0 USDT<i class="ri-add-circle-line"></i></span></li>
+                    <li>Max Account<span className='text-light'>3,000,000 USDT</span></li>
+                  </ul>
+
+
                 </div>
 
-                <div className='col-sm-6'>
-                  <div className="hot_trading_t model_height">
-                    <div className='table-responsive'>
-                      <table>
-                        <tbody>
-                          <tr>
-                            <td></td>
-                          </tr>
-                          <tr>
-                            <td>Duration: </td>
-                            <td className="right_t price_tb text-warning">
-                              {packageDetails?.duration_days || 0} Days </td>
-                          </tr>
+                <div className='right_cnt_pop'>
+                  <h4>Preview</h4>
 
-                          <tr>
-                            <td></td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                          </tr>
+                  <ul className='subscriptionlist'>
+                    <li>Subscription <span>Date1/5/2026, 10:44</span></li>
+                    <li>Accrual Date <span>Date1/5/2026, 10:44</span></li>
+                    <li>Profit Distribution Date <span>1/6/2026, 17:30</span></li>
+                    <li>Date of Maturity <span>4/6/2026</span></li>
+                  </ul>
 
-                          <tr>
-                            <td>Bonus Rate
-                            </td>
+                  <ul className='termslist border-0'>
+                    <li>Redemption Period <span>0 day</span></li>
+                    <li>Profit Received<span>Daily </span></li>
+                  </ul>
 
-                          </tr>
-                          <tr>
-                            <td className='padding-0'><i className="ri-arrow-right-line"></i> Earning Bonus (%):
-                            </td>
-                            <td className="right_t price_tb padding-0">
-                              {packageDetails?.return_percentage || 0} %</td>
-                          </tr>
-                          <tr>
-                            <td className='padding-0'><i className="ri-arrow-right-line"></i> Estimated Bonus:
-                            </td>
-                            <td className="right_t price_tb padding-0">
-                              {formatToNineDecimals((packageDetails?.return_percentage * +subscriptionAmount) / 100) || 0} USDT</td>
-                          </tr>
-                          <tr>
-                            <td className='padding-0'><i className="ri-arrow-right-line"></i> Receive Amount:
-                            </td>
-                            <td className="right_t price_tb padding-0">
-                              {formatToNineDecimals(+subscriptionAmount + ((packageDetails?.return_percentage * +subscriptionAmount) / 100)) || 0} {packageDetails?.currency}</td>
-                          </tr>
+                  <div className='estimated'>
+                    <h4>Estimated Returns</h4>
 
+                    <ul className='termslist border-0 mb-0'>
+                      <li>USDT Earnings <span>- USDT / D</span></li>
+                    </ul>
 
-
-                          <div className="mt-2">
-                            {(walletBalance < packageDetails?.min_amount || subscriptionAmount > walletBalance) ?
-                              <button className="orderbtn" disabled>Insufficient Balance</button> :
-                              subscriptionAmount < packageDetails?.min_amount ?
-                                <button className="orderbtn" disabled>Next</button> :
-                                <button className="orderbtn" onClick={showOrderDetail}>Next</button>
-                            }
-                          </div>
-
-                        </tbody>
-                      </table>
-                    </div>
+                    <ul className='estimatedlist'>
+                      <li>* At maturity, your funds are seamlessly transferred to the corresponding Flexible Promotions plans.</li>
+                      <li>* Early withdrawal is allowed; however, any earnings already credited will be adjusted accordingly.</li>
+                    </ul>
+                    <label><input type='checkbox'/> I have read and agree to the <a href='#'>Earn Service Agreement.</a></label>
+                  <button className='subscribebtn'>Subscription</button>  
                   </div>
                 </div>
-
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      {/* <!-- Modal   more details Pop Up End --> */}
-
-      {/* <!-- Modal  more details Pop Up Start --> */}
-
-      <div className="modal fade search_form order_detail_pop" id="more_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-
-          <div className="modal-content">
-            <div className="modal-header justify-content-start gap-3 ">
-              <h5><i class="ri-arrow-left-line text-warning cursor-pointer" onClick={showBackModel}></i> Order Details</h5>
-
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body modal-swap ">
-
-              {/* <div>
-                  <img src='/images/plan_verified.png' height="100px" alt='order-details'/>
-                </div> */}
-              <div className='row'>
-                <div className='col-sm-12'>
-                  <div className="hot_trading_t model_height">
-                    <div className='table-responsive'>
-                      <table>
-                        <tbody>
-                          <tr>
-                            <td>Duration:</td>
-                            <td className="right_t price_tb text-warning">
-                              {packageDetails?.duration_days} <span></span></td>
-                          </tr>
-                          <tr>
-                            <td>Subscription Amount:</td>
-                            <td className="">
-                              {subscriptionAmount} {packageDetails?.currency}</td>
-                          </tr>
-                          <tr>
-                            <td>{packageDetails?.duration_days || 0} Days</td>
-                          </tr>
-                          <tr>
-                            <td><img src="images/date_vector.svg" alt='date' width={42} /> Start Date:
-                            </td>
-                            <td className="right_t price_tb">
-                              {packageDetails?.subscriptionDate}</td>
-                          </tr>
-                          <tr>
-                            <td><img src="images/date_vector.svg" alt='date' width={42} /> End Date:
-                            </td>
-                            <td className="right_t price_tb">
-                              {packageDetails?.redemptionDate}</td>
-                          </tr>
-                          <tr>
-                            <td>Bonus Rate</td>
-                          </tr>
-                          <tr>
-                            <td>Earning Bonus <i className="ri-discount-percent-line"></i>:
-                            </td>
-                            <td className="right_t price_tb">
-                              {packageDetails?.return_percentage} %</td>
-                          </tr>
-                          <tr>
-                            <td>Estimated Bonus:
-                            </td>
-                            <td className="right_t price_tb">
-                              <span className='usd_price_tb2'> {formatToNineDecimals((packageDetails?.return_percentage * +subscriptionAmount) / 100) || 0} {packageDetails?.currency} </span></td>
-                          </tr>
-                          <tr>
-                            <td>Receive Amount:
-                            </td>
-                            <td className="right_t price_tb">
-                              {+subscriptionAmount + formatToNineDecimals((packageDetails?.return_percentage * +subscriptionAmount) / 100) || 0} {packageDetails?.currency}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="mt-21">
-                      <button className="orderbtn" onClick={subscribeEarningPackage}>Buy Package</button>
-                    </div>
-                  </div>
-                </div>
-
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
 
       {/* <!-- Modal   more details Pop Up End --> */}
     </ >
