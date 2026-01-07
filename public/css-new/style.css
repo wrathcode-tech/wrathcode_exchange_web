@@ -2010,7 +2010,7 @@ section.hot_articles_s .row {
 }
 
 .kyc_approval_s.activity_logs .cnt p {
-      font-size: 15px;
+    font-size: 15px;
     color: #6F798C;
 }
 
@@ -2869,7 +2869,7 @@ canvas.qr_img.img-fluid {
 }
 
 .kyc_approval_s.activity_logs .notification_table table tr td p {
-margin-top: 10px;
+    margin-top: 10px;
     font-size: 14px;
     color: #6F798C;
 }
@@ -14479,7 +14479,6 @@ button.btn_claim:active {
     position: relative;
     border: 1px solid #949AA4;
     border-radius: 5px;
-    padding-right: 10px;
 }
 
 .profile_form .emailinput label {
@@ -14498,6 +14497,7 @@ button.btn_claim:active {
     min-height: 50px;
     font-weight: 300;
     background: none;
+    border-radius: 0px;
     padding: 10px;
     font-size: 12px;
     color: #949AA4;
@@ -14782,6 +14782,328 @@ button.btn_claim:active {
     color: #87909F;
     font-weight: 200;
 }
+
+
+.faq_section {
+    background: #2B313C;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.faq_section h4 {
+    padding: 24px 24px 0px;
+    margin-bottom: 0px;
+}
+
+.faq_item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.faq_question {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 15px 20px 10px;
+    color: #ffffff80;
+    font-size: 12px;
+    font-weight: 300;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.faq_question .icon {
+    transition: transform 0.3s ease;
+}
+
+.faq_item.active .faq_question .icon {
+    transform: rotate(180deg);
+}
+
+.faq_answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+}
+
+.faq_item.active .faq_answer {
+    max-height: 200px;
+    padding: 0 20px 18px;
+}
+
+.faq_answer p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    margin: 0;
+}
+
+.faq_question:hover {
+    background-color: transparent;
+}
+
+.account_benifits .row {
+    margin-top: 32px;
+}
+
+.kyc_verif_bnr {
+    width: 100%;
+    display: block;
+    background: linear-gradient(130deg, rgba(43, 49, 60, 1) 65%, rgba(69, 65, 51, 1) 100%);
+    padding: 32px;
+    border-radius: 10px;
+    margin-top: 24px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.kycvector {
+    min-width: 340px;
+    max-width: 100%;
+    margin-right: 30px;
+}
+
+.kysbnr_cnt {
+    width: 70%;
+}
+
+.kysbnr_cnt p {
+    font-size: 13px;
+    color: #6F798C;
+}
+
+ul.kyclist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 15px;
+    color: #6F798C;
+    margin-top: 10px;
+}
+
+ul.kyclist li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+ul.kyclist li img {
+    width: 16px;
+}
+
+.kyc_verif_bnr button.kyc.btn {
+    width: 310px;
+    background-color: #F3BB2B;
+    font-size: 16px;
+    color: #000;
+    padding: 12px;
+    border-radius: 50px;
+    margin-top: 22px;
+}
+
+.account_benifits {
+    width: 100%;
+    background-color: #2B313C;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.kyc_account.d-flex {
+    gap: 36px;
+    margin-top: 36px;
+}
+
+.kyc_modal .modal-content {
+    background: #3b4250;
+    border-radius: 14px;
+    width: 600px;
+    max-width: 100%;
+    color: #fff;
+}
+
+.modal-header {
+    border-bottom: 1px solid #4a5161;
+}
+
+.label {
+    font-size: 14px;
+    color: #cfd3dc;
+}
+
+.select_box {
+    background: #4a5161;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.select_box select {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+}
+
+.id_preview {
+    margin-bottom: 20px;
+}
+
+.id_preview img{ width: 100%; }
+
+.input {
+    width: 100%;
+    height: 46px;
+    background: #4a5161;
+    border: none;
+    border-radius: 8px;
+    padding: 0 14px;
+    color: #fff;
+}
+
+.upload_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.upload_box,
+.upload_big {
+    background: #4a5161;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.upload_big {
+    margin: 14px 0;
+}
+
+.selfie_circle{
+    width: 100%;
+    padding: 24px;
+    border-radius: 12px;
+    /* border: 2px dashed #888; */
+    /* margin: 15px auto; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF10;
+}
+
+.small {
+    font-size: 12px;
+    opacity: .7;
+}
+
+/* .kyc_step{display:none;} */
+.kyc_step.active {
+    display: block;
+}
+
+.photomini {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+}
+
+.kyc_step {
+    color: #fff;
+}
+
+.label {
+    font-size: 14px;
+    color: #b8c0cc;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* ===== ID GRID ===== */
+.id_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 12px;
+}
+
+/* ===== ID CARD ITEM ===== */
+.id_item {
+    position: relative;
+    padding: 14px 16px 14px 44px;
+    background: #4B515D;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #d5dbea;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+}
+
+/* Hover effect */
+.id_item:hover {
+    background: #424a5c;
+}
+
+/* ===== Hide default radio ===== */
+.id_item input {
+    display: none;
+}
+
+/* ===== Custom radio circle ===== */
+.id_item::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #7b859a;
+    background: transparent;
+}
+
+/* ===== Checked state ===== */
+.id_item input:checked+span,
+.id_item input:checked {
+    display: none;
+}
+
+/* Active / Selected */
+.id_item:has(input:checked) {
+    background: #454f63;
+    border-color: #f6c343;
+    color: #ffffff;
+}
+
+/* Inner dot */
+.id_item:has(input:checked)::before {
+    border-color: #f6c343;
+    background: radial-gradient(circle at center, #f6c343 45%, transparent 46%);
+}
+
+/* ===== Button ===== */
+.primary_btn {
+    width: 100%;
+    margin-top: 20px;
+    background: #f6c343;
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary_btn:hover {
+    background: #ffd15a;
+}
+
+
+
 
 @media screen and (max-width:1700px) {
 

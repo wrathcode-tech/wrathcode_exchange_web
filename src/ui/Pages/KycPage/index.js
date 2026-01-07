@@ -42,6 +42,7 @@ const KycPage = (props) => {
     const [emailOtp, setemailOtp] = useState();
     const [isShow, setIsShow] = useState(1);
     const [signupBy, setSignupBy] = useState("");
+    const [activeIndex, setActiveIndex] = useState(0);
 
 
     const [previewImages, setPreviewImages] = useState({ "selfie": "", "doc_front": "", "doc_back": "", "pan": "" });
@@ -323,6 +324,33 @@ const KycPage = (props) => {
     }
 
 
+    const faqData = [
+        {
+            q: "What is KYC and why do I need it?",
+            a: "KYC is identity verification that confirms you're a real user. Completing it unlocks full access, withdrawals, and keeps the platform safe."
+        },
+        {
+            q: "How does KYC protect my account?",
+            a: "KYC prevents unauthorized access and reduces fraud."
+        },
+        {
+            q: "How long does KYC take?",
+            a: "Most KYC verifications are completed within a few minutes to 24 hours."
+        },
+        {
+            q: "What documents do I need for KYC?",
+            a: "A valid government-issued ID and proof of address are required."
+        },
+        {
+            q: "Can I use the app without completing KYC?",
+            a: "Limited features are available, but full access requires KYC."
+        },
+        {
+            q: "Is my personal information secure in the KYC process?",
+            a: "Your data is encrypted and handled according to strict security standards."
+        }
+    ];
+
 
     return (
         <>
@@ -348,12 +376,12 @@ const KycPage = (props) => {
                         <h6>KYC Verification Requirements</h6>
 
                         <ul className="kyclist">
-                            <li>⭐ID</li>
-                            <li>⭐ Facial Recognition</li>
-                            <li>⭐ Facial Recognition</li>
+                            <li><img src="/images/staricon.png" alt="star" /> ID</li>
+                            <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
+                            <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
                         </ul>
 
-                        <button className="kyc btn">Verify </button>
+                        <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Verify </button>
                     </div>
                     <div className="kycvector">
                         <img src="/images/kyc_verification_vector.svg" alt="kyc" />
@@ -364,114 +392,69 @@ const KycPage = (props) => {
 
                 <div className="kyc_account d-flex">
                     <div className="account_benifits">
-                        <h4>Account Benefits</h4>
+                        <h5>Account Benefits</h5>
 
                         <div className="row">
                             <div className="col-sm-4">
-                                <ul>
-                                    <li>⭐ KYC Level</li>
-                                    <li>⭐ Crypto Deposit</li>
-                                    <li>⭐ Crypto Withdrawal</li>
-                                    <li>⭐ Fiat Trading</li>
-                                    <li>⭐ Spot/Futures Trading</li>
-                                    <li>⭐ Platform Events</li>
+                                <ul className="kyclist">
+                                    <li><img src="/images/staricon.png" alt="star" /> KYC Level</li>
+                                    <li><img src="/images/staricon.png" alt="star" /> Crypto Deposit</li>
+                                    <li><img src="/images/staricon.png" alt="star" /> Crypto Withdrawal</li>
+                                    <li><img src="/images/staricon.png" alt="star" /> Fiat Trading</li>
+                                    <li><img src="/images/staricon.png" alt="star" /> Spot/Futures Trading</li>
+                                    <li><img src="/images/staricon.png" alt="star" /> Platform Events</li>
                                 </ul>
                             </div>
 
-                                <div className="col-sm-4">
-                                    <h6>Unverified</h6>
-                                <ul>
+                            <div className="col-sm-4">
+                                <h6>Unverified</h6>
+                                <ul className="kyclist">
                                     <li>Unlimited</li>
                                     <li>12 BTC per day</li>
-                                    <li>⭐ Crypto Withdrawal</li>
-                                    <li>⭐ Fiat Trading</li>
-                                    <li>⭐ Spot/Futures Trading</li>
-                                    <li>⭐ Platform Events</li>
+                                    <li><img src="/images/closebtn2.svg" alt="star" /></li>
+                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                 </ul>
                             </div>
 
-                                <div className="col-sm-4">
-                                     <h6>Advanced KYC</h6>
-                                <ul>
+                            <div className="col-sm-4">
+                                <h6>Advanced KYC</h6>
+                                <ul className="kyclist">
                                     <li>Unlimited</li>
                                     <li>100 BTC per day*</li>
                                     <li>30,000 USD per day*</li>
-                                    <li>⭐ Fiat Trading</li>
-                                    <li>⭐ Spot/Futures Trading</li>
-                                    <li>⭐ Platform Events</li>
+                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                 </ul>
                             </div>
 
                         </div>
                     </div>
 
-                 <div class="faq_section">
-                    <h4>Faq</h4>
-  <div class="faq_item active">
-    <button class="faq_question">
-      What is KYC and why do I need it?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>
-        KYC is identity verification that confirms you're a real user.
-        Completing it unlocks full access, withdrawals, and keeps the platform safe for everyone.
-      </p>
-    </div>
-  </div>
 
-  <div class="faq_item">
-    <button class="faq_question">
-      How does KYC protect my account?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>
-        KYC prevents unauthorized access and reduces fraud by verifying user identity.
-      </p>
-    </div>
-  </div>
+                    <div className="faq_section">
+                        <h4>Faq</h4>
+                        {faqData.map((item, index) => (
+                            <div
+                                className={`faq_item ${activeIndex === index ? "active" : ""}`}
+                                key={index}
+                            >
+                                <button
+                                    className="faq_question"
+                                    onClick={() =>
+                                        setActiveIndex(activeIndex === index ? null : index)
+                                    }
+                                >
+                                    {item.q}
+                                    <span className="icon">⌄</span>
+                                </button>
 
-  <div class="faq_item">
-    <button class="faq_question">
-      How long does KYC take?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>Most KYC verifications are completed within a few minutes to 24 hours.</p>
-    </div>
-  </div>
-
-  <div class="faq_item">
-    <button class="faq_question">
-      What documents do I need for KYC?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>A valid government-issued ID and proof of address are required.</p>
-    </div>
-  </div>
-
-  <div class="faq_item">
-    <button class="faq_question">
-      Can I use the app without completing KYC?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>Limited features may be available, but full access requires KYC.</p>
-    </div>
-  </div>
-
-  <div class="faq_item">
-    <button class="faq_question">
-      Is my personal information secure in the KYC process?
-      <span class="icon">⌄</span>
-    </button>
-    <div class="faq_answer">
-      <p>Your data is encrypted and handled according to strict security standards.</p>
-    </div>
-  </div>
-</div>
+                                <div className="faq_answer">
+                                    <p>{item.a}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
                 </div>
 
@@ -1132,6 +1115,125 @@ const KycPage = (props) => {
                     </div >
                 </section > */}
             </div >
+
+
+            {/* <!-- Modal Search Coin Start --> */}
+
+            <div class="modal fade kyc_modal" id="kycModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="kycTitle">Select Country and ID Type</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+
+
+                            <div class="kyc_step active">
+                                <label class="label">🌟 Country/Region (Please select the issuing country of the document)</label>
+                                <div class="select_box">
+                                    <select>
+                                        <option>🇮🇳 India</option>
+                                        <option>USA</option>
+                                    </select>
+                                </div>
+
+                                <label class="label mt-4">ID Type</label>
+                                <div class="id_grid">
+                                    <label class="id_item active">
+                                        <input type="radio" name="id" />
+                                        ID Card
+                                    </label>
+                                    <label class="id_item">
+                                        <input type="radio" name="id" />
+                                        Passport
+                                    </label>
+                                    <label class="id_item active">
+                                        <input type="radio" name="id" />
+                                        Driving license
+                                    </label>
+                                    <label class="id_item">
+                                        <input type="radio" name="id" />
+                                        Residence Permit
+                                    </label>
+                                </div>
+
+                                <button class="primary_btn" onclick="nextStep('Take a Photo of Your ID Card')">Next</button>
+                            </div>
+
+
+                            <div class="kyc_step">
+                                <div class="id_preview">
+                                    <img src="/images/photoid_vector.png" alt="photo" />
+                                </div>
+
+                                <div class="tips photomini">
+                                    <p> <img src="/images/photoidmini.png" alt="photo" /></p>
+                                    <p> <img src="/images/photoidmini2.png" alt="photo" /></p>
+                                    <p> <img src="/images/photoidmini3.png" alt="photo" /></p>
+                                </div>
+
+                                <h6></h6>The selected country/region and ID type are as follows:
+
+                                <div class="info_text">
+                                    <ul className="d-flex gap-3">
+                                        <li>🇮🇳 India </li>
+                                        <li>ID Card</li>
+                                    </ul>
+                                </div>
+                                <p>Please upload a valid ID matching your selected country/region and ID type to avoid verification failure.</p>
+
+                                <input class="input" placeholder="ID Card Number" />
+
+                                <div class="upload_grid">
+                                    <div class="upload_box"><input type="file"/></div>
+                                    <div class="upload_box"><input type="file"/></div>
+                                </div>
+
+                                <button class="primary_btn" onclick="nextStep('Take a Photo of Your')">Next</button>
+                            </div>
+
+
+                            <div class="kyc_step">
+                                <input class="input" placeholder="Income Tax Identification Number" />
+
+                                <div class="upload_big">
+                                   <input type="file"/>
+                                </div>
+
+                                <p class="small">Upload Selfie with ID*</p>
+                                <span>(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
+
+                                <div class="selfie_circle">
+                                  <img src="/images/selefvector.png" alt="photo"  />
+                                </div>
+
+                                <button class="primary_btn" onclick="nextStep('Face Verification')">Next</button>
+                            </div>
+
+
+                            <div class="kyc_step text-center">
+                                <div class="face_circle">
+                                   <img src="/images/selefvector.png" alt="photo"  />
+                                </div>
+
+                                <button class="primary_btn">Submit</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {/* <!-- Modal Search Coin Start End --> */}
+
+
+
         </>
     );
 }

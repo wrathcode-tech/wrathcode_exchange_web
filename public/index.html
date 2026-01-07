@@ -707,6 +707,63 @@
   });
 </script>
 
+<script>
+  document.querySelectorAll(".faq_question").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.parentElement;
+
+      document.querySelectorAll(".faq_item").forEach((el) => {
+        if (el !== item) el.classList.remove("active");
+      });
+
+      item.classList.toggle("active");
+    });
+  });
+</script>
+
+
+<script>
+jquery(document).ready(function () {
+
+  let currentStep = 0;
+  const steps = jquery('.kyc_step');
+  const totalSteps = steps.length;
+
+  function showStep(step) {
+    steps.hide().removeClass('active');
+    steps.eq(step).fadeIn(200).addClass('active');
+
+    // update title from step attribute
+    const title = steps.eq(step).data('title');
+    if (title) {
+      jquery('#kycTitle').text(title);
+    }
+  }
+
+  // NEXT
+ jquery(document).on('click', '.nextStep', function () {
+    if (currentStep < totalSteps - 1) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  });
+
+  // BACK
+jquery(document).on('click', '.prevStep', function () {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  // INIT
+  showStep(currentStep);
+
+});
+</script>
+
+
+
 
 
 </body>
