@@ -215,6 +215,58 @@ const Swap = () => {
 
         <div className="swap_outer_section">
 
+          <h3>Quick Swap</h3>
+          <div className="d-flex cnt_amountsl ">
+            <ul className="swaplist">
+              <li><span>Minimum Amount | Maximum Amount</span>1 | 500 USDT</li>
+              <li><span>Swapping Fee</span>0.1 USDT</li>
+            </ul>
+            <div className="swap_bitcoin">
+              <img src="/images/bitcoinswap.svg" className="img-fluid" alt="swapbitcoin" />
+            </div>
+          </div>
+
+
+          <div className="swap_usdtdata">
+            <div className="d-flex">
+              <div className="swap_ustd_bl">
+                <div className="from">
+                  <p>From<i class="ri-information-line"></i></p>
+                  <p>Available -- USDT <i class="ri-add-circle-fill"></i></p>
+                </div>
+                <div className="from">
+                  <button data-bs-toggle="modal" data-bs-target="#search_coin"><img src="/images/tether_icon.png" className="img-fluid" alt="USDT" /> USDT <i class="ri-arrow-drop-down-fill"></i></button>
+                  <h6>0</h6>
+                </div>
+              </div>
+
+              <div className="swap_ustd_bl">
+                <div className="from">
+                  <p>From<i class="ri-information-line"></i></p>
+                  <p>Available -- USDT <i class="ri-add-circle-fill"></i></p>
+                </div>
+                <div className="from">
+                  <button data-bs-toggle="modal" data-bs-target="#search_coin"><img src="/images/tether_icon.png" className="img-fluid" alt="USDT" /> USDT <i class="ri-arrow-drop-down-fill"></i></button>
+                  <h6>0</h6>
+                </div>
+              </div>
+
+              <div class="vector_icon"><img src="/images/wallet_icon2.png" alt="wallet" /></div>
+
+            </div>
+
+            <p><span>Conversion Rate (Approx.)</span> 1 USDT  2.3674632571565426 BTC</p>
+
+            <button className="btn">Sign Up/Log In</button>
+
+          </div>
+
+
+        </div>
+
+
+        {/* <div className="swap_outer_section">
+
           <div className="give_currency_s">
 
             <div className="currency_block">
@@ -341,8 +393,8 @@ const Swap = () => {
 
                 <div className="price_max_total">
                   <input type="number" placeholder={`Amount (${receiveCurrency?.short_name || ""})`} value={nineDecimalFormat(receiveCurrencyAmount)} disabled />
-                  {/* <input type="number" placeholder={`Amount (${receiveCurrency?.short_name || ""})`} onWheel={(e) => e.target.blur()} name="toSwap" value={receiveCurrencyAmount} onChange={handleSwapInput} /> */}
-                  {/* <button onClick={() => handleMaxAmount("to")}>Max</button> */}
+                  <input type="number" placeholder={`Amount (${receiveCurrency?.short_name || ""})`} onWheel={(e) => e.target.blur()} name="toSwap" value={receiveCurrencyAmount} onChange={handleSwapInput} />
+                  <button onClick={() => handleMaxAmount("to")}>Max</button>
                 </div>
               </div>
 
@@ -384,12 +436,13 @@ const Swap = () => {
 
           </div>
 
-        </div>
+        </div> */}
 
         <div className="dashboard_recent_s swap_tb_his">
           <div className="user_list_top">
-            <div className="user_list_l">
+            <div className="d-flex-between  mb-3  custom_dlflex">
               <h4>Recent Transactions </h4>
+              <div class="searchBar custom-tabs"><i class="ri-search-2-line"></i><input type="search" class="custom_search" placeholder="Search Crypto" /></div>
             </div>
             {/* <div className="user_search">
               <form>
@@ -440,7 +493,166 @@ const Swap = () => {
 
       {/* <!-- Modal  more details Pop Up Start --> */}
 
-      <div className="modal fade search_form search_coin" id="more_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      <div className="modal fade search_form search_coin"
+        id="search_coin" tabIndex="-1" aria-labelledby="exampleModalLabel">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4>Select Crypto</h4>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              />
+            </div>
+
+            <div className="modal-body">
+              <form>
+                <input type="text" placeholder="Search coin name " />
+              </form>
+
+              <div className="hot_trading_t">
+                <div className="table-responsive">
+                  <table>
+                    <tbody>
+
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751740975587-586000162.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">AVAX<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739888899-576451443.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">DOGE<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739854071-903335949.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BNB<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BTC<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BTC<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BTC<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BTC<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+                      <tr data-bs-dismiss="modal">
+                        <td>
+                          <div className="td_first">
+                            <div className="icon">
+                              <img
+                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
+                                alt="icon"
+                                width="30"
+                              />
+                            </div>
+                            <div className="price_heading">BTC<span>/USDT</span></div>
+                          </div>
+                        </td>
+                        <td className="right_t price_tb">0.00%</td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="modal fade search_form search_coin" id="more_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -485,7 +697,7 @@ const Swap = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
 
       {/* <!-- Modal   more details Pop Up End --> */}

@@ -919,29 +919,49 @@ const LandingPage = () => {
           </div>
 
           <div className="row">
-            <div className="col-sm-6">
+            <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
                   <img className="blogimg" src="images/new-images/platform_trade.png" />
                 </div>
                 <div className="resources_cnt">
                   {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
-                  <h3>The Best Platform to Trade Bitcoin on Your Phone</h3>
-                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
+                  <h3>The Best Platform to Trade Bitcoin</h3>
+                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                   industry's standard dummy text ever since the 1500s,</p>
                 </div>
               </div>
             </div>
 
 
-            <div className="col-sm-6">
+            <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
                   <img className="blogimg" src="images/new-images/secure_crypto.png" />
                 </div>
                 <div className="resources_cnt">
                   {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
-                  <h3>What Is the Most Secure Crypto Wallet in 2026?</h3>
+                  <h3>Most Secure Crypto Wallet in 2026</h3>
+                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                   industry's standard dummy text ever since the 1500s,</p>
+                
                   {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
+                  
+                </div>
+              </div>
+            </div>
+
+                 <div className="col-sm-4">
+              <div className="resources_news">
+                <div className="news_img">
+                  <img className="blogimg" src="images/new-images/secure_crypto.png" />
+                </div>
+                <div className="resources_cnt">
+                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
+                  <h3>Most Secure Crypto Wallet in 2026</h3>
+                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
+                   <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                   industry's standard dummy text ever since the 1500s,</p>
                 </div>
               </div>
             </div>

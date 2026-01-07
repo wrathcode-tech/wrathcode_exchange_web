@@ -279,14 +279,11 @@ const LaunchpadCoinPage = () => {
                     </div>
 
                     <div className="usdtpool_bl">
-
                         <div className="d-flex tbl_flex">
                             <button className="poolbtn active">USDT Pool <span><i class="ri-user-3-fill"></i> NEW</span></button>
                             <button className="poolbtn">USDT Pool</button>
                         </div>
-
                         <div className="commit_usdt_del">
-
                             <div class="coin_lft">
                                 <div class="coin">
                                     <img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" />
@@ -299,32 +296,105 @@ const LaunchpadCoinPage = () => {
                                     <div class="hd d-flex">
                                         <ul class="subcate">
                                             <li><button><i class="ri-user-3-fill"></i> New User Exclusive</button></li>
-                                            <li><button><i class="ri-user-3-fill"></i> 60% Off</button></li>
-                                            <li><button><i class="ri-user-3-fill"></i> Raise Limit</button></li>
+                                            <li><button><i class="ri-discount-percent-fill"></i> 60% Off</button></li>
+                                            <li><button><i class="ri-share-forward-fill"></i> Raise Limit</button></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+                            <ul className="exclusive_list">
+                                <li><span>Exclusive Subscription Price</span>1 LIT = 1.6 USDT <span className="sellsub">Sell Price: 4 USDT</span></li>
+                                <li><span>Total Allocation</span>12,500 LIT</li>
+                                <li><span>Total Committed</span>1,030,485.64 USDT</li>
+                                <li><span>Subscribed</span>---</li>
+                                <li><span>Allocated</span>---</li>
+                                <li><span>Refunded</span>---</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {/* 
+                    <div className="futures_trading_s">
 
-                            
+                        <div className="d-flex toplimit">
+                            <h3>Complete tasks to increase your subscription limit, up to <span>10,000 USDT</span></h3>
+                            <div className="limit_current">
+                                Current Limit: <span>5,000 USDT</span>
+                            </div>
+                        </div>
 
-                                <ul className="exclusive_list">
-                                    <li><span>Exclusive Subscription Price</span>1 LIT = 1.6 USDT <span className="sellsub">Sell Price: 4 USDT</span></li>
-                                    <li><span>Total Allocation</span>12,500 LIT</li>
-                                    <li><span>Total Committed</span>1,030,485.64 USDT</li>
-                                    <li><span>Subscribed</span>---</li>
-                                    <li><span>Allocated</span>---</li>
-                                    <li><span>Refunded</span>---</li>
-                                </ul>
+                        <div className="future_trading_block">
+                            <h5>Futures Trading Challenge <i class="ri-information-line"></i></h5>
+
+                            <div className="trading_process">
+                                <div className="usdt_selected">
+                                    0 USDT
+                                </div>
+
+                                <div className="usdt_selected">
+                                    <span>+1,500 USDT</span> 50,000 USDT
+                                </div>
+
+                                <div className="usdt_selected">
+                                    <span>+500 USDT</span> 80,000 USDT
+                                </div>
+
+                                <div className="usdt_selected">
+                                    <span>+1,000 USDT</span> 120,000 USDT
+                                </div>
+
+                                <div className="usdt_selected">
+                                    <span>+1,000 USDT</span> 200,000 USDT
+                                </div>
+
+                            </div>
+
+                            <div className="d-flex toplimit">
+                                <h6>Trade <span>50,000 USDT</span> worth of tokens more to increase your limit by <span>1,500 USDT</span></h6>
+                                <div className="trade">
+                                    <button>Trade</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div> */}
+
+                    <div className="futures_trading_s">
+
+                        <div className="future_trading_block">
+                            <h5>Project Summary</h5>
+
+                            <div className="d-flex toplimit">
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                <div className="trade websitebtn d-flex">
+                                    <button>Website</button>
+                                    <button className="whitebtn">Whitepaper</button>
+                                </div>
+                            </div>
 
                         </div>
 
                     </div>
 
+                    <div className="futures_trading_s">
+
+                        <div className="d-flex toplimit">
+                            <h3>Details</h3>
+                            {/* <div className="limit_current">
+                                Current Limit: <span>5,000 USDT</span>
+                            </div> */}
+                        </div>
+
+                        <ul className="usdtdetail">
+                            <li><span>Exclusive Subscription Price</span>1 LIT = 1.6 USDT; 1 LIT = 2 USDT</li>
+                            <li><span>Launchpad Total Allocation</span>17,500 LIT</li>
+                            <li><span>Individual Subscription Limit</span>5,000 USDT; 5,000 USDT</li>
+                        </ul>
+
+                    </div>
 
 
                 </div>
-
             </div>
 
 

@@ -600,7 +600,39 @@ ul.registration_list li span {
 .usdtpool_bl {
     width: 100%;
     display: block;
-    margin: 60px 0px;
+    margin: 60px 0px 40px;
+}
+
+
+.futures_trading_s {
+    width: 100%;
+    display: block;
+    color: #fff;
+}
+
+.toplimit {
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.futures_trading_s h3 {
+    font-size: 24px;
+    margin: 0px;
+}
+
+.futures_trading_s h3 span {
+    color: #F3BB2B;
+}
+
+.limit_current {
+    font-size: 14px;
+    color: #949AA4;
+    font-weight: 600;
+}
+
+.limit_current span {
+    color: #fff;
 }
 
 .tbl_flex {
@@ -642,7 +674,151 @@ ul.registration_list li span {
 .commit_usdt_del .coin_lft ul.subcate li button {
     background-color: #515760;
     font-size: 10px;
+    gap: 3px;
     padding: 3px 7px;
+}
+
+.future_trading_block {
+    width: 100%;
+    display: block;
+    padding: 24px;
+    background-color: #2B313C;
+    border-radius: 16px;
+    margin-top: 18px;
+    color: #F2F4F6;
+}
+
+.future_trading_block h5 {
+    font-size: 18px;
+}
+
+.future_trading_block h5 i {
+    color: #868686;
+}
+
+.trading_process {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.future_trading_block p {
+    font-size: 14px;
+    width: 70%;
+    color: #949AA4;
+    font-weight: 300;
+}
+
+.trade.websitebtn {
+    gap: 15px;
+}
+
+.trade.websitebtn button.whitebtn{ background-color: #5a5d61;
+    color: #F2F4F6; }
+
+.trading_process .usdt_selected {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    justify-content: end;
+    position: relative;
+    color: #949AA4;
+}
+
+.trading_process .usdt_selected span {
+    background-color: #3C4554;
+    border-radius: 4px;
+    padding: 3px 4px;
+}
+
+.trading_process .usdt_selected::before {
+    width: 10px;
+    height: 10px;
+    background-color: #3C4554;
+    position: absolute;
+    left: 43%;
+    top: 46%;
+    content: "";
+    border-radius: 50px;
+}
+
+.trading_process .usdt_selected:first-child::before {
+    left: 0px;
+}
+
+.future_trading_block .toplimit {
+    margin: 24px 0px 0px;
+}
+
+.future_trading_block .toplimit h6 {
+    font-size: 12px;
+    color: #949AA4;
+    font-weight: 600;
+}
+
+.future_trading_block .toplimit h6 span {
+    color: #fff;
+}
+
+.future_trading_block .trade button {
+    border: none;
+    border-radius: 50px;
+    padding: 9px 22px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.launchpad_detail_s .futures_trading_s {
+    margin-bottom: 36px;
+}
+
+.usdtdetail {
+    border-radius: 16px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.usdtdetail li {
+    font-size: 16px;
+    color: #F2F4F6;
+    padding: 24px 32px;
+    background-color: #393F4F50;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-weight: 300;
+}
+
+.usdtdetail li span {
+    color: #707070;
+}
+
+.usdtdetail li:nth-child(odd) {
+    background-color: rgba(57, 63, 79, 0.5);
+}
+
+.usdtdetail li:nth-child(even) {
+    background-color: #181A20;
+}
+
+.trading_process .usdt_selected:last-child::before {
+    left: 98%;
+}
+
+.trading_process::before {
+    width: 100%;
+    height: 4px;
+    background-color: #3C4554;
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    content: "";
+    border-radius: 2px;
 }
 
 .commit_usdt_del .coin_cnt h3 {
@@ -1588,14 +1764,14 @@ ul.exclusive_list {
     margin-top: 24px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap:32px;
+    gap: 32px;
 }
 
 ul.exclusive_list li {
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    gap:7px;
+    gap: 7px;
     font-weight: 500;
     color: #F2F4F6;
 }
@@ -1606,7 +1782,11 @@ ul.exclusive_list li span {
     font-weight: 300;
 }
 
-ul.exclusive_list li span.sellsub{ font-size: 11px; display: block; }
+ul.exclusive_list li span.sellsub {
+    font-size: 11px;
+    display: block;
+    margin-top: -5px;
+}
 
 /* === Project Cycle & Key Highlight Styling === */
 .project_cycle_header {

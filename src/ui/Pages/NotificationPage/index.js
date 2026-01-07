@@ -130,7 +130,7 @@ const NotificationPage = (props) => {
 
                 <div className="col-sm-9">
                   <h3>Notifications</h3>
-                  <p>Your latest updates and notifications list.</p>
+                  <p>Find your notifications setting and choose your settings</p>
                 </div>
                 {unseenCount > 0 &&
                   <div className="col-sm-3">
@@ -154,7 +154,7 @@ const NotificationPage = (props) => {
               {notifications?.length > 0 ? (
 
                 <div className="notification_table">
-
+                  <h4>Today</h4>
                   <table>
                     <tbody>
                       {notifications.map((item) => (
@@ -203,7 +203,7 @@ const NotificationPage = (props) => {
                 <div className=' d-flex justify-content-center'>
                   <div className="no_data_outer">
                     <div className="no_data_vector">
-                      <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                      <img src="/images/no_data_vector.svg" alt="no-data" />
                     </div>
                     <p>No Notifications Found</p>
                   </div>

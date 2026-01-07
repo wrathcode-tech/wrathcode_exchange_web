@@ -246,9 +246,10 @@ const DepositPage = () => {
               {/* <!-- Modal Search Coin Start --> */}
 
               <div className="modal fade search_form search_coin" id="search_coin" tabIndex="-1" aria-labelledby="exampleModalLabel" >
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
                     <div className="modal-header">
+                      <h4>Select Crypto</h4>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">

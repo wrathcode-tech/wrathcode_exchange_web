@@ -93,7 +93,7 @@ const SettingsPage = (props) => {
       signId = newEmail
     } else {
       const fullPhone = `${newCountryCode}${newPhone}`;
-      
+
       if (!isValidPhoneNumber(fullPhone)) {
         alertErrorMessage("Please enter a valid phone number for the selected country");
         return;
@@ -103,7 +103,7 @@ const SettingsPage = (props) => {
       signId = fullPhonePayload
 
     }
-   
+
     LoaderHelper.loaderStatus(true);
     await AuthService.getOtp(signId, type).then(async (result) => {
       LoaderHelper.loaderStatus(false);
@@ -215,17 +215,17 @@ const SettingsPage = (props) => {
     if (!isValidPhoneNumber(fullPhone)) {
       alertErrorMessage("Please enter a valid phone number for the selected country");
       return;
-    }if (!newPhone || mobileOtp?.length < 5) {
+    } if (!newPhone || mobileOtp?.length < 5) {
       alertErrorMessage("Invalid OTP");
       $("#phone_light").modal('show');
       return
     }
     LoaderHelper.loaderStatus(true);
-    await AuthService.editPhone( `${newCountryCode} ${newPhone}`, mobileOtp).then(async (result) => {
+    await AuthService.editPhone(`${newCountryCode} ${newPhone}`, mobileOtp).then(async (result) => {
       if (result?.success) {
         LoaderHelper.loaderStatus(false);
         try {
-          setCountryCode("+91"); 
+          setCountryCode("+91");
           setMobileOtp("");
           setNewPhone("");
           setTimer2(0);
@@ -353,7 +353,245 @@ const SettingsPage = (props) => {
       <div className="dashboard_right">
         <DashboardHeader props={props} />
 
-        <div className="profile_outer_block mt-4">
+
+        <div className="twofactor_outer_s">
+          <h5>Profile</h5>
+          <p>To protect your account, we recommend that you enable at least one 2FA</p>
+
+          <div className="two_factor_list">
+
+            <div className="factor_bl active">
+              <div className="lftcnt">
+                <h6><img src="/images/lock_icon.svg" alt="Authenticator App" /> Name & Avatar</h6>
+                <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
+              </div>
+
+              <div className="enable"><img src="/images/user.png" alt="user" />Pallav-Soni</div>
+              <button className="btn">Change</button>
+
+            </div>
+
+            <div className="factor_bl">
+              <div className="lftcnt">
+                <h6><img src="/images/email_icon2.svg" alt="Email Verification" /> Email Verification</h6>
+                <p>SeLink your email address to your account for login, password recovery and withdrawal confirmation.cure your account and withdrawals with a passkey</p>
+              </div>
+
+              <div className="enable"><img src="/images/verified_icon.svg" alt="Email Verification" /> pl***9@gmail.com</div>
+              <button className="btn">Change</button>
+
+            </div>
+
+            <div className="factor_bl">
+              <div className="lftcnt">
+                <h6><img src="/images/mobile_icon.svg" alt="Mobile Verification" /> Mobile Verification</h6>
+                <p>Link your mobile number to your account to receive verification codes via SMS for confirmations on withdrawal, password change, and security settings.</p>
+              </div>
+
+              <div className="enable"><img src="/images/verified_icon.svg" alt="mobile" />+91-9982141988</div>
+              <button className="btn">Change</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="twofactor_outer_s">
+          <h5>Currency Preference</h5>
+          <p>Select your preferred display currency for all markets</p>
+
+          <div className="two_factor_list">
+
+            <div class="currency_list_b">
+              <ul>
+                <li className="active">
+                  <div class="currency_bit"><img src="https://backend.gatbits.com/icons/coin-image-1751739665132-148359796.png" class="img-fluid" alt="Tether" /></div>
+                  <h6>Tether USD (USDT)</h6>
+                  <div class="vector_bottom">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="52" viewBox="0 0 60 52" fill="none">
+                      <path d="M59.6296 0L60 52H0L59.6296 0Z" fill="#3B3B3B"></path>
+                    </svg>
+                  </div>
+                </li>
+                <li>
+                  <div class="currency_bit"><img src="https://backend.gatbits.com/icons/coin-image-1751739665132-148359796.png" class="img-fluid" alt="Tether" /></div>
+                  <h6>BTC</h6>
+                  <div class="vector_bottom">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="52" viewBox="0 0 60 52" fill="none">
+                      <path d="M59.6296 0L60 52H0L59.6296 0Z" fill="#3B3B3B"></path>
+                    </svg>
+                  </div>
+                </li>
+                <li>
+                  <div class="currency_bit"><img src="https://backend.gatbits.com/icons/coin-image-1751739665132-148359796.png" class="img-fluid" alt="Tether" /></div>
+                  <h6>BNB</h6>
+                  <div class="vector_bottom">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="52" viewBox="0 0 60 52" fill="none">
+                      <path d="M59.6296 0L60 52H0L59.6296 0Z" fill="#3B3B3B"></path>
+                    </svg>
+                  </div>
+                </li>
+              </ul>
+              <div className="savebtn">
+                <button>Save Currency Preference</button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div className="twofactor_outer_s">
+          <h5>Change Password</h5>
+          <p>To protect your account, we recommend that you enable at least one 2FA</p>
+
+          <div className="two_factor_list">
+
+            <div className="factor_bl active">
+              <div className="lftcnt">
+                <h6><img src="/images/lock_icon.svg" alt="Login Password" /> Login Password</h6>
+                <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
+              </div>
+
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#security_verification">Change</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+        <div className="modal fade search_form" id="security_verification" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Security Verification</h5>
+                <p>Enter the code sent to <span>ple***@gmail.com.</span></p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+                <form className="profile_form">
+
+                  <div className="emailinput">
+                    <label>Email Verification</label>
+                    <div className="d-flex">
+                      <input type="email" placeholder="" />
+                      <div className="resend">Resend</div>
+                    </div>
+                  </div>
+                 
+                  <div className="emailinput">
+                    <label>New Password</label>
+                    <div className="d-flex">
+                      <input type="password" placeholder="" />
+                    </div>
+                  </div>
+                  <div className="error">
+                    <span>10-32 characters</span>
+                    <span>At least one uppercase, lowercase, and number.</span>
+                    <span>Does not contain any spaces.</span>
+                  </div>
+                  <div className="emailinput">
+                    <label>Confirm Password</label>
+                    <div className="d-flex">
+                      <input type="password" placeholder="" />
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
+
+                {/* <div className="profile_cnt_lightb">
+
+                      <div className="profile_bl">
+
+                        <h5>Avatar</h5>
+
+                        <div className="user_profile_pick">
+
+                          <div className="editor_img_b">
+
+                            <input type="file" accept="image/*" className="user-profile-editor_panel-form-field_object_avatar-uploader" onChange={handleChangeSelfie} />
+
+                            <div className="user_profile_editor">
+                              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="bn-svg"><path fillRule="evenodd" clip-rule="evenodd"
+                                d="M15.314 4.781l3.889 3.89-1.768 1.767-3.889-3.889 1.768-1.768zm-3.182 3.182l3.89 3.89-5.129 
+    5.127H15v3H7.893l-.004.004H4v-3.889l8.132-8.132zM17 16.98h3v3h-3v-3z" fill="currentColor"></path></svg>
+                            </div>
+
+                            <img src={props?.userDetails?.profilepicture ? ApiConfig?.baseImage + props?.userDetails?.profilepicture : "/images/user.png"} height="54px" width="54px" />
+
+                          </div>
+
+                      
+                        </div>
+
+                      </div>
+
+
+
+                      <div className="profile_bl">
+
+                        <h5>First name</h5>
+
+                        <div className="user_profile_pick">
+
+                          <input type="text" placeholder="" value={firstName === "undefined" ? "" : firstName} onChange={(e) => setFirstName(e.target.value)} />
+
+                       
+                        </div>
+
+                      </div>
+                      <div className="profile_bl">
+
+                        <h5>Last name</h5>
+
+                        <div className="user_profile_pick">
+
+                          <input type="text" placeholder="" value={lastName === "undefined" ? "" : lastName} onChange={(e) => setLastName(e.target.value)} />
+
+                      
+                        </div>
+
+                      </div>
+
+                    </div> */}
+
+
+                {/* <div className="btn_profile_list">
+                      <button data-bs-dismiss="modal" >Cancel</button>
+                      <button className="savebtn" onClick={editusername} disabled={!firstName?.trim() || !lastName?.trim()}  >Save</button>
+                    </div> */}
+
+
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+        {/* <div className="profile_outer_block mt-4">
 
           <div className="profile_cvtrade">
 
@@ -381,7 +619,7 @@ const SettingsPage = (props) => {
             </div>
 
 
-            {/* <!-- Modal Profile Pop Up First and Lastname --> */}
+          
             <div className="modal fade search_form" id="exampleModal_2" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered ">
                 <div className="modal-content">
@@ -418,7 +656,7 @@ const SettingsPage = (props) => {
 
                           </div>
 
-                          {/* <p>Avatar can only be modified 1 time per 30 days.</p> */}
+                      
                         </div>
 
                       </div>
@@ -433,7 +671,7 @@ const SettingsPage = (props) => {
 
                           <input type="text" placeholder="" value={firstName === "undefined" ? "" : firstName} onChange={(e) => setFirstName(e.target.value)} />
 
-                          {/* <p>Nickname can only be modified 1 time per 30 days.</p> */}
+                       
                         </div>
 
                       </div>
@@ -445,7 +683,7 @@ const SettingsPage = (props) => {
 
                           <input type="text" placeholder="" value={lastName === "undefined" ? "" : lastName} onChange={(e) => setLastName(e.target.value)} />
 
-                          {/* <p>Nickname can only be modified 1 time per 30 days.</p> */}
+                      
                         </div>
 
                       </div>
@@ -471,7 +709,7 @@ const SettingsPage = (props) => {
 
 
 
-            {/* <!-- Modal Profile Pop Up Avatar edit--> */}
+        
             <div className="modal fade search_form" id="exampleModal_3" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered ">
                 <div className="modal-content">
@@ -532,7 +770,7 @@ const SettingsPage = (props) => {
             </div>
 
 
-            {/* <!-- Modal Profile Email --> */}
+         
             <div className="modal fade search_form" id="email_light" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered ">
                 <div className="modal-content">
@@ -624,9 +862,9 @@ const SettingsPage = (props) => {
 
           </div>
 
-        </div>
+        </div> */}
 
-        <div className="dashboard_right_side profileslider">
+        {/* <div className="dashboard_right_side profileslider">
 
           <div className="slider dashboard_slider">
             <Slider {...bannerSettings}>
@@ -697,7 +935,9 @@ const SettingsPage = (props) => {
               </div>
             </Slider>
           </div>
-        </div>
+        </div> */}
+
+
       </div>
 
       <div className="modal fade search_form" id="phone_light" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

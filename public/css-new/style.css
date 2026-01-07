@@ -1099,7 +1099,7 @@ button.learnbtn a:hover {
 }
 
 *::-webkit-scrollbar-track {
-    background: #727272;
+    background: #161616;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -1397,7 +1397,7 @@ img.animation_effect.bitcoin1 {
 }
 
 .resources_cnt {
-    padding: 48px;
+    padding: 32px;
 }
 
 .date {
@@ -1408,10 +1408,17 @@ img.animation_effect.bitcoin1 {
 
 .resources_news h3 {
     line-height: 130%;
+    font-size: 20px;
+}
+
+.resources_news p {
+    color: #C0C0C0;
+    margin: 0px;
+    font-size: 14px;
 }
 
 .resources_news .news_img {
-    height: 442px;
+    height: 300px;
     width: 100%;
     overflow: hidden;
 }
@@ -2003,7 +2010,8 @@ section.hot_articles_s .row {
 }
 
 .kyc_approval_s.activity_logs .cnt p {
-    font-size: 16px;
+      font-size: 15px;
+    color: #6F798C;
 }
 
 .activity_logs table {
@@ -2117,14 +2125,12 @@ section.hot_articles_s .row {
 
 
 .search_form .modal-content {
-    background: #111214;
-    border-radius: 20px;
+    background: #373E4B;
+    border-radius: 12px;
 }
 
-
-
 .search_form .modal-body {
-    padding: 30px !important;
+    padding: 0px 20px 30px;
 }
 
 .search_form .modal-swap {
@@ -2236,11 +2242,7 @@ section.hot_articles_s .row {
 
 .kyc_approval_s {
     display: flex;
-    background-color: #1a1a1a;
     margin-top: 32px;
-    border-radius: 12px;
-    border: 1px solid #ffffff12;
-    padding: 36px;
     gap: 32px;
     align-items: center;
 }
@@ -2250,9 +2252,10 @@ section.hot_articles_s .row {
 }
 
 .kyc_approval_s h3 {
-    color: #f3bb2b;
-    font-weight: 700;
-    margin: 0px;
+    color: #F2F4F6;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0px 0px 10px;
 }
 
 body .slick-dots li.slick-active button:before {
@@ -2346,16 +2349,60 @@ body .slick-dots li.slick-active button:before {
     gap: 18px;
     font-size: 16px;
     font-weight: 400;
+    align-items: center;
+    border-radius: 10px;
+    transition: 1s;
+    padding: 24px;
+    border: 1px solid #3B465900;
+}
+
+.factor_bl:hover {
+    border: 1px solid #3B4659;
+    background-color: #31384540;
+}
+
+.factor_bl.active {
+    border: 1px solid #3B4659;
+    background-color: #31384540;
+}
+
+.two_factor_list h6 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.two_factor_list .lftcnt {
+    width: 40%;
 }
 
 .two_factor_list {
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid #cdbb9024;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 24px;
+    margin-top: 15px;
+}
+
+.enable {
+    font-size: 12px;
+    color: #F2F4F6;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.two_factor_list button.btn {
+    border: 1px solid #949AA4;
+    border-radius: 50px;
+    font-size: 13px;
+    color: #F2F4F6;
+    padding: 4px 5px;
+    width: 85px;
+}
+
+.two_factor_list button.btn:hover {
+    border: 1px solid #3E4653;
+    background-color: #3E4653;
 }
 
 .Security_factor p {
@@ -2805,7 +2852,7 @@ canvas.qr_img.img-fluid {
 
 .notification_table table tr td {
     border-bottom: 1px solid #ffffff14;
-    padding-bottom: 32px;
+    padding: 0px 0px 32px;
 }
 
 .notification_table table tr td h4 {
@@ -2822,9 +2869,9 @@ canvas.qr_img.img-fluid {
 }
 
 .kyc_approval_s.activity_logs .notification_table table tr td p {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #ffffff9e;
+margin-top: 10px;
+    font-size: 14px;
+    color: #6F798C;
 }
 
 .login_section {
@@ -3666,11 +3713,11 @@ section.faq_sec .section-title {
 }
 
 .modal.search_form input:focus {
-    border: 1px solid #ffffff26 !important;
+    border: none;
 }
 
 body.light_theme .modal.search_form input:focus {
-    border: 1px solid #00000026 !important;
+    border: none;
 }
 
 
@@ -4890,7 +4937,7 @@ body .red {
 }
 
 .modal.fade .modal-dialog {
-    min-width: 730px;
+    min-width: 610px;
     width: 100%;
 }
 
@@ -5137,9 +5184,43 @@ input[type="date"] {
 }
 
 .modal.search_form input {
-    padding: 12px !important;
-    border: 1px solid #545454;
+    min-height: 42px;
+    font-weight: 300;
+    padding: 10px 18px;
     font-size: 14px;
+    color: #949AA4;
+    background-color: #2B313C;
+}
+
+.modal.search_form .emailinput {
+    width: 100%;
+    position: relative;
+    border: 1px solid #949AA4;
+    border-radius: 5px;
+}
+
+.modal.search_form .resend {
+    font-size: 14px;
+    font-weight: 300;
+    margin-right: 15px;
+}
+
+
+.modal.search_form .emailinput label {
+    color: #949AA4;
+    font-size: 12px;
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background-color: #373E4B;
+    width: auto;
+    padding: 0px 10px;
+}
+
+.modal.search_form .emailinput .d-flex {
+    align-items: center;
+    gap: 24px;
+    justify-content: space-between;
 }
 
 .modal.search_form select {
@@ -5230,8 +5311,13 @@ section.blog_list {
 }
 
 .deposit_crypto_block_coin .modal .modal-header {
-    padding: 10px 0px 0px !important;
+    padding: 16px 20px 5px !important;
     border-bottom: none !important;
+    height: 60px;
+}
+
+.modal.search_coin .modal-dialog {
+    min-width: 500px;
 }
 
 .network_top_p p {
@@ -5693,8 +5779,8 @@ body.light_theme .coin_right a.search_icon2 input {
 
 
 .deposit_crypto_block_coin h2 {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .deposit_crypto_left {
@@ -6130,11 +6216,11 @@ button.sc-gjLLEI.kuPCgf svg>path {
 }
 
 .deposit_crypto_right button.accordion-button {
-    background-color: transparent;
     background: transparent;
     border: none;
     padding: 10px 0px;
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 400;
     color: #cfcfcf;
 }
 
@@ -7258,7 +7344,7 @@ img.round_img {
 
 .user_profile_cnt h3 {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     display: flex;
     margin-bottom: 2px;
     align-items: center;
@@ -7278,7 +7364,9 @@ span.hide button {
 }
 
 span.subdel {
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 300;
+    color: #949AA4;
 }
 
 .user_profile_cnt ul {
@@ -7836,11 +7924,44 @@ body .recommendations_block ul li a:hover {
 .search_form input {
     background-color: transparent;
     border: 1px solid #ffffff1c;
-    color: #fff !important;
     border: 1px solid #ffffff26;
     padding: 12px 20px;
     width: 100%;
     border-radius: 50px;
+}
+
+.modal.search_form .error {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.modal.search_form .error span {
+    font-size: 12px;
+    font-weight: 400;
+    color: #E45561;
+    position: relative;
+    padding-left: 13px;
+}
+
+.modal.search_form .error span::before {
+    width: 5px;
+    height: 5px;
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 6px;
+    background-color: #E45561;
+    border-radius: 50px;
+}
+
+.modal.search_form button.submit {
+    background-color: #FFFFFF60;
+    border: none;
+    border-radius: 50px;
+    margin-top: 12px;
 }
 
 .addbankbtn.btn.btn-gradient {
@@ -8071,9 +8192,15 @@ ul.navi_sidebar {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    overflow: scroll;
     height: 100%;
     padding-bottom: 150px;
+}
+
+.enable img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    object-fit: cover;
 }
 
 .navi_sidebar li p {
@@ -8205,8 +8332,9 @@ td {
 }
 
 .price_heading {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 300;
+    color: #fff;
 }
 
 .dashboard_summary a {
@@ -9052,11 +9180,9 @@ button.subscribe_btn a {
 }
 
 .swap_outer_section {
-    width: 100%;
-    display: flex;
+    width: 70%;
+    display: block;
     padding: 40px 0px 10px;
-    flex-direction: column;
-    gap: 48px;
 }
 
 .give_currency_s {
@@ -9065,6 +9191,16 @@ button.subscribe_btn a {
     border-radius: 12px;
     display: flex;
     gap: 80px;
+}
+
+.cnt_amountsl {
+    gap: 24px;
+    justify-content: space-between;
+}
+
+.swap_bitcoin {
+    max-width: 96px;
+    margin-top: -24px;
 }
 
 .top_heading_s {
@@ -9103,8 +9239,46 @@ section.block_currency {
 }
 
 .vector_icon {
-    width: 134px;
-    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    background-color: #222831;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.swap_usdtdata p {
+    font-size: 14px;
+    margin: 15px 0px 0px;
+}
+
+.swap_usdtdata p span {
+    display: block;
+    color: #F3F3F340;
+    margin-bottom: 5px;
+}
+
+.swap_usdtdata button.btn {
+    width: 100%;
+    background-color: #F3BB2B;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 15px;
+}
+
+.swap_usdtdata button.btn {
+    width: 100%;
+    background-color: #F3BB2B;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 15px;
+    color: #000;
+    margin-top: 20px;
 }
 
 .bitcoin_top_currency {
@@ -9345,7 +9519,7 @@ body.light_theme button.transfer_btn {
 }
 
 .dashboard_recent_s h4 {
-    font-size: 18px;
+    font-size: 20px;
     margin: 0px;
 }
 
@@ -10113,19 +10287,19 @@ ul.daylist li span {
 
 .search_form button.btn-close {
     position: absolute;
-    right: 0px;
-    background-color: #f3bb2b;
+    right: 24px;
+    background-color: #ffffff;
     opacity: 1;
     border-radius: 100px;
     font-size: 10px;
     padding: 6px;
-    top: 0px;
+    top: 24px;
 }
 
 .modal.search_form .hot_trading_t {
     padding: 20px 0px;
-    min-height: 100px;
-    max-height: 320px;
+    min-height: 300px;
+    max-height: 500px;
     overflow: auto;
 }
 
@@ -10150,8 +10324,21 @@ body.light_theme .withdrawal_rightside button {
 }
 
 .search_form .modal-header {
-    border-bottom: 1px solid #424242 !important;
-    padding: 32px !important;
+    border-bottom: none;
+    padding: 20px;
+    flex-direction: column;
+    align-items: start;
+}
+
+.search_form .modal-header p {
+    font-size: 12px;
+    color: #949AA4;
+    margin-top: 7px;
+    margin-bottom: 0px;
+}
+
+.search_form .modal-header p span {
+    color: #fff;
 }
 
 .bankpop_up_d ul#myTab li button.active {
@@ -10319,15 +10506,14 @@ button.transfer_btn {
     position: relative;
 }
 
-
-
-ƒ .user_img img {
+.user_img img {
     /* width: auto !important; height: auto !important;
      */
 }
 
 .d-flex-between.mb-3.custom_dlflex {
     padding-top: 24px;
+    width: 100%;
 }
 
 .login_bg.login_sec.market_page {
@@ -10546,7 +10732,7 @@ ul.funds_tab.market_tabs {
     font-weight: 400;
     border-radius: 4px;
     width: 40px;
-    transition: 2s all;
+    transition: 0.5s all;
     overflow: hidden;
 }
 
@@ -10612,13 +10798,13 @@ header.sticky-top.afterloginheader {
 }
 
 .searchBar.custom-tabs input {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 300;
     padding: 0px 10px;
     background: transparent;
     border: 0 !important;
-    color: var(--white-color);
     min-width: min-content;
+    width: 100%;
 }
 
 .searchBar.custom-tabs input {
@@ -10630,7 +10816,8 @@ header.sticky-top.afterloginheader {
 }
 
 .searchBar.custom-tabs.search_active {
-    width: 240px;
+    width: 320px;
+    padding-left: 10px;
 }
 
 .searchBar .custom_search {
@@ -10687,10 +10874,6 @@ header.sticky-top.afterloginheader {
 }
 
 .dashboard_recent_s {
-    background-color: #0a0a0a;
-    border: 1px solid #7878789c;
-    border-radius: 20px;
-    padding: 24px;
     color: #fff;
     margin-top: 40px;
 }
@@ -10745,6 +10928,7 @@ header.sticky-top.afterloginheader {
 
 .dashboard_recent_s td {
     font-size: 14px;
+    color: #ffffffd6;
 }
 
 .no_data {
@@ -10948,7 +11132,7 @@ button.signbtn {
 }
 
 .vector_bottom {
-    width: 32px;
+    width: 52px;
     position: absolute;
     right: 0px;
     bottom: 0px;
@@ -10964,9 +11148,17 @@ button.signbtn {
     font-size: 16px;
 }
 
+.currency_list_b ul li h6 {
+    margin-bottom: 0px;
+}
+
 .currency_list_b ul {
     display: flex;
     justify-content: center;
+    gap: 75px;
+    max-width: 85%;
+    margin: 0 auto;
+    margin-top: 16px;
 }
 
 .currency_list_b ul li {
@@ -10974,7 +11166,27 @@ button.signbtn {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    cursor: pointer;
+    transition: 1s;
     max-width: 100%;
+}
+
+.currency_list_b ul li:hover {
+    border: 1px solid #F3BB2B;
+    background-color: #424A58;
+}
+
+.currency_list_b ul li:hover svg path {
+    fill: #F3BB2B;
+}
+
+.currency_list_b ul li.active {
+    border: 1px solid #F3BB2B;
+    background-color: #424A58;
+}
+
+.currency_list_b ul li.active svg path {
+    fill: #F3BB2B;
 }
 
 .currency_list_b ul li .currency_bit {
@@ -10997,6 +11209,21 @@ button.signbtn {
 .currency_list_b ul li p span {
     color: #f3bb2b;
     padding-left: 3px;
+}
+
+.savebtn {
+    margin: 36px 0px 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.savebtn button {
+    font-size: 16px;
+    background-color: #fff;
+    color: #000;
+    border-radius: 50px;
+    border: none;
+    font-weight: 500;
 }
 
 .arbitrage_subscriptions_block button.subscribe_btn a {
@@ -11136,17 +11363,24 @@ table td.action_td {
 }
 
 .currency_list_b ul li {
-    border: 1px solid #242424;
-    border-radius: 14px;
+    border: 1px solid #5E687B;
+    border-radius: 12px;
     padding: 24px;
-    text-align: left;
+    flex-direction: column;
+    text-align: center;
     position: relative;
     overflow: hidden;
     background-color: #2B313C;
     transition: 1s all;
-    min-height: 212px;
-    align-items: start;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
 }
+
+.currency_list_b ul li svg path {
+    fill: #5E687B;
+}
+
 
 .earning_list_block .slick-track {
     gap: 24px;
@@ -11624,11 +11858,14 @@ button.btn.supportbtn {
     cursor: pointer;
 }
 
-.support_form_s {
-    background-color: #1a1a1a;
-    padding: 10px 40px;
-    border-radius: 20px;
-    margin-top: 20px;
+.issuelist_data {
+    margin-top: 32px;
+}
+
+.issuelist_data table tr th {
+    font-size: 12px;
+    color: #949AA4;
+    font-weight: 300;
 }
 
 
@@ -12487,8 +12724,25 @@ button.btn.btn-success {
     color: #000 !important;
     background-color: #01BC8D !important;
     border-radius: 50px;
-    font-size: 14px;
+    font-size: 12px;
+    padding: 3px 16px;
     border-color: #01BC8D;
+}
+
+.issuelist_data table tr td {
+    border: none;
+}
+
+.issuelist_data table tr td i.ri-file-copy-line {
+    color: #EAECEF;
+}
+
+.issuelist_data table tr th {
+    border: none;
+}
+
+.supportsection {
+    width: 70%;
 }
 
 
@@ -14168,18 +14422,18 @@ button.btn_claim:active {
 }
 
 .crypto_tabs_mbl ul li button {
-background-color: transparent;
+    background-color: transparent;
     border: none;
     color: #fff;
     font-size: 16px;
     font-weight: 500;
     padding: 11px 10px 15px;
-    border-bottom:2px solid #ffffff00;
+    border-bottom: 2px solid #ffffff00;
 }
 
 .crypto_tabs_mbl ul li.active button {
     color: #F3BB2B;
-    border-bottom:2px solid #F3BB2B;
+    border-bottom: 2px solid #F3BB2B;
 }
 
 .wallet_balance_tb {
@@ -14188,6 +14442,346 @@ background-color: transparent;
     margin-top: 50px;
 }
 
+.twofactor_outer_s {
+    width: 100%;
+    background-color: #2B313C;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.twofactor_outer_s p {
+    font-size: 12px;
+    color: #949AA4;
+    margin: 0px;
+}
+
+.security_level {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.security_level p span {
+    color: #E45561;
+}
+
+.profile_form .emailinput .d-flex {
+    align-items: center;
+    gap: 24px;
+    justify-content: space-between;
+}
+
+.profile_form .emailinput {
+    width: 100%;
+    position: relative;
+    border: 1px solid #949AA4;
+    border-radius: 5px;
+    padding-right: 10px;
+}
+
+.profile_form .emailinput label {
+    color: #949AA4;
+    font-size: 12px;
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background-color: #373E4B;
+    width: auto;
+    padding: 0px 10px;
+}
+
+.profile_form .emailinput input {
+    font-size: 14px;
+    min-height: 50px;
+    font-weight: 300;
+    background: none;
+    padding: 10px;
+    font-size: 12px;
+    color: #949AA4;
+    border: none;
+    width: 100%;
+}
+
+
+
+.profile_form .emailinput textarea {
+    font-size: 14px;
+    min-height: 50px;
+    min-height: 120px;
+    font-weight: 300;
+    background: none;
+    padding: 10px;
+    font-size: 12px;
+    color: #949AA4;
+    border: none;
+    width: 100%;
+}
+
+.profile_form .row {
+    row-gap: 30px;
+}
+
+.profile_form .emailinput select {
+    font-size: 14px;
+    min-height: 50px;
+    font-weight: 300;
+    background: none;
+    padding: 10px;
+    font-size: 12px;
+    color: #949AA4;
+    border: none;
+    width: 100%;
+}
+
+.profile_form button.submit {
+    background-color: #FFFFFF60;
+    border: none;
+    border-radius: 50px;
+    margin-top: 12px;
+}
+
+.supportinquery .profile_form button.submit {
+    margin-top: 0px;
+}
+
+.supportinquery {
+    margin-top: 36px;
+}
+
+.supportinquery .profile_form .emailinput label {
+    background-color: #181a20;
+}
+
+
+.chatmessages .chat-container {
+    height: 700px;
+    background: #2F3542;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chatmessages .chat-header {
+    background: #2A303C;
+    padding: 16px;
+    border-bottom: 1px solid #3B4251;
+}
+
+.chatmessages .chat-header h3 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.chatmessages .ticket {
+    color: #9AA3B2;
+    font-size: 13px;
+}
+
+.chatmessages .chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.chatmessages .message {
+    display: flex;
+    margin-bottom: 22px;
+    align-items: flex-end;
+}
+
+.chatmessages .message.right {
+    justify-content: flex-end;
+}
+
+.chatmessages .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #4B5160;
+    display: flex;
+    background-color: #303234;
+    align-items: center;
+    justify-content: center;
+    color: #FFD54F;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.chatmessages .message.right .avatar {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.chatmessages .bubble {
+    max-width: 300px;
+    background: #47505E;
+    color: #E6E9EF;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    position: relative;
+}
+
+.chatmessages .message.left .bubble::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    bottom: 12px;
+    border-width: 6px 6px 6px 0;
+    border-style: solid;
+    border-color: transparent #47505E transparent transparent;
+}
+
+.chatmessages .message.right .bubble::before {
+    content: "";
+    position: absolute;
+    right: -6px;
+    bottom: 12px;
+    border-width: 6px 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent #3A4151;
+}
+
+.chatmessages .chat-footer {
+    padding: 14px;
+    border-top: 1px solid #3B4251;
+    background: #2A303C;
+    display: flex;
+    align-items: center;
+}
+
+.chatmessages .chat-footer input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+.chatmessages .chat-footer input::placeholder {
+    color: #7C8495;
+}
+
+.chatmessages .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #4B5160;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.chatmessages .send-btn {
+    background: #F5C542;
+    border: none;
+    color: #000;
+}
+
+.modal.chatmessages .modal-dialog {
+    position: absolute;
+    right: 0px;
+}
+
+.swaplist {
+    display: flex;
+    gap: 42px;
+}
+
+.swaplist li {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.swaplist li span {
+    color: #ffffff40;
+    display: block;
+}
+
+.swap_usdtdata {
+    width: 610px;
+    margin: 0 auto;
+    background-color: #222831;
+    border-radius: 16px;
+    padding: 26px;
+    margin-top: 60px;
+}
+
+.swap_ustd_bl {
+    width: 100%;
+    background-color: #FFFFFF05;
+    border-radius: 13px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.swap_ustd_bl .from {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.swap_ustd_bl .from button {
+    background-color: #181A20;
+    border: none;
+    padding: 8px;
+    border-radius: 50px;
+    width: 130px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #F2F4F6;
+    font-size: 18px;
+}
+
+.swap_ustd_bl .from h6 {
+    font-size: 22px;
+    margin: 0px;
+    color: #535963;
+    font-weight: 600;
+}
+
+.swap_ustd_bl .from button img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.swap_ustd_bl .from p {
+    font-size: 15px;
+    color: #87909F;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.swap_usdtdata .d-flex {
+    flex-direction: column;
+    gap: 26px;
+    position: relative;
+}
+
+
+.price_heading span {
+    color: #87909F;
+    font-weight: 200;
+}
 
 @media screen and (max-width:1700px) {
 
@@ -15831,9 +16425,9 @@ background-color: transparent;
         display: none;
     }
 
-.header_right .themeicon {
-    display: none;
-}
+    .header_right .themeicon {
+        display: none;
+    }
 
     .icon_notificaton_r ul li.themetbs {
         display: none;
@@ -20518,7 +21112,7 @@ background-color: transparent;
         font-size: 12px;
     }
 
-        .header_right {
+    .header_right {
         top: 10px;
     }
 
@@ -22525,7 +23119,8 @@ background-color: transparent;
     }
 
     .crypto_tabs_mbl ul {
-    gap: 10px; }
+        gap: 10px;
+    }
 
     .withdrawal_outer::before {
         height: 74%;
@@ -22566,4 +23161,27 @@ background-color: transparent;
         min-height: calc(100vh - 47px) !important;
     }
 
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }

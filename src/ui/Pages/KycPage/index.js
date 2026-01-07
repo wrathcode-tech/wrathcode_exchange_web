@@ -162,60 +162,60 @@ const KycPage = (props) => {
         if (!infoCountry) {
             alertErrorMessage("Please select your country.");
             return;
-          }
-          if (!firstName) {
+        }
+        if (!firstName) {
             alertErrorMessage("Please enter your first name.");
             return;
-          }
-          if (!lastName) {
+        }
+        if (!lastName) {
             alertErrorMessage("Please enter your last name.");
             return;
-          }
-          if (!gender) {
+        }
+        if (!gender) {
             alertErrorMessage("Please select your gender.");
             return;
-          }
-          if (!infoDob) {
+        }
+        if (!infoDob) {
             alertErrorMessage("Please enter your date of birth.");
             return;
-          }
-          if (!address) {
+        }
+        if (!address) {
             alertErrorMessage("Please enter your address.");
             return;
-          }
-          if (!infoState) {
+        }
+        if (!infoState) {
             alertErrorMessage("Please enter your state.");
             return;
-          }
-          if (!city) {
+        }
+        if (!city) {
             alertErrorMessage("Please enter your city.");
             return;
-          }
-          if (!zipCode) {
+        }
+        if (!zipCode) {
             alertErrorMessage("Please enter your zip code.");
             return;
-          }
-          if (!aadhar) {
+        }
+        if (!aadhar) {
             alertErrorMessage("Please enter your Aadhar number.");
             return;
-          }
-          if (!localFront) {
+        }
+        if (!localFront) {
             alertErrorMessage("Please upload front side of document.");
             return;
-          }
-          if (!localBack) {
+        }
+        if (!localBack) {
             alertErrorMessage("Please upload back side of document.");
             return;
-          }
-          if (!localSelfie) {
+        }
+        if (!localSelfie) {
             alertErrorMessage("Please upload a selfie with document.");
             return;
-          }
-          if (!docType) {
+        }
+        if (!docType) {
             alertErrorMessage("Please select document type.");
             return;
-          }
-          
+        }
+
         var formData = new FormData();
         formData.append("document_front_image", localFront);
         formData.append("document_back_image", localBack);
@@ -338,13 +338,151 @@ const KycPage = (props) => {
                     </div>
 
                 </div>
-                <section className="pb-5 kyc_form_s">
+
+                <div className="kyc_verif_bnr">
+                    <div className="kysbnr_cnt">
+                        <h5>KYC</h5>
+                        <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
+                            withdrawals, rewards, and every feature without any delays or limitations.</p>
+
+                        <h6>KYC Verification Requirements</h6>
+
+                        <ul className="kyclist">
+                            <li>⭐ID</li>
+                            <li>⭐ Facial Recognition</li>
+                            <li>⭐ Facial Recognition</li>
+                        </ul>
+
+                        <button className="kyc btn">Verify </button>
+                    </div>
+                    <div className="kycvector">
+                        <img src="/images/kyc_verification_vector.svg" alt="kyc" />
+                    </div>
+
+                </div>
+
+
+                <div className="kyc_account d-flex">
+                    <div className="account_benifits">
+                        <h4>Account Benefits</h4>
+
+                        <div className="row">
+                            <div className="col-sm-4">
+                                <ul>
+                                    <li>⭐ KYC Level</li>
+                                    <li>⭐ Crypto Deposit</li>
+                                    <li>⭐ Crypto Withdrawal</li>
+                                    <li>⭐ Fiat Trading</li>
+                                    <li>⭐ Spot/Futures Trading</li>
+                                    <li>⭐ Platform Events</li>
+                                </ul>
+                            </div>
+
+                                <div className="col-sm-4">
+                                    <h6>Unverified</h6>
+                                <ul>
+                                    <li>Unlimited</li>
+                                    <li>12 BTC per day</li>
+                                    <li>⭐ Crypto Withdrawal</li>
+                                    <li>⭐ Fiat Trading</li>
+                                    <li>⭐ Spot/Futures Trading</li>
+                                    <li>⭐ Platform Events</li>
+                                </ul>
+                            </div>
+
+                                <div className="col-sm-4">
+                                     <h6>Advanced KYC</h6>
+                                <ul>
+                                    <li>Unlimited</li>
+                                    <li>100 BTC per day*</li>
+                                    <li>30,000 USD per day*</li>
+                                    <li>⭐ Fiat Trading</li>
+                                    <li>⭐ Spot/Futures Trading</li>
+                                    <li>⭐ Platform Events</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                 <div class="faq_section">
+                    <h4>Faq</h4>
+  <div class="faq_item active">
+    <button class="faq_question">
+      What is KYC and why do I need it?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>
+        KYC is identity verification that confirms you're a real user.
+        Completing it unlocks full access, withdrawals, and keeps the platform safe for everyone.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq_item">
+    <button class="faq_question">
+      How does KYC protect my account?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>
+        KYC prevents unauthorized access and reduces fraud by verifying user identity.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq_item">
+    <button class="faq_question">
+      How long does KYC take?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>Most KYC verifications are completed within a few minutes to 24 hours.</p>
+    </div>
+  </div>
+
+  <div class="faq_item">
+    <button class="faq_question">
+      What documents do I need for KYC?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>A valid government-issued ID and proof of address are required.</p>
+    </div>
+  </div>
+
+  <div class="faq_item">
+    <button class="faq_question">
+      Can I use the app without completing KYC?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>Limited features may be available, but full access requires KYC.</p>
+    </div>
+  </div>
+
+  <div class="faq_item">
+    <button class="faq_question">
+      Is my personal information secure in the KYC process?
+      <span class="icon">⌄</span>
+    </button>
+    <div class="faq_answer">
+      <p>Your data is encrypted and handled according to strict security standards.</p>
+    </div>
+  </div>
+</div>
+
+                </div>
+
+
+                {/* <section className="pb-5 kyc_form_s">
 
                     <div className="row">
                         <div className="col-lg-12">
                             {
                                 kycVerfied == "1" ?
-                                    // pending KYC
+                                   
                                     <div className=" mb-5" >
                                         <div className="card-body create-item-wrapper create-item-wrapper-kyc">
                                             <div className="form-field-wrapper kyc_wrapper ">
@@ -377,7 +515,7 @@ const KycPage = (props) => {
                                         </div>
                                     </div>
                                     : kycVerfied == "2" ?
-                                        //  Verify Approved
+                                        
                                         <div className="container" >
                                             <div className="row" >
                                                 <div className="col-lg-10 m-auto" >
@@ -412,7 +550,7 @@ const KycPage = (props) => {
                                             </div>
                                         </div>
                                         : kycVerfied == "3" ?
-                                            // KYC Rejected
+                                           
                                             <div className="container" >
                                                 <div className="row" >
                                                     <div className="col-lg-10 m-auto" >
@@ -448,7 +586,7 @@ const KycPage = (props) => {
                                             </div>
                                             :
 
-                                            // KYC Rejected Form 
+                                            
                                             <div className="form-container kyc_form_multistep">
 
                                                 <div className="step-indicator">
@@ -506,7 +644,7 @@ const KycPage = (props) => {
                                                                                 <label>KYC Type <span className="text-danger">*</span></label>
                                                                                 <select value={kycType} >
                                                                                     <option>Personal</option>
-                                                                                    {/* <option>Business</option> */}
+                                                                                  
                                                                                 </select>
                                                                             </div>
 
@@ -974,8 +1112,7 @@ const KycPage = (props) => {
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                {/* <div className="submitbutton">
-                                                                </div> */}
+                                                               
                                                             </div>
                                                         </div>
 
@@ -993,7 +1130,7 @@ const KycPage = (props) => {
                             }
                         </div>
                     </div >
-                </section >
+                </section > */}
             </div >
         </>
     );
