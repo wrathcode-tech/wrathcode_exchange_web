@@ -620,7 +620,7 @@ function Earning() {
                 </div>
 
 
-                <div className="dashboard_recent_s productdata">
+                <div className="dashboard_recent_s productdata position_order">
                   <div className='d-flex justify-content-between align-items-center'>
                     <h4>Earning Balance History </h4>
                     <div className="searchBar custom-tabs">
@@ -630,24 +630,14 @@ function Earning() {
                   </div>
                   <div className="user_list_top rowtable">
                     <div className="user_list_l earning_section_cate responsive-table">
-                      <ul className="nav nav-tabs" id="myTab" role="tablist">
-                        <li className="nav-item" role="presentation">
-                          <button className="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="true">Active</button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                          <button className="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">Completed</button>
-                        </li>
+                      <ul class="position_list">
+                        <li class="nav-item positions" role="presentation"><button>Active</button></li>
+                        <li class="nav-item open" role="presentation"><button>Completed</button></li>
                       </ul>
-                    </div>
-                    <div className="user_search">
-                      {/* <form className='searchinput'>
-                  <button><i class="ri-search-line"></i></button>
-                  <input type="text" placeholder="Search" />
-                </form> */}
                     </div>
                   </div>
                   <div className='table-responsive recenttable_s'>
-                    <div className="tab-pane fade active show" id="active" role="tabpanel" aria-labelledby="active-tab">
+                    <div className="cnt_table positions">
                       <table>
                         <thead>
                           <tr>
@@ -713,7 +703,7 @@ function Earning() {
                   </ul>
                 </div> */}
                     </div>
-                    <div className="tab-pane fade " id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                    <div className="cnt_table open">
                       <table>
                         <thead>
                           <tr>
@@ -891,8 +881,8 @@ function Earning() {
                       <li>* At maturity, your funds are seamlessly transferred to the corresponding Flexible Promotions plans.</li>
                       <li>* Early withdrawal is allowed; however, any earnings already credited will be adjusted accordingly.</li>
                     </ul>
-                    <label><input type='checkbox'/> I have read and agree to the <a href='#'>Earn Service Agreement.</a></label>
-                  <button className='subscribebtn'>Subscription</button>  
+                    <label><input type='checkbox' /> I have read and agree to the <a href='#'>Earn Service Agreement.</a></label>
+                    <button className='subscribebtn'>Subscription</button>
                   </div>
                 </div>
               </div>

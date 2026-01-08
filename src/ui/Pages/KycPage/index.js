@@ -1162,7 +1162,7 @@ const KycPage = (props) => {
                                     </label>
                                 </div>
 
-                                <button class="primary_btn" onclick="nextStep('Take a Photo of Your ID Card')">Next</button>
+                                <button class="primary_btn" onClick="nextStep('Take a Photo of Your ID Card')">Next</button>
                             </div>
 
 
@@ -1172,17 +1172,17 @@ const KycPage = (props) => {
                                 </div>
 
                                 <div class="tips photomini">
-                                    <p> <img src="/images/photoidmini.png" alt="photo" /></p>
-                                    <p> <img src="/images/photoidmini2.png" alt="photo" /></p>
-                                    <p> <img src="/images/photoidmini3.png" alt="photo" /></p>
+                                    <p><img src="/images/photoidmini.png" alt="photo" /></p>
+                                    <p><img src="/images/photoidmini2.png" alt="photo" /></p>
+                                    <p><img src="/images/photoidmini3.png" alt="photo" /></p>
                                 </div>
 
-                                <h6></h6>The selected country/region and ID type are as follows:
+                                <h6>The selected country/region and ID type are as follows:</h6>
 
                                 <div class="info_text">
                                     <ul className="d-flex gap-3">
-                                        <li>🇮🇳 India </li>
-                                        <li>ID Card</li>
+                                        <li><img src="/images/indiaflag.png" alt="flag" /> 🇮🇳 India </li>
+                                        <li><img src="/images/idcard.png" alt="flag" />ID Card</li>
                                     </ul>
                                 </div>
                                 <p>Please upload a valid ID matching your selected country/region and ID type to avoid verification failure.</p>
@@ -1194,7 +1194,7 @@ const KycPage = (props) => {
                                     <div class="upload_box"><input type="file"/></div>
                                 </div>
 
-                                <button class="primary_btn" onclick="nextStep('Take a Photo of Your')">Next</button>
+                                <button class="primary_btn" onClick="nextStep('Take a Photo of Your')">Next</button>
                             </div>
 
 
@@ -1212,7 +1212,7 @@ const KycPage = (props) => {
                                   <img src="/images/selefvector.png" alt="photo"  />
                                 </div>
 
-                                <button class="primary_btn" onclick="nextStep('Face Verification')">Next</button>
+                                <button class="primary_btn" onClick="nextStep('Face Verification')">Next</button>
                             </div>
 
 

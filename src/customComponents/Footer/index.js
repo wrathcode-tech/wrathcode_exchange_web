@@ -12,52 +12,11 @@ const Footer = () => {
     return (
 
         <>
-            <footer>
+            <footer className="p-0">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-sm-5 col-md-5 col-lg-5">
-                            <div className="footer_logo">
-                                <img className='darklogo' src="/images/logo_light.svg" alt="logo" />
-                            </div>
-                            <p>Wrathcode is a blockchain-based banking platform for crypto traders and investors, and aims to connect the world of traditional finance and cryptocurrencies.</p>
-                            <ul className="social_media">
-                                <li><a href="#"><i className="ri-facebook-circle-line"></i></a></li>
-                                <li><a href="#"><i className="ri-twitter-x-line"></i></a></li>
-                                <li><a href="#"><i className="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i className="ri-telegram-2-fill"></i></a></li>
-                                <li><a href="#"><i className="ri-youtube-line"></i></a></li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-7 col-md-7 col-lg-7">
-                            <div className="row">
-
-                                <div className="col-sm-6">
-                                    <div className="address_footer">
-                                        <h5><span>Head Office</span></h5>
-                                        <div className="address_cnt">
-                                            <p>1st floor, JDA Complex, Plot no. 11, Sector 4, Vidyadhar Nagar, Jaipur, Rajasthan 302039</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="address_footer">
-                                        <h5>Contact Us</h5>
-                                        <div className="address_cnt">
-                                            <address><img src="/images/email-icon.png" alt="email" /> support@wrathcode.com</address>
-                                            <address><img src="/images/email-icon.png" alt="email" /> admin@wrathcode.com</address>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div className="row main_footer_menu_s">
+                <div className="row main_footer_menu_s m-0">
                     <div className="container">
 
 
