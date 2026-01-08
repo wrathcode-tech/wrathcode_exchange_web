@@ -393,6 +393,50 @@ const KycPage = (props) => {
 
                     </div>
 
+                    <div className="kyc_verif_bnr kyc_seccessfull" style={{ display: "none" }}>
+                        <div className="kysbnr_cnt">
+                            <h5>KYC</h5>
+                            <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
+                                withdrawals, rewards, and every feature without any delays or limitations.</p>
+
+                            <h6>KYC Verification Requirements</h6>
+
+                            <ul className="kyclist">
+                                <li>✅ Deposit & Withdraw Without Limit</li>
+                                <li>✅ Spot & Futures Trading Unlock</li>
+                                <li>✅ 100% Secure Trading with Verified KYC</li>
+                            </ul>
+
+                            {/* <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Verify </button> */}
+                        </div>
+                        <div className="kycvector">
+                            <img src="/images/kyc_success_vector.svg" alt="kyc" />
+                        </div>
+
+                    </div> 
+
+                       <div className="kyc_verif_bnr kyc_rejected" style={{ display: "none" }}>
+                        <div className="kysbnr_cnt">
+                            <h5>KYC Rejected </h5>
+                            <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
+                                withdrawals, rewards, and every feature without any delays or limitations.</p>
+
+                            <h6>KYC information is missing or incomplete</h6>
+
+                            <ul className="kyclist">
+                                <li>❌ Identity document is unclear or invalid</li>
+                                <li>❌ Unable to verify user identity</li>
+                                <li>❌ KYC requirements not met</li>
+                            </ul>
+
+                            <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Resubmit KYC </button>
+                        </div>
+                        <div className="kycvector">
+                            <img src="/images/rejectvector.png" alt="kyc" />
+                        </div>
+
+                    </div>    
+
 
                     <div className="kyc_account d-flex">
                         <div className="account_benifits">

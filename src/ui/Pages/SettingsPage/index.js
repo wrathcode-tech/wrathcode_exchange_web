@@ -367,7 +367,7 @@ const SettingsPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/user.png" alt="user" />Pallav-Soni</div>
-              <button className="btn">Change</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#profilepop">Change</button>
 
             </div>
 
@@ -378,7 +378,7 @@ const SettingsPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/verified_icon.svg" alt="Email Verification" /> pl***9@gmail.com</div>
-              <button className="btn">Change</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#emailpop">Change</button>
 
             </div>
 
@@ -389,7 +389,7 @@ const SettingsPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/verified_icon.svg" alt="mobile" />+91-9982141988</div>
-              <button className="btn">Change</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#mobilepop">Change</button>
 
             </div>
 
@@ -466,10 +466,107 @@ const SettingsPage = (props) => {
 
 
 
+        <div className="modal fade search_form" id="mobilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Edit Phone</h5>
+                <p>Avatar and nickname will also be applied to dummy text.Abusing them might lead to community penalties.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+                <form className="profile_form">
+
+                  <div className="emailinput">
+                    <label>Registered Phone</label>
+                    <div className="d-flex">
+                      <input type="email" placeholder="pallavsoni64@gmail.com" />
+                    </div>
+                  </div>
+
+                  <div className="emailinput">
+                    <label>New Phone</label>
+                    <div className="d-flex">
+                      <div>
+                        <div className="phonecode">
+                          <select className="country_code">
+                            <option value="+91">+91</option>
+                            <option value="+1">+1</option>
+                            <option value="+44">+44</option>
+                          </select>
+                        </div>
+                        <input type="text" placeholder="New Phone" />
+                      </div>
+                      <div className="getotp">GET OTP</div>
+                    </div>
+                  </div>
+
+                  <div className="emailinput">
+                    <label>OTP</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="Enter OTP here..." />
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
 
 
+              </div>
+
+            </div>
+          </div>
+        </div>
 
 
+        <div className="modal fade search_form" id="emailpop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                <p>Avatar and nickname will also be applied to dummy text.Abusing them might lead to community penalties.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+                <form className="profile_form">
+
+                  <div className="emailinput">
+                    <label>Registered Email</label>
+                    <div className="d-flex">
+                      <input type="email" placeholder="pallavsoni64@gmail.com" />
+                    </div>
+                  </div>
+
+                  <div className="emailinput">
+                    <label>New Email</label>
+                    <div className="d-flex">
+                      <input type="email" placeholder="Enter email here..." />
+                      <div className="getotp">GET OTP</div>
+                    </div>
+                  </div>
+
+                  <div className="emailinput">
+                    <label>OTP</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="Enter OTP here..." />
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
 
 
         <div className="modal fade search_form" id="security_verification" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -492,7 +589,7 @@ const SettingsPage = (props) => {
                       <div className="resend">Resend</div>
                     </div>
                   </div>
-                 
+
                   <div className="emailinput">
                     <label>New Password</label>
                     <div className="d-flex">
@@ -578,6 +675,52 @@ const SettingsPage = (props) => {
                     </div> */}
 
 
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <div className="modal fade search_form" id="profilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                <p>Avatar and nickname will also be applied to dummy text.Abusing them might lead to community penalties.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+                <form className="profile_form">
+
+                  <div class="user_img">
+                    <img src="/images/user.png" alt="user" />
+                    <div class="edit_user"> <img src="/images/edit_icon.svg" alt="edit" /></div>
+                  </div>
+
+
+                  <div className="emailinput">
+                    <label>First Name</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="Pallav" />
+                    </div>
+                  </div>
+
+                  <div className="emailinput">
+                    <label>Last Name</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="Soni" />
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
 
 
               </div>
@@ -938,7 +1081,7 @@ const SettingsPage = (props) => {
         </div> */}
 
 
-      </div>
+      </div >
 
       <div className="modal fade search_form" id="phone_light" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered ">

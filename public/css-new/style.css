@@ -14623,8 +14623,8 @@ button.btn_claim:active {
     width: 100%;
 }
 
-.profile_form button.submit {
-    background-color: #FFFFFF60;
+.search_form .profile_form button.submit {
+    background-color: #FFFFFF;
     border: none;
     border-radius: 50px;
     margin-top: 12px;
@@ -14632,6 +14632,37 @@ button.btn_claim:active {
 
 .supportinquery .profile_form button.submit {
     margin-top: 0px;
+}
+
+#profilepop .user_img {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+#profilepop .edit_user {
+    right: -15px;
+    bottom: 5px;
+    width: 32px;
+    height: 32px;
+}
+
+.phonecode {
+    width: 80px;
+    border: 1px solid #666;
+    border-radius: 5px;
+}
+
+.getotp {
+    background-color: #fff;
+    color: #000;
+    font-size: 14px;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 50px;
+    margin-right: 10px;
 }
 
 .supportinquery {
@@ -14945,7 +14976,7 @@ button.btn_claim:active {
     width: 100%;
     display: block;
     background: linear-gradient(130deg, rgba(43, 49, 60, 1) 65%, rgba(69, 65, 51, 1) 100%);
-    padding: 32px;
+    padding: 20px 32px;
     border-radius: 10px;
     margin-top: 24px;
     display: flex;
@@ -14955,9 +14986,9 @@ button.btn_claim:active {
 }
 
 .kycvector {
-    min-width: 340px;
+    min-width: 360px;
     max-width: 100%;
-    margin-right: 30px;
+    margin-right: 10px;
 }
 
 .kysbnr_cnt {
