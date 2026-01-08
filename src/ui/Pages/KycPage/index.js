@@ -1119,59 +1119,62 @@ const KycPage = (props) => {
 
             {/* <!-- Modal Search Coin Start --> */}
 
-            <div class="modal fade kyc_modal" id="kycModal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+            <div className="modal fade kyc_modal" id="kycModal" tabIndex="-1">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
 
 
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="kycTitle">Select Country and ID Type</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="kycTitle">Select Country and ID Type</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
 
-                        <div class="modal-body">
+                        <div className="modal-body">
 
 
-                            <div class="kyc_step active">
-                                <label class="label">🌟 Country/Region (Please select the issuing country of the document)</label>
-                                <div class="select_box">
-                                    <select>
-                                        <option>🇮🇳 India</option>
-                                        <option>USA</option>
+                            <div className="kyc_step active" data-title="Select Country and ID Type">
+                                <label className="label">🌟 Country/Region (Please select the issuing country of the document) <span className="text-danger">*</span></label>
+                                <div className="select_box">
+                                    <select id="kycCountry" required>
+                                        <option value="">Select Country</option>
+                                        <option value="India">🇮🇳 India</option>
+                                        <option value="USA">USA</option>
                                     </select>
                                 </div>
+                                <small className="text-danger d-none" id="countryError">Please select a country</small>
 
-                                <label class="label mt-4">ID Type</label>
-                                <div class="id_grid">
-                                    <label class="id_item active">
-                                        <input type="radio" name="id" />
+                                <label className="label mt-4">ID Type <span className="text-danger">*</span></label>
+                                <div className="id_grid">
+                                    <label className="id_item">
+                                        <input type="radio" name="kycIdType" value="ID Card" required />
                                         ID Card
                                     </label>
-                                    <label class="id_item">
-                                        <input type="radio" name="id" />
+                                    <label className="id_item">
+                                        <input type="radio" name="kycIdType" value="Passport" />
                                         Passport
                                     </label>
-                                    <label class="id_item active">
-                                        <input type="radio" name="id" />
+                                    <label className="id_item">
+                                        <input type="radio" name="kycIdType" value="Driving License" />
                                         Driving license
                                     </label>
-                                    <label class="id_item">
-                                        <input type="radio" name="id" />
+                                    <label className="id_item">
+                                        <input type="radio" name="kycIdType" value="Residence Permit" />
                                         Residence Permit
                                     </label>
                                 </div>
+                                <small className="text-danger d-none" id="idTypeError">Please select an ID type</small>
 
-                                <button class="primary_btn" onClick="nextStep('Take a Photo of Your ID Card')">Next</button>
+                                <button type="button" className="primary_btn nextStep" data-step="0" data-title="Take a Photo of Your ID Card">Next</button>
                             </div>
 
 
-                            <div class="kyc_step">
-                                <div class="id_preview">
+                            <div className="kyc_step" data-title="Take a Photo of Your ID Card">
+                                <div className="id_preview">
                                     <img src="/images/photoid_vector.png" alt="photo" />
                                 </div>
 
-                                <div class="tips photomini">
+                                <div className="tips photomini">
                                     <p><img src="/images/photoidmini.png" alt="photo" /></p>
                                     <p><img src="/images/photoidmini2.png" alt="photo" /></p>
                                     <p><img src="/images/photoidmini3.png" alt="photo" /></p>
@@ -1179,7 +1182,7 @@ const KycPage = (props) => {
 
                                 <h6>The selected country/region and ID type are as follows:</h6>
 
-                                <div class="info_text">
+                                <div className="info_text">
                                     <ul className="d-flex gap-3">
                                         <li><img src="/images/indiaflag.png" alt="flag" /> 🇮🇳 India </li>
                                         <li><img src="/images/idcard.png" alt="flag" />ID Card</li>
@@ -1187,41 +1190,73 @@ const KycPage = (props) => {
                                 </div>
                                 <p>Please upload a valid ID matching your selected country/region and ID type to avoid verification failure.</p>
 
-                                <input class="input" placeholder="ID Card Number" />
+                                <input className="input" placeholder="ID Card Number" />
 
-                                <div class="upload_grid">
-                                    <div class="upload_box"><input type="file"/></div>
-                                    <div class="upload_box"><input type="file"/></div>
+                                <div className="upload_grid">
+                                 
+                                    <div class="upload-box">
+                                        <input type="file" id="fileUpload" hidden />
+                                        <label for="fileUpload" class="upload-label">
+                                    <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
+                                            <div class="icon">
+                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                            </div>
+                                            <h3>Choose a File</h3>
+                                            <p>Drag or choose your file to upload</p>
+                                        </label>
+                                    </div>
+
+                                    <div class="upload-box">
+                                        <input type="file" id="fileUpload" hidden />
+                                        <label for="fileUpload" class="upload-label">
+                                    <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
+                                            <div class="icon">
+                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                            </div>
+                                            <h3>Choose a File</h3>
+                                            <p>Drag or choose your file to upload</p>
+                                        </label>
+                                    </div>
+
                                 </div>
 
-                                <button class="primary_btn" onClick="nextStep('Take a Photo of Your')">Next</button>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                    <button className="primary_btn prevStep">Back</button>
+                                    <button className="primary_btn nextStep" data-title="Upload Documents">Next</button>
+                                </div>
                             </div>
 
 
-                            <div class="kyc_step">
-                                <input class="input" placeholder="Income Tax Identification Number" />
+                            <div className="kyc_step" data-title="Upload Documents">
+                                <input className="input" placeholder="Income Tax Identification Number" />
 
-                                <div class="upload_big">
-                                   <input type="file"/>
+                                <div className="upload_big">
+                                    <input type="file" />
                                 </div>
 
-                                <p class="small">Upload Selfie with ID*</p>
+                                <p className="small">Upload Selfie with ID*</p>
                                 <span>(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
 
-                                <div class="selfie_circle">
-                                  <img src="/images/selefvector.png" alt="photo"  />
+                                <div className="selfie_circle">
+                                    <img src="/images/selefvector.png" alt="photo" />
                                 </div>
 
-                                <button class="primary_btn" onClick="nextStep('Face Verification')">Next</button>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                    <button className="primary_btn prevStep">Back</button>
+                                    <button className="primary_btn nextStep" data-title="Face Verification">Next</button>
+                                </div>
                             </div>
 
 
-                            <div class="kyc_step text-center">
-                                <div class="face_circle">
-                                   <img src="/images/selefvector.png" alt="photo"  />
+                            <div className="kyc_step text-center" data-title="Face Verification">
+                                <div className="face_circle">
+                                    <img src="/images/selefvector.png" alt="photo" />
                                 </div>
 
-                                <button class="primary_btn">Submit</button>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                    <button className="primary_btn prevStep">Back</button>
+                                    <button className="primary_btn">Submit</button>
+                                </div>
                             </div>
 
                         </div>

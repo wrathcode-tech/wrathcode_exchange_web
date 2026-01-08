@@ -14979,6 +14979,11 @@ ul.kyclist li img {
     background-color: transparent;
     border: none;
     color: #fff;
+    font-size: 14px;
+}
+
+.select_box select option {
+    color: #000;
 }
 
 .id_preview {
@@ -15002,7 +15007,9 @@ ul.kyclist li img {
     border: 1px solid #949AA4;
 }
 
-.upload_grid input[type="file"]{ width: 100%; }
+.upload_grid input[type="file"] {
+    width: 100%;
+}
 
 .upload_grid {
     display: grid;
@@ -15011,13 +15018,27 @@ ul.kyclist li img {
     margin-top: 14px;
 }
 
-.upload_box,
-.upload_big {
+.upload-box {
     background: #4a5161;
-    padding: 30px;
+    padding: 0px 10px;
     border-radius: 10px;
     text-align: center;
+    position: relative;
+    min-height: 126px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+img.upload_back_img {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+}
+
 
 .upload_big {
     margin: 14px 0;
@@ -15143,15 +15164,69 @@ ul.kyclist li img {
 .primary_btn:hover {
     background: #ffd15a;
 }
+
 .kyc_step {
-  display: none;
+    display: none;
 }
 
 .kyc_step.active {
-  display: block;
+    display: block;
+}
+
+/* Validation Error Styles */
+#countryError,
+#idTypeError {
+    display: block;
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.select_box.error {
+    border: 1px solid #ff6b6b;
+    background: #4a5161;
+}
+
+.select_box.error select {
+    color: #ff6b6b;
+}
+
+.id_grid.error .id_item {
+    border: 1px solid #ff6b6b;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
 
+.upload-label .icon {
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
+.upload-label h3 {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.upload-label p {
+    font-size: 12px;
+    opacity: 1;
+    margin: 5px 0px 0px;
+    color: #fff;
+}
+
+.kyc_step .info_text ul li{ display: flex; align-items: center; gap:4px; }
 
 @media screen and (max-width:1700px) {
 

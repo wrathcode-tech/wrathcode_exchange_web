@@ -723,41 +723,122 @@
 
 
 <script>
-jquery(document).ready(function () {
+$(document).ready(function () {
 
   let currentStep = 0;
-  const steps = jquery('.kyc_step');
-  const totalSteps = steps.length;
+  let steps, totalSteps;
+
+  function initKycSteps() {
+    const modal = $('#kycModal');
+    steps = modal.find('.kyc_step');
+    totalSteps = steps.length;
+    currentStep = 0;
+    showStep(currentStep);
+    // Reset validation errors
+    $('#countryError, #idTypeError').addClass('d-none');
+  }
 
   function showStep(step) {
+    if (!steps || steps.length === 0) return;
+    
     steps.hide().removeClass('active');
     steps.eq(step).fadeIn(200).addClass('active');
 
     // update title from step attribute
     const title = steps.eq(step).data('title');
     if (title) {
-      jquery('#kycTitle').text(title);
+      $('#kycTitle').text(title);
     }
   }
 
-  // NEXT
- jquery(document).on('click', '.nextStep', function () {
-    if (currentStep < totalSteps - 1) {
-      currentStep++;
-      showStep(currentStep);
+  function validateStep0() {
+    const country = $('#kycCountry').val();
+    const idType = $('input[name="kycIdType"]:checked').val();
+    
+    let isValid = true;
+    
+    // Hide previous errors
+    $('#countryError, #idTypeError').addClass('d-none');
+    $('.select_box').removeClass('error');
+    $('.id_grid').removeClass('error');
+    
+    if (!country || country === '') {
+      $('#countryError').removeClass('d-none');
+      $('.select_box').addClass('error');
+      isValid = false;
+    }
+    
+    if (!idType) {
+      $('#idTypeError').removeClass('d-none');
+      $('.id_grid').addClass('error');
+      isValid = false;
+    }
+    
+    return isValid;
+  }
+
+  // Remove error on change
+  $(document).on('change', '#kycCountry', function() {
+    if ($(this).val()) {
+      $('#countryError').addClass('d-none');
+      $('.select_box').removeClass('error');
     }
   });
 
+  $(document).on('change', 'input[name="kycIdType"]', function() {
+    if ($(this).is(':checked')) {
+      $('#idTypeError').addClass('d-none');
+      $('.id_grid').removeClass('error');
+    }
+  });
+
+  // Initialize when modal is shown (Bootstrap 5)
+  $('#kycModal').on('shown.bs.modal', function () {
+    initKycSteps();
+  });
+  
+  // Also initialize on show event as fallback
+  $('#kycModal').on('show.bs.modal', function () {
+    // Reset to first step when modal opens
+    currentStep = 0;
+  });
+
+  // NEXT
+  $(document).on('click', '#kycModal .nextStep', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Validate current step
+    if (currentStep === 0) {
+      if (!validateStep0()) {
+        return false;
+      }
+    }
+    
+    if (currentStep < totalSteps - 1) {
+      currentStep++;
+      showStep(currentStep);
+    } else {
+      console.log('Already at last step');
+    }
+    return false;
+  });
+
   // BACK
-jquery(document).on('click', '.prevStep', function () {
+  $(document).on('click', '#kycModal .prevStep', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
     if (currentStep > 0) {
       currentStep--;
       showStep(currentStep);
     }
+    return false;
   });
 
-  // INIT
-  showStep(currentStep);
+  // Initialize on page load if modal is already visible
+  if ($('#kycModal').is(':visible')) {
+    initKycSteps();
+  }
 
 });
 </script>
