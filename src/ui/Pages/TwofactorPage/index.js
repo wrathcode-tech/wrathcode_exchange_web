@@ -166,7 +166,7 @@ const TwofactorPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/enabled_icon.svg" alt="Not Enabled" />Not Enabled</div>
-              <button className="btn">Manage</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#twofaInfoModal">Manage</button>
 
             </div>
 
@@ -177,7 +177,7 @@ const TwofactorPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/verified_icon.svg" alt="Email Verification" /> pl***9@gmail.com</div>
-              <button className="btn">Change</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#twofaInfoModal">Change</button>
 
             </div>
 
@@ -188,7 +188,7 @@ const TwofactorPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/enabled_icon.svg" alt="Not Enabled" />Not Enabled</div>
-              <button className="btn">Set Up</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#twofaInfoModal">Set Up</button>
 
             </div>
 
@@ -377,7 +377,28 @@ const TwofactorPage = (props) => {
 
       </div>
 
-
+      {/* Two-Factor info modal */}
+      <div className="modal fade" id="twofaInfoModal" tabIndex="-1" aria-labelledby="twofaInfoModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content kyc_modal">
+            <div className="modal-header">
+              <h5 className="modal-title" id="twofaInfoModalLabel">Enable Two-Factor Authentication</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <p className="mb-3">To secure your account, please follow the steps below:</p>
+              <ul className="mb-0">
+                <li>Download or open your Authenticator App (Google/Microsoft).</li>
+                <li>Scan the QR code we provide, or enter the secret key manually.</li>
+                <li>Enter the 6-digit code from the app to verify and finish setup.</li>
+              </ul>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="primary_btn" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

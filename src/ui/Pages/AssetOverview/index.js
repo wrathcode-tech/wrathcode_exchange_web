@@ -24,6 +24,8 @@ const AssetOverview = () => {
   const [selectedCurrBalance, setSelectedCurrBalance] = useState({});
   const [transferAmount, setTransferAmount] = useState("");
   const [currenctTab, setCurrenctTab] = useState("");
+  const [showBalance, setShowBalance] = useState("");
+  const [activeTab, setActiveTab] = useState("assets");
 
 
   const [hideAssets, setHideAssets] = useState(true);
@@ -231,11 +233,40 @@ const AssetOverview = () => {
 
 
       <div className="dashboard_right">
+        <div className='row'>
+          <div className="col-sm-10">
+            <div className='overview_section'>
+              <div className='estimated_balance'>
+                <h6>Estimated Balance <i class="ri-eye-line"></i></h6>
+                <div class="wallet-header d-flex flex-wrap align-items-center justify-content-between">
+                  <div>
+                    <div class="wallet-title">
+                      0 USDT
+                    </div>
+                    <div class="wallet-sub mt-1">
+                      ≈ 0.00 USD
+                      <span>Today’s PNL 0.00 USD (0.00%) <i class="ri-arrow-right-s-line"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-2 mt-3 mt-md-0">
+                    <button class="btn btn-deposit px-4">Deposit</button>
+                    <button class="btn btn-outline-custom px-4">Withdraw</button>
+                    <button class="btn btn-outline-custom px-4" data-bs-toggle="modal" data-bs-target="#kycModal">Transfer</button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
 
 
         {/* <DashboardHeader props={props} /> */}
 
-        <div className="overview_section">
+        {/* <div className="overview_section">
           <div className="row top_heading_overview">
             <div className="col-sm-2">
               <h1><img src="/images/poket_overview.png" alt="poket" />Overview</h1>
@@ -274,10 +305,7 @@ const AssetOverview = () => {
                     <button className="nav-link" id="earning-tab" data-bs-toggle="tab" data-bs-target="#futures"
                       type="button" role="tab" aria-controls="earning" aria-selected="false" onClick={() => estimatedPortfolio("options")}>Options</button>
                   </li>
-                  {/* <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="arbitrage-tab" data-bs-toggle="tab" data-bs-target="#arbitrage"
-                      type="button" role="tab" aria-controls="arbitrage" aria-selected="false" onClick={() => estimatedPortfolio("arbitrage")}>Arbitrage</button>
-                  </li> */}
+                 
                 </ul>
 
 
@@ -846,7 +874,7 @@ const AssetOverview = () => {
         </div >
 
 
-        {/* <div className="estimated_balance">
+        <div className="estimated_balance">
 
        <div className='div_tag'>
 
@@ -892,78 +920,196 @@ const AssetOverview = () => {
           </div>
 
           <div className="chart_img mobile_view"><img src="/images/graph_map.svg" alt="graph" /></div>
-        </div>*/}
+        </div> */}
 
         <div div className="dashboard_listing_section Overview_mid" >
           <div className="assets_wallets_section">
             <div className='row'>
-              <div className="col-sm-6">
+              <div className="col-sm-10">
                 <div className="market_section">
-                  <div className="top_heading">
-                    <h4>{currenctTab && currenctTab.charAt(0).toUpperCase() + currenctTab.slice(1) + " Wallet"} Assets Overview</h4>
-                    {/* <a className="more_btn" href="/market">More {">"}</a> */}
-                  </div>
-                  <div className="dashboard_summary">
-                    <div className="coin_view_top">
-                      <h6>Coin View</h6>
-                      <div className="coin_right">
-                        <a className="search_icon" href="#/"><input type="search" placeholder='Search coin name' value={search} onChange={(event) => setSearch(event.target.value)} /> <i className="ri-search-line"></i></a>
 
-                        <div className="checkbox">
-                          <input type="checkbox" checked={hideAssets} onChange={() => handleCheckboxChange('balance')} /> Hide 0 Balance
-                        </div>
+                  {/* Tabs Header */}
+
+                  <div className="coin_view_top">
+                    <div className="wallet_tabs">
+                      <button
+                        className={activeTab === "assets" ? "tab_btn active" : "tab_btn"}
+                        onClick={() => setActiveTab("assets")}
+                      >
+                        Crypto
+                      </button>
+
+                      <button
+                        className={activeTab === "dummy" ? "tab_btn active" : "tab_btn"}
+                        onClick={() => setActiveTab("dummy")}
+                      >
+                        Account
+                      </button>
+                    </div>
+
+                    <div className="coin_right">
+                      <div class="searchBar custom-tabs"><i class="ri-search-2-line"></i>
+                        <input type="search" class="custom_search" placeholder="Search Crypto" />
+                      </div>
+
+                      <div className="checkbox">
+                        <input
+                          type="checkbox"
+                          checked={hideAssets}
+                          onChange={() => handleCheckboxChange("balance")}
+                        />
+                        Hide 0 Balance
                       </div>
                     </div>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Available Balance</th>
-                            <th>In-Order Balance</th>
-                            <th >Bonus</th>
-                            <th className="right_td">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredCoinList?.length > 0 ? filteredCoinList?.map((item) => {
-                            return (
+
+                  </div>
+
+                  {/* TAB 1 : YOUR ORIGINAL CONTENT */}
+                  {activeTab === "assets" && (
+                    <div className="dashboard_summary">
+
+                      <div className="table-responsive">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Available Balance</th>
+                              <th>In-Order Balance</th>
+                              <th>Bonus</th>
+                              <th className="right_td">Action</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {filteredCoinList?.length > 0 ? (
+                              filteredCoinList.map((item, index) => (
+                                <tr key={index}>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon">
+                                        <img
+                                          src={ApiConfig?.baseImage + item?.icon_path}
+                                          height="30"
+                                          alt="icon"
+                                        />
+                                      </div>
+                                      <div className="price_heading">
+                                        {item?.short_name}
+                                        <br />
+                                        <span>{item?.currency}</span>
+                                      </div>
+                                    </div>
+                                  </td>
+
+                                  <td>{item?.balance}</td>
+                                  <td>{item?.locked_balance}</td>
+                                  <td>{item?.bonus}</td>
+                                  <td className="right_td">
+                                    <div className='d-flex gap-3 justify-content-end'>
+                                      <a className="text-white" href="#">
+                                        Convert
+                                      </a>
+                                      <a className="text-white" href="/asset_managemnet/deposit">
+                                        Trade
+                                      </a>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
                               <tr>
-                                <td>
-                                  <div className="td_first">
-                                    <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                    <div className="price_heading"> {item?.short_name} <br /> <span>{item?.currency}</span></div>
+                                <td colSpan="12">
+                                  <div className="no_data_outer">
+                                    <div className="no_data_vector">
+                                      <img
+                                        src="/images/no_data_vector.svg"
+                                        alt="no-data"
+                                      />
+                                    </div>
+                                    <p>No Data Available</p>
                                   </div>
                                 </td>
-                                <td>{item?.balance} </td>
-                                <td>{item?.locked_balance}</td>
-                                <td >{item?.bonus}</td>
-                                <td className="right_td ">
-                                  <a className='text-success' href={`/asset_managemnet/deposit`}>Deposit</a>
-                                </td>
                               </tr>
-                            )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
-                              </div>
-
-                            </td>
-                          </tr>}
-                        </tbody>
-                      </table>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* TAB 2 : DUMMY CONTENT */}
+                  {activeTab === "dummy" && (
+                    <div className="dashboard_summary dummy_tab">
+                      <div className='d-flex gap-3 justify-content-between account_tabcnt'>
+
+                        <div className="table-responsive">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Coin</th>
+                                <th>Available Balance</th>
+                                <th>In-Order Balance</th>
+                                <th>Bonus</th>
+                                <th className="right_td">Action</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {filteredCoinList?.length > 0 ? (
+                                filteredCoinList.map((item, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="price_heading">
+                                          {item?.short_name}
+                                          <br />
+                                          {/* <span>{item?.currency}</span> */}
+                                        </div>
+                                      </div>
+                                    </td>
+
+                                    <td>{item?.balance}</td>
+                                    <td>{item?.locked_balance}</td>
+                                    <td>{item?.bonus}</td>
+                                    <td className="right_td">
+                                      <div className='d-flex gap-3 justify-content-end'>
+                                        <a className="text-white" href="#">
+                                          Convert
+                                        </a>
+                                        <a className="text-white" href="/asset_managemnet/deposit">
+                                          Trade
+                                        </a>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan="12">
+                                    <div className="no_data_outer">
+                                      <div className="no_data_vector">
+                                        <img
+                                          src="/images/no_data_vector.svg"
+                                          alt="no-data"
+                                        />
+                                      </div>
+                                      <p>No Data Available</p>
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+
+                      </div>
+                    </div>
+                  )}
                 </div>
+
               </div>
-              <div className="col-sm-6">
+              {/* <div className="col-sm-6">
                 <div className="my_assets_summary_t wallet_transfer">
                   <h2>Wallet Transfer</h2>
                   <h4>Select Coin</h4>
@@ -984,7 +1130,7 @@ const AssetOverview = () => {
 
 
 
-                {/* <!-- Modal Search Coin Start --> */}
+              
 
                 <div className="modal fade search_form search_coin bordernone" id="search_coin" tabIndex="-1" aria-labelledby="exampleModalLabel" >
                   <div className="modal-dialog">
@@ -1050,7 +1196,7 @@ const AssetOverview = () => {
                   </div>
                 </div>
 
-                {/* <!-- Modal Search Coin Start End --> */}
+               
 
                 <div className="form_select_to_s">
 
@@ -1124,11 +1270,11 @@ const AssetOverview = () => {
                   <button className="transfer_btn" disabled>Transfer Amount</button> : <button className="transfer_btn" onClick={handleWalletTransfer}>Transfer Amount</button>}
 
 
-              </div>
+              </div> */}
             </div>
           </div>
         </div >
-        <div className="trade_add_view">
+        {/* <div className="trade_add_view">
           <div className="banner_img_add">
             <div className="cnt_slider_f">
               <h6>Wrathcode Landing Protocol</h6>
@@ -1203,9 +1349,9 @@ const AssetOverview = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div >
-      <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {/* <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -1219,7 +1365,112 @@ const AssetOverview = () => {
 
           </div>
         </div>
+      </div> */}
+
+      {/* <!-- Modal kyc Start --> */}
+
+      <div className="modal fade kyc_modal" id="kycModal" tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+
+
+            <div className="modal-header">
+              <h5 className="modal-title" id="kycTitle">Face Verification </h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+
+            <div className="modal-body">
+
+              <div className='wallet_transfer'>
+
+                <div className='wallet_form'>
+                  <div className='form_select'>
+                    <div className='currencyicon'>
+                      <img src="/images/dollaricon.svg" alt="dollaricon" />
+                    </div>
+                    <div className='formfiled'>
+                      <label>Form</label>
+                      <div className='select_spot'>
+                        <select>
+                          <option>Spot</option>
+                          <option>Spot</option>
+                          <option>Spot</option>
+                        </select>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div className='form_select refreshcntr'>
+                    <div className='currencyicon'>
+                      <img src="/images/arrowbottom.svg" alt="arrowbottom" />
+                    </div>
+                    <div className='formfiled'>
+                    </div>
+
+                    <div className='currencyicon'>
+                      <img src="/images/refreshicon.svg" alt="refreshicon" />
+                    </div>
+
+                  </div>
+
+                  <div className='form_select'>
+                    <div className='currencyicon'>
+                      <img src="/images/dollaricon.svg" alt="dollaricon" />
+                    </div>
+                    <div className='formfiled'>
+                      <label>To</label>
+                      <div className='select_spot'>
+                        <select>
+                          <option>Futures</option>
+                          <option>Futures</option>
+                          <option>Spot</option>
+                        </select>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+                <div className='crypto_selectcoin'>
+                  <h6>Crypto</h6>
+
+                  <div className='coin_cryptofiled'>
+                    <button data-bs-toggle="modal" data-bs-target="#exampleModal"><span><img src="/images/tether_icon.png" alt="Crypto" />Crypto</span>
+                    <i class="ri-arrow-down-s-fill"></i></button>
+                  </div>
+                </div>
+                <div className='crypto_selectcoin'>
+                  <h6>Quantity</h6>
+                  <div class="price_max_total">
+                    <input type="number" placeholder="Amount" />
+                    <div className='d-flex gap-0'>
+                      USDT
+                      <button>All</button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <legend>Balance：<span>0 USDT</span></legend>
+
+                <button className='btn'>Explore</button>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
+
+
+      {/* <!-- Modal kyc End --> */}
+
+
     </>
   )
 }

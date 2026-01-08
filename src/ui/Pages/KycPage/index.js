@@ -8,6 +8,7 @@ import DefaultInput from "../../../customComponents/DefaultInput";
 import { drivingLicense, documentNum } from "../../../utils/Validation";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { $ } from 'react-jquery-plugin';
 import { ProfileContext } from "../../../context/ProfileProvider";
 
 
@@ -357,109 +358,120 @@ const KycPage = (props) => {
 
 
             <div className="dashboard_right">
-                <div className="profile_sections" >
-                    <div className="row" >
-                        <div className="col-md-6" >
-                            <h2 className="mb-0 pb-0"> KYC Verification </h2>
+
+                <div className="kyc_verif_bnr_wrapper">
+
+                    <div className="profile_sections" >
+                        <div className="row" >
+                            <div className="col-md-12" >
+                                <h2 className="mb-0 pb-0"> KYC Verification </h2>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="kyc_verif_bnr">
+                        <div className="kysbnr_cnt">
+                            <h5>KYC</h5>
+                            <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
+                                withdrawals, rewards, and every feature without any delays or limitations.</p>
+
+                            <h6>KYC Verification Requirements</h6>
+
+                            <ul className="kyclist">
+                                <li><img src="/images/staricon.png" alt="star" /> ID</li>
+                                <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
+                                <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
+                            </ul>
+
+                            <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Verify </button>
+                        </div>
+                        <div className="kycvector">
+                            <img src="/images/kyc_verification_vector.svg" alt="kyc" />
                         </div>
 
                     </div>
 
-                </div>
 
-                <div className="kyc_verif_bnr">
-                    <div className="kysbnr_cnt">
-                        <h5>KYC</h5>
-                        <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
-                            withdrawals, rewards, and every feature without any delays or limitations.</p>
+                    <div className="kyc_account d-flex">
+                        <div className="account_benifits">
+                            <h5>Account Benefits</h5>
 
-                        <h6>KYC Verification Requirements</h6>
-
-                        <ul className="kyclist">
-                            <li><img src="/images/staricon.png" alt="star" /> ID</li>
-                            <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
-                            <li><img src="/images/staricon.png" alt="star" /> Facial Recognition</li>
-                        </ul>
-
-                        <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Verify </button>
-                    </div>
-                    <div className="kycvector">
-                        <img src="/images/kyc_verification_vector.svg" alt="kyc" />
-                    </div>
-
-                </div>
-
-
-                <div className="kyc_account d-flex">
-                    <div className="account_benifits">
-                        <h5>Account Benefits</h5>
-
-                        <div className="row">
-                            <div className="col-sm-4">
-                                <ul className="kyclist">
-                                    <li><img src="/images/staricon.png" alt="star" /> KYC Level</li>
-                                    <li><img src="/images/staricon.png" alt="star" /> Crypto Deposit</li>
-                                    <li><img src="/images/staricon.png" alt="star" /> Crypto Withdrawal</li>
-                                    <li><img src="/images/staricon.png" alt="star" /> Fiat Trading</li>
-                                    <li><img src="/images/staricon.png" alt="star" /> Spot/Futures Trading</li>
-                                    <li><img src="/images/staricon.png" alt="star" /> Platform Events</li>
-                                </ul>
-                            </div>
-
-                            <div className="col-sm-4">
-                                <h6>Unverified</h6>
-                                <ul className="kyclist">
-                                    <li>Unlimited</li>
-                                    <li>12 BTC per day</li>
-                                    <li><img src="/images/closebtn2.svg" alt="star" /></li>
-                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
-                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
-                                </ul>
-                            </div>
-
-                            <div className="col-sm-4">
-                                <h6>Advanced KYC</h6>
-                                <ul className="kyclist">
-                                    <li>Unlimited</li>
-                                    <li>100 BTC per day*</li>
-                                    <li>30,000 USD per day*</li>
-                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
-                                    <li><img src="/images/rightbtn2.svg" alt="star" /></li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div className="faq_section">
-                        <h4>Faq</h4>
-                        {faqData.map((item, index) => (
-                            <div
-                                className={`faq_item ${activeIndex === index ? "active" : ""}`}
-                                key={index}
-                            >
-                                <button
-                                    className="faq_question"
-                                    onClick={() =>
-                                        setActiveIndex(activeIndex === index ? null : index)
-                                    }
-                                >
-                                    {item.q}
-                                    <span className="icon">⌄</span>
-                                </button>
-
-                                <div className="faq_answer">
-                                    <p>{item.a}</p>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <ul className="kyclist">
+                                        <li><img src="/images/staricon.png" alt="star" /> KYC Level</li>
+                                        <li><img src="/images/staricon.png" alt="star" /> Crypto Deposit</li>
+                                        <li><img src="/images/staricon.png" alt="star" /> Crypto Withdrawal</li>
+                                        <li><img src="/images/staricon.png" alt="star" /> Fiat Trading</li>
+                                        <li><img src="/images/staricon.png" alt="star" /> Spot/Futures Trading</li>
+                                        <li><img src="/images/staricon.png" alt="star" /> Platform Events</li>
+                                    </ul>
                                 </div>
+
+                                <div className="col-sm-4">
+                                    <h6>Unverified</h6>
+                                    <ul className="kyclist">
+                                        <li>Unlimited</li>
+                                        <li>12 BTC per day</li>
+                                        <li><img src="/images/closebtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                    </ul>
+                                </div>
+
+                                <div className="col-sm-4">
+                                    <h6>Advanced KYC</h6>
+                                    <ul className="kyclist">
+                                        <li>Unlimited</li>
+                                        <li>100 BTC per day*</li>
+                                        <li>30,000 USD per day*</li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
+                                    </ul>
+                                </div>
+
                             </div>
-                        ))}
+                        </div>
+
+
+                        <div className="faq_section">
+                            <h4>Faq</h4>
+                            <div className="table-responsive">
+                                {faqData.map((item, index) => (
+                                    <div
+                                        className={`faq_item ${activeIndex === index ? "active" : ""}`}
+                                        key={index}
+                                    >
+                                        <button
+                                            className="faq_question"
+                                            onClick={() =>
+                                                setActiveIndex(activeIndex === index ? null : index)
+                                            }
+                                        >
+                                            {item.q}
+                                            <span className="icon"><i class="ri-arrow-down-s-line"></i></span>
+                                        </button>
+
+                                        <div className="faq_answer">
+                                            <p>{item.a}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
 
-
-                {/* <section className="pb-5 kyc_form_s">
+                {/* 
+                <section className="pb-5 kyc_form_s">
 
                     <div className="row">
                         <div className="col-lg-12">
@@ -1114,10 +1126,10 @@ const KycPage = (props) => {
                         </div>
                     </div >
                 </section > */}
-            </div >
+            </div>
 
 
-            {/* <!-- Modal Search Coin Start --> */}
+            {/* <!-- Modal kyc Start --> */}
 
             <div className="modal fade kyc_modal" id="kycModal" tabIndex="-1">
                 <div className="modal-dialog modal-dialog-centered">
@@ -1193,13 +1205,13 @@ const KycPage = (props) => {
                                 <input className="input" placeholder="ID Card Number" />
 
                                 <div className="upload_grid">
-                                 
+
                                     <div class="upload-box">
                                         <input type="file" id="fileUpload" hidden />
                                         <label for="fileUpload" class="upload-label">
-                                    <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
+                                            <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
                                             <div class="icon">
-                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                                <img src="/images/uploadvector.svg" alt="upload" />
                                             </div>
                                             <h3>Choose a File</h3>
                                             <p>Drag or choose your file to upload</p>
@@ -1209,9 +1221,9 @@ const KycPage = (props) => {
                                     <div class="upload-box">
                                         <input type="file" id="fileUpload" hidden />
                                         <label for="fileUpload" class="upload-label">
-                                    <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
+                                            <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
                                             <div class="icon">
-                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                                <img src="/images/uploadvector.svg" alt="upload" />
                                             </div>
                                             <h3>Choose a File</h3>
                                             <p>Drag or choose your file to upload</p>
@@ -1222,23 +1234,45 @@ const KycPage = (props) => {
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
                                     <button className="primary_btn prevStep">Back</button>
-                                    <button className="primary_btn nextStep" data-title="Upload Documents">Next</button>
+                                    <button className="primary_btn nextStep" data-title="Take a Photo of Your ">Next</button>
                                 </div>
                             </div>
 
 
-                            <div className="kyc_step" data-title="Upload Documents">
-                                <input className="input" placeholder="Income Tax Identification Number" />
+                            <div className="kyc_step" data-title="Take a Photo of Your">
+                                <div className="d-flex gap-4 flex-column">
+                                    <input className="input" placeholder="Income Tax Identification Number" />
 
-                                <div className="upload_big">
-                                    <input type="file" />
-                                </div>
+                                    <div class="upload-box">
+                                        <input type="file" id="fileUpload" hidden />
+                                        <label for="fileUpload" class="upload-label">
+                                            <div class="icon">
+                                                <img src="/images/uploadvector.svg" alt="upload" />
+                                            </div>
+                                            <h3>Choose a File</h3>
+                                            <p>Drag or choose your file to upload</p>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <h5 className="mb-0">Upload Selfie with ID*</h5>
+                                        <span className="small">(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
 
-                                <p className="small">Upload Selfie with ID*</p>
-                                <span>(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
+                                        <div className="upload-box mt-3">
+                                            <img className="successfull_img" src="/images/success_file.svg" alt="successfull" />
+                                            <input type="file" id="fileUpload" hidden />
+                                            <label for="fileUpload" class="upload-label">
+                                                <div class="icon">
+                                                    <img src="/images/uploadvector.svg" alt="upload" />
+                                                </div>
+                                                <h3>Choose a File</h3>
+                                                <p>Drag or choose your file to upload</p>
+                                                <div className="selfie_circle">
+                                                    <img src="/images/selefvector.png" alt="photo" />
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
 
-                                <div className="selfie_circle">
-                                    <img src="/images/selefvector.png" alt="photo" />
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
@@ -1247,7 +1281,6 @@ const KycPage = (props) => {
                                 </div>
                             </div>
 
-
                             <div className="kyc_step text-center" data-title="Face Verification">
                                 <div className="face_circle">
                                     <img src="/images/selefvector.png" alt="photo" />
@@ -1255,7 +1288,101 @@ const KycPage = (props) => {
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
                                     <button className="primary_btn prevStep">Back</button>
-                                    <button className="primary_btn">Submit</button>
+                                    <button className="primary_btn nextStep" data-title="Review">Next</button>
+                                </div>
+
+
+                            </div>
+
+
+                            <div className="kyc_step" data-title="Review">
+                                <div className="table-responsive pt-3">
+                                    <div className="kyc_information_del">
+                                        <div className="userinfolft">
+                                            <div className="face_circle">
+                                                <img src="/images/selefvector.png" alt="photo" />
+                                            </div>
+                                            <h5>Pallav Soni</h5>
+                                        </div>
+
+                                        <div className="info_list">
+                                            <ul>
+                                                <li>UserID <span>31353839</span></li>
+                                                <li>Full Name <span>Pallav Soni</span></li>
+                                                <li>Mobile Number <span>+919799080052</span></li>
+                                                <li>Address <span>qwertyuiop qwertyuiop</span></li>
+                                                <li>City <span>qwertyuiop</span></li>
+                                                <li>State <span>asdfghjkl</span></li>
+                                                <li>Zip Code <span>123456</span></li>
+                                                <li>Date of Birth <span>2002-02-28</span></li>
+                                                <li>Registration Date <span>2026-01-07</span></li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+
+                                    <div className="documentnumber_s">
+                                        <ul>
+                                            <li><span>Document No.</span>123456789012</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between' }}>
+                                        <div className="document_front_bl">
+                                            <p>Document (Front)</p>
+                                            <div className="front_img">
+                                                <img src="/images/document_front.png" alt="photo" />
+                                            </div>
+                                        </div>
+                                        <div className="document_front_bl">
+                                            <p>Document (Front)</p>
+                                            <div className="front_img">
+                                                <img src="/images/document_front.png" alt="photo" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="documentnumber_s">
+                                        <ul>
+                                            <li><span>Document No.</span>123456789012</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between' }}>
+                                        <div className="document_front_bl">
+                                            <p>Income Tax Identification</p>
+                                            <div className="front_img">
+                                                <img src="/images/document_front.png" alt="photo" />
+                                            </div>
+                                        </div>
+                                        <div className="document_front_bl">
+                                            <p>Selfie</p>
+                                            <div className="front_img">
+                                                <img src="/images/document_front.png" alt="photo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                    <button type="button" className="primary_btn prevStep">Back</button>
+                                    <button
+                                        type="button"
+                                        className="primary_btn kyc-submit-btn"
+                                        onClick={() => {
+                                            if (typeof $ !== 'undefined') {
+                                                // First close the multistep KYC modal
+                                                $('#kycModal').modal('hide');
+
+                                                // After the hide animation, show the verifying popup
+                                                setTimeout(() => {
+                                                    $('#kycSubmitModal').modal('show');
+                                                }, 300);
+                                            }
+                                        }}
+                                    >
+                                        Submit
+                                    </button>
                                 </div>
                             </div>
 
@@ -1265,7 +1392,46 @@ const KycPage = (props) => {
             </div>
 
 
-            {/* <!-- Modal Search Coin Start End --> */}
+            {/* <!-- Modal kyc End --> */}
+
+            {/* KYC Submit Confirmation Modal */}
+            <div className="modal fade" id="kycSubmitModal" tabIndex="-1" aria-labelledby="kycSubmitModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content kyc_modal">
+                        <div className="modal-header">
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body text-center">
+                            <div className="mb-4">
+                                <div className="success_icon_wrapper mb-3">
+                                    <img src="/images/verifing_vector.png" alt="photo" />
+                                </div>
+                                <h4 className="mb-3">Verifying</h4>
+                                <p className="text-muted mb-2">
+                                    Hang tight, your review will be completed within the next 48 hours.
+                                </p>
+
+                                <p className="text-muted mb-2">Continue exploring Exchange while you wait. We'll notify you once
+                                    verification is complete.</p>
+                            </div>
+                            <div className="d-flex gap-3 justify-content-center mt-4">
+                                <button type="button" className="primary_btn" style={{ width: 'auto', padding: '10px 30px' }}
+                                    onClick={() => {
+                                        $('#kycSubmitModal').modal('hide');
+                                        // Close KYC modal
+                                        setTimeout(() => {
+                                            $('#kycModal').modal('hide');
+                                        }, 300);
+                                        // Call actual submit function
+                                        handleKyc();
+                                    }}>
+                                    Done
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 

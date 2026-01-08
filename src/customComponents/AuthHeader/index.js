@@ -511,8 +511,13 @@ const AuthHeader = (props) => {
 
             {/* <!--Search Bar Modal --> */}
             <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         
               <div className="modal-dialog">
                 <div className="modal-content">
+                <div className="modal-header mb-2">
+              {/* <h5 className="modal-title" id="kycTitle">Face Verification </h5> */}
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+            </div>
                   <div className="modal-body">
                     <form>
                       <input type="search" placeholder="Search here..." value={searchPair} onChange={(e) => setSearchPair(e.target.value)} />

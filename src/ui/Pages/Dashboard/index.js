@@ -136,7 +136,7 @@ const Dashboard = (props) => {
       <div className="dashboard_right">
 
         <DashboardHeader props={props} />
-        <div className="estimated_balance">
+        <div className="estimated_balance dash_balance">
           <div className='div_tag'>
             <div className="balance_chart_left">
               <div className="d-flex justify-content-between">

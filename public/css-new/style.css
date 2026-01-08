@@ -7794,9 +7794,10 @@ body .recommendations_block ul li a:hover {
 .estimated_balance {
     margin-top: 26px;
     border-radius: 12px;
-    border: 1px solid #454C59;
-    padding: 15px;
+    padding: 24px;
+    flex-direction: column;
     display: flex;
+    background-color: #373E4B;
     gap: 18px;
 }
 
@@ -7914,11 +7915,37 @@ body .recommendations_block ul li a:hover {
 
 .assets_wallets_section .market_section {
     margin-top: 0px;
-    border: 1px solid #434343;
+    background-color: #373E4B;
     padding: 24px;
-    border-radius: 12px;
+    border-radius: 10px;
     width: 100%;
     min-height: 480px;
+}
+
+.wallet_tabs {
+    display: flex;
+    gap: 24px;
+}
+
+.market_section .coin_right {
+    padding: 0px;
+}
+
+.market_section .dashboard_summary th {
+    font-size: 12px;
+}
+
+.wallet_tabs .tab_btn {
+    font-size: 20px;
+    color: #848E9C;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+    font-weight: 500;
+}
+
+.wallet_tabs .tab_btn.active {
+    color: #fff;
 }
 
 .search_form input {
@@ -8176,7 +8203,7 @@ body {
 }
 
 .navi_sidebar li ul li a:hover {
-    color: #f3bb2b;
+    color: #fff;
 }
 
 .navi_sidebar li ul {
@@ -8211,12 +8238,12 @@ ul.navi_sidebar {
 
 .navi_sidebar li a:hover {
     background-color: none;
-    color: #f3bb2b;
+    color: #fff;
     border: none;
 }
 
 .navi_sidebar li button:hover {
-    color: #f3bb2b;
+    color: #fff;
 }
 
 .btn:focus-visible {
@@ -8390,7 +8417,7 @@ textarea:focus-visible {
 .Overview_mid .dashboard_summary a {
     font-size: 11px;
     color: #fff;
-    font-weight: 700;
+    font-weight: 500;
     text-decoration: none;
 }
 
@@ -9068,7 +9095,6 @@ button.subscribe_btn a {
 .overview_section {
     width: 100%;
     position: relative;
-    overflow: hidden;
     margin: 32px 0px 32px 20px;
 }
 
@@ -9490,6 +9516,29 @@ button.orderbtn a {
     border-radius: 50px;
     gap: 3px;
 }
+
+
+/* 
+.asset_account ul li span.spot:before {
+    background-color: #4C7ECF;
+}
+
+.asset_account ul li span.swap:before {
+    background-color: #B2CD52;
+}
+
+.modal .btn-close:hover {
+    background-color: transparent;
+}
+
+.asset_account ul li span.staking:before {
+    background-color: #DCA451;
+}
+
+.asset_account ul li span.futures:before {
+    background-color: #CC3D3D;
+} */
+
 
 body.light_theme button.orderbtn {
     background-color: #F4B609;
@@ -9930,6 +9979,7 @@ span.arrow {
     top: 80px;
     z-index: 666;
     height: 100%;
+    overflow: auto;
 }
 
 .bankdetail_tabs .row {
@@ -10288,7 +10338,7 @@ ul.daylist li span {
 .search_form button.btn-close {
     position: absolute;
     right: 24px;
-    background-color: #ffffff;
+    background-color: #ffffff00;
     opacity: 1;
     border-radius: 100px;
     font-size: 10px;
@@ -10357,11 +10407,19 @@ body.light_theme .withdrawal_rightside button {
 
 .price_max_total {
     width: 100%;
-    border: 1px solid #434343;
     display: flex;
     justify-content: space-between;
     border-radius: 5px;
     overflow: hidden;
+    width: 100%;
+    border: none;
+    background-color: #4B515D;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    gap: 12px;
 }
 
 .topheading_footer {
@@ -10387,10 +10445,34 @@ body.light_theme .withdrawal_rightside button {
 }
 
 .price_max_total button {
-    background-color: #f3bb2b;
+    background-color: transparent;
     border: none;
-    font-size: 16px;
-    padding: 14px 22px;
+    font-weight: 500;
+    color: #fff;
+    padding: 13px 22px 13px 10px;
+}
+
+.wallet_transfer legend {
+    font-size: 13px;
+    color: #b7b7b7;
+    margin: 12px 0px;
+}
+
+.wallet_transfer legend span {
+    color: #fff;
+    font-weight: 600;
+}
+
+.price_max_total .d-flex {
+    align-items: center;
+    font-size: 15px;
+}
+
+.wallet_transfer button.btn {
+    background-color: #F3BB2B;
+    width: 100%;
+    border-radius: 50px;
+    color: #000;
 }
 
 .price_max_total input[type="number"] {
@@ -12400,7 +12482,7 @@ body .right_t.right_0 {
 }
 
 .active_ul {
-    color: #f3bb2b !important;
+    color: #fff !important;
 }
 
 /* .twofa_card>.card-body {
@@ -13608,12 +13690,16 @@ body.light_theme .login_profile_header {
 }
 
 .leftside_menu .logout_btn a {
-    background-color: #f3bb2b;
+    background-color: #ffffff;
     display: block;
     font-size: 15px;
     font-weight: 400;
     padding: 7px 20px;
     color: #000;
+}
+
+.faq_section .table-responsive {
+    max-height: 340px;
 }
 
 ul.tbltabs {
@@ -13707,6 +13793,7 @@ a.search_icon i {
 
 .modal-backdrop.show {
     opacity: 0 !important;
+    display: none;
 }
 
 .earining_calculator_form select option {
@@ -14791,22 +14878,22 @@ button.btn_claim:active {
     border-bottom: none;
 }
 
-.faq_section {
+.kyc_verif_bnr_wrapper .faq_section {
     background: #2B313C;
     border-radius: 10px;
     overflow: hidden;
 }
 
-.faq_section h4 {
+.kyc_verif_bnr_wrapper .faq_section h4 {
     padding: 24px 24px 0px;
     margin-bottom: 0px;
 }
 
-.faq_item {
+.kyc_verif_bnr_wrapper .faq_item {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.faq_question {
+.kyc_verif_bnr_wrapper .faq_question {
     width: 100%;
     background: transparent;
     border: none;
@@ -14820,37 +14907,37 @@ button.btn_claim:active {
     cursor: pointer;
 }
 
-.faq_question .icon {
+.kyc_verif_bnr_wrapper .faq_question .icon {
     transition: transform 0.3s ease;
 }
 
-.faq_item.active .faq_question .icon {
+.kyc_verif_bnr_wrapper .faq_item.active .faq_question .icon {
     transform: rotate(180deg);
 }
 
-.faq_answer {
+.kyc_verif_bnr_wrapper .faq_answer {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease;
     padding: 0 20px;
 }
 
-.faq_item.active .faq_answer {
+.kyc_verif_bnr_wrapper .faq_item.active .faq_answer {
     max-height: 200px;
     padding: 0 20px 18px;
 }
 
-.faq_answer p {
+.kyc_verif_bnr_wrapper .faq_answer p {
     color: rgba(255, 255, 255, 0.7);
     font-size: 11px;
     margin: 0;
 }
 
-.faq_question:hover {
+.kyc_verif_bnr_wrapper .faq_question:hover {
     background-color: transparent;
 }
 
-.account_benifits .row {
+.kyc_verif_bnr_wrapper .account_benifits .row {
     margin-top: 32px;
 }
 
@@ -14959,6 +15046,44 @@ ul.kyclist li img {
     color: #fff;
 }
 
+/* KYC Submit Modal Styles */
+#kycSubmitModal .modal-content {
+    background: #3b4250;
+    border-radius: 14px;
+    color: #fff;
+}
+
+.success_icon_wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success_icon_wrapper i {
+    font-size: 64px;
+    color: #4caf50;
+}
+
+#kycSubmitModal .modal-body {
+    padding: 30px;
+}
+
+#kycSubmitModal .modal-body h4 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#kycSubmitModal .modal-body p {
+    color: #b8c0cc;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#kycSubmitModal .text-muted {
+    color: #949AA4 !important;
+}
+
 .modal-header {
     border-bottom: 1px solid #4a5161;
 }
@@ -15011,6 +15136,24 @@ ul.kyclist li img {
     width: 100%;
 }
 
+.success_icon_wrapper.mb-3 {
+    max-width: 90px;
+    margin: 0 auto;
+}
+
+.kyc_verif_bnr_wrapper {
+    width: 90%;
+}
+
+.modal .btn-close {
+    filter: invert(1);
+    opacity: 1;
+    border: 1px solid #000000;
+    border-radius: 50px;
+    padding: 8px;
+    font-size: 9px;
+}
+
 .upload_grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -15020,7 +15163,7 @@ ul.kyclist li img {
 
 .upload-box {
     background: #4a5161;
-    padding: 0px 10px;
+    padding: 15px;
     border-radius: 10px;
     text-align: center;
     position: relative;
@@ -15030,6 +15173,26 @@ ul.kyclist li img {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+img.successfull_img {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.kyc_step span.small {
+    font-size: 11px;
+    color: #6F798C;
+}
+
+.kyc_modal .modal-header {
+    border-bottom: none;
+}
+
+.face_circle {
+    max-width: 320px;
+    margin: 40px auto;
 }
 
 img.upload_back_img {
@@ -15045,15 +15208,12 @@ img.upload_back_img {
 }
 
 .selfie_circle {
-    width: 100%;
-    padding: 24px;
-    border-radius: 12px;
-    /* border: 2px dashed #888; */
-    /* margin: 15px auto; */
+    width: 200px;
+    margin: 20px 0px 0px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #FFFFFF10;
+
 }
 
 .small {
@@ -15143,8 +15303,8 @@ img.upload_back_img {
 
 /* Inner dot */
 .id_item:has(input:checked)::before {
-    border-color: #f6c343;
-    background: radial-gradient(circle at center, #f6c343 45%, transparent 46%);
+    border-color: #fff;
+    background: radial-gradient(circle at center, #fff 35%, transparent 36%);
 }
 
 /* ===== Button ===== */
@@ -15154,11 +15314,14 @@ img.upload_back_img {
     background: #f6c343;
     color: #000;
     border: none;
-    padding: 14px;
+    padding: 10px;
     border-radius: 999px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+button.primary_btn.prevStep {
+    background-color: #fff;
 }
 
 .primary_btn:hover {
@@ -15226,7 +15389,235 @@ img.upload_back_img {
     color: #fff;
 }
 
-.kyc_step .info_text ul li{ display: flex; align-items: center; gap:4px; }
+.kyc_step .info_text ul li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.wallet-header {
+    width: 100%;
+}
+
+.wallet-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.wallet-sub {
+    font-size: 15px;
+    color: #9aa4ad;
+}
+
+.wallet-sub span {
+    color: #8b949e;
+    display: block;
+    margin-top: 10px;
+}
+
+.estimated_balance button.btn {
+    font-size: 15px;
+    border-radius: 50px;
+}
+
+.estimated_balance h6 {
+    font-weight: 400;
+    color: #848E9C;
+}
+
+.btn-deposit {
+    background: #f0b90b;
+    color: #000;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-deposit:hover {
+    background: #d9a900;
+    color: #000;
+}
+
+.btn-outline-custom {
+    border: 1px solid #848e9c;
+    color: #eaecef;
+}
+
+.btn-outline-custom:hover {
+    background: #484c53;
+    color: #fff;
+}
+
+.wallet_form {
+    background-color: #4B515D;
+    border-radius: 10px;
+    padding: 20px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form_select.refreshcntr {
+    position: relative;
+}
+
+.form_select.refreshcntr:before {
+    width: 82%;
+    top: 44%;
+    height: 1px;
+    background-color: #91A9B4;
+    position: absolute;
+    content: "";
+    right: 0px;
+    left: -15px;
+    margin: 0 auto;
+}
+
+.wallet_form .form_select {
+    width: 100%;
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+    display: flex;
+    gap: 22px;
+}
+
+.formfiled label {
+    width: 24px;
+}
+
+.formfiled {
+    width: 100%;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    font-size: 12px;
+}
+
+.formfiled .select_spot {
+    width: 75%;
+}
+
+.kyc_information_del {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    align-items: start;
+    background-color: #4B515D;
+    padding: 24px;
+    border-radius: 12px;
+    margin-top: -10px;
+}
+
+.documentnumber_s {
+    width: 100%;
+    background-color: #4B515D;
+    padding: 18px 24px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.documentnumber_s ul li {
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 300;
+    justify-content: space-between;
+    display: flex;
+    gap: 24px;
+}
+
+.documentnumber_s ul li span {
+    color: #ffffff60;
+}
+
+.picture_front_bl {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.document_front_bl {
+    width: 100%;
+    background-color: #4B515D;
+    padding: 10px;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.kyc_step .document_front_bl p {
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.kyc_information_del .userinfolft {
+    width: 200px;
+    text-align: center;
+}
+
+.kyc_information_del .face_circle {
+    margin-bottom: 15px;
+}
+
+.info_list {
+    width: 60%;
+}
+
+.info_list ul {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.info_list ul li {
+    font-size: 12px;
+    color: #ffffff60;
+    font-weight: 300;
+    justify-content: space-between;
+    display: flex;
+    gap: 12px;
+}
+
+.info_list ul li span {
+    font-weight: 500;
+    color: #fff;
+    width: 60%;
+    text-align: right;
+}
+
+.estimated_balance.dash_balance {
+    flex-direction: row;
+    gap: 24px;
+    background-color: transparent;
+    border: 1px solid #454C59;
+    padding: 20px;
+}
+
+.crypto_selectcoin {
+    margin-top: 20px;
+}
+
+.coin_cryptofiled button {
+    width: 100%;
+    border: none;
+    background-color: #4B515D;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    gap: 12px;
+}
+
+.coin_cryptofiled button span {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.coin_cryptofiled button span img {
+    width: 28px;
+}
 
 @media screen and (max-width:1700px) {
 
@@ -23608,25 +23999,81 @@ img.upload_back_img {
 
 }
 
+.table-responsive {
+    overflow-x: auto;
+    /* scroll ALWAYS enabled */
+    overflow-y: auto;
 
-::-webkit-scrollbar {
-    width: 6px;
+    /* Space reserved → no layout shift */
+    scrollbar-gutter: stable;
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0) transparent;
 }
 
-::-webkit-scrollbar-track {
+/* WebKit scrollbar */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
     background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.25);
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    transition: background-color 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
 }
 
-* {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+/* When hover/active - show scrollbar */
+.table-responsive.show-scrollbar {
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+.table-responsive.show-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.4);
+    opacity: 1;
+}
+
+.table-responsive.show-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* KYC Modal specific - ensure no data shift */
+#kycModal .table-responsive {
+    scrollbar-gutter: stable;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+#kycModal .table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#kycModal .table-responsive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 4px;
+}
+
+#kycModal .table-responsive::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    transition: background-color 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+}
+
+#kycModal .table-responsive.show-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.4);
+    opacity: 1;
+}
+
+#kycModal .table-responsive.show-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.65);
 }
