@@ -679,15 +679,38 @@ form.price_info {
 
 .price_inputbl ul li button {
     font-size: 12px;
-    border-radius: 3px;
-    border: 1px solid #2d303a !important;
+    border-radius: 0px;
+    border: 1px solid #2d303a00 !important;
     font-weight: 200;
     width: 100%;
+    position: relative;
     text-align: center;
-    background-color: #22242c;
+    background-color: transparent;
     color: #ababab;
-    padding: 1px 5px !important;
+    padding: 0px !important;
 }
+
+.price_inputbl ul li button:before {
+    width: 7px;
+    background-color: #393F4F;
+    height: 7px;
+    position: absolute;
+    content: "";
+    border-radius: 50px;
+    border: 1px solid #393F4F;
+    left: 0px;
+    top: -15px;
+}
+
+.price_inputbl ul li.active button:before {
+    width: 14px;
+    background-color: #393f4f;
+    height: 14px;
+    border: 2px solid #F2F4F6;
+    top: -19px;
+}
+
+.price_inputbl ul li:last-child button:before{ left: inherit; right: 0px; }
 
 .avail_total_usd {
     display: flex;

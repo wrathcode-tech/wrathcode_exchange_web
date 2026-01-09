@@ -14167,9 +14167,7 @@ td.tb_background {
 }
 
 .price_inputbl.value_choose {
-    border-bottom: 1px solid #99999926;
-    padding-bottom: 15px;
-    margin-bottom: 10px;
+    padding-top: 15px; margin-top:5px;
 }
 
 .tp_sl_option {

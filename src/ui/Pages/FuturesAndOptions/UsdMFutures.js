@@ -1557,15 +1557,11 @@ function UsdMFutures() {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl value_choose">
+                                    <div class="price_inputbl value_choose process_step">
                                         <ul>
                                             {[20, 40, 60, 80, 100].map((perc) => (
                                                 <li><button type='button' className={percentage === perc && "active"} onClick={() => computeQuantityFromBalance(perc)}>{perc}%</button></li>
                                             ))}
-                                            {/* <li><button type='button'>40%</button></li>
-                                                <li><button type='button'>60%</button></li>
-                                                <li><button type='button'>80%</button></li>
-                                                <li><button type='button'>100%</button></li> */}
                                         </ul>
                                     </div>
                                     <div class="price_inputbl">
@@ -2112,10 +2108,7 @@ function UsdMFutures() {
                     </div>
                 </div>
 
-                <div class="trade_account_summary_assets">
-
-
-
+                <div class="trade_account_summary_assets futuresflex">
 
                     <div class="trade_summary_table_lft mt-0 position_order">
                         <div class="top_th_easyop border-0">

@@ -785,6 +785,7 @@ html[data-theme='light'] .trade_assets .product-owner {
     font-weight: 300;
     color: #87909F;
     position: sticky;
+    padding: 4px 10px;
     top: 0;
     z-index: 5;
     background-color: #181a20 !important;
