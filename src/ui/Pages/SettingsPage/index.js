@@ -489,7 +489,7 @@ const SettingsPage = (props) => {
                   <div className="emailinput">
                     <label>New Phone</label>
                     <div className="d-flex">
-                      <div>
+                      <div className="d-flex mobilenumber">
                         <div className="phonecode">
                           <select className="country_code">
                             <option value="+91">+91</option>
@@ -498,10 +498,10 @@ const SettingsPage = (props) => {
                           </select>
                         </div>
                         <input type="text" placeholder="New Phone" />
-                      </div>
+                        </div> 
                       <div className="getotp">GET OTP</div>
+                      </div>
                     </div>
-                  </div>
 
                   <div className="emailinput">
                     <label>OTP</label>
