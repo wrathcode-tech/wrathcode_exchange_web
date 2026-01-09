@@ -58,11 +58,11 @@ export default function TVChartContainer({ symbol }) {
         "paneProperties.legendProperties.fontFamily": "HarmonyOS Sans Regular, sans-serif",
       },
       styleOverrides: {
-        "paneProperties.background": Theme === 'light' ? "#ffffff" : "#111114",
+        "paneProperties.background": Theme === 'light' ? "#ffffff" : "#181A20",
         "paneProperties.backgroundType": "solid",
       },
       loading_screen: {
-        backgroundColor: "#111114",
+        backgroundColor: "#181A20",
       },
       disabled_features: [
         "use_sessionStorage_for_settings", "adaptive_logo",
@@ -78,7 +78,7 @@ export default function TVChartContainer({ symbol }) {
     tvWidgetInstance.onChartReady(() => {
         const chart = tvWidgetInstance.chart();
         chart.applyOverrides({
-            "paneProperties.background": Theme === 'light' ? "#ffffff" : "#111114",
+            "paneProperties.background": Theme === 'light' ? "#ffffff" : "#181A20",
         });
     });
 
@@ -120,8 +120,8 @@ useEffect(() => {
       if (chart) {
         // **Force Change Background Color**
         chart.applyOverrides({
-          "paneProperties.background": "#111114",
-          "scalesProperties.backgroundColor": "#111114",
+          "paneProperties.background": "#181A20",
+          "scalesProperties.backgroundColor": "#181A20",
           "paneProperties.backgroundType": "solid",
           "mainSeriesProperties.style": 1, // Keep this for candlesticks
         });
@@ -131,7 +131,7 @@ useEffect(() => {
         if (iframe) {
           const css = `
             body, .chart-page {
-              background-color:#111114 !important;
+              background-color:#181A20 !important;
             }
           `;
           const style = document.createElement('style');
@@ -243,8 +243,8 @@ useEffect(() => {
   
           // **Apply UI customizations**
           chart.applyOverrides({
-            "paneProperties.background": "#111114",
-            "scalesProperties.backgroundColor": "#111114",
+            "paneProperties.background": "#181A20",
+            "scalesProperties.backgroundColor": "#181A20",
             "paneProperties.backgroundType": "solid",
             "mainSeriesProperties.style": 1, // Keep candlesticks
           });
@@ -297,7 +297,7 @@ useEffect(() => {
         style={{
           opacity: isReady ? 1 : 0,
           transition: "opacity 0.1s ease",
-          backgroundColor: "#111114",
+          backgroundColor: "#181A20",
           height: "100%", // ensure it has visible height
           minHeight: "400px",
         }}

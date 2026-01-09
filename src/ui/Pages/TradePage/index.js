@@ -61,6 +61,7 @@ const Trade = () => {
     const [isPricePositive, setIsPricePositive] = useState(true);
     const [showTab, setShowTab] = useState("chart");
     const [showBuySellTab, setShowBuySellTab] = useState("");
+    const [orderBookActiveTab, setOrderBookActiveTab] = useState("orderbook");
     const [Coins, setCoins] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(null);
     const { userDetails, newStoredTheme } = useContext(ProfileContext);
@@ -644,13 +645,136 @@ const Trade = () => {
                 />
             </Helmet>
 
-     
+
 
             <div className="trade-wrapper spot pb-3 ">
                 <div className="  container-fluid">
                     <div className="row g-1 g-md-2" >
-                        <div className="col-12 col-lg-12 col-xl-7  col-xxl-7 " >
-                            <div className={`bs_dropbox spotLists_bs_dropbox ${showCoinList === true ? 'active' : ""}`}>
+
+                        <div className="col-12 col-lg-12 col-xl-2 col-xxl-2 trade_favourites_lft">
+                            <div className="spotLists">
+
+                                {/* Search */}
+                                <div className="spot-list-search">
+                                    <div className="ivu-input">
+                                        <i className="ri-search-2-line"></i>
+                                        <input
+                                            autoComplete="off"
+                                            spellCheck="false"
+                                            type="search"
+                                            placeholder="Search"
+                                            onChange={(e) => setsearch(e.target.value)}
+                                            value={search}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Table */}
+                                <div className="price_card table-responsive">
+                                    <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Pair</th>
+                                                <th className="text-end">Price</th>
+                                                <th className="text-end">Change</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody className="price_card_body">
+
+                                            {/* ALL TAB */}
+                                            {CoinPairDetails &&
+                                                CoinPairDetails.map((data, index) => {
+                                                    if (
+                                                        coinFilter !== "ALL" &&
+                                                        !(
+                                                            (coinFilter === "USDT" &&
+                                                                (data?.quote_currency === "USDT" ||
+                                                                    data?.base_currency === "USDT")) ||
+                                                            (coinFilter === "CVT" &&
+                                                                (data?.quote_currency === "CVT" ||
+                                                                    data?.base_currency === "CVT"))
+                                                        )
+                                                    ) {
+                                                        return null;
+                                                    }
+
+                                                    const isActive =
+                                                        SelectedCoin?.base_currency === data?.base_currency &&
+                                                        SelectedCoin?.quote_currency === data?.quote_currency;
+
+                                                    return (
+                                                        <tr
+                                                            key={index}
+                                                            className={isActive ? "active" : ""}
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() => handleSelectCoin(data)}
+                                                        >
+                                                            {/* Pair */}
+                                                            <td>
+                                                                <div className="d-flex align-items-center gap-1">
+                                                                    <img
+                                                                        src={ApiConfig.baseImage + data?.icon_path}
+                                                                        alt=""
+                                                                        className="img-fluid me-1 round_img"
+                                                                    />
+                                                                    <div className="d-flex flex-column">
+                                                                        {`${data?.base_currency}/${data?.quote_currency}`}
+                                                                        <span className="tokensubcnt">MX Token</span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+
+                                                            {/* Price */}
+                                                            <td className="text-end">
+                                                                <div className="d-flex flex-column">
+                                                                    <span>{data?.buy_price}</span>
+                                                                    <span className="tokensubcnt">$ 2.035</span>
+                                                                </div>
+                                                            </td>
+
+                                                            {/* Change + Star */}
+                                                            <td className="text-end">
+                                                                <div className="d-flex justify-content-end align-items-center gap-2">
+                                                                    <div className="d-flex flex-column text-end">
+                                                                        <span
+                                                                            className={
+                                                                                data?.change_percentage >= 0
+                                                                                    ? "text-green"
+                                                                                    : "text-danger"
+                                                                            }
+                                                                        >
+                                                                            {Number(data?.change_percentage).toFixed(5)}%
+                                                                        </span>
+                                                                        <span className="tokensubcnt">$ 2.035</span>
+                                                                    </div>
+
+                                                                    {token && (
+                                                                        <i
+                                                                            className={
+                                                                                favCoins.includes(data?._id)
+                                                                                    ? "ri ri-star-fill ri-xl"
+                                                                                    : "ri ri-star-line ri-xl"
+                                                                            }
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleAddFav(data?._id);
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-lg-12 col-xl-6  col-xxl-6 " >
+                            {/* <div className={`bs_dropbox spotLists_bs_dropbox ${showCoinList === true ? 'active' : ""}`}>
                                 <div className="spotLists active" >
                                     <div className=" trade_tabs buy_sell_cards   ">
                                         <div className="bs_box_header " >
@@ -662,7 +786,7 @@ const Trade = () => {
                                             </span>
                                         </div>
 
-                                        {/* <ul className="nav custom-tabs nav_order">
+                                        <ul className="nav custom-tabs nav_order">
                                             <li className="all-tab">
                                                 <a className="active" data-bs-toggle="tab" href="#tab_all" onClick={() => setcoinFilter('ALL')}> All </a>
                                             </li>
@@ -677,7 +801,7 @@ const Trade = () => {
                                                     <a data-bs-toggle="tab" href="#tab_fav" onClick={() => setcoinFilter('FAV')}>FAV</a>
                                                 </li>
                                             }
-                                        </ul> */}
+                                        </ul>
                                     </div>
                                     <div className="spot-list-search">
                                         <div className="ivu-input" >
@@ -742,11 +866,10 @@ const Trade = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="trade_card p-2  overflow_card mb-1" >
                                 <div className="headline_left__lBBPY">
-
 
                                     <div className="headline_left__lBBPY_leftmain d-flex align-items-center">
                                         <div className="headline_symbolName__KfmIZ mt_tr_pr cursor-pointer" onClick={() => setShowCoinList(!showCoinList)}>
@@ -759,7 +882,7 @@ const Trade = () => {
                                             <div>
                                                 <div className="headline_bigName__dspVW ">
                                                     <h1>{SelectedCoin ? `${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}` : "---/---"}
-                                                        <i className="ri-arrow-down-s-line ms-1"></i>
+                                                        {/* <i className="ri-arrow-down-s-line ms-1"></i> */}
                                                     </h1>
                                                 </div>
                                                 <div className="headline_etfDisplay__P4Hdv"><span>{SelectedCoin?.base_currency_fullname}</span></div>
@@ -832,7 +955,7 @@ const Trade = () => {
                             <div className="trade_card trade_chart p-0"  >
                                 <div className="treade_card_header tch_main_tab">
                                     <div className={`card_header_title  cursor-pointer ${showTab === "chart" && "active"}`} onClick={() => setShowTab("chart")}> Chart  </div>
-                                    <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div>
+                                    {/* <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div> */}
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "order_book" && "active"}`} onClick={() => setShowTab("order_book")}> Order Book  </div>
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "trade_history" && "active"}`} onClick={() => setShowTab("trade_history")}> Market Trades </div>
 
@@ -906,237 +1029,313 @@ const Trade = () => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-lg-12 col-xl-5 col-xxl-5 mmn_btm_minus_spc" >
+                        <div className="col-12 col-lg-12 col-xl-4 col-xxl-4 mmn_btm_minus_spc" >
                             <div className="row g-1 g-md-2 px-1 px-md-0" >
                                 <div className="col-lg-6" >
 
                                     {/* tab 3 content is here */}
                                     <div id="tab_3" className={`trade_card orderbook_two d-lg-block ${showTab !== "order_book"}`}>
-                                        <div className="treade_card_header d-lg-flex"><div className="card_header_title active">Order Book</div></div>
-                                        <div className=" trade_tabs buy_sell_cards  buy_sell_row d-flex-between">
-                                            <ul className="nav custom-tabs nav_order">
-                                                <li className="fav-tab"><a className="active" data-bs-toggle="tab" href="#all_orders"> <img alt='' src="/images/order_1.svg" width="22" height="11" />   </a></li>
-
-                                                <li className="usdt-tab">
-                                                    <a data-bs-toggle="tab" href="#buy_orders">
-                                                        <img alt='' src="/images/order_2.svg" width="22" height="11" />
-                                                    </a>
-                                                </li>
-                                                <li className="btc-tab"><a data-bs-toggle="tab" href="#sell_orders" className="me-0"> <img alt='' src="/images/order_3.svg" width="22" height="11" /> </a></li>
-                                            </ul>
-                                            <div className='num-div' >
-                                                <select className="form-select num-select p-0 input-select cursor-pointer" aria-label="Default select example" onClick={(e) => { setpriceDecimal(e.target.value) }}>
-                                                    <option value={8}>
-                                                        0.00000001
-                                                    </option>
-                                                    <option value={7}>
-                                                        0.0000001
-                                                    </option>
-                                                    <option value={6}>
-                                                        0.000001
-                                                    </option>
-                                                    <option value={5}>
-                                                        0.00001
-                                                    </option>
-                                                    <option value={4}>
-                                                        0.0001
-                                                    </option>
-                                                    <option value={3}>
-                                                        0.001
-                                                    </option>
-                                                    <option value={2}>
-                                                        0.01
-                                                    </option>
-                                                    <option value={1}>
-                                                        0.1
-                                                    </option>
-
-                                                </select>
-                                            </div>
-                                            {/* </div> */}
+                                        <div className="treade_card_header d-lg-flex">
+                                            <div className={`card_header_title cursor-pointer ${orderBookActiveTab === "orderbook" ? "active" : ""}`} onClick={() => setOrderBookActiveTab("orderbook")}>Order Book</div>
+                                            <div className={`card_header_title cursor-pointer ${orderBookActiveTab === "tradehistory" ? "active" : ""}`} onClick={() => setOrderBookActiveTab("tradehistory")}>Market Trades</div>
                                         </div>
-                                        <div className="tab-content buy_sell_row_price" >
-                                            <div className="tab-pane fade px-0  active show" id="all_orders">
-                                                <div className="price_card">
-                                                    <div className="price_card_head">
-                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                        <div>Total({SelectedCoin?.quote_currency})</div>
-                                                    </div>
-                                                    <div className="price_card_body scroll_y scroll_y_reverse" style={{ cursor: "pointer" }} >
-                                                        {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
-                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
-                                                            return (
-                                                                <div className="price_item_value" style={{
-                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                }} key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
-                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                </div>
-                                                            )
-                                                        }) : loader ?
-                                                            <div className="favouriteData">
-                                                                <div >
-                                                                    <div className="spinner-border text-primary" role="status" />
-                                                                </div>
-                                                            </div> :
-                                                            <>
 
-                                                                <div className="favouriteData">
-                                                                    <div >
-                                                                        <div className="spinner-border text-primary" role="status" />
-                                                                    </div>
-                                                                </div>
+                                        {orderBookActiveTab === "orderbook" && (
+                                            <div className="orderbooktab">
 
-                                                                {/* <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                    <small>No data Available</small>
-                                                                </div>
-                                                            </p> */}
-                                                            </>
-                                                        }
-                                                    </div>
-                                                    <div className="mrkt_trde_tab justify-content-center" >
-                                                        {/* <span className={`headline_title__x1csO  ${isPricePositive  ? "text-green" : "text-danger"}`} >{parseFloat(buyprice?.toFixed(8))} </span> */}
-
-                                                        <b className={isPricePositive ? "text-green" : "text-danger"} >
-                                                            {parseFloat(buyprice?.toFixed(8))}
-                                                        </b>
-                                                        <i className={isPricePositive ? 'ri-arrow-up-line ri-xl mx-3 text-green' : 'ri-arrow-down-line ri-xl mx-3 text-danger'}></i>
-                                                        <span>{parseFloat(priceChange?.toFixed(priceDecimal))}%</span>
-                                                    </div>
-                                                    <div className="price_card_body scroll_y" style={{ cursor: "pointer" }} >
-                                                        {(BuyOrders?.length > 0 && !loader) ?
-                                                            BuyOrders?.map((data, index) => {
-                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
-                                                                return (
-                                                                    <div style={{
-                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
-                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                    </div>
-                                                                )
-                                                            }) :
-                                                            loader ?
-                                                                <div className="favouriteData">
-                                                                    <div >
-                                                                        <div className="spinner-border text-primary" role="status" />
-                                                                    </div>
-                                                                </div> :
-                                                                <>
-
-                                                                    <div className="favouriteData">
-                                                                        <div >
-                                                                            <div className="spinner-border text-primary" role="status" />
-                                                                        </div>
-                                                                    </div>
-
-                                                                    {/* <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                    <small>No data Available</small>
-                                                                </div>
-                                                            </p> */}
-                                                                </>
-                                                        }
-                                                    </div>
+                                                {/* TABS */}
+                                                <div className="trade_tabs buy_sell_cards buy_sell_row d-flex-between">
+                                                    <ul className="nav custom-tabs nav_order">
+                                                        <li className="fav-tab">
+                                                            <a className="active" data-bs-toggle="tab" href="#all_orders">
+                                                                <img src="/images/order_1.svg" alt="" width="22" height="11" />
+                                                            </a>
+                                                        </li>
+                                                        <li className="usdt-tab">
+                                                            <a data-bs-toggle="tab" href="#buy_orders">
+                                                                <img src="/images/order_2.svg" alt="" width="22" height="11" />
+                                                            </a>
+                                                        </li>
+                                                        <li className="btc-tab">
+                                                            <a data-bs-toggle="tab" href="#sell_orders">
+                                                                <img src="/images/order_3.svg" alt="" width="22" height="11" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                            </div>
-                                            <div className="tab-pane fade px-0 " id="buy_orders">
-                                                <div className="price_card">
-                                                    <div className="price_card_head">
-                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                        <div>Total({SelectedCoin?.quote_currency})</div>
-                                                    </div>
-                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
-                                                        {(BuyOrders?.length > 0 && !loader) ?
-                                                            BuyOrders?.map((data, index) => {
-                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
-                                                                return (
-                                                                    <div style={{
-                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy} ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
-                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                    </div>
-                                                                )
-                                                            }) :
-                                                            loader ?
-                                                                <div className="favouriteData">
-                                                                    <div >
-                                                                        <div className="spinner-border text-primary" role="status" />
-                                                                    </div>
-                                                                </div> :
-                                                                <>
 
-                                                                    <div className="favouriteData">
-                                                                        <div >
-                                                                            <div className="spinner-border text-primary" role="status" />
-                                                                        </div>
-                                                                    </div>
+                                                <div className="tab-content buy_sell_row_price">
 
-                                                                    {/* <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                    <small>No data Available</small>
-                                                                </div>
-                                                            </p> */}
-                                                                </>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="tab-pane fade px-0 " id="sell_orders">
-                                                <div className="price_card">
-                                                    <div className="price_card_head">
-                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                        <div>Total({SelectedCoin?.quote_currency})
+                                                    {/* ================= ALL ORDERS ================= */}
+                                                    <div className="tab-pane fade show active px-0" id="all_orders">
+                                                        <div className="price_card">
+
+                                                            {/* SELL ORDERS */}
+                                                            <div className="price_card_body scroll_y scroll_y_reverse">
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Price ({SelectedCoin?.quote_currency})</th>
+                                                                            <th className="text-end">Quantity ({SelectedCoin?.base_currency})</th>
+                                                                            <th className="text-end">Total ({SelectedCoin?.quote_currency})</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {SellOrders?.length > 0 && !loader ? (
+                                                                            SellOrders.map((data, index) => {
+                                                                                const fill = maxSellVolume
+                                                                                    ? Math.min((data.remaining / maxSellVolume) * 100, 100)
+                                                                                    : 0;
+
+                                                                                return (
+                                                                                    <tr
+                                                                                        key={index}
+                                                                                        style={{
+                                                                                            cursor: "pointer",
+                                                                                            background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                        }}
+                                                                                        onClick={() => {
+                                                                                            setbuyamount(data.remaining.toFixed(8));
+                                                                                            infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                        }}
+                                                                                    >
+                                                                                        <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
+                                                                                        <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                        <td className="text-danger text-end">
+                                                                                            {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })
+                                                                        ) : (
+                                                                            <tr>
+                                                                                <td colSpan="3" className="text-center">
+                                                                                    <div className="spinner-border text-primary" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        )}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                            {/* MARKET PRICE */}
+                                                            <div className="mrkt_trde_tab justify-content-center">
+                                                                <b className={isPricePositive ? "text-green" : "text-danger"}>
+                                                                    {buyprice?.toFixed(8)}
+                                                                </b>
+                                                                <i className={`ri-arrow-${isPricePositive ? "up" : "down"}-line ri-xl mx-3 ${isPricePositive ? "text-green" : "text-danger"}`} />
+                                                                <span>{priceChange?.toFixed(priceDecimal)}%</span>
+                                                            </div>
+
+                                                            {/* BUY ORDERS */}
+                                                            <div className="price_card_body scroll_y">
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                    <tbody>
+                                                                        {BuyOrders?.length > 0 && !loader ? (
+                                                                            BuyOrders.map((data, index) => {
+                                                                                const fill = maxBuyVolume
+                                                                                    ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
+                                                                                    : 0;
+
+                                                                                return (
+                                                                                    <tr
+                                                                                        key={index}
+                                                                                        style={{
+                                                                                            cursor: "pointer",
+                                                                                            background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                        }}
+                                                                                        onClick={() => {
+                                                                                            setsellAmount(data.remaining.toFixed(8));
+                                                                                            infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                        }}
+                                                                                    >
+                                                                                        <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
+                                                                                        <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                        <td className="text-green text-end">
+                                                                                            {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })
+                                                                        ) : (
+                                                                            <tr>
+                                                                                <td colSpan="3" className="text-center">
+                                                                                    <div className="spinner-border text-primary" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        )}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
-                                                        {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
-                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
-                                                            return (
-                                                                <div style={{
-                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                }} className="price_item_value" key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
-                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                </div>
-                                                            )
-                                                        }) : loader ?
-                                                            <div className="favouriteData">
-                                                                <div >
-                                                                    <div className="spinner-border text-primary" role="status" />
-                                                                </div>
-                                                            </div> :
-                                                            <>
 
-                                                                <div className="favouriteData">
-                                                                    <div >
-                                                                        <div className="spinner-border text-primary" role="status" />
-                                                                    </div>
-                                                                </div>
+                                                    {/* ================= BUY ONLY ================= */}
+                                                    <div className="tab-pane fade px-0" id="buy_orders">
+                                                        <div className="price_card">
+                                                            <div className="price_card_body scroll_y">
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Price</th>
+                                                                            <th className="text-end">Quantity</th>
+                                                                            <th className="text-end">Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {BuyOrders?.map((data, index) => {
+                                                                            const fill = maxBuyVolume
+                                                                                ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
+                                                                                : 0;
 
-                                                                {/* <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                    <small>No data Available</small>
-                                                                </div>
-                                                            </p> */}
-                                                            </>}
+                                                                            return (
+                                                                                <tr
+                                                                                    key={index}
+                                                                                    style={{
+                                                                                        cursor: "pointer",
+                                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                    }}
+                                                                                    onClick={() => {
+                                                                                        setsellAmount(data.remaining.toFixed(8));
+                                                                                        infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                    }}
+                                                                                >
+                                                                                    <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-green text-end">
+                                                                                        {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            );
+                                                                        })}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    {/* ================= SELL ONLY ================= */}
+                                                    <div className="tab-pane fade px-0" id="sell_orders">
+                                                        <div className="price_card">
+                                                            <div className="price_card_body scroll_y">
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Price</th>
+                                                                            <th className="text-end">Quantity</th>
+                                                                            <th className="text-end">Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {SellOrders?.map((data, index) => {
+                                                                            const fill = maxSellVolume
+                                                                                ? Math.min((data.remaining / maxSellVolume) * 100, 100)
+                                                                                : 0;
+
+                                                                            return (
+                                                                                <tr
+                                                                                    key={index}
+                                                                                    style={{
+                                                                                        cursor: "pointer",
+                                                                                        background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                    }}
+                                                                                    onClick={() => {
+                                                                                        setbuyamount(data.remaining.toFixed(8));
+                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                    }}
+                                                                                >
+                                                                                    <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-danger text-end">
+                                                                                        {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            );
+                                                                        })}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                        </div>
+                                        )}
+
+
+                                        {orderBookActiveTab === "tradehistory" && (
+                                            <div className="trade_history_tab">
+
+                                                <div className="table-responsive">
+                                                    <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th className="text-start">
+                                                                    Price ({SelectedCoin?.quote_currency})
+                                                                </th>
+                                                                <th className="text-end">
+                                                                    Quantity ({SelectedCoin?.base_currency})
+                                                                </th>
+                                                                <th className="text-end">
+                                                                    Time
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody className="price_card_body">
+                                                            {RecentTrade?.length > 0 ? (
+                                                                RecentTrade.map((item, index) => (
+                                                                    <tr key={index}>
+                                                                        <td
+                                                                            className={
+                                                                                item?.side === "BUY"
+                                                                                    ? "text-green text-start"
+                                                                                    : "text-danger text-start"
+                                                                            }
+                                                                        >
+                                                                            {parseFloat(item?.price || 0)}
+                                                                        </td>
+
+                                                                        <td className="text-end">
+                                                                            {parseFloat(item?.quantity || 0)}
+                                                                        </td>
+
+                                                                        <td className="text-end">
+                                                                            {item?.time || "---"}
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            ) : (
+                                                                <tr>
+                                                                    <td colSpan="3" className="text-center">
+                                                                        <div className="no_data_s">
+                                                                            <img
+                                                                                src="/images/no_data_vector.svg"
+                                                                                className="img-fluid mb-2"
+                                                                                alt="no data"
+                                                                                width="52"
+                                                                            />
+                                                                            <br />
+                                                                            <small>No data Available</small>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        )}
+
+
+
+
+
+
+
+
+
                                     </div>
                                 </div>
                                 <div className="col-lg-6">
@@ -1208,149 +1407,235 @@ const Trade = () => {
                                                             </div>
                                                             {/* </div> */}
                                                         </div>
-                                                        <div className="tab-content buy_sell_row_price" >
-                                                            <div className="tab-pane fade px-0  active show" id="all_orders">
-                                                                <div className="price_card">
-                                                                    <div className="price_card_head">
-                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                                        {/* <div>Total({SelectedCoin?.quote_currency})</div> */}
-                                                                    </div><div className="table-responsive">
-                                                                        <div className="price_card_body scroll_y scroll_y_reverse" style={{ cursor: "pointer" }} >
-                                                                            {(SellOrders?.length > 0 && !loader) ? SellOrders?.map((data, index) => {
-                                                                                const fillPercentage = (data.remaining / maxSellVolume) * 100;
-                                                                                return (
-                                                                                    <div className="price_item_value" style={{
-                                                                                        background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                                    }} key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
-                                                                                        <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                                        <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                        {/* <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span> */}
-                                                                                    </div>
-                                                                                )
-                                                                            }) : loader ?
-                                                                                <div className="favouriteData">
-                                                                                    <div style={{ width: '100%', height: '429px' }}>
-                                                                                        <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                                    <div className="no_data_s">
-                                                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                                        <small>No data Available</small>
-                                                                                    </div>
-                                                                                </p>
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mrkt_trde_tab justify-content-center" >
-                                                                        {/* <span className={`headline_title__x1csO  ${isPricePositive  ? "text-green" : "text-danger"}`} >{parseFloat(buyprice?.toFixed(8))} </span> */}
+                                                        <div className="tab-content buy_sell_row_price">
 
-                                                                        <b className={isPricePositive ? "text-green" : "text-danger"} >
-                                                                            {parseFloat(buyprice?.toFixed(8))}
-                                                                        </b>
-                                                                        <i className={isPricePositive ? 'ri-arrow-up-line ri-xl mx-3 text-green' : 'ri-arrow-down-line ri-xl mx-3 text-danger'}></i>
-                                                                        <span>{parseFloat(priceChange?.toFixed(priceDecimal))}%</span>
-                                                                    </div>
-                                                                    <div className="price_card_body scroll_y" style={{ cursor: "pointer" }} >
-                                                                        {(BuyOrders?.length > 0 && !loader) ?
-                                                                            BuyOrders?.map((data, index) => {
-                                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
-                                                                                return (
-                                                                                    <div style={{
-                                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
-                                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                        {/* <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span> */}
-                                                                                    </div>
-                                                                                )
-                                                                            }) :
-                                                                            loader ?
-                                                                                <div className="favouriteData">
-                                                                                    <div style={{ width: '100%', height: '429px' }}>
-                                                                                        <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                            <div className="loading-bar"></div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                                    <div className="no_data_s">
-                                                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                                        <small>No data Available</small>
-                                                                                    </div>
-                                                                                </p>
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="tab-pane fade px-0 " id="buy_orders">
+                                                            {/* ================= ALL ORDERS ================= */}
+                                                            <div className="tab-pane fade px-0 active show" id="all_orders">
                                                                 <div className="price_card">
-                                                                    <div className="price_card_head">
-                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                                        <div>Total({SelectedCoin?.quote_currency})</div>
-                                                                    </div>
-                                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
-                                                                        {BuyOrders?.length > 0 ?
-                                                                            BuyOrders?.map((data, index) => {
-                                                                                const fillPercentage = (data.remaining / maxBuyVolume) * 100;
-                                                                                return (
-                                                                                    <div style={{
-                                                                                        background: `linear-gradient(to left, ${orderBookColor?.buy} ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                                    }} className="price_item_value" key={index} onClick={() => { setsellAmount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setsellOrderPrice(data?.price) }}>
-                                                                                        <span className={"text-green d-flex lign-items-center"} >{parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                                        <span className="">{parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                        <span className="text-green">{parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                    </div>
-                                                                                )
-                                                                            }) :
-                                                                            <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                                <div className="no_data_s">
-                                                                                    <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                                    <small>No data Available</small>
-                                                                                </div>
-                                                                            </p>
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="tab-pane fade px-0 " id="sell_orders">
-                                                                <div className="price_card">
-                                                                    <div className="price_card_head">
-                                                                        <div className="ps-0" >Price({SelectedCoin?.quote_currency})</div>
-                                                                        <div>Quantity({SelectedCoin?.base_currency})</div>
-                                                                        <div>Total({SelectedCoin?.quote_currency})
+
+                                                                    {/* SELL ORDERS */}
+                                                                    <div className="table-responsive">
+                                                                        <div className="price_card_body scroll_y scroll_y_reverse">
+                                                                            <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Price ({SelectedCoin?.quote_currency})</th>
+                                                                                        <th className="text-end">
+                                                                                            Quantity ({SelectedCoin?.base_currency})
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    {SellOrders?.length > 0 && !loader ? (
+                                                                                        SellOrders.map((data, index) => {
+                                                                                            const fill = maxSellVolume
+                                                                                                ? Math.min((data.remaining / maxSellVolume) * 100, 100)
+                                                                                                : 0;
+
+                                                                                            return (
+                                                                                                <tr
+                                                                                                    key={index}
+                                                                                                    style={{
+                                                                                                        cursor: "pointer",
+                                                                                                        background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                                    }}
+                                                                                                    onClick={() => {
+                                                                                                        setbuyamount(data.remaining.toFixed(8));
+                                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                                    }}
+                                                                                                >
+                                                                                                    <td className="text-danger">
+                                                                                                        {data.price.toFixed(priceDecimal)}
+                                                                                                    </td>
+                                                                                                    <td className="text-end">
+                                                                                                        {data.remaining.toFixed(priceDecimal)}
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            );
+                                                                                        })
+                                                                                    ) : (
+                                                                                        <tr>
+                                                                                            <td colSpan="2" className="text-center">
+                                                                                                <div className="loading-wave">
+                                                                                                    <div className="loading-bar"></div>
+                                                                                                    <div className="loading-bar"></div>
+                                                                                                    <div className="loading-bar"></div>
+                                                                                                    <div className="loading-bar"></div>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    )}
+                                                                                </tbody>
+                                                                            </table>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="price_card_body scroll_y center_cntr" style={{ cursor: "pointer" }} >
-                                                                        {SellOrders?.length > 0 ? SellOrders?.map((data, index) => {
-                                                                            const fillPercentage = (data.remaining / maxSellVolume) * 100;
-                                                                            return (
-                                                                                <div style={{
-                                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell}  ${fillPercentage}%, transparent ${fillPercentage}%)`
-                                                                                }} className="price_item_value" key={index} onClick={() => { setbuyamount(data?.remaining?.toFixed(8)); infoPlaceOrder !== 'MARKET' && setbuyOrderPrice(data?.price) }}>
-                                                                                    <span className="d-flex align-items-center text-danger "> {parseFloat((data?.price)?.toFixed(priceDecimal))}</span>
-                                                                                    <span className=""> {parseFloat((data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                    <span className="text-danger"> {parseFloat((data?.price * data?.remaining)?.toFixed(priceDecimal))}</span>
-                                                                                </div>
-                                                                            )
-                                                                        }) : <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                            <div className="no_data_s">
-                                                                                <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                                                <small>No data Available</small>
-                                                                            </div>
-                                                                        </p>}
+
+                                                                    {/* MARKET PRICE */}
+                                                                    <div className="mrkt_trde_tab justify-content-center">
+                                                                        <b className={isPricePositive ? "text-green" : "text-danger"}>
+                                                                            {buyprice?.toFixed(8)}
+                                                                        </b>
+                                                                        <i
+                                                                            className={
+                                                                                isPricePositive
+                                                                                    ? "ri-arrow-up-line ri-xl mx-3 text-green"
+                                                                                    : "ri-arrow-down-line ri-xl mx-3 text-danger"
+                                                                            }
+                                                                        />
+                                                                        <span>{priceChange?.toFixed(priceDecimal)}%</span>
+                                                                    </div>
+
+                                                                    {/* BUY ORDERS */}
+                                                                    <div className="price_card_body scroll_y">
+                                                                        <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                            <tbody>
+                                                                                {BuyOrders?.length > 0 && !loader ? (
+                                                                                    BuyOrders.map((data, index) => {
+                                                                                        const fill = maxBuyVolume
+                                                                                            ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
+                                                                                            : 0;
+
+                                                                                        return (
+                                                                                            <tr
+                                                                                                key={index}
+                                                                                                style={{
+                                                                                                    cursor: "pointer",
+                                                                                                    background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                                }}
+                                                                                                onClick={() => {
+                                                                                                    setsellAmount(data.remaining.toFixed(8));
+                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                                }}
+                                                                                            >
+                                                                                                <td className="text-green">
+                                                                                                    {data.price.toFixed(priceDecimal)}
+                                                                                                </td>
+                                                                                                <td className="text-end">
+                                                                                                    {data.remaining.toFixed(priceDecimal)}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        );
+                                                                                    })
+                                                                                ) : (
+                                                                                    <tr>
+                                                                                        <td colSpan="2" className="text-center">
+                                                                                            <div className="loading-wave">
+                                                                                                <div className="loading-bar"></div>
+                                                                                                <div className="loading-bar"></div>
+                                                                                                <div className="loading-bar"></div>
+                                                                                                <div className="loading-bar"></div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                )}
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            {/* ================= BUY ONLY ================= */}
+                                                            <div className="tab-pane fade px-0" id="buy_orders">
+                                                                <div className="price_card">
+                                                                    <div className="price_card_body scroll_y center_cntr">
+                                                                        <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Price</th>
+                                                                                    <th className="text-end">Quantity</th>
+                                                                                    <th className="text-end">Total</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                {BuyOrders?.length > 0 ? (
+                                                                                    BuyOrders.map((data, index) => {
+                                                                                        const fill = maxBuyVolume
+                                                                                            ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
+                                                                                            : 0;
+
+                                                                                        return (
+                                                                                            <tr
+                                                                                                key={index}
+                                                                                                style={{
+                                                                                                    cursor: "pointer",
+                                                                                                    background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                                }}
+                                                                                                onClick={() => {
+                                                                                                    setsellAmount(data.remaining.toFixed(8));
+                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                                }}
+                                                                                            >
+                                                                                                <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-green text-end">
+                                                                                                    {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        );
+                                                                                    })
+                                                                                ) : (
+                                                                                    <tr>
+                                                                                        <td colSpan="3" className="text-center">No data available</td>
+                                                                                    </tr>
+                                                                                )}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* ================= SELL ONLY ================= */}
+                                                            <div className="tab-pane fade px-0" id="sell_orders">
+                                                                <div className="price_card">
+                                                                    <div className="price_card_body scroll_y center_cntr">
+                                                                        <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Price</th>
+                                                                                    <th className="text-end">Quantity</th>
+                                                                                    <th className="text-end">Total</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                {SellOrders?.length > 0 ? (
+                                                                                    SellOrders.map((data, index) => {
+                                                                                        const fill = maxSellVolume
+                                                                                            ? Math.min((data.remaining / maxSellVolume) * 100, 100)
+                                                                                            : 0;
+
+                                                                                        return (
+                                                                                            <tr
+                                                                                                key={index}
+                                                                                                style={{
+                                                                                                    cursor: "pointer",
+                                                                                                    background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                                }}
+                                                                                                onClick={() => {
+                                                                                                    setbuyamount(data.remaining.toFixed(8));
+                                                                                                    infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                                }}
+                                                                                            >
+                                                                                                <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-danger text-end">
+                                                                                                    {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        );
+                                                                                    })
+                                                                                ) : (
+                                                                                    <tr>
+                                                                                        <td colSpan="3" className="text-center">No data available</td>
+                                                                                    </tr>
+                                                                                )}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
+
                                                     </div>
 
                                                     <div className="trade_card trade_chart  buysell_card buysell_two">
@@ -1370,11 +1655,13 @@ const Trade = () => {
                                                         </div>
                                                         <div className=" p-2 p-md-3" >
                                                             <div className="col-md-12 mb-3">
-                                                                <div className="spot_limit  " >
-                                                                    <select className=" mb-0 form-select-sm" name="infoPlaceOrder" onChange={handleOrderType} value={infoPlaceOrder}>
+                                                                <div className="spot_limit d-flex align-items-center gap-4" >
+                                                                    <button className="active">Limit</button>
+                                                                    <button>Market</button>
+                                                                    {/* <select className=" mb-0 form-select-sm" name="infoPlaceOrder" onChange={handleOrderType} value={infoPlaceOrder}>
                                                                         <option value="LIMIT" >Limit</option>
                                                                         <option value="MARKET">Market</option>
-                                                                    </select>
+                                                                    </select> */}
                                                                 </div>
                                                             </div>
                                                             <div className="tab-content" >
@@ -1431,7 +1718,9 @@ const Trade = () => {
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-group" >
-                                                                            <div className="btn-group btn-group-mini  mb-3" role="group" aria-label="Basic radio toggle button group">
+                                                                            <div className="btn-group btn-group-mini  mb-3 process_step" role="group" aria-label="Basic radio toggle button group">
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio10" autoComplete="off" />
+                                                                                <label className="btn btn-outline-success checked" htmlFor="btnradio10" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 0) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >0%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio125" autoComplete="off" />
                                                                                 <label className="btn btn-outline-success" htmlFor="btnradio125" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 25) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >25%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio250" autoComplete="off" />
@@ -1439,14 +1728,12 @@ const Trade = () => {
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio375" autoComplete="off" />
                                                                                 <label className="btn btn-outline-success" htmlFor="btnradio375" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 75) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>75%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio3100" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success" htmlFor="btnradio3100" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal)) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>100%</label>
+                                                                                <label className="btn btn-outline-success last-child" htmlFor="btnradio3100" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal)) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>100%</label>
                                                                             </div>
                                                                         </div>
 
-                                                                        <small className="">Minimal Buy : 10 USDT</small>
+                                                                        {/* <small className="mb-2">Minimal Buy : 10 USDT</small> */}
                                                                         <>
-
-
                                                                             {token ?
                                                                                 KycStatus === 0 || KycStatus == 1 || KycStatus == 3 ?
                                                                                     <Link to={KycStatus == 1 ? "" : '/user_profile/kyc'
@@ -1532,18 +1819,18 @@ const Trade = () => {
                                                                             </div>
                                                                         </div>
                                                                         <div className="form-group" >
-                                                                            <div className="btn-group btn-group-mini   mb-3 " role="group" aria-label="Basic radio toggle button group">
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio15" autoComplete="off" />
+                                                                            <div className="btn-group btn-group-mini process_step  mb-3 " role="group" aria-label="Basic radio toggle button group">
+                                                                                <input type="radio" className="btn-check checked" name="btnradio" id="btnradio15" autoComplete="off" />
                                                                                 <label className="btn btn-outline-danger" htmlFor="btnradio15" onClick={() => { setsellAmount(toFixed8(SellCoinBal / 100) * 25) }}>25%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio20" autoComplete="off" />
                                                                                 <label className="btn btn-outline-danger" htmlFor="btnradio20" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 50)) }}>50%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio35" autoComplete="off" />
                                                                                 <label className="btn btn-outline-danger" htmlFor="btnradio35" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 75)) }}>75%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio300" autoComplete="off" />
-                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio300" onClick={() => { setsellAmount(toFixed8(SellCoinBal)) }}>100%</label>
+                                                                                <label className="btn btn-outline-danger last-child" htmlFor="btnradio300" onClick={() => { setsellAmount(toFixed8(SellCoinBal)) }}>100%</label>
                                                                             </div>
                                                                         </div>
-                                                                        <small className=" ">Minimal Sell: {nineDecimalFormat(10 / SelectedCoin?.buy_price)} {SelectedCoin?.base_currency}</small>
+                                                                        {/* <small className="">Minimal Sell: {nineDecimalFormat(10 / SelectedCoin?.buy_price)} {SelectedCoin?.base_currency}</small> */}
 
                                                                         <>
 
@@ -1582,14 +1869,6 @@ const Trade = () => {
 
 
                                                         <div className="assets_list">
-
-                                                            <div className="top_heading"><h4>Assets</h4><Link className="more_btn" to="/user_profile/asset_overview">More &gt;</Link></div>
-
-                                                            <div className="assets_btn">
-                                                                <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>
-                                                                <button><Link to="/asset_managemnet/withdraw">Withdrawal</Link></button>
-                                                                <button><Link to="/user_profile/spot_orders">Trade History</Link></button>
-                                                            </div>
 
                                                             <ul>
                                                                 <li>Coin<span>Total Assets</span></li>
@@ -1807,33 +2086,93 @@ const Trade = () => {
                             <div className="assets_right" >
                                 {/* tab 4 content is here */}
                                 <div id="tab_4" className={` d-lg-block ${showTab !== "trade_history" && "d-none"}`}>
+
+                                    <div className="assets_list">
+
+                                        <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i class="ri-exchange-funds-fill"></i> Convert</Link></div>
+
+                                        <div className="assets_btn">
+                                            <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>
+                                            <button><Link to="/asset_managemnet/withdraw">Withdrawal</Link></button>
+                                            {/* <button><Link to="/user_profile/spot_orders">Trade History</Link></button> */}
+                                        </div>
+
+                                    </div>
                                     <div className="price_card">
-                                        <div className="treade_card_header d-none d-lg-flex">
+                                        {/* <div className="treade_card_header d-none d-lg-flex">
                                             <div className="card_header_title active">Trade History </div>
+                                        </div> */}
+                                        <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                            <thead>
+                                                <tr>
+                                                    <th className="ps-0 text-start">
+                                                        Price ({SelectedCoin?.quote_currency})
+                                                    </th>
+                                                    <th className="text-end">
+                                                        Quantity ({SelectedCoin?.base_currency})
+                                                    </th>
+                                                    <th className="text-end">
+                                                        Time
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                        <div className="table-responsive price_card_body scroll_y scroll_y_mt">
+                                            <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Price</th>
+                                                        <th className="text-end">Quantity</th>
+                                                        <th className="text-end">Time</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody style={{ cursor: "pointer" }}>
+                                                    {RecentTrade?.length > 0 ? (
+                                                        RecentTrade.map((item, index) => (
+                                                            <tr key={index}>
+                                                                {/* Price */}
+                                                                <td
+                                                                    className={
+                                                                        item?.side === "BUY"
+                                                                            ? "text-green d-flex align-items-center"
+                                                                            : "text-danger d-flex align-items-center"
+                                                                    }
+                                                                >
+                                                                    {parseFloat(item?.price || 0)}
+                                                                </td>
+
+                                                                {/* Quantity */}
+                                                                <td className="text-end">
+                                                                    {parseFloat(item?.quantity || 0)}
+                                                                </td>
+
+                                                                {/* Time */}
+                                                                <td className="text-end">
+                                                                    {item?.time || "---"}
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan="3" className="text-center">
+                                                                <div className="no_data_s">
+                                                                    <img
+                                                                        src="/images/no_data_vector.svg"
+                                                                        className="img-fluid mb-2"
+                                                                        alt="no data"
+                                                                        width="52"
+                                                                    />
+                                                                    <small>No data Available</small>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div className="price_card_head">
-                                            <div className="ps-0">Price({SelectedCoin?.quote_currency})</div>
-                                            <div >Quantity({SelectedCoin?.base_currency})</div>
-                                            <div >Time</div>
-                                        </div>
-                                        <div className="price_card_body scroll_y scroll_y_mt" style={{ cursor: "pointer" }}>
-                                            {RecentTrade?.length > 0 ? RecentTrade.map((item, index) =>
-                                                <div className="price_item_value" key={index}>
-                                                    <span className={item?.side === "BUY" ? "text-green d-flex align-items-center" : "text-danger d-flex align-items-center"}>
-                                                        {parseFloat((item?.price || 0))}
-                                                    </span>
-                                                    <span>{parseFloat((item?.quantity || 0))}</span>
-                                                    <span>{item?.time || "---"}</span>
-                                                </div>
-                                            ) : (
-                                                <p className="text-center no-data h-100 mb-0 center_b">
-                                                    <div className="no_data_s">
-                                                        <img src="/images/no_data_vector.svg" className='img-fluid mb-2' alt="no data" width="52" />
-                                                        <small>No data Available</small>
-                                                    </div>
-                                                </p>
-                                            )}
-                                        </div>
+
 
                                     </div>
                                 </div>

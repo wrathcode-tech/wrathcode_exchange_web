@@ -1251,50 +1251,50 @@ function UsdMFutures() {
                                                     <div className="tab-pane show active" id="sell_orders">
                                                         <div className="table_info_data">
                                                             <div className="table-responsive">
-                                                                {SellOrders?.length > 0 ? 
-                                                                <table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Price ({selectedCoin?.margin_asset || "---"})</th>
-                                                                            <th>Size ({selectedCoin?.short_name || "---"})</th>
-                                                                            <th>Sum ({selectedCoin?.short_name || "---"})</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {SellOrders?.length > 0 ? (
-                                                                            SellOrders.map((item) => {
-                                                                                const fillPercentage = (item.size / maxSellVolume) * 100;
-                                                                                return (
-                                                                                    <tr
-                                                                                        key={item?._id}
-                                                                                        style={{
-                                                                                            background: `linear-gradient(to left, ${orderBookColor?.sell} ${fillPercentage}%, transparent ${fillPercentage}%)`,
-                                                                                        }}
-                                                                                        className="cursor-pointer"
-                                                                                        onClick={() => {
-                                                                                            setLimitPrice(pricePrecision(item?.price));
-                                                                                            setPercentage(0);
-                                                                                        }}
-                                                                                    >
-                                                                                        <td className="danger">{pricePrecision(item?.price)}</td>
-                                                                                        <td>{qunaityPrecision(item?.size)}</td>
-                                                                                        <td>{toFixedFive(item?.sum)}</td>
-                                                                                    </tr>
-                                                                                );
-                                                                            })
-                                                                        ) : (
-                                                                            // <tr>
-                                                                            //     <td colSpan="3">
-                                                                            <div className="favouriteData d-flex justify-content-center align-items-center">
-                                                                                <div className="spinner-border" role="status"></div>
-                                                                            </div>
-                                                                            //     </td>
-                                                                            // </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table> : <div className="favouriteData d-flex justify-content-center align-items-center">
-                                                                    <div className="spinner-border" role="status"></div>
-                                                                </div>}
+                                                                {SellOrders?.length > 0 ?
+                                                                    <table>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Price ({selectedCoin?.margin_asset || "---"})</th>
+                                                                                <th>Size ({selectedCoin?.short_name || "---"})</th>
+                                                                                <th>Sum ({selectedCoin?.short_name || "---"})</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {SellOrders?.length > 0 ? (
+                                                                                SellOrders.map((item) => {
+                                                                                    const fillPercentage = (item.size / maxSellVolume) * 100;
+                                                                                    return (
+                                                                                        <tr
+                                                                                            key={item?._id}
+                                                                                            style={{
+                                                                                                background: `linear-gradient(to left, ${orderBookColor?.sell} ${fillPercentage}%, transparent ${fillPercentage}%)`,
+                                                                                            }}
+                                                                                            className="cursor-pointer"
+                                                                                            onClick={() => {
+                                                                                                setLimitPrice(pricePrecision(item?.price));
+                                                                                                setPercentage(0);
+                                                                                            }}
+                                                                                        >
+                                                                                            <td className="danger">{pricePrecision(item?.price)}</td>
+                                                                                            <td>{qunaityPrecision(item?.size)}</td>
+                                                                                            <td>{toFixedFive(item?.sum)}</td>
+                                                                                        </tr>
+                                                                                    );
+                                                                                })
+                                                                            ) : (
+                                                                                // <tr>
+                                                                                //     <td colSpan="3">
+                                                                                <div className="favouriteData d-flex justify-content-center align-items-center">
+                                                                                    <div className="spinner-border" role="status"></div>
+                                                                                </div>
+                                                                                //     </td>
+                                                                                // </tr>
+                                                                            )}
+                                                                        </tbody>
+                                                                    </table> : <div className="favouriteData d-flex justify-content-center align-items-center">
+                                                                        <div className="spinner-border" role="status"></div>
+                                                                    </div>}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1356,7 +1356,7 @@ function UsdMFutures() {
                         <div class="top_cross_dashboard">
                             <ul>
                                 <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cross">Cross</a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cross">Cross <i class="ri-arrow-down-s-fill"></i></a>
 
                                     {/* <!-- Modal Start Margin  --> */}
                                     <div class="modal fade currency_popup_s crosstabs" id="cross" tabindex="-1"
@@ -1415,7 +1415,7 @@ function UsdMFutures() {
 
                                 </li>
                                 <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#twox">{Leverage}x</a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#twox">{Leverage}x <i class="ri-arrow-down-s-fill"></i></a>
                                     {/* <!-- Modal Start leverage --> */}
                                     <div class="modal fade currency_popup_s crosstabs" id="twox" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">

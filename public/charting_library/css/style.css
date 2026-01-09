@@ -15,17 +15,17 @@
 }
 
 .theme-dark:root {
-    --tv-color-platform-background: #111114;
-    --tv-color-pane-background: #111114;
-    --tv-color-pane-background-secondary: #111114;
-    --tv-color-toolbar-button-background-hover: #111114;
-    --tv-color-toolbar-button-background-secondary-hover: #111114;
-    --tv-color-toolbar-button-background-expanded: #111114;
+    --tv-color-platform-background: #181A20;
+    --tv-color-pane-background: #181A20;
+    --tv-color-pane-background-secondary: #181A20;
+    --tv-color-toolbar-button-background-hover: #181A20;
+    --tv-color-toolbar-button-background-secondary-hover: #181A20;
+    --tv-color-toolbar-button-background-expanded: #181A20;
     --tv-color-toolbar-button-text: #fff;
     --tv-color-toolbar-button-text-hover: #f3bb2c;
     --tv-color-toolbar-button-text-active: #f3bb2c;
     --tv-color-toolbar-button-text-active-hover: #f3bb2c;
-    --tv-color-item-active-text: #111114;
+    --tv-color-item-active-text: #181A20;
     --tv-color-toolbar-toggle-button-background-active: #f3bb2c;
     --tv-color-toolbar-toggle-button-background-active-hover: #f3bb2c;
 
@@ -49,17 +49,18 @@
 }
 
 .theme-dark .custom-interval-button {
-    background-color: #0c0917;
-    color: white;
+    background-color: #0c091740;
+    color: #949AA4;
     border: none;
     padding: 5px 10px;
     margin: 0 5px;
     cursor: pointer;
     border-radius: 3px;
+    font-size:12px;
 }
 
 .theme-dark .custom-interval-button:hover {
-    background-color: #f3bb2c !important;
+    background-color: #0c091770 !important;
 }
 
 .custom-interval-button {
@@ -75,3 +76,4 @@
 .custom-interval-button:hover {
     background-color: #dbd9d9 !important;
 }
+

@@ -53,6 +53,18 @@ body .banner_add_slide .slick-dots li.slick-active {
   background-repeat: no-repeat;
 }
 
+h2 {
+  font-family: "Afacad", sans-serif;
+}
+
+h3 {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li {
+  font-family: "Afacad", sans-serif;
+}
+
 .how_get_account_ot ul li p {
   font-size: 22px;
 }
@@ -623,9 +635,22 @@ body .banner_add_slide .slick-dots li.slick-active {
 
 
 .herobanner2 {
+  font-family: "Afacad", sans-serif;
   background-image: url('../../../../public/images/new_img/hero_bannerbg2.svg');
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+h2 {
+  font-family: "Afacad", sans-serif;
+}
+
+h3 {
+  font-family: "Afacad", sans-serif;
+}
+
+.how_get_account_ot ul li {
+  font-family: "Afacad", sans-serif;
 }
 
 .how_get_account_ot ul li p {
@@ -1139,5 +1164,16 @@ body.light_theme .scan_left_s img.light_m {
 
   }
 
-/* Enhanced animations are now in public/css-new/style.css */
-/* All banner animations now include rotation for better visual effect */
+/* 360 Degree Rotation Animation for crypto_cntr */
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.crypto_cntr {
+  animation: rotate360 10s linear infinite;
+}

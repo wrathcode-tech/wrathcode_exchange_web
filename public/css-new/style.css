@@ -613,7 +613,7 @@ button.morebtn {
 }
 
 button.btn.btn-danger {
-    border-color: #ed5765;
+    border-color: #E45561;
     border-radius: 50px;
 }
 
@@ -11608,8 +11608,7 @@ img.coinimg {
     border-color: #fea903 !important;
 } */
 
-.trade_card table.table,
-.table tbody tr:hover {
+.trade_card table tr:hover {
     background-color: #2B313C;
 }
 
@@ -15664,6 +15663,35 @@ button.primary_btn.prevStep {
 .coin_cryptofiled button span img {
     width: 28px;
 }
+
+.orderbook-table th {
+    font-size: 12px;
+    font-weight: 500;
+    color: #8b92a5;
+    background: #1c2230;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.orderbook-table th {
+    font-size: 12px;
+    font-weight: 300;
+    color: #87909F;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.orderbook-table tr.active {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.orderbook-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+
 
 @media screen and (max-width:1700px) {
 
