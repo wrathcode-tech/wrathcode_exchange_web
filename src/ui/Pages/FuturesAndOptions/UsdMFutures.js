@@ -1050,17 +1050,18 @@ function UsdMFutures() {
                                                     <div className="tab-pane show active toggle2" id="all_orders">
                                                         <div className="table_info_data">
 
-                                                            <div class="price_card_head"><div class="ps-0">Price(USDT)</div><div>Quantity(BTC)</div><div>Total(USDT)</div></div>
+                                                            {/* <div class="price_card_head">
+                                                                <div class="ps-0">Price(USDT)</div><div>Quantity(BTC)</div><div>Total(USDT)</div></div> */}
                                                             <div className="scroll_y scroll_y_reverse">
                                                                 {SellOrders?.length > 0 ?
                                                                     <table>
-                                                                        {/* <thead>
+                                                                        <thead>
                                                                         <tr>
                                                                             <th>Price ({selectedCoin?.margin_asset || "---"})</th>
                                                                             <th>Size ({selectedCoin?.short_name || "---"})</th>
                                                                             <th>Sum ({selectedCoin?.short_name || "---"})</th>
                                                                         </tr>
-                                                                    </thead> */}
+                                                                    </thead>
                                                                         <tbody>
                                                                             {SellOrders?.length > 0 ? (
                                                                                 SellOrders.map((item) => {
@@ -1101,9 +1102,6 @@ function UsdMFutures() {
                                                                     </div>}
                                                             </div>
 
-
-
-
                                                             <div className="mrkt_trde_tab justify-content-center">
                                                                 <table>
 
@@ -1127,12 +1125,6 @@ function UsdMFutures() {
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-
-
-
-
-
-
 
                                                             <div className="price_card_body scroll_y">
                                                                 {BuyOrders?.length > 0 ? <table>
@@ -1182,8 +1174,6 @@ function UsdMFutures() {
                                                                     </div>}
                                                             </div>
 
-
-
                                                         </div>
                                                     </div>
                                                 )}
@@ -1193,6 +1183,7 @@ function UsdMFutures() {
                                                 {activeInnerTab === "buy_orders" && (
                                                     <div className="tab-pane show active" id="buy_orders">
                                                         <div className="table_info_data">
+                                                            
                                                             <div className="table-responsive">
                                                                 {BuyOrders?.length > 0 ? <table>
                                                                     <thead>
@@ -1308,7 +1299,7 @@ function UsdMFutures() {
 
                                 {/* RECENT TRADES */}
                                 {activeMainTab === "trades" && (
-                                    <div className="tab-pane show active" id="trades">
+                                    <div className="tab-pane show active mt-2" id="trades">
                                         <div className="table_info_data">
                                             <div className="table-responsive">
                                                 <table>

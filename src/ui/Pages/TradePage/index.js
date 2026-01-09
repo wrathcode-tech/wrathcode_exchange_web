@@ -669,6 +669,11 @@ const Trade = () => {
                                     </div>
                                 </div>
 
+                               <ul className="favorites_list_tabs">
+                                   <li><button className="active">Favourites</button></li>
+                                   <li><button>USDT</button></li>
+                                </ul> 
+
                                 {/* Table */}
                                 <div className="price_card table-responsive">
                                     <table className="table table-sm table-borderless mb-0 orderbook-table">
@@ -773,7 +778,7 @@ const Trade = () => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-lg-12 col-xl-6  col-xxl-6 " >
+                        <div className="col-12 col-lg-12 col-xl-6  col-xxl-6 midgraph_col">
                             {/* <div className={`bs_dropbox spotLists_bs_dropbox ${showCoinList === true ? 'active' : ""}`}>
                                 <div className="spotLists active" >
                                     <div className=" trade_tabs buy_sell_cards   ">
@@ -953,13 +958,13 @@ const Trade = () => {
                             </div>
 
                             <div className="trade_card trade_chart p-0"  >
-                                <div className="treade_card_header tch_main_tab">
+                                {/* <div className="treade_card_header tch_main_tab">
                                     <div className={`card_header_title  cursor-pointer ${showTab === "chart" && "active"}`} onClick={() => setShowTab("chart")}> Chart  </div>
-                                    {/* <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div> */}
+                                    <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div>
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "order_book" && "active"}`} onClick={() => setShowTab("order_book")}> Order Book  </div>
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "trade_history" && "active"}`} onClick={() => setShowTab("trade_history")}> Market Trades </div>
 
-                                </div>
+                                </div> */}
                                 {/* tab 1 */}
                                 <div id="tab_1" className={`cc_tab ${showTab !== "chart" && "d-none"}`} >
                                     {!SelectedCoin?.base_currency ?
@@ -1865,6 +1870,12 @@ const Trade = () => {
                                                                 </div>
 
                                                             </div>
+
+
+                                                            <div className="freerate">
+                                                            <span>Fee rate</span>  Maker 0%/ Taker 0.01%
+                                                        </div>
+
                                                         </div>
 
 
@@ -2102,22 +2113,6 @@ const Trade = () => {
                                         {/* <div className="treade_card_header d-none d-lg-flex">
                                             <div className="card_header_title active">Trade History </div>
                                         </div> */}
-                                        <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                            <thead>
-                                                <tr>
-                                                    <th className="ps-0 text-start">
-                                                        Price ({SelectedCoin?.quote_currency})
-                                                    </th>
-                                                    <th className="text-end">
-                                                        Quantity ({SelectedCoin?.base_currency})
-                                                    </th>
-                                                    <th className="text-end">
-                                                        Time
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-
                                         <div className="table-responsive price_card_body scroll_y scroll_y_mt">
                                             <table className="table table-sm table-borderless mb-0 orderbook-table">
                                                 <thead>

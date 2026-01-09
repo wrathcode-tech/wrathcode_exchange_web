@@ -656,6 +656,7 @@ form.price_info {
     background-color: transparent;
     padding-left: 2px;
     color: #fff;
+    font-weight: 200;
 }
 
 .price_inputbl select {
@@ -771,7 +772,7 @@ ul.btnlimit li button.active {
 }
 
 .position_order .position_list {
-    border-bottom: 1px solid #282828;
+    border-bottom: 1px solid #454C59;
     gap: 15px;
     display: flex;
 }
@@ -814,13 +815,13 @@ ul.btnlimit li button.active {
 .trade_summary_table_lft .nav-item.active button {
     background-color: #1B1B1B;
     color: #fff;
-    /* border-bottom: 1px solid #282828; */
+    border-bottom: 1px solid #fff;
 }
 
 .trade_summary_table_lft .nav-tabs li button.active {
     background-color: #1B1B1B;
     color: #fff;
-    /* border-bottom: 1px solid #282828; */
+    border-bottom: 1px solid #fff;
 }
 
 .trade_summary_table_lft .tab-content {
@@ -841,7 +842,7 @@ ul.btnlimit li button.active {
 
 
 .assets_right {
-    width:19%;
+    width:19.3%;
     background-color: #181A20;
     /* padding: 7px; */
 }
@@ -1673,7 +1674,6 @@ span.green {
     box-shadow: none;
 }
 
-
 .prediction_detail .tab-content .tab-pane {
     margin-top: 22px;
 }
@@ -1682,6 +1682,7 @@ span.green {
     font-size: 13px;
     font-weight: 300;
     color: #999;
+    border-color: #ffffff00;
     padding: 8px 15px;
 }
 
