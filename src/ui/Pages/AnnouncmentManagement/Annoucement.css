@@ -1,5 +1,5 @@
 body {
-    background-color: #000;
+    background-color: #181A20;
     font-family: "Inter", sans-serif;
 }
 
@@ -19,7 +19,7 @@ ul {
 }
 
 p {
-    font-size: 18px;
+    font-size: 14px;
     line-height: 140%;
     font-weight: 300;
 }

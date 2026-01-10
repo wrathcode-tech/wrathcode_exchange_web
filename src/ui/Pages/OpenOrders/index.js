@@ -137,7 +137,7 @@ const OpenOrders = (props) => {
                           <td colSpan="12">
                             <div className="no_data_outer">
                               <div className="no_data_vector">
-                                <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                <img src="/images/no_data_vector.svg" alt="no-data" />
 
                               </div>
 

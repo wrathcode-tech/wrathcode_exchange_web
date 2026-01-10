@@ -50,9 +50,9 @@ const LaunchpadTransation = (props) => {
                     style={{
                         color:
                             row?.status === "SUCCESS"
-                                ? "green"
+                                ? "#5EBA89 "
                                 : row?.status === "FAILED"
-                                    ? "red"
+                                    ? "#E45561"
                                     : " #555",
                         fontWeight: 600,
                     }}

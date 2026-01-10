@@ -505,7 +505,7 @@ const LandingPage = () => {
 
 
 
-      <div className="crypto_section trending_crypto" data-aos="fade-up" data-aos-duration="2000">
+      <div className="crypto_section trending_crypto">
         <div className="container">
           <h2>Trending Cryptocurrencies</h2>
           <p>Real-time market movers powered by live data and smart analytics.</p>

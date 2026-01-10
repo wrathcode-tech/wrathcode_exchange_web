@@ -216,8 +216,9 @@ const SupportPage = () => {
                                     </div>
                                 </div>
 
+                                <div className="col-sm-12">
                                 <button className="submit">Submit</button>
-
+</div>
                             </div>
 
                         </form>

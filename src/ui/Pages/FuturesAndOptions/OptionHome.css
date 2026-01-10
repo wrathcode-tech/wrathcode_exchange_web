@@ -18,12 +18,12 @@ a {
 .container-sm,
 .container-xl,
 .container-xxl {
-    max-width: 1510px;
+    max-width: 1380px;
     padding: 0px 20px;
 }
 
 body {
-    background-color: #111114;
+    background-color: #181A20;
 }
 
 .usd_future_dashboard {

@@ -12,8 +12,8 @@ const SpotOrders = (props) => {
   const [skip, setSkip] = useState(0);
   const limit = 10;
   const [expandedRow, setExpandedRow] = useState(null);
-      const [expandedRowIndex, setExpandedRowIndex] = useState(null);
-  
+  const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+
 
   const handleTradeHistory = async (skip, limit) => {
     try {
@@ -41,27 +41,63 @@ const SpotOrders = (props) => {
 
   const nineDecimalFormat = (data) => {
     if (typeof (data) === "number") {
-        // return data
-        return parseFloat(data?.toFixed(9))
+      // return data
+      return parseFloat(data?.toFixed(9))
     } else {
-        return 0
+      return 0
     }
-};
+  };
 
   useEffect(() => {
     handleTradeHistory(skip, limit);
   }, [skip]);
 
-  
+
 
   return (
     <div className="dashboard_right">
       <DashboardHeader props={props} />
       <div className="dashboard_listing_section Overview_mid">
+
+
+        <div className='overview_section'>
+          <div className='estimated_balance'>
+            <h6>Estimated Balance <i class="ri-eye-line"></i></h6>
+            <div class="wallet-header d-flex flex-wrap align-items-center justify-content-between">
+              <div>
+                <div class="wallet-title">
+                  0 USDT
+                </div>
+                <div class="wallet-sub mt-1">
+                  ≈ 0.00 USD
+                  <span>Today’s PNL 0.00 USD (0.00%) <i class="ri-arrow-right-s-line"></i></span>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3 mt-md-0">
+                <button class="btn btn-deposit px-4">Deposit</button>
+                <button class="btn btn-outline-custom px-4">Withdraw</button>
+                <button class="btn btn-outline-custom px-4" data-bs-toggle="modal" data-bs-target="#kycModal">Transfer</button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
         <div className="listing_left_outer full_width transaction_history_t">
           <div className="market_section spotorderhist">
             <div className="top_heading">
               <h4>Spot order history</h4>
+              <div class="coin_right">
+                <div class="searchBar custom-tabs">
+                  <i class="ri-search-2-line"></i>
+              <input type="search" class="custom_search" placeholder="Search Crypto"/>
+              </div><div class="checkbox">
+                <input type="checkbox"/>Hide 0 Balance</div>
+                </div>
+
             </div>
             <div className="dashboard_summary">
               <div className='table-responsive'>
@@ -71,7 +107,7 @@ const SpotOrders = (props) => {
                       <th>Date</th>
                       <th>Trading Pair</th>
                       <th>Side</th>
-                    
+
                       <th>Price</th>
                       <th>Average</th>
                       <th>Quantity</th>
@@ -130,7 +166,7 @@ const SpotOrders = (props) => {
                                   <tbody>
                                     {item.executed_prices.map((trade, i) => (
                                       <tr key={i}>
-                                        <td>{i+1}</td>
+                                        <td>{i + 1}</td>
                                         <td >{nineDecimalFormat(trade.price)} {item?.side === "BUY" ? `${item?.pay_currency}` : `${item?.ask_currency}`}</td>
                                         <td>{nineDecimalFormat(trade.quantity)} {item?.side === "BUY" ? `${item?.ask_currency}` : `${item?.pay_currency}`}</td>
                                         <td>{nineDecimalFormat(+trade.fee)} {item?.ask_currency}</td>
