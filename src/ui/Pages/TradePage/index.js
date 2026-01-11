@@ -40,7 +40,7 @@ const Trade = () => {
     const [openOrders, setopenOrders] = useState([]);
     const [orderType, setorderType] = useState('All');
     const [pastOrderType, setpastOrderType] = useState('All');
-    const [priceDecimal, setpriceDecimal] = useState(8);
+    const [priceDecimal, setpriceDecimal] = useState(3);
     const [pastOrders, setpastOrders] = useState([]);
     const [pastOrder2, setpastOrder2] = useState([]);
     const [favCoins, setfavCoins] = useState([]);
@@ -64,6 +64,8 @@ const Trade = () => {
     const [orderBookActiveTab, setOrderBookActiveTab] = useState("orderbook");
     const [Coins, setCoins] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+    const [activeBuyPercent, setActiveBuyPercent] = useState(null);
+    const [activeSellPercent, setActiveSellPercent] = useState(null);
     const { userDetails, newStoredTheme } = useContext(ProfileContext);
     const KycStatus = userDetails?.kycVerified;
     const { socket } = useContext(SocketContext);
@@ -204,7 +206,7 @@ const Trade = () => {
                 const transformedAsks = message.asks.map(transformAsk);
 
                 setBuyOrders(transformedBids);
-                setSellOrders(transformedAsks);
+                setSellOrders(transformedAsks?.reverse());
 
                 const MIN_QTY = 0.0001;
                 const fakeTrades = [];
@@ -377,6 +379,16 @@ const Trade = () => {
         })
         setCoinPairDetails(filteredData)
     }, [search, AllData]);
+
+    // Set default coin filter to first quote currency
+    useEffect(() => {
+        if (CoinPairDetails?.length > 0 && coinFilter === 'ALL') {
+            const firstQuoteCurrency = CoinPairDetails[0]?.quote_currency;
+            if (firstQuoteCurrency) {
+                setcoinFilter(firstQuoteCurrency);
+            }
+        }
+    }, [CoinPairDetails, coinFilter]);
 
 
 
@@ -670,8 +682,26 @@ const Trade = () => {
                                 </div>
 
                                <ul className="favorites_list_tabs">
-                                   <li><button className="active">Favourites</button></li>
-                                   <li><button>USDT</button></li>
+                                   {token && (
+                                       <li>
+                                           <button 
+                                               className={coinFilter === 'FAV' ? 'active' : ''} 
+                                               onClick={() => setcoinFilter('FAV')}
+                                           >
+                                               Favourites
+                                           </button>
+                                       </li>
+                                   )}
+                                   {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)),"BTC","BNB","ETH"].map((quoteCurrency, idx) => (
+                                       <li key={idx}>
+                                           <button 
+                                               className={coinFilter === quoteCurrency ? 'active' : ''} 
+                                               onClick={() => setcoinFilter(quoteCurrency)}
+                                           >
+                                               {quoteCurrency}
+                                           </button>
+                                       </li>
+                                   ))}
                                 </ul> 
 
                                 {/* Table */}
@@ -690,19 +720,15 @@ const Trade = () => {
                                             {/* ALL TAB */}
                                             {CoinPairDetails &&
                                                 CoinPairDetails.map((data, index) => {
-                                                    if (
-                                                        coinFilter !== "ALL" &&
-                                                        !(
-                                                            (coinFilter === "USDT" &&
-                                                                (data?.quote_currency === "USDT" ||
-                                                                    data?.base_currency === "USDT")) ||
-                                                            (coinFilter === "CVT" &&
-                                                                (data?.quote_currency === "CVT" ||
-                                                                    data?.base_currency === "CVT"))
-                                                        )
-                                                    ) {
+                                                    // Filter by favorites
+                                                    if (coinFilter === "FAV" && !favCoins.includes(data?._id)) {
                                                         return null;
                                                     }
+                                                    // Filter by quote currency
+                                                    if (coinFilter !== "FAV" && (data?.quote_currency !== coinFilter && data?.base_currency !== coinFilter)) {
+                                                        return null;
+                                                    }
+                                                  
 
                                                     const isActive =
                                                         SelectedCoin?.base_currency === data?.base_currency &&
@@ -725,7 +751,7 @@ const Trade = () => {
                                                                     />
                                                                     <div className="d-flex flex-column">
                                                                         {`${data?.base_currency}/${data?.quote_currency}`}
-                                                                        <span className="tokensubcnt">MX Token</span>
+                                                                        <span className="tokensubcnt">{data?.base_currency_fullname}</span>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -734,7 +760,7 @@ const Trade = () => {
                                                             <td className="text-end">
                                                                 <div className="d-flex flex-column">
                                                                     <span>{data?.buy_price}</span>
-                                                                    <span className="tokensubcnt">$ 2.035</span>
+                                                                    <span className="tokensubcnt">${data?.buy_price}</span>
                                                                 </div>
                                                             </td>
 
@@ -749,9 +775,9 @@ const Trade = () => {
                                                                                     : "text-danger"
                                                                             }
                                                                         >
-                                                                            {Number(data?.change_percentage).toFixed(5)}%
+                                                                         {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
                                                                         </span>
-                                                                        <span className="tokensubcnt">$ 2.035</span>
+                                                                        <span className="tokensubcnt">{parseFloat(data?.change?.toFixed(5)) || 0}</span>
                                                                     </div>
 
                                                                     {token && (
@@ -1661,8 +1687,8 @@ const Trade = () => {
                                                         <div className=" p-2 p-md-3" >
                                                             <div className="col-md-12 mb-3">
                                                                 <div className="spot_limit d-flex align-items-center gap-4" >
-                                                                    <button className="active">Limit</button>
-                                                                    <button>Market</button>
+                                                                    <button onClick={() => setinfoPlaceOrder("LIMIT")} className={`${infoPlaceOrder === "LIMIT" ? "active" : ""}`}>Limit</button>
+                                                                    <button onClick={() => setinfoPlaceOrder("MARKET")} className={`${infoPlaceOrder === "MARKET" ? "active" : ""}`}>Market</button>
                                                                     {/* <select className=" mb-0 form-select-sm" name="infoPlaceOrder" onChange={handleOrderType} value={infoPlaceOrder}>
                                                                         <option value="LIMIT" >Limit</option>
                                                                         <option value="MARKET">Market</option>
@@ -1685,7 +1711,7 @@ const Trade = () => {
                                                                         <div className="form-group  mb-3" >
                                                                             <label>Price</label>
                                                                             <div className="input-group">
-                                                                                {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"Best Market Price"} readOnly /> : <input type="text" className="form-control" disabled={infoPlaceOrder === 'MARKET'} value={buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : formatTotal(buyprice)}
+                                                                                {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"---Best Market Price---"} readOnly /> : <input type="text" className="form-control" disabled={infoPlaceOrder === 'MARKET'} value={buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : formatTotal(buyprice)}
 
                                                                                     onChange={(e) => {
                                                                                         const value = e.target.value;
@@ -1724,16 +1750,15 @@ const Trade = () => {
                                                                         </div>
                                                                         <div className="form-group" >
                                                                             <div className="btn-group btn-group-mini  mb-3 process_step" role="group" aria-label="Basic radio toggle button group">
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio10" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success checked" htmlFor="btnradio10" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 0) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >0%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio125" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success" htmlFor="btnradio125" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 25) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >25%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio250" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success" htmlFor="btnradio250" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 50) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>50%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio375" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success" htmlFor="btnradio375" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal / 100) * 75) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>75%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio3100" autoComplete="off" />
-                                                                                <label className="btn btn-outline-success last-child" htmlFor="btnradio3100" onClick={() => { setbuyamount(toFixed8(((BuyCoinBal)) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>100%</label>
+                                                                             
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio125" autoComplete="off" checked={activeBuyPercent === 25} readOnly />
+                                                                                <label className={`btn btn-outline-success ${activeBuyPercent === 25 ? 'active' : ''}`} htmlFor="btnradio125" onClick={() => { setActiveBuyPercent(25); setbuyamount(toFixed8(((BuyCoinBal / 100) * 25) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >25%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio250" autoComplete="off" checked={activeBuyPercent === 50} readOnly />
+                                                                                <label className={`btn btn-outline-success ${activeBuyPercent === 50 ? 'active' : ''}`} htmlFor="btnradio250" onClick={() => { setActiveBuyPercent(50); setbuyamount(toFixed8(((BuyCoinBal / 100) * 50) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>50%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio375" autoComplete="off" checked={activeBuyPercent === 75} readOnly />
+                                                                                <label className={`btn btn-outline-success ${activeBuyPercent === 75 ? 'active' : ''}`} htmlFor="btnradio375" onClick={() => { setActiveBuyPercent(75); setbuyamount(toFixed8(((BuyCoinBal / 100) * 75) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>75%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio3100" autoComplete="off" checked={activeBuyPercent === 100} readOnly />
+                                                                                <label className={`btn btn-outline-success last-child ${activeBuyPercent === 100 ? 'active' : ''}`} htmlFor="btnradio3100" onClick={() => { setActiveBuyPercent(100); setbuyamount(toFixed8(((BuyCoinBal)) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }}>100%</label>
                                                                             </div>
                                                                         </div>
 
@@ -1825,14 +1850,14 @@ const Trade = () => {
                                                                         </div>
                                                                         <div className="form-group" >
                                                                             <div className="btn-group btn-group-mini process_step  mb-3 " role="group" aria-label="Basic radio toggle button group">
-                                                                                <input type="radio" className="btn-check checked" name="btnradio" id="btnradio15" autoComplete="off" />
-                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio15" onClick={() => { setsellAmount(toFixed8(SellCoinBal / 100) * 25) }}>25%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio20" autoComplete="off" />
-                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio20" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 50)) }}>50%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio35" autoComplete="off" />
-                                                                                <label className="btn btn-outline-danger" htmlFor="btnradio35" onClick={() => { setsellAmount(toFixed8((SellCoinBal / 100) * 75)) }}>75%</label>
-                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio300" autoComplete="off" />
-                                                                                <label className="btn btn-outline-danger last-child" htmlFor="btnradio300" onClick={() => { setsellAmount(toFixed8(SellCoinBal)) }}>100%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio15" autoComplete="off" checked={activeSellPercent === 25} readOnly />
+                                                                                <label className={`btn btn-outline-danger ${activeSellPercent === 25 ? 'active' : ''}`} htmlFor="btnradio15" onClick={() => { setActiveSellPercent(25); setsellAmount(toFixed8(SellCoinBal / 100) * 25) }}>25%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio20" autoComplete="off" checked={activeSellPercent === 50} readOnly />
+                                                                                <label className={`btn btn-outline-danger ${activeSellPercent === 50 ? 'active' : ''}`} htmlFor="btnradio20" onClick={() => { setActiveSellPercent(50); setsellAmount(toFixed8((SellCoinBal / 100) * 50)) }}>50%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio35" autoComplete="off" checked={activeSellPercent === 75} readOnly />
+                                                                                <label className={`btn btn-outline-danger ${activeSellPercent === 75 ? 'active' : ''}`} htmlFor="btnradio35" onClick={() => { setActiveSellPercent(75); setsellAmount(toFixed8((SellCoinBal / 100) * 75)) }}>75%</label>
+                                                                                <input type="radio" className="btn-check" name="btnradio" id="btnradio300" autoComplete="off" checked={activeSellPercent === 100} readOnly />
+                                                                                <label className={`btn btn-outline-danger last-child ${activeSellPercent === 100 ? 'active' : ''}`} htmlFor="btnradio300" onClick={() => { setActiveSellPercent(100); setsellAmount(toFixed8(SellCoinBal)) }}>100%</label>
                                                                             </div>
                                                                         </div>
                                                                         {/* <small className="">Minimal Sell: {nineDecimalFormat(10 / SelectedCoin?.buy_price)} {SelectedCoin?.base_currency}</small> */}

@@ -647,15 +647,29 @@ html[data-theme='light'] .btn-group.btn-group-mini * {
 }
 
 .data-buy .btn-group.btn-group-mini .btn-check:checked+.btn-outline-success,
-.data-buy .btn-group.btn-group-mini .btn-outline-success:hover {
+.data-buy .btn-group.btn-group-mini .btn-outline-success:hover,
+.data-buy .btn-group.btn-group-mini .btn-outline-success.active {
     background: #00000000;
     border-color: #00000000;
 }
 
+.data-buy .btn-group.btn-group-mini .btn-outline-success.active {
+    background: rgba(2, 192, 118, 0.15) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
 .data-sell .btn-group.btn-group-mini .btn-check:checked+.btn-outline-danger,
-.data-sell .btn-group.btn-group-mini .btn-outline-danger:hover {
+.data-sell .btn-group.btn-group-mini .btn-outline-danger:hover,
+.data-sell .btn-group.btn-group-mini .btn-outline-danger.active {
     background: #00000000;
     border-color: #00000000;
+}
+
+.data-sell .btn-group.btn-group-mini .btn-outline-danger.active {
+    background: rgba(228, 85, 97, 0.15) !important;
+    border-color: #fff !important;
+    color: #fff !important;
 }
 
 html[data-theme='dark'] .data-buy .btn-group.btn-group-mini .btn-check:checked+.btn-outline-success,
@@ -664,6 +678,18 @@ html[data-theme='dark'] .data-sell .btn-group.btn-group-mini .btn-check:checked+
 html[data-theme='dark'] .data-sell .btn-group.btn-group-mini .btn-outline-danger:hover {
     background: #ffffff00 !important;
     border-color: #ffffff00 !important;
+}
+
+html[data-theme='dark'] .data-buy .btn-group.btn-group-mini .btn-outline-success.active {
+    background: rgba(2, 192, 118, 0.15) !important;
+    border-color: #02c076 !important;
+    color: #ffff !important;
+}
+
+html[data-theme='dark'] .data-sell .btn-group.btn-group-mini .btn-outline-danger.active {
+    background: rgba(228, 85, 97, 0.15) !important;
+    border-color: #E45561 !important;
+    color: #ffff !important;
 }
 
 
@@ -1315,7 +1341,7 @@ html[data-theme='light'] .price_item_value.active {
     color: #a9a9a9;
 }
 
-.trade-wrapper table tr td{ font-size:12px !important; font-weight: 300 !important; padding: 4px 10px !important; }
+.trade-wrapper table tr td{ font-size:12px !important; font-weight: 300 !important; padding: 2px 10px !important; }
 
 .trade_favourites_lft .price_card_body {
     padding: 0px;

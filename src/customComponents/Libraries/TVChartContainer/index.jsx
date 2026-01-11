@@ -35,7 +35,7 @@ export default function TVChartContainer({ symbol }) {
       intraday_multipliers: ['1', '60'],
       custom_css_url: 'css/style.css',
       hide_resolution_in_legend: true,
-      height: '600px',
+      height: '625px',
       time_frames: [
         { text: '1D', resolution: 'D', description: '1 Day' },
         { text: '1W', resolution: 'W', description: '1 Week' },
@@ -68,7 +68,8 @@ export default function TVChartContainer({ symbol }) {
         "use_sessionStorage_for_settings", "adaptive_logo",
         "border_around_the_chart", 'header_symbol_search',
         'header_interval_dialog_button', 'header_compare',
-        'header_undo_redo', 'header_resolutions'
+        'header_undo_redo', 'header_resolutions',
+        'left_toolbar'
       ],
     };
 
@@ -297,9 +298,9 @@ useEffect(() => {
         style={{
           opacity: isReady ? 1 : 0,
           transition: "opacity 0.1s ease",
-          backgroundColor: "#181A20",
+          backgroundColor: "rgba(17, 17, 20, 0.9)",
           height: "100%", // ensure it has visible height
-          minHeight: "400px",
+          // minHeight: "400px",
         }}
       />
   
@@ -315,7 +316,7 @@ useEffect(() => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: "rgba(17, 17, 20, 0.9)",
+            background: "rgb(24 26 33)",
             zIndex: 10,
           }}
         >
