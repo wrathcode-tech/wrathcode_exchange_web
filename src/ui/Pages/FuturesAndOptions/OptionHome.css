@@ -493,7 +493,9 @@ body {
     justify-content: space-between;
 }
 
-.top_cross_dashboard ul li { width: 100%; display: block;
+.top_cross_dashboard ul li {
+    width: 100%;
+    display: block;
 }
 
 .top_cross_dashboard ul li a {
@@ -710,7 +712,10 @@ form.price_info {
     top: -19px;
 }
 
-.price_inputbl ul li:last-child button:before{ left: inherit; right: 0px; }
+.price_inputbl ul li:last-child button:before {
+    left: inherit;
+    right: 0px;
+}
 
 .avail_total_usd {
     display: flex;
@@ -865,7 +870,7 @@ ul.btnlimit li button.active {
 
 
 .assets_right {
-    width:19.3%;
+    width: 19.3%;
     background-color: #181A20;
     /* padding: 7px; */
 }
@@ -1724,6 +1729,15 @@ span.green {
     width: 100%;
 }
 
+.trade-wrapper .trade_account_summary_assets .trade_summary_table_lft table tr td {
+    padding: 7px 10px !important;
+    border-bottom: 1px solid #222222;
+}
+
+body .trade_account_summary_assets .bg-dark {
+    background-color: #2b313c !important;
+}
+
 
 .fill_cnt {
     width: 100%;
@@ -1758,7 +1772,7 @@ span.green {
 }
 
 .notfound_vector {
-max-width: 190px;
+    max-width: 190px;
     margin: 0 auto;
     margin: 60px auto;
     display: flex;
@@ -1839,7 +1853,7 @@ max-width: 190px;
     flex-wrap: nowrap;
     border: none;
     margin: 8px 0px 10px;
-    border-bottom:1px solid #454C59 !important;
+    border-bottom: 1px solid #454C59 !important;
 }
 
 .relative_select_right .limit_tabs li.active button {
@@ -1849,12 +1863,12 @@ max-width: 190px;
 
 .relative_select_right .nav-tabs .nav-link.active#buy-tab {
     color: #fff !important;
-    background: #5EBA89  !important;
+    background: #5EBA89 !important;
 }
 
-.relative_select_right .limit_tabs .selltab.active  button {
+.relative_select_right .limit_tabs .selltab.active button {
     color: #fff !important;
-    background: #ed5765  !important;
+    background: #ed5765 !important;
 }
 
 .buysell_heder .limit_tabs li.selltab.active button::before {
@@ -3136,15 +3150,15 @@ button.bn-button.button__buy.sellbtn {
 }
 
 ::-webkit-scrollbar {
-    width: 6px; 
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.15); 
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 10px;
 }
 
@@ -3154,7 +3168,7 @@ button.bn-button.button__buy.sellbtn {
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.25) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
 
 .top_table_data .lefside_data {

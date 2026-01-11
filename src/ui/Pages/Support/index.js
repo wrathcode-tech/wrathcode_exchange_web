@@ -225,7 +225,17 @@ const SupportPage = () => {
 
                     </div>
                     <div className={`tt_main issuelist_data ${isShow === 1 && "d-none"}`}>
+
+                        <div className="coin_view_top">
                         <h4>Issue List</h4>
+
+                        <div class="searchBar custom-tabs">
+                            <i class="ri-search-2-line"></i>
+                            <input type="search" class="custom_search" placeholder="Search Crypto"/>
+                            </div>
+
+                            </div>
+
                         <div className="inngerbox cng-pass overflow_unset">
                             {/* <div className={`cursor-pointer refresh ${isRotating ? 'rotating' : ''}`} onClick={() => { getIssueList(); setRotating(true); }}><i className="ri-refresh-line "></i></div> */}
                             <div className='table-responsive'>

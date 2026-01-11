@@ -1462,7 +1462,6 @@ ul.social_media {
 }
 
 
-
 .trusted_partner {
     width: 100%;
     background-color: #000;
@@ -4760,7 +4759,13 @@ img.round_img {
 
 .hot_trading_t th,
 td {
-    padding: 12px 2px;
+    padding: 10px 2px;
+    text-align: left;
+}
+
+
+.hot_trading_t td {
+    padding: 10px 2px;
     text-align: left;
 }
 
@@ -4878,7 +4883,7 @@ body .red {
 
 .hot_trading_s table tr td {
     color: #b4b4b4;
-    font-size: 15px;
+    font-size: 14px;
     border: none;
 }
 
@@ -6360,7 +6365,9 @@ button.btn.btn-primary.homelightbox2 {
     justify-content: space-between;
 }
 
-.top_heading .more_btn{ color: #fff;}
+.top_heading .more_btn {
+    color: #fff;
+}
 
 .recent_deposit_list table tr td svg {
     width: 22px;
@@ -7324,7 +7331,7 @@ footer .menu {
 .user_profile {
     display: flex;
     padding: 0px 10px;
-    gap: 15px;
+    gap: 18px;
     align-items: center;
 }
 
@@ -7388,6 +7395,8 @@ span.subdel {
     font-size: 10px;
     font-weight: 300;
     color: #949AA4;
+    /* margin-top: 0px; */
+    display: block;
 }
 
 .user_profile_cnt ul {
@@ -8211,6 +8220,7 @@ body {
     font-weight: 400;
     color: #6F798C;
     display: flex;
+    width: 100%;
     border: none;
     gap: 8px;
     border-radius: 0px 10px 10px 0px;
@@ -8324,9 +8334,7 @@ ul.navi_sidebar {
     padding-top: 0px;
 }
 
-.dashboard_summary th,
-td {
-    padding: 10px 12px;
+.dashboard_summary th {
     text-align: left;
 }
 
@@ -8619,8 +8627,7 @@ td.tradebtn a {
     padding: 7px 12px;
 }
 
-.transaction_history_t table
-tr th {
+.transaction_history_t table tr th {
     padding: 7px 12px;
 }
 
@@ -9315,7 +9322,7 @@ section.block_currency {
 
 .swap_usdtdata p {
     font-size: 14px;
-    margin: 15px 0px 0px;
+    margin: 7px 0px 0px;
 }
 
 .swap_usdtdata p span {
@@ -9726,11 +9733,18 @@ body.light_theme .top_heading_s h2 {
     align-items: center;
 }
 
-.my_assets_summary_t .issuse_list_t tr td,
-th {
+.my_assets_summary_t .issuse_list_t tr td {
     padding: 10px 0px;
-    font-weight: 700;
-    font-size: 10px;
+    font-weight: 300;
+    font-size: 12px;
+    color: #848E9C;
+}
+
+
+.my_assets_summary_t .issuse_list_t tr th {
+    padding: 10px 0px;
+    font-weight: 300;
+    font-size: 12px;
     color: #848E9C;
 }
 
@@ -12000,7 +12014,7 @@ button.btn.supportbtn {
 }
 
 .issuelist_data {
-    margin-top: 32px;
+    margin-top: 40px;
 }
 
 .issuelist_data table tr th {
@@ -12863,12 +12877,13 @@ section.section-padding.val_sec.pt-0 {
 
 button.btn.btn-success {
     color: #000 !important;
-    background-color: #01BC8D !important;
+    background-color: #5EBA89 !important;
     border-radius: 50px;
     font-size: 12px;
     padding: 3px 16px;
-    border-color: #01BC8D;
+    border-color: #5EBA89;
 }
+
 
 .issuelist_data table tr td {
     border: none;
@@ -15711,7 +15726,7 @@ button.primary_btn.prevStep {
     gap: 24px;
     background-color: transparent;
     border: 1px solid #454C59;
-    padding: 20px;
+    padding: 15px;
 }
 
 .crypto_selectcoin {
@@ -18684,6 +18699,32 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:767px) {
 
+    .market_trade_crypto {
+        margin-top: 0px;
+    }
+
+    .trade-wrapper.spot {
+        padding: 30px 0px;
+        height: auto;
+        min-inline-size: auto;
+    }
+
+    .trade_favourites_lft .spotLists{ min-height: 100%; top: 0px; }
+
+    .market_trade_crypto .row {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .market_trade_crypto .row .col-sm-4 {
+        width: 100%;
+    }
+
+    .trade_marketvalue .price {
+        font-size: 20px;
+        margin: 6px 0px;
+    }
+
     body .cnt_first_t .icon_currency img {
         width: 24px;
     }
@@ -20668,7 +20709,6 @@ button.primary_btn.prevStep {
     }
 
     .searchBar.custom-tabs {
-        width: 100%;
         margin-top: 14px;
     }
 

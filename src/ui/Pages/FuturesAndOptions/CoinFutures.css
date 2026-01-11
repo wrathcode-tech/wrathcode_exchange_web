@@ -3258,10 +3258,6 @@ button.bn-button.button__buy.sellbtn {
         white-space: nowrap;
     }
 
-    .trade_summary_table_lft {
-        width: 79%;
-    }
-
     .recent_trades_options table tr th {
         white-space: nowrap;
     }
