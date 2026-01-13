@@ -15785,6 +15785,37 @@ button.primary_btn.prevStep {
 }
 
 
+.mobiletable {
+    width: 100%;
+    display: none;
+    align-items: center;
+    background-color: #181a20;
+    padding: 0px;
+    border-radius: 0px;
+    color: #fff;
+}
+
+.mobiletable table {
+    line-height: 2;
+    vertical-align: middle;
+    color: #F7F7F7;
+    text-shadow: none !important;
+    font-weight: 300;
+    font-size:12px;
+}
+
+.mobiletable table tr th {
+    font-weight: 300;
+    padding: 5px !important;
+    border-bottom: 1px solid #282D36;
+}
+
+.mobiletable table tr td {
+    font-weight: 300;
+    padding: 5px !important;
+    border-bottom: 1px solid #282D36;
+}
+
 @media screen and (max-width:1700px) {
 
     .refrefer_earn_outer {
@@ -18699,6 +18730,32 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:767px) {
 
+    .mobiletable {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .desktoptable {
+        display: none;
+    }
+
+    ul.tbltabs {
+        gap: 5px;
+    }
+
+    button.btn.btn-outline-primary.favourites-toggle-btn-mobile {
+        justify-content: space-between;
+    }
+
+    ul.tbltabs li button {
+        padding: 2px 7px;
+        font-size: 11px;
+    }
+
+    ul.tbltabs li select {
+        font-size: 11px;
+    }
+
     .market_trade_crypto {
         margin-top: 0px;
     }
@@ -18709,7 +18766,10 @@ button.primary_btn.prevStep {
         min-inline-size: auto;
     }
 
-    .trade_favourites_lft .spotLists{ min-height: 100%; top: 0px; }
+    .trade_favourites_lft .spotLists {
+        min-height: 100%;
+        top: 0px;
+    }
 
     .market_trade_crypto .row {
         flex-direction: column;
@@ -20713,8 +20773,11 @@ button.primary_btn.prevStep {
     }
 
     .custom_dlflex {
-        flex-direction: column;
-        align-items: baseline;
+        align-items: end;
+    }
+
+    ul.nav.nav-pills.mb-2.overflowx_scroll.funds_tab.market_tabs {
+        padding-bottom: 0px;
     }
 
     .os_sec.cv_tocnomics .card_pp {
@@ -22139,6 +22202,22 @@ button.primary_btn.prevStep {
         font-size: 12px;
     }
 
+body .trade-wrapper .card_header_title {
+        font-size: 12px;
+    }
+
+    .crypto_features p {
+        font-size: 13px;
+    }
+
+    .crypto_features h4 {
+        font-size: 16px;
+    }
+
+    .trade_marketvalue {
+        padding: 15px;
+    }
+
     .header_right {
         top: 10px;
     }
@@ -22651,7 +22730,7 @@ button.primary_btn.prevStep {
     }
 
     .crypto_dashboard {
-        margin-top: 18px;
+        margin-top: 8px;
     }
 
     .tt_item {
@@ -23538,6 +23617,15 @@ button.primary_btn.prevStep {
         width: 15px;
     }
 
+    p {
+        font-size: 13px;
+    }
+
+    .resources_news p {
+        font-size: 13px;
+    }
+
+
     body .cnt_first_t .icon_currency img {
         width: 24px;
     }
@@ -23685,7 +23773,8 @@ button.primary_btn.prevStep {
     body .headline_extendInfoWrapper__dooIS,
     body .headline_left__lBBPY,
     body .headline_wrapper__BKn9L {
-        flex-direction: column;
+        /* flex-direction: column; */
+        gap: 7px
     }
 
     .coin_items_select {
@@ -23801,7 +23890,7 @@ button.primary_btn.prevStep {
     }
 
     body .card_header_title {
-        font-size: 13.5px;
+        font-size: 12px;
     }
 
     .grid.faq_sidebar a.card p {
@@ -23870,14 +23959,22 @@ button.primary_btn.prevStep {
     }
 
     .market_tabs .nav-link {
-        font-size: 12px;
-        padding: 6px 20px;
+        font-size: 11px;
+        padding: 4px 10px;
         margin-right: 0px;
+    }
+
+    ul.nav.nav-pills.mb-2.overflowx_scroll.funds_tab.market_tabs {
+        padding-bottom: 0px;
     }
 
     .kyc_form_multistep .inquery_fill input[type="text"] {
         padding: 10px;
         font-size: 11px;
+    }
+
+    .market_update_sec .table> :not(caption)>*>* {
+        padding: 8px 15px;
     }
 
     table.table tbody tr:last-child td .favouriteData p {
@@ -24119,6 +24216,18 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:360px) {
 
+
+    img.round_img {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px;
+    }
+
+    .profit_costs_cta_outer .d-flex.download_button button.btn {
+        font-size: 11px;
+        padding: 6px 8px;
+    }
+
     .deposit_crypto_left::before {
         height: 250px;
     }
@@ -24267,4 +24376,53 @@ button.primary_btn.prevStep {
 
 #kycModal .table-responsive.show-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.65);
+}
+
+/* Market Trade Crypto Slider - Mobile Only */
+@media screen and (max-width: 767px) {
+    .market_trade_crypto_slider {
+        padding: 0 15px;
+    }
+
+    .market_trade_crypto_slider .market-crypto-swiper {
+        padding-bottom:0px;
+    }
+
+.market_update_table .searchBar.custom-tabs {
+        margin-top: 0px;
+    }
+
+.market_trade_crypto .container {
+        max-width: 100%;
+        padding: 0px;
+    }    
+
+    .market_trade_crypto_slider .swiper-slide {
+        height: auto;
+    }
+
+    .market_trade_crypto_slider .trade_marketvalue {
+        height: 100%;
+    }
+
+    /* Pagination dots styling */
+    .market_trade_crypto_slider .swiper-pagination {
+        position: relative;
+        margin-top: 15px;
+        bottom: 0;
+    }
+
+    .market_trade_crypto_slider .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+        background: #454C59;
+        opacity: 1;
+        margin: 0 4px;
+    }
+
+    .market_trade_crypto_slider .swiper-pagination-bullet-active {
+        background: #FCD535;
+        width: 24px;
+        border-radius: 4px;
+    }
 }

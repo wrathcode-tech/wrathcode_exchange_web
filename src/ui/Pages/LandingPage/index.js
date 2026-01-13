@@ -899,7 +899,7 @@ const LandingPage = () => {
                  <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
-                  <img className="blogimg" src="images/new-images/secure_crypto.png" />
+                  <img className="blogimg" src="images/new-images/secure_crypto2.png" />
                 </div>
                 <div className="resources_cnt">
                   {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}

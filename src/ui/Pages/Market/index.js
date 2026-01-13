@@ -4,10 +4,13 @@ import { alertErrorMessage } from "../../../customComponents/CustomAlertMessage"
 import { ApiConfig } from "../../../api/apiConfig/apiConfig";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper";
 import AuthService from "../../../api/services/AuthService";
 import { SocketContext } from "../../../customComponents/SocketContext";
 import { Helmet } from "react-helmet-async";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
+
 
 const Market = () => {
   const token = sessionStorage.getItem("token");
@@ -153,7 +156,8 @@ const Market = () => {
 
         <div className="market_trade_crypto">
           <div className="container">
-            <div className="row">
+            {/* Desktop View - Row/Col Structure */}
+            <div className="row d-none d-md-flex">
               <div className="col-sm-4">
                 <div className="trade_marketvalue">
                   <div className="d-flex tophd">
@@ -163,7 +167,7 @@ const Market = () => {
                   <div className="price">
                     $88,415
                   </div>
-                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
 
                   <div className="tradevector_r">
                     <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
@@ -181,7 +185,7 @@ const Market = () => {
                   <div className="price">
                     $2,974.2
                   </div>
-                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
 
                   <div className="tradevector_r">
                     <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
@@ -199,7 +203,7 @@ const Market = () => {
                   <div className="price">
                     $597.3
                   </div>
-                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+                  <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
 
                   <div className="tradevector_r">
                     <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
@@ -207,8 +211,74 @@ const Market = () => {
 
                 </div>
               </div>
+            </div>
 
+            {/* Mobile View - Swiper Slider */}
+            <div className="d-md-none market_trade_crypto_slider">
+              <Swiper
+                modules={[Pagination]}
+                spaceBetween={15}
+                slidesPerView={1}
+                pagination={{
+                  clickable: true,
+                  dynamicBullets: true,
+                }}
+                className="market-crypto-swiper"
+              >
+                <SwiperSlide>
+                  <div className="trade_marketvalue">
+                    <div className="d-flex tophd">
+                      <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png" class="img-fluid icon_img coinimg me-2" />BTC</h5>
+                      <div className="value text-green">+1.31%</div>
+                    </div>
+                    <div className="price">
+                      $88,415
+                    </div>
+                    <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
 
+                    <div className="tradevector_r">
+                      <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                    </div>
+
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  <div className="trade_marketvalue">
+                    <div className="d-flex tophd">
+                      <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739568603-337176937.png" class="img-fluid icon_img coinimg me-2" />ETH</h5>
+                      <div className="value text-danger">-1.31%</div>
+                    </div>
+                    <div className="price">
+                      $2,974.2
+                    </div>
+                    <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+
+                    <div className="tradevector_r">
+                      <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                    </div>
+
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  <div className="trade_marketvalue">
+                    <div className="d-flex tophd">
+                      <h5><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png" class="img-fluid icon_img coinimg me-2" />BCH</h5>
+                      <div className="value text-green">+1.31%</div>
+                    </div>
+                    <div className="price">
+                      $597.3
+                    </div>
+                    <div className="privevolume"><span>24H Volume：</span>4,015,454.86 (USD)</div>
+
+                    <div className="tradevector_r">
+                      <img src="/images/trade_vector.svg" className="img-fluid" alt="" />
+                    </div>
+
+                  </div>
+                </SwiperSlide>
+              </Swiper>
             </div>
           </div>
         </div>
@@ -527,7 +597,7 @@ const Market = () => {
               {/* Favourite */}
               <div className={`tab-pane ${activeTab === "Fav" ? 'active' : ""}`}>
                 <div className="card py-2">
-                  <div className="card-body p-0">
+                  <div className="card-body p-0 desktoptable">
                     <div className="table-responsive">
                       {token ? (
                         (favCoins?.length > 0) ?
@@ -586,6 +656,57 @@ const Market = () => {
                       )}
                     </div>
                   </div>
+
+                  <div className="mobiletable">
+                    <table>
+                      <tr>
+                        <th>Pair</th>
+                        <td>
+                          <div class="td_div">
+                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
+                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
+                            BTC/USDT</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Price</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Change</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H High</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Low</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Vol</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Operation</th>
+                        <td>
+                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+
                 </div>
               </div>
               {/* Spot */}
@@ -604,7 +725,7 @@ const Market = () => {
                 </ul>
 
                 <div className="card  py-2 spot_table">
-                  <div className="card-body p-0">
+                  <div className="card-body p-0 desktoptable">
                     <div className="mrt_row">
                     </div>
                     <div className="table-responsive">
@@ -661,6 +782,57 @@ const Market = () => {
                       )}
                     </div>
                   </div>
+
+                  <div className="mobiletable">
+                    <table>
+                      <tr>
+                        <th>Pair</th>
+                        <td>
+                          <div class="td_div">
+                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
+                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
+                            BTC/USDT</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Price</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Change</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H High</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Low</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Vol</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Operation</th>
+                        <td>
+                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+
                 </div>
               </div>
               {/* Biggest Gainers */}
@@ -677,7 +849,7 @@ const Market = () => {
                   <li><button>Trending</button></li>
                 </ul>
                 <div className="card  py-2">
-                  <div className="card-body p-0 gainers_table">
+                  <div className="card-body p-0 gainers_table desktoptable">
                     <div className="table-responsive">
                       {topGainers && topGainers?.length > 0 ? (
                         <>
@@ -726,6 +898,55 @@ const Market = () => {
                       )
                       }
                     </div>
+                  </div>
+                  <div className="mobiletable">
+                    <table>
+                      <tr>
+                        <th>Pair</th>
+                        <td>
+                          <div class="td_div">
+                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
+                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
+                            BTC/USDT</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Price</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Change</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H High</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Low</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>24H Vol</th>
+                        <td>
+                          <b>10000</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Operation</th>
+                        <td>
+                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                 </div>
               </div>

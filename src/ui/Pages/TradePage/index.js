@@ -66,6 +66,7 @@ const Trade = () => {
     const [expandedRowIndex, setExpandedRowIndex] = useState(null);
     const [activeBuyPercent, setActiveBuyPercent] = useState(null);
     const [activeSellPercent, setActiveSellPercent] = useState(null);
+    const [showMobileFavouritesPopup, setShowMobileFavouritesPopup] = useState(false);
     const { userDetails, newStoredTheme } = useContext(ProfileContext);
     const KycStatus = userDetails?.kycVerified;
     const { socket } = useContext(SocketContext);
@@ -903,17 +904,19 @@ const Trade = () => {
                                 <div className="headline_left__lBBPY">
 
                                     <div className="headline_left__lBBPY_leftmain d-flex align-items-center">
-                                        <div className="headline_symbolName__KfmIZ mt_tr_pr cursor-pointer" onClick={() => setShowCoinList(!showCoinList)}>
+                                        <div className="headline_symbolName__KfmIZ mt_tr_pr cursor-pointer" onClick={() => {
+                                            setShowCoinList(!showCoinList);
+                                            setShowMobileFavouritesPopup(true);
+                                        }}>
                                             <div className="headline_bigName__dspVW "  >
                                                 {/* <i className="faaa  ri-menu-add-line"></i> */}
                                                 <img alt="" src={ApiConfig.baseImage + SelectedCoin?.icon_path} width="24" className="img-fluid round_img" />
-
                                             </div>
 
                                             <div>
                                                 <div className="headline_bigName__dspVW ">
                                                     <h1>{SelectedCoin ? `${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}` : "---/---"}
-                                                        {/* <i className="ri-arrow-down-s-line ms-1"></i> */}
+                                                        <i className="ri-arrow-down-s-line ms-1"></i>
                                                     </h1>
                                                 </div>
                                                 <div className="headline_etfDisplay__P4Hdv"><span>{SelectedCoin?.base_currency_fullname}</span></div>
@@ -931,8 +934,6 @@ const Trade = () => {
                                                 <span className="ms-1"> {parseFloat(parseFloat(changesHour?.toFixed(2))) || "0.00"}</span>
                                             </div>
                                         </div>
-
-
 
                                     </div>
 
@@ -984,13 +985,14 @@ const Trade = () => {
                             </div>
 
                             <div className="trade_card trade_chart p-0"  >
-                                {/* <div className="treade_card_header tch_main_tab">
+                                <div className="treade_card_header tch_main_tab">
                                     <div className={`card_header_title  cursor-pointer ${showTab === "chart" && "active"}`} onClick={() => setShowTab("chart")}> Chart  </div>
-                                    <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div>
+                                    {/* <div className={`card_header_title  cursor-pointer ${showTab === "token_info" && "active"}`} onClick={() => { getDescAndLink(); setShowTab("token_info") }}> Token Info  </div> */}
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "order_book" && "active"}`} onClick={() => setShowTab("order_book")}> Order Book  </div>
                                     <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "trade_history" && "active"}`} onClick={() => setShowTab("trade_history")}> Market Trades </div>
+                                    <div className={`card_header_title  cursor-pointer d-lg-none ${showTab === "wallets" && "active"}`} onClick={() => setShowTab("wallets")}> Wallets </div>
 
-                                </div> */}
+                                </div>
                                 {/* tab 1 */}
                                 <div id="tab_1" className={`cc_tab ${showTab !== "chart" && "d-none"}`} >
                                     {!SelectedCoin?.base_currency ?
@@ -1064,14 +1066,14 @@ const Trade = () => {
                             <div className="row g-1 g-md-2 px-1 px-md-0" >
                                 <div className="col-lg-6" >
 
-                                    {/* tab 3 content is here */}
-                                    <div id="tab_3" className={`trade_card orderbook_two d-lg-block ${showTab !== "order_book"}`}>
-                                        <div className="treade_card_header d-lg-flex">
+                                    {/* tab 3 content is here - Order Book */}
+                                    <div id="tab_3" className={`trade_card orderbook_two d-lg-block ${showTab !== "order_book" ? "d-none" : ""}`}>
+                                        <div className="treade_card_header d-none d-lg-flex">
                                             <div className={`card_header_title cursor-pointer ${orderBookActiveTab === "orderbook" ? "active" : ""}`} onClick={() => setOrderBookActiveTab("orderbook")}>Order Book</div>
                                             <div className={`card_header_title cursor-pointer ${orderBookActiveTab === "tradehistory" ? "active" : ""}`} onClick={() => setOrderBookActiveTab("tradehistory")}>Market Trades</div>
                                         </div>
 
-                                        {orderBookActiveTab === "orderbook" && (
+                                        {(orderBookActiveTab === "orderbook" || showTab === "order_book") && (
                                             <div className="orderbooktab">
 
                                                 {/* TABS */}
@@ -1294,7 +1296,7 @@ const Trade = () => {
                                         )}
 
 
-                                        {orderBookActiveTab === "tradehistory" && (
+                                        {(orderBookActiveTab === "tradehistory" && showTab !== "order_book") && (
                                             <div className="trade_history_tab">
 
                                                 <div className="table-responsive">
@@ -1369,6 +1371,137 @@ const Trade = () => {
 
                                     </div>
                                 </div>
+
+                                {/* Market Trades - Mobile Only (when trade_history tab is active) */}
+                                <div className="col-lg-6 d-lg-none">
+                                    <div id="tab_mobile_trade_history" className={`trade_card orderbook_two ${showTab !== "trade_history" ? "d-none" : ""}`}>
+                                        <div className="trade_history_tab">
+                                            <div className="table-responsive">
+                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="text-start">
+                                                                Price ({SelectedCoin?.quote_currency})
+                                                            </th>
+                                                            <th className="text-end">
+                                                                Quantity ({SelectedCoin?.base_currency})
+                                                            </th>
+                                                            <th className="text-end">
+                                                                Time
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="price_card_body">
+                                                        {RecentTrade?.length > 0 ? (
+                                                            RecentTrade.map((item, index) => (
+                                                                <tr key={index}>
+                                                                    <td
+                                                                        className={
+                                                                            item?.side === "BUY"
+                                                                                ? "text-green text-start"
+                                                                                : "text-danger text-start"
+                                                                        }
+                                                                    >
+                                                                        {parseFloat(item?.price || 0)}
+                                                                    </td>
+                                                                    <td className="text-end">
+                                                                        {parseFloat(item?.quantity || 0)}
+                                                                    </td>
+                                                                    <td className="text-end">
+                                                                        {item?.time || "---"}
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        ) : (
+                                                            <tr>
+                                                                <td colSpan="3" className="text-center">
+                                                                    <div className="no_data_s">
+                                                                        <img
+                                                                            src="/images/no_data_vector.svg"
+                                                                            className="img-fluid mb-2"
+                                                                            alt="no data"
+                                                                            width="52"
+                                                                        />
+                                                                        <br />
+                                                                        <small>No data Available</small>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Wallets - Mobile Only (when wallets tab is active) */}
+                                <div className="col-lg-6 d-lg-none">
+                                    <div className="assets_right">
+                                        <div id="tab_4_mobile" className={`trade_card orderbook_two ${showTab !== "wallets" ? "d-none" : ""}`}>
+                                            <div className="assets_list">
+                                                <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i class="ri-exchange-funds-fill"></i> Convert</Link></div>
+
+                                                <div className="assets_btn">
+                                                    <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>
+                                                    <button><Link to="/asset_managemnet/withdraw">Withdrawal</Link></button>
+                                                </div>
+                                            </div>
+                                            <div className="price_card">
+                                                <div className="table-responsive price_card_body scroll_y scroll_y_mt">
+                                                    <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Price</th>
+                                                                <th className="text-end">Quantity</th>
+                                                                <th className="text-end">Time</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody style={{ cursor: "pointer" }}>
+                                                            {RecentTrade?.length > 0 ? (
+                                                                RecentTrade.map((item, index) => (
+                                                                    <tr key={index}>
+                                                                        <td
+                                                                            className={
+                                                                                item?.side === "BUY"
+                                                                                    ? "text-green d-flex align-items-center"
+                                                                                    : "text-danger d-flex align-items-center"
+                                                                            }
+                                                                        >
+                                                                            {parseFloat(item?.price || 0)}
+                                                                        </td>
+                                                                        <td className="text-end">
+                                                                            {parseFloat(item?.quantity || 0)}
+                                                                        </td>
+                                                                        <td className="text-end">
+                                                                            {item?.time || "---"}
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            ) : (
+                                                                <tr>
+                                                                    <td colSpan="3" className="text-center">
+                                                                        <div className="no_data_s">
+                                                                            <img
+                                                                                src="/images/no_data_vector.svg"
+                                                                                className="img-fluid mb-2"
+                                                                                alt="no data"
+                                                                                width="52"
+                                                                            />
+                                                                            <small>No data Available</small>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="col-lg-6">
                                     <div className="bs_tab_row d-lg-none" >
                                         <div className="row gx-3" >
@@ -2119,9 +2252,9 @@ const Trade = () => {
                             </div>
 
 
-                            <div className="assets_right" >
-                                {/* tab 4 content is here */}
-                                <div id="tab_4" className={` d-lg-block ${showTab !== "trade_history" && "d-none"}`}>
+                            <div className="assets_right d-none d-lg-block" >
+                                {/* tab 4 content is here - Desktop Only */}
+                                <div id="tab_4">
 
                                     <div className="assets_list">
 
@@ -2204,6 +2337,158 @@ const Trade = () => {
                     </div>
                 </div>
             </div >
+
+            {/* Mobile Favourites Popup */}
+            {showMobileFavouritesPopup && (
+                <div className="mobile-favourites-popup-overlay" onClick={() => setShowMobileFavouritesPopup(false)}>
+                    <div className="mobile-favourites-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="mobile-favourites-popup-header">
+                            <h4>Favourites</h4>
+                            <button className="mobile-favourites-close-btn" onClick={() => setShowMobileFavouritesPopup(false)}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="mobile-favourites-popup-content">
+                            <div className="spotLists">
+                                {/* Search */}
+                                <div className="spot-list-search">
+                                    <div className="ivu-input">
+                                        <i className="ri-search-2-line"></i>
+                                        <input
+                                            autoComplete="off"
+                                            spellCheck="false"
+                                            type="search"
+                                            placeholder="Search"
+                                            onChange={(e) => setsearch(e.target.value)}
+                                            value={search}
+                                        />
+                                    </div>
+                                </div>
+
+                                <ul className="favorites_list_tabs">
+                                    {token && (
+                                        <li>
+                                            <button 
+                                                className={coinFilter === 'FAV' ? 'active' : ''} 
+                                                onClick={() => setcoinFilter('FAV')}
+                                            >
+                                                Favourites
+                                            </button>
+                                        </li>
+                                    )}
+                                    {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)),"BTC","BNB","ETH"].map((quoteCurrency, idx) => (
+                                        <li key={idx}>
+                                            <button 
+                                                className={coinFilter === quoteCurrency ? 'active' : ''} 
+                                                onClick={() => setcoinFilter(quoteCurrency)}
+                                            >
+                                                {quoteCurrency}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul> 
+
+                                {/* Table */}
+                                <div className="price_card table-responsive">
+                                    <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Pair</th>
+                                                <th className="text-end">Price</th>
+                                                <th className="text-end">Change</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="price_card_body">
+                                            {CoinPairDetails &&
+                                                CoinPairDetails.map((data, index) => {
+                                                    // Filter by favorites
+                                                    if (coinFilter === "FAV" && !favCoins.includes(data?._id)) {
+                                                        return null;
+                                                    }
+                                                    // Filter by quote currency
+                                                    if (coinFilter !== "FAV" && (data?.quote_currency !== coinFilter && data?.base_currency !== coinFilter)) {
+                                                        return null;
+                                                    }
+
+                                                    const isActive =
+                                                        SelectedCoin?.base_currency === data?.base_currency &&
+                                                        SelectedCoin?.quote_currency === data?.quote_currency;
+
+                                                    return (
+                                                        <tr
+                                                            key={index}
+                                                            className={isActive ? "active" : ""}
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() => {
+                                                                handleSelectCoin(data);
+                                                                setShowMobileFavouritesPopup(false);
+                                                            }}
+                                                        >
+                                                            {/* Pair */}
+                                                            <td>
+                                                                <div className="d-flex align-items-center gap-1">
+                                                                    <img
+                                                                        src={ApiConfig.baseImage + data?.icon_path}
+                                                                        alt=""
+                                                                        className="img-fluid me-1 round_img"
+                                                                    />
+                                                                    <div className="d-flex flex-column">
+                                                                        {`${data?.base_currency}/${data?.quote_currency}`}
+                                                                        <span className="tokensubcnt">{data?.base_currency_fullname}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+
+                                                            {/* Price */}
+                                                            <td className="text-end">
+                                                                <div className="d-flex flex-column">
+                                                                    <span>{data?.buy_price}</span>
+                                                                    <span className="tokensubcnt">${data?.buy_price}</span>
+                                                                </div>
+                                                            </td>
+
+                                                            {/* Change + Star */}
+                                                            <td className="text-end">
+                                                                <div className="d-flex justify-content-end align-items-center gap-2">
+                                                                    <div className="d-flex flex-column text-end">
+                                                                        <span
+                                                                            className={
+                                                                                data?.change_percentage >= 0
+                                                                                    ? "text-green"
+                                                                                    : "text-danger"
+                                                                            }
+                                                                        >
+                                                                         {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
+                                                                        </span>
+                                                                        <span className="tokensubcnt">{parseFloat(data?.change?.toFixed(5)) || 0}</span>
+                                                                    </div>
+
+                                                                    {token && (
+                                                                        <i
+                                                                            className={
+                                                                                favCoins.includes(data?._id)
+                                                                                    ? "ri ri-star-fill ri-xl"
+                                                                                    : "ri ri-star-line ri-xl"
+                                                                            }
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleAddFav(data?._id);
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
