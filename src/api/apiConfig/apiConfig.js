@@ -1,6 +1,9 @@
-const appUrl = "https://backend.gatbits.com";
+const appUrl = "http://159.195.23.93:5001";
+const appUrl2 = "http://159.195.23.93:5001";
+// const appUrl = "http://192.168.1.16:5001";
+// const appUrl2 = "http://192.168.1.16:5001";
 // const appUrl = "http://localhost:3001";
-const appUrl2 = "https://backend.gatbits.com";
+// const appUrl2 = "https://backend.gatbits.com";
 
 export const deployedUrl = `${window.origin}/`
 
@@ -182,6 +185,44 @@ export const ApiConfig = {
   checkGiveawayStatus: "checkEleigibleForGiveaway",
   getGiveawayList: "giveawayList",
   claimGiveaway: "claimGiveaway",
+
+
+  // P2P Routes
+  getCurrency: "getCurrency",
+  getFiatCurrency: "getFiatCurrency",
+  getAllPaymentMethods: "getAllPaymentMethods",
+  p2pSellOrderForBuyer: "p2pSellOrderForBuyer",
+  p2pBuyOrderForSeller: "p2pBuyOrderForSellers",
+  getPaymentMethodFields: "getPaymentMethodFields",
+  addUserPaymentMethod: "addUserPaymentMethod",
+  getUserPaymentMethods: "getUserPaymentMethods",
+  deleteUserPaymentMethod: "deletePaymentMethod",
+  createAd: "createAd",
+  buyFromAd: "buyFromAd",
+  sellFromAd: "sellFromAd",
+  getP2pOrderDetails: "getOrderDetails",
+  getP2pOrders: "orders",
+  getPairPrice: "getPairPrice",
+
+  // P2P Order Actions
+  markPaymentCompleted: "markPaymentCompleted",
+  releaseCrypto: "releaseCrypto",
+  cancelP2pOrder: "cancelOrder",
+  buyerDispute: "buyerDispute",
+  sellerDispute: "sellerDispute",
+
+  // P2P Chat endpoints
+  sendChatMessage: "chat/send",
+  uploadChatImage: "chat/upload",
+  getChatHistory: "chat",
+  markChatRead: "chat/read",
+  getChatUnreadCount: "chat/unread/count",
+  deleteChatMessage: "chat/delete",
+  getUserAds: "getUserAds",
+  closeAd: "closeAd",
+  updateAdStatus: "updateAdStatus",
+  getP2pProfile: "profile",
+
 
   // ============URLs================
 

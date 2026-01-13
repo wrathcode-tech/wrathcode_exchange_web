@@ -22,7 +22,9 @@
 
   <!-- Font -->
   <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"> -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
 
   <!--CLOUDFARE CDN LINK -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
@@ -439,27 +441,27 @@
 
 
 <script>
-// Hover → show scrollbar
-$(document).on("mouseenter", ".table-responsive", function () {
+  // Hover → show scrollbar
+  $(document).on("mouseenter", ".table-responsive", function () {
     $(this).addClass("show-scrollbar");
-});
+  });
 
-// Leave → hide scrollbar
-$(document).on("mouseleave", ".table-responsive", function () {
+  // Leave → hide scrollbar
+  $(document).on("mouseleave", ".table-responsive", function () {
     $(this).removeClass("show-scrollbar");
-});
+  });
 
-// Scroll → auto show (important for touchpad)
-$(document).on("scroll", ".table-responsive", function () {
+  // Scroll → auto show (important for touchpad)
+  $(document).on("scroll", ".table-responsive", function () {
     const el = $(this);
 
     el.addClass("show-scrollbar");
 
     clearTimeout(el.data("sb_timer"));
     el.data("sb_timer", setTimeout(() => {
-        el.removeClass("show-scrollbar");
+      el.removeClass("show-scrollbar");
     }, 700));
-});
+  });
 
 </script>
 

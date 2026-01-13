@@ -120,7 +120,11 @@ const UserHeader = () => {
                             Spot Trading
                           </a>
                         </li>
-
+                        <li>
+                          <Link className="dropdown-item" to="/p2p-dashboard" onClick={toggleNavbar}>
+                            P2P
+                          </Link>
+                        </li>
                         {/* <li>
                             <a className="dropdown-item" href="/user_profile/arbitrage_bot" onClick={toggleNavbar}>
                               Arbitrage Trading Bot
@@ -161,29 +165,29 @@ const UserHeader = () => {
                       </ul>
                     </li>
 
-  <li className="nav-item dropdown">
+                    <li className="nav-item dropdown">
                       <span
                         className="nav-link dropdown-toggle"
                         style={{ cursor: "pointer" }}
                         onClick={() => toggleDropdown("earning")}
                       >
-                          Earning
+                        Earning
                       </span>
                       <ul className={`dropdown-menu ${openDropdown === "earning" ? "show" : ""}`}>
                         <li>
                           <a className="dropdown-item" href="/earning" onClick={toggleNavbar}>
-                             Earning
+                            Earning
                           </a>
                         </li>
 
                         <li>
-                            <a className="dropdown-item" href="/refer_earn" onClick={toggleNavbar}>
-                               Refer & Earn
-                            </a>
-                          </li>
+                          <a className="dropdown-item" href="/refer_earn" onClick={toggleNavbar}>
+                            Refer & Earn
+                          </a>
+                        </li>
                       </ul>
                     </li>
-                    
+
                     {/* <li className="nav-item">
                       <Link className="nav-link" to="/earning" onClick={toggleNavbar}>
                         Earning
@@ -197,7 +201,7 @@ const UserHeader = () => {
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/launchpad" onClick={toggleNavbar}>
-                        Launchpad<i class="ri-rocket-fill" style={{color:"#f3bb2c"}}></i>
+                        Launchpad<i class="ri-rocket-fill" style={{ color: "#f3bb2c" }}></i>
                       </Link>
                     </li>
 
@@ -248,7 +252,7 @@ const UserHeader = () => {
 
           <div className="col-lg-4">
             <div className="header_right">
-              
+
               <div className="button_outer">
                 <a className="search_icon" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                   <i className="ri-search-line"></i>
@@ -264,18 +268,18 @@ const UserHeader = () => {
                   <i class="ri-sun-line light-text"></i>
                 </div> */}
 
-                
-                    <div className="downloadtabs">
-                      <img src="/images/download_icon2.svg" alt="download" />
-                       <div className='scantophdr'>
-                      <div className='qrcode'>
-                        <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
-                        <p>Scan to Download App iOS & Android</p>
-                        <button className='btn'>Download</button>
-                      </div>
-                      </div>
-                      </div>
-                    <div className="themeicon"><img src="/images/themeicon.svg" alt="theme" /></div>
+
+                <div className="downloadtabs">
+                  <img src="/images/download_icon2.svg" alt="download" />
+                  <div className='scantophdr'>
+                    <div className='qrcode'>
+                      <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                      <p>Scan to Download App iOS & Android</p>
+                      <button className='btn'>Download</button>
+                    </div>
+                  </div>
+                </div>
+                <div className="themeicon"><img src="/images/themeicon.svg" alt="theme" /></div>
               </div>
             </div>
           </div>

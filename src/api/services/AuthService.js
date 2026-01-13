@@ -2063,6 +2063,408 @@ const AuthService = {
     return ApiCallPost(url, params, headers);
 
   },
+
+
+  // P2P Routes Starts Here
+  getCurrency: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getCurrency } = ApiConfig;
+    const url = baseP2p + getCurrency;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getFiatCurrency: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getFiatCurrency } = ApiConfig;
+    const url = baseP2p + getFiatCurrency;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getAllPaymentMethods: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getAllPaymentMethods } = ApiConfig;
+    const url = baseP2p + getAllPaymentMethods;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  p2pSellOrderForBuyer: async (params = {}) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, p2pSellOrderForBuyer } = ApiConfig;
+    const queryParams = new URLSearchParams();
+    if (params.fiat) queryParams.append('fiat', params.fiat);
+    if (params.crypto) queryParams.append('crypto', params.crypto);
+    if (params.paymentType && params.paymentType !== 'All payments') queryParams.append('paymentType', params.paymentType);
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    const url = baseP2p + p2pSellOrderForBuyer + (queryParams.toString() ? `?${queryParams.toString()}` : '');
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+  p2pBuyOrderForSeller: async (params = {}) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, p2pBuyOrderForSeller } = ApiConfig;
+    const queryParams = new URLSearchParams();
+    if (params.fiat) queryParams.append('fiat', params.fiat);
+    if (params.crypto) queryParams.append('crypto', params.crypto);
+    if (params.paymentType && params.paymentType !== 'All payments') queryParams.append('paymentType', params.paymentType);
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    const url = baseP2p + p2pBuyOrderForSeller + (queryParams.toString() ? `?${queryParams.toString()}` : '');
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getUserPaymentMethods: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getUserPaymentMethods } = ApiConfig;
+    const url = baseP2p + getUserPaymentMethods;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getPaymentMethodFields: async (id) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getPaymentMethodFields } = ApiConfig;
+    const url = baseP2p + getPaymentMethodFields + `?id=${id}`;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getPairPrice: async (crypto, fiat) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getPairPrice } = ApiConfig;
+    const url = baseP2p + getPairPrice + `?crypto=${crypto}&fiat=${fiat}`;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getUserAds: async (params = {}) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getUserAds } = ApiConfig;
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.side) queryParams.append('side', params.side);
+    if (params.status) queryParams.append('status', params.status);
+    if (params.fiatCurrency) queryParams.append('fiatCurrency', params.fiatCurrency);
+    if (params.qouteCurrency) queryParams.append('qouteCurrency', params.qouteCurrency);
+    const url = baseP2p + getUserAds + (queryParams.toString() ? `?${queryParams.toString()}` : '');
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  closeAd: async (adId, reason = '') => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, closeAd } = ApiConfig;
+    const url = baseP2p + closeAd;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    const payload = { adId };
+    if (reason && reason.trim()) {
+      payload.reason = reason.trim();
+    }
+    return ApiCallPost(url, payload, headers);
+  },
+
+  updateAdStatus: async (adId, isOnline) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, updateAdStatus } = ApiConfig;
+    const url = baseP2p + updateAdStatus;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { adId, isOnline }, headers);
+  },
+
+  addUserPaymentMethod: async (formData) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, addUserPaymentMethod } = ApiConfig;
+    const url = baseP2p + addUserPaymentMethod;
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      'Authorization': token
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+
+  deleteUserPaymentMethod: async (paymentMethodId) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, deleteUserPaymentMethod } = ApiConfig;
+    const url = baseP2p + deleteUserPaymentMethod;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { paymentMethodId }, headers);
+  },
+
+  createAd: async (formData) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, createAd } = ApiConfig;
+    const url = baseP2p + createAd;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+  buyFromAd: async (formData) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, buyFromAd } = ApiConfig;
+    const url = baseP2p + buyFromAd;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+
+  sellFromAd: async (formData) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, sellFromAd } = ApiConfig;
+    const url = baseP2p + sellFromAd;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+
+  getP2pOrderDetails: async (orderId) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getP2pOrderDetails } = ApiConfig;
+    const url = baseP2p + getP2pOrderDetails + `/${orderId}`;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  getP2pOrders: async (params = {}) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getP2pOrders } = ApiConfig;
+    const queryParams = new URLSearchParams();
+    if (params.status) queryParams.append('status', params.status);
+    if (params.side) queryParams.append('side', params.side);
+    if (params.crypto) queryParams.append('crypto', params.crypto);
+    if (params.fiat) queryParams.append('fiat', params.fiat);
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    const url = baseP2p + getP2pOrders + (queryParams.toString() ? `?${queryParams.toString()}` : '');
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  // ============ P2P ORDER ACTIONS ============
+
+  // Buyer marks payment as completed (with optional payment proof)
+  markPaymentCompleted: async (orderId, paymentProof = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, markPaymentCompleted } = ApiConfig;
+    const url = baseP2p + markPaymentCompleted;
+
+    const formData = new FormData();
+    formData.append('orderId', orderId);
+    if (paymentProof) {
+      formData.append('paymentProof', paymentProof);
+    }
+
+    const headers = {
+      'Authorization': token
+      // Note: Don't set Content-Type for FormData, let browser set it with boundary
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+
+  // Seller releases crypto after verifying payment
+  releaseCrypto: async (orderId) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, releaseCrypto } = ApiConfig;
+    const url = baseP2p + releaseCrypto;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId }, headers);
+  },
+
+  // Buyer cancels order (only PENDING_PAYMENT status)
+  cancelP2pOrder: async (orderId, cancelReason = '') => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, cancelP2pOrder } = ApiConfig;
+    const url = baseP2p + cancelP2pOrder;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId, cancelReason }, headers);
+  },
+
+  // Buyer raises dispute (only after PAID status)
+  buyerRaiseDispute: async (orderId, reason) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, buyerDispute } = ApiConfig;
+    const url = baseP2p + buyerDispute;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId, reason }, headers);
+  },
+
+  // Seller raises dispute (only after PAID status)
+  sellerRaiseDispute: async (orderId, reason) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, sellerDispute } = ApiConfig;
+    const url = baseP2p + sellerDispute;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId, reason }, headers);
+  },
+
+  getP2pProfile: async (userId = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getP2pProfile } = ApiConfig;
+    let url = baseP2p + getP2pProfile;
+    if (userId) {
+      url += `?userId=${userId}`;
+    }
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  // ============ P2P CHAT APIs ============
+
+  // Send text message
+  sendChatMessage: async (orderId, message) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, sendChatMessage } = ApiConfig;
+    const url = baseP2p + sendChatMessage;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId, message }, headers);
+  },
+
+  // Upload chat image
+  uploadChatImage: async (orderId, file) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, uploadChatImage } = ApiConfig;
+    const url = baseP2p + uploadChatImage;
+
+    const formData = new FormData();
+    formData.append('orderId', orderId);
+    formData.append('image', file);
+
+    const headers = {
+      'Authorization': token
+    };
+    return ApiCallPost(url, formData, headers);
+  },
+
+  // Get chat history
+  getChatHistory: async (orderId, params = {}) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getChatHistory } = ApiConfig;
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.before) queryParams.append('before', params.before);
+    const url = baseP2p + getChatHistory + `/${orderId}` + (queryParams.toString() ? `?${queryParams.toString()}` : '');
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  // Mark chat messages as read
+  markChatAsRead: async (orderId) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, markChatRead } = ApiConfig;
+    const url = baseP2p + markChatRead;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { orderId }, headers);
+  },
+
+  // Get unread message count
+  getChatUnreadCount: async (orderId = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, getChatUnreadCount } = ApiConfig;
+    let url = baseP2p + getChatUnreadCount;
+    if (orderId) {
+      url += `?orderId=${orderId}`;
+    }
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  // Delete chat message
+  deleteChatMessage: async (messageId) => {
+    const token = sessionStorage.getItem("token");
+    const { baseP2p, deleteChatMessage } = ApiConfig;
+    const url = baseP2p + deleteChatMessage;
+    const headers = {
+      "Content-Type": "application/json",
+      'Authorization': token
+    };
+    return ApiCallPost(url, { messageId }, headers);
+  },
+
+  // P2P ends here
+
+
+
+
 };
 
 export default AuthService;

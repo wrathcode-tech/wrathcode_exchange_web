@@ -213,9 +213,14 @@ const AuthHeader = (props) => {
                           </span>
                           <ul className={`dropdown-menu ${openDropdown === "trade" ? "show" : ""}`}>
                             <li>
-                              <a className="dropdown-item" href="/trade/Header" onClick={closeNavbar}>
+                              <Link className="dropdown-item" to="/trade/Header" onClick={closeNavbar}>
                                 Spot Trading
-                              </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link className="dropdown-item" to="/p2p-dashboard" onClick={closeNavbar}>
+                                P2P
+                              </Link>
                             </li>
                             {/* <li>
                               <a className="dropdown-item" href="#" onClick={closeNavbar}>
@@ -309,7 +314,6 @@ const AuthHeader = (props) => {
                                 Refer & Earn
                               </a>
                             </li>
-
                           </ul>
                         </li>
                         {/*                         
@@ -348,12 +352,12 @@ const AuthHeader = (props) => {
                             Blogs & News
                           </NavLink>
                         </li>
-                         <li className="nav-item mbl">
+                        <li className="nav-item mbl">
                           <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
-                             Download <img src="/images/download_icon2.svg" alt="scan" />
+                            Download <img src="/images/download_icon2.svg" alt="scan" />
                           </NavLink>
                         </li>
-                         <li className="nav-item mbl">
+                        <li className="nav-item mbl">
                           <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
                             Theme <span><img src="/images/themeicon.svg" alt="theme" /></span>
                           </NavLink>
@@ -496,11 +500,11 @@ const AuthHeader = (props) => {
                     <li className='downloadtabs'>
                       <img src="/images/download_icon2.svg" alt="download" />
                       <div className='scantophdr'>
-                      <div className='qrcode'>
-                        <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
-                        <p>Scan to Download App iOS & Android</p>
-                        <button className='btn'>Download</button>
-                      </div>
+                        <div className='qrcode'>
+                          <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                          <p>Scan to Download App iOS & Android</p>
+                          <button className='btn'>Download</button>
+                        </div>
                       </div>
                     </li>
                     <li className='themetbs'><img src="/images/themeicon.svg" alt="theme" /></li>
@@ -511,13 +515,13 @@ const AuthHeader = (props) => {
 
             {/* <!--Search Bar Modal --> */}
             <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         
+
               <div className="modal-dialog">
                 <div className="modal-content">
-                <div className="modal-header mb-2">
-              {/* <h5 className="modal-title" id="kycTitle">Face Verification </h5> */}
-              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                  <div className="modal-header mb-2">
+                    {/* <h5 className="modal-title" id="kycTitle">Face Verification </h5> */}
+                    <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
                   <div className="modal-body">
                     <form>
                       <input type="search" placeholder="Search here..." value={searchPair} onChange={(e) => setSearchPair(e.target.value)} />

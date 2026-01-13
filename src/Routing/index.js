@@ -76,6 +76,15 @@ import LaunchpadCoinPage from "../ui/Pages/Launchpad/LaunchpadCoinPage";
 import LaunchpadTransation from "../ui/Pages/Launchpad/LaunchpadTransation";
 import Giveaway from "../ui/Pages/Giveaway/Giveaway";
 
+// P2p Routes
+import P2pDashboard from "../ui/Pages/P2P/P2pDashboard";
+import P2pOrderDetails from "../ui/Pages/P2P/P2pOrderDetails";
+import P2pCreatePost from "../ui/Pages/P2P/P2pCreatePost";
+import P2pMyAds from "../ui/Pages/P2P/P2pMyAds";
+import P2pOrders from "../ui/Pages/P2P/P2pOrders";
+import P2pProfile from "../ui/Pages/P2P/P2pProfile";
+
+
 function Routing() {
   const location = useLocation();
   const token = sessionStorage.getItem("token");
@@ -181,9 +190,16 @@ function Routing() {
         <Route path="/launchpadCoin_Details/:id" element={<LaunchpadCoinPage />} />
         <Route path="/announcement_list/:title/:announce_title_id" element={<AnnouncementList />} />
         <Route path="/announcement_details/:title/:announce_title_id" element={<AnnouncementDetails />} />
-
         <Route path="/*" element={<ComingSoonPage />} />
         <Route path="/optionHome" element={<OptionHome />} />
+
+        {/* P2P Routes */}
+        <Route path="/p2p-dashboard" element={token ? <P2pDashboard /> : <Navigate to="/login" replace />} />
+        <Route path="/p2p-order-details/:adId" element={token ? <P2pOrderDetails /> : <Navigate to="/login" replace />} />
+        <Route path="/p2p-create-post" element={token ? <P2pCreatePost /> : <Navigate to="/login" replace />} />
+        <Route path="/p2p-my-ads" element={token ? <P2pMyAds /> : <Navigate to="/login" replace />} />
+        <Route path="/p2p-orders" element={token ? <P2pOrders /> : <Navigate to="/login" replace />} />
+        <Route path="/p2p-profile" element={token ? <P2pProfile /> : <Navigate to="/login" replace />} />
       </Routes>
       {isChartPage || isLoginPage || isSignupPage || isDashboardPages || isAssetPages || isComingSoonPage || isForgotPass || accountVerification || accountActivate || isFuturesPage || isOptionPage ? null : <Footer />}
     </>
