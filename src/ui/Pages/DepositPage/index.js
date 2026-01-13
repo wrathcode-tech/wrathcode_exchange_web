@@ -227,14 +227,7 @@ const DepositPage = () => {
   }, []);
   return (
     <>
-  {(modalStatus?.deposit === false && modalStatus?.isDepositClosed === false) &&
-        <div id="popup-overlay" className="popup-overlay">
-          <div id="popup-box" className="popup-box">
-            <button className="close-btn" onClick={() => updateModelHideStatus("depositModalStatus")}>✖</button>
-            <img src="/images/bonus_banner/bonus_banner_img.svg" alt="gift" />
-          </div>
-        </div>
-      }
+
       <div className="dashboard_right">
         <div className="deposit_crypto_block_coin">
           <div className="deposit_crypto_left">

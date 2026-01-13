@@ -147,14 +147,7 @@ const ReferalPage = () => {
     />
 </Helmet>
 
-      {(modalStatus?.referral === false && modalStatus?.isReferralClosed === false) &&
-        <div id="popup-overlay" className="popup-overlay">
-          <div id="popup-box" className="popup-box">
-            <button className="close-btn" onClick={() => updateModelHideStatus("referralModalStatus")}>✖</button>
-            <img src="/images/bonus_banner/bonus_banner_img4.svg" alt="gift" />
-          </div>
-        </div>
-      }
+   
       <div className="refrefer_earn_outer">
 
         <section className="pb-5 mt-3 ">

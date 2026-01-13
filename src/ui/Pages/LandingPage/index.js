@@ -318,61 +318,6 @@ const LandingPage = () => {
 
 
 
-      {/* <div
-        class="modal fade homebonuspop"
-        id="bonusPopup"
-        tabindex="-1"
-        aria-labelledby="bonusPopupLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content popup-box homepop_box">
-            <div class="modal-body text-center position-relative">
-
-            
-              <button
-                type="button"
-                class="btn-close position-absolute top-0 end-0 m-2"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={handleApkDonwload}
-              ></button>
-
-          
-              <div id="bonusSlider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-                <div class="carousel-inner">
-
-               
-                  <div class="carousel-item active">
-                    <a href={authToken ? "/user_profile/giveaway" : "/login"}>
-                      <img
-                        src="/images/bonus_banner/giveaway_banner.png"
-                        alt="giveaway"
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-
-                
-                  <div class="carousel-item ">
-                    <a onClick={handleApkDonwload} href={ApiConfig?.baseUrl + apkLink}>
-                      <img
-                        src="/images/bonus_banner/Wrathcode_popup_img.png"
-                        alt="gift"
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-
-                </div>
-              </div>
-           
-
-            </div>
-          </div>
-        </div>
-      </div> */}
-
 
 
       <div class="hero_section_main">

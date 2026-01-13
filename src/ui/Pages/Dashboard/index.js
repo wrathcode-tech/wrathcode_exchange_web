@@ -124,14 +124,6 @@ const Dashboard = (props) => {
   return (
     <>
 
-      {(modalStatus?.kyc === false && modalStatus?.isKycClosed === false) &&
-        <div id="popup-overlay" className="popup-overlay">
-          <div id="popup-box" className="popup-box">
-            <button className="close-btn" onClick={() => updateModelHideStatus("kycModalStatus")}>✖</button>
-            <Link to="/user_profile/kyc"> <img src="/images/bonus_banner/bonus_banner_img5.svg" alt="gift" /></Link>
-          </div>
-        </div>
-      }
 
       <div className="dashboard_right">
 

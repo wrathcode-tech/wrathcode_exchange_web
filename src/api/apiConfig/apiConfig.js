@@ -1,9 +1,6 @@
 const appUrl = "http://159.195.23.93:5001";
-const appUrl2 = "http://159.195.23.93:5001";
-// const appUrl = "http://192.168.1.16:5001";
-// const appUrl2 = "http://192.168.1.16:5001";
 // const appUrl = "http://localhost:3001";
-// const appUrl2 = "https://backend.gatbits.com";
+const appUrl2 = "http://159.195.23.93:5001";
 
 export const deployedUrl = `${window.origin}/`
 
