@@ -62,9 +62,6 @@ const Market = () => {
 
 
 
-
-
-
   const nextPage = (data) => {
     sessionStorage.setItem('RecentPair', JSON.stringify(data))
     navigate(`/trade/${data?.base_currency}_${data?.quote_currency}`);
@@ -657,55 +654,65 @@ const Market = () => {
                     </div>
                   </div>
 
-                  <div className="mobiletable">
-                    <table>
-                      <tr>
-                        <th>Pair</th>
-                        <td>
-                          <div class="td_div">
-                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
-                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
-                            BTC/USDT</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Price</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Change</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H High</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Low</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Vol</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Operation</th>
-                        <td>
-                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
-                        </td>
-                      </tr>
-                    </table>
+ 
+                  <div className="card-body p-0 mobiletable">
+                    <div className="table-responsive">
+                      {token ? (
+                        (favCoins?.length > 0) ?
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Pair/24h Vol</th>
+                                <th>Price</th>
+                                <th>24H Change</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fiterPairData && fiterPairData.map((item, index) => {
+                                // if (!favCoins.includes(item?._id)) return null;
+                                return (
+                                  favCoins.includes(item?._id) &&
+                                  <tr key={index} onClick={() => nextPage(item)} >
+                                    <td>
+                                      <div className="td_div">
+                                        <span className="star_btn btn_icon active">
+                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
+                                        </span>
+                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
+                                        {item?.base_currency}/{item?.quote_currency}
+                                       
+                                      </div>
+                                      <br />
+                                      <b>{formatNumber(item?.volume, 5)}</b>
+                                    </td>
+                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
+                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
+                                    </td>
+                                   
+                                    <td><b>{formatNumber(item?.high, 5)}</b>
+                                    <br />
+                                    <b>{formatNumber(item?.low, 5)}</b></td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                          :
+                          <div className="favouriteData">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                            <p>No Data Available</p>
+                          </div>
+                      ) : (
+                        <div className="py-5 favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          <p className="mt-2">No results.... Go to&nbsp;
+                            <Link className="btn-link" to="/login"><b>&nbsp; Sign in &nbsp;</b></Link>&nbsp;and add your favorite coins from Spot.
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                 
 
                 </div>
               </div>
@@ -783,54 +790,63 @@ const Market = () => {
                     </div>
                   </div>
 
-                  <div className="mobiletable">
-                    <table>
-                      <tr>
-                        <th>Pair</th>
-                        <td>
-                          <div class="td_div">
-                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
-                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
-                            BTC/USDT</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Price</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Change</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H High</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Low</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Vol</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Operation</th>
-                        <td>
-                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
-                        </td>
-                      </tr>
-                    </table>
+                
+                  <div className="card-body p-0 mobiletable">
+                    <div className="table-responsive">
+                      {token ? (
+                        (favCoins?.length > 0) ?
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Pair/24h Vol</th>
+                                <th>Price</th>
+                                <th>24H Change</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fiterPairData && fiterPairData.map((item, index) => {
+                                // if (!favCoins.includes(item?._id)) return null;
+                                return (
+                                  favCoins.includes(item?._id) &&
+                                  <tr key={index} onClick={() => nextPage(item)} >
+                                    <td>
+                                      <div className="td_div">
+                                        <span className="star_btn btn_icon active">
+                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
+                                        </span>
+                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
+                                        {item?.base_currency}/{item?.quote_currency}
+                                       
+                                      </div>
+                                      <br />
+                                      <b>{formatNumber(item?.volume, 5)}</b>
+                                    </td>
+                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
+                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
+                                    </td>
+                                   
+                                    <td><b>{formatNumber(item?.high, 5)}</b>
+                                    <br />
+                                    <b>{formatNumber(item?.low, 5)}</b></td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                          :
+                          <div className="favouriteData">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                            <p>No Data Available</p>
+                          </div>
+                      ) : (
+                        <div className="py-5 favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          <p className="mt-2">No results.... Go to&nbsp;
+                            <Link className="btn-link" to="/login"><b>&nbsp; Sign in &nbsp;</b></Link>&nbsp;and add your favorite coins from Spot.
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                 </div>
@@ -949,6 +965,66 @@ const Market = () => {
                     </table>
                   </div>
                 </div>
+
+                <div className="card-body p-0 mobiletable">
+                    <div className="table-responsive">
+                      {token ? (
+                        (favCoins?.length > 0) ?
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Pair/24h Vol</th>
+                                <th>Price</th>
+                                <th>24H Change</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fiterPairData && fiterPairData.map((item, index) => {
+                                // if (!favCoins.includes(item?._id)) return null;
+                                return (
+                                  favCoins.includes(item?._id) &&
+                                  <tr key={index} onClick={() => nextPage(item)} >
+                                    <td>
+                                      <div className="td_div">
+                                        <span className="star_btn btn_icon active">
+                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
+                                        </span>
+                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
+                                        {item?.base_currency}/{item?.quote_currency}
+                                       
+                                      </div>
+                                      <br />
+                                      <b>{formatNumber(item?.volume, 5)}</b>
+                                    </td>
+                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
+                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
+                                    </td>
+                                   
+                                    <td><b>{formatNumber(item?.high, 5)}</b>
+                                    <br />
+                                    <b>{formatNumber(item?.low, 5)}</b></td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                          :
+                          <div className="favouriteData">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                            <p>No Data Available</p>
+                          </div>
+                      ) : (
+                        <div className="py-5 favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          <p className="mt-2">No results.... Go to&nbsp;
+                            <Link className="btn-link" to="/login"><b>&nbsp; Sign in &nbsp;</b></Link>&nbsp;and add your favorite coins from Spot.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+
               </div>
 
 
