@@ -7384,6 +7384,13 @@ img.round_img {
 
 }
 
+.modal.fade.search_form {
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+    padding: 0px !important;
+}
+
 span.hide button {
     font-size: 11px;
     padding: 5px 16px;
@@ -14922,6 +14929,7 @@ button.btn_claim:active {
 
 .swap_usdtdata {
     width: 610px;
+    max-width: 100%;
     margin: 0 auto;
     background-color: #222831;
     border-radius: 16px;
@@ -16247,6 +16255,19 @@ button.primary_btn.prevStep {
 
     .top_total_bar {
         gap: 20px;
+    }
+
+    .swap_outer_section {
+        width: 100%;
+        padding: 20px 0px 10px;
+    }
+
+    .swaplist li {
+        font-size: 14px;
+    }
+
+    .swap_ustd_bl .from button {
+        font-size: 15px;
     }
 
     .exchange_earning_bnr h2 {
@@ -18771,6 +18792,18 @@ button.primary_btn.prevStep {
         display: none;
     }
 
+    .modal-dialog-centered {
+        align-items: end;
+    }
+
+    .earningpopup .modal-content {
+        border-radius: 0px;
+    }
+
+    .modal.fade .modal-dialog {
+        min-height: 100%;
+    }
+
     ul.tbltabs {
         gap: 5px;
     }
@@ -19283,7 +19316,11 @@ button.primary_btn.prevStep {
     }
 
     .search_form.modal.fade .modal-dialog {
-        top: 20px;
+        top: 0px;
+    }
+
+    .modal-dialog h4 {
+        font-size: 18px;
     }
 
     .modal.search_form input {
@@ -19741,7 +19778,7 @@ button.primary_btn.prevStep {
     }
 
     .modal.fade .modal-dialog {
-        min-width: 500px;
+        min-width: 100%;
         margin: 0 auto;
     }
 
@@ -20044,7 +20081,11 @@ button.primary_btn.prevStep {
     }
 
     .search_form .modal-header {
-        padding: 18px !important;
+        padding: 18px 18px 0px !important;
+    }
+
+    .swaplist li {
+        font-size: 13px;
     }
 
     .model_height {
@@ -20287,7 +20328,22 @@ button.primary_btn.prevStep {
     }
 
     .vector_icon {
-        width: 32px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .swap_usdtdata .d-flex {
+        gap: 15px;
+    }
+
+    .swap_usdtdata p {
+        font-size: 12px;
+    }
+
+    .swap_usdtdata button.btn {
+        font-size: 12px;
+        padding: 8px 10px;
+        margin-top: 12px;
     }
 
     .bitcoin_top_currency {
@@ -20366,9 +20422,35 @@ button.primary_btn.prevStep {
     }
 
     .swap_outer_section {
-        margin-top: 5px;
-        padding-top: 20px;
-        gap: 24px
+        width: 100%;
+        display: block;
+        padding: 20px 0px 10px;
+    }
+
+    .swap_usdtdata {
+        border-radius: 12px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .swap_ustd_bl {
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .swap_ustd_bl .from button {
+        padding: 6px;
+        width: 100px;
+        font-size: 12px;
+    }
+
+    .swap_ustd_bl .from button img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .swap_ustd_bl .from p {
+        font-size: 12px;
     }
 
     .overview_cate_section .nav-tabs .nav-link {
@@ -20429,6 +20511,8 @@ button.primary_btn.prevStep {
 
     .earining_popup_exchange {
         flex-direction: column;
+        height: 80vh;
+        overflow: auto;
     }
 
     .lft_pop_cnt {
@@ -22771,7 +22855,7 @@ button.primary_btn.prevStep {
     }
 
     .modal.fade .modal-dialog {
-        min-width: 90%;
+        min-width: 100%;
     }
 
 
@@ -23440,8 +23524,9 @@ button.primary_btn.prevStep {
     }
 
     .search_form .modal-content {
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
+        border-radius: 0px;
     }
 
     .login_profile_header {

@@ -2794,11 +2794,6 @@ ul.exclusive_list li span.sellsub {
         flex-direction: column;
     }
 
-    img {
-        /* width: 100%; */
-        height: 100%;
-    }
-
     .timeline_connector {
         width: 2px;
         height: 40px;

@@ -3408,8 +3408,8 @@ button:disabled{   background-color: #1a1a2400 !important; }
   }
 
 .selectpaymetpop.modal.fade .modal-dialog {
-    width: 70%;
-    min-width: 70%;
+    width: 100%;
+    min-width: 100%;
 }
 
 }
@@ -3417,14 +3417,14 @@ button:disabled{   background-color: #1a1a2400 !important; }
 @media (max-width: 480px) {
 
   .modal.fade .modal-dialog {
-    min-width: 90%;
-    width: 90%;
+    min-width: 100%;
+    width: 100%;
     margin: 0 auto;
   }
 
 .selectpaymetpop.modal.fade .modal-dialog {
-    width: 95%;
-    min-width: 95%;
+    width: 100%;
+    min-width: 100%;
 }
 
   .myadsheading .p2p-mobile-card-user-info h4 {
