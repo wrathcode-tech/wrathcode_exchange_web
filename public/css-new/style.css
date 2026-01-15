@@ -3790,6 +3790,9 @@ button:disabled {
     pointer-events: none !important;
 }
 
+.balance_vector {
+    max-width: 200px;
+}
 
 .email_code .get_otp.otpcode {
     background-color: #f3bb2b;
@@ -15801,7 +15804,7 @@ button.primary_btn.prevStep {
     color: #F7F7F7;
     text-shadow: none !important;
     font-weight: 300;
-    font-size:12px;
+    font-size: 12px;
 }
 
 .mobiletable table tr th {
@@ -16244,6 +16247,10 @@ button.primary_btn.prevStep {
 
     .top_total_bar {
         gap: 20px;
+    }
+
+    .exchange_earning_bnr h2 {
+        font-size: 30px;
     }
 
     .button_outer .scantophdr {
@@ -17454,6 +17461,24 @@ button.primary_btn.prevStep {
         display: none;
     }
 
+    .exchange_earning_bnr h2 {
+        font-size: 24px;
+    }
+
+    .exchange_earning_bnr p {
+        font-size: 16px;
+        margin: 15px 0px;
+    }
+
+    .exchange_earning_bnr p span {
+        font-size: 18px;
+    }
+
+    button.signbtn {
+        padding: 10px 24px;
+        margin-top: 5px;
+    }
+
     .button_outer .downloadtabs {
         display: none;
     }
@@ -17967,9 +17992,16 @@ button.primary_btn.prevStep {
 
     .earning_section_cate ul#myTab {
         gap: 24px;
-        overflow: auto;
         white-space: nowrap;
         flex-wrap: nowrap;
+    }
+
+    ul.balance_list_s li h4 {
+        font-size: 20px;
+    }
+
+    ul.balance_list_s li p {
+        font-size: 13px;
     }
 
     .dashboard_recent_s .user_list_top ul#myTab {
@@ -20395,6 +20427,33 @@ button.primary_btn.prevStep {
         font-size: 12px;
     }
 
+    .earining_popup_exchange {
+        flex-direction: column;
+    }
+
+    .lft_pop_cnt {
+        width: 100%;
+        padding: 24px;
+    }
+
+    .right_cnt_pop {
+        width: 100%;
+        padding: 24px;
+    }
+
+    .lft_pop_cnt .select_option {
+        width: 100%;
+    }
+
+    ul.daylist {
+        flex-wrap: wrap;
+    }
+
+    ul.termslist.border-0 {
+        margin: 20px 0px 0px;
+        padding-bottom: 5px;
+    }
+
     section.earning_outer_s {
         padding: 20px 0px;
     }
@@ -20404,8 +20463,8 @@ button.primary_btn.prevStep {
     }
 
     .earning_section_cate {
-        border-radius: 15px;
-        padding: 20px;
+        border-radius: 0px;
+        padding: 0px 20px;
         margin-bottom: 24px;
     }
 
@@ -20414,16 +20473,54 @@ button.primary_btn.prevStep {
     }
 
     .earning_section_cate ul#myTab {
-        padding: 13px 0px 0px;
-        gap: 24px;
+        padding: 0px 0px 0px;
+        gap: 10px;
         border: none;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-        overflow: auto;
+    }
+
+    .earning_outer_s .container {
+        padding: 0px;
     }
 
     .earning_section_cate .nav-tabs .nav-link {
+        font-size: 13px;
+    }
+
+    .exchange_earning_bnr {
+        padding: 0px 0px 20px;
+        flex-direction: column;
+        /* text-align: center; */
+    }
+
+    .exchange_earning_bnr h2 {
+        font-size: 20px;
+    }
+
+    .earningbnr_cnt {
+        width: 100%;
+        text-align: center;
+    }
+
+    .exchange_earning_bnr p {
         font-size: 14px;
+        margin: 10px 0px;
+    }
+
+    .exchange_earning_bnr p span {
+        font-size: 15px;
+    }
+
+    button.signbtn {
+        padding: 7px 24px;
+    }
+
+    .earning_bnr {
+        max-width: 250px;
+        margin-top: 20px;
+    }
+
+    ul.balance_list_s {
+        gap: 15px;
     }
 
     #home .user_search {
@@ -22192,6 +22289,10 @@ button.primary_btn.prevStep {
         min-width: 70%;
     }
 
+    .wallet_balance_tb {
+        margin: 15px 0px 18px;
+    }
+
 }
 
 
@@ -22202,7 +22303,32 @@ button.primary_btn.prevStep {
         font-size: 12px;
     }
 
-body .trade-wrapper .card_header_title {
+    .balance_vector {
+        max-width: 100px;
+    }
+
+    ul.earning_assets_list {
+        flex-wrap: wrap;
+        margin-top: 10px;
+        padding: 15px;
+        gap: 18px;
+    }
+
+    ul.earning_assets_list li {
+        width: 46%;
+        gap: 3px;
+        font-size: 13px;
+    }
+
+    ul.balance_list_s {
+        grid-template-columns: 1fr;
+    }
+
+    ul.balance_list_s li .balance_cnt {
+        padding: 0px 15px;
+    }
+
+    body .trade-wrapper .card_header_title {
         font-size: 12px;
     }
 
@@ -22287,15 +22413,15 @@ body .trade-wrapper .card_header_title {
     }
 
     .custom-tab-content table.table td {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .custom-tab-content .table>thead th {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .market_page .mt_table .table tr th {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .crypto_section.market_update_outer.aos-init.aos-animate .container {
@@ -24385,17 +24511,17 @@ body .trade-wrapper .card_header_title {
     }
 
     .market_trade_crypto_slider .market-crypto-swiper {
-        padding-bottom:0px;
+        padding-bottom: 0px;
     }
 
-.market_update_table .searchBar.custom-tabs {
+    .market_update_table .searchBar.custom-tabs {
         margin-top: 0px;
     }
 
-.market_trade_crypto .container {
+    .market_trade_crypto .container {
         max-width: 100%;
         padding: 0px;
-    }    
+    }
 
     .market_trade_crypto_slider .swiper-slide {
         height: auto;

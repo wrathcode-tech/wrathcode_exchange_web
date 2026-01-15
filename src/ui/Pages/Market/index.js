@@ -928,44 +928,30 @@ const Market = () => {
                                 <th>24H Change</th>
                               </tr>
                             </thead>
-
-
-                            <tbody>
-                              {topGainers
-                                ? topGainers
-                                  .map((item, index) => {
-                                    return <tr key={index} onClick={() => nextPage(item)}  >
-                                      <td className="">
-                                        {index + 1}
-                                      </td>
-                                      <td>
-                                        <div className="td_div">
-                                          {item?.base_currency}
-                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
-                                          {item?.quote_currency}
-                                        </div>
-                                      </td>
-                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
-                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
-                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
-                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
-                                    </tr>
-                                  })
-                                : null
-                              }
-                            </tbody>
-
-
-
-
-
                             <tbody>
                               {fiterPairData && fiterPairData.map((item, index) => {
                                 // if (!favCoins.includes(item?._id)) return null;
                                 return (
                                   favCoins.includes(item?._id) &&
-                            
+                                  <tr key={index} onClick={() => nextPage(item)} >
+                                    <td>
+                                      <div className="td_div">
+                                        <span className="star_btn btn_icon active">
+                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
+                                        </span>
+                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
+                                        {item?.base_currency}/{item?.quote_currency}
+                                      </div>
+                                      <b>Vol {formatNumber(item?.volume, 5)}</b>
+                                    </td>
+                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
+                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
+                                    </td>
+                                   
+                                    <td><b>{formatNumber(item?.high, 5)}</b>
+                                    <br />
+                                    <b>{formatNumber(item?.low, 5)}</b></td>
+                                  </tr>
                                 );
                               })}
                             </tbody>
