@@ -682,8 +682,7 @@ const Market = () => {
                                         {item?.base_currency}/{item?.quote_currency}
                                        
                                       </div>
-                                      <br />
-                                      <b>{formatNumber(item?.volume, 5)}</b>
+                                      <b>Vol {formatNumber(item?.volume, 5)}</b>
                                     </td>
                                     <td><b>{formatNumber(item?.buy_price, 5)}</b>
                                     <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
@@ -818,8 +817,7 @@ const Market = () => {
                                         {item?.base_currency}/{item?.quote_currency}
                                        
                                       </div>
-                                      <br />
-                                      <b>{formatNumber(item?.volume, 5)}</b>
+                                      <b>Vol {formatNumber(item?.volume, 5)}</b>
                                     </td>
                                     <td><b>{formatNumber(item?.buy_price, 5)}</b>
                                     <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
@@ -915,55 +913,7 @@ const Market = () => {
                       }
                     </div>
                   </div>
-                  <div className="mobiletable">
-                    <table>
-                      <tr>
-                        <th>Pair</th>
-                        <td>
-                          <div class="td_div">
-                            <span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span>
-                            <img alt="" src="http://159.195.23.93:5001/icons/coin-image-1766573894103-204743634.png" class="img-fluid icon_img coinimg me-2 " />
-                            BTC/USDT</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Price</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Change</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H High</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Low</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>24H Vol</th>
-                        <td>
-                          <b>10000</b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Operation</th>
-                        <td>
-                          <a href="#" className="btn custom-btn btn-sm"><span>Trade</span></a>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
+               
                 </div>
 
                 <div className="card-body p-0 mobiletable">
@@ -978,32 +928,44 @@ const Market = () => {
                                 <th>24H Change</th>
                               </tr>
                             </thead>
+
+
+                            <tbody>
+                              {topGainers
+                                ? topGainers
+                                  .map((item, index) => {
+                                    return <tr key={index} onClick={() => nextPage(item)}  >
+                                      <td className="">
+                                        {index + 1}
+                                      </td>
+                                      <td>
+                                        <div className="td_div">
+                                          {item?.base_currency}
+                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
+                                          {item?.quote_currency}
+                                        </div>
+                                      </td>
+                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
+                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
+                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
+                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
+                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
+                                    </tr>
+                                  })
+                                : null
+                              }
+                            </tbody>
+
+
+
+
+
                             <tbody>
                               {fiterPairData && fiterPairData.map((item, index) => {
                                 // if (!favCoins.includes(item?._id)) return null;
                                 return (
                                   favCoins.includes(item?._id) &&
-                                  <tr key={index} onClick={() => nextPage(item)} >
-                                    <td>
-                                      <div className="td_div">
-                                        <span className="star_btn btn_icon active">
-                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
-                                        </span>
-                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
-                                        {item?.base_currency}/{item?.quote_currency}
-                                       
-                                      </div>
-                                      <br />
-                                      <b>{formatNumber(item?.volume, 5)}</b>
-                                    </td>
-                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
-                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
-                                    </td>
-                                   
-                                    <td><b>{formatNumber(item?.high, 5)}</b>
-                                    <br />
-                                    <b>{formatNumber(item?.low, 5)}</b></td>
-                                  </tr>
+                            
                                 );
                               })}
                             </tbody>
@@ -1024,121 +986,8 @@ const Market = () => {
                     </div>
                   </div>
 
-
               </div>
 
-
-              {/* <div className={`tab-pane ${activeTab === "Losers" ? 'active' : ""}`}>
-                <div className="card  py-2">
-                  <div className="card-body p-0 losers_table">
-                    <div className="table-responsive">
-                      {
-                        topLosers && topLosers?.length > 0 ? (
-                          <>
-                       
-                            <table className="table ">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th className="name"> Name</th>
-                                  <th> Price</th>
-                                  <th> 24H </th>
-                                  <th> Volume(24H)</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {topLosers
-                                  ? topLosers.map((item, index) => {
-                                    return <tr key={index} onClick={() => nextPage(item)} >
-                                      <td className="">
-                                        {index + 1}
-                                      </td>
-                                      <td>
-                                        <div className="td_div">
-                                          {item?.base_currency}
-                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
-                                          {item?.quote_currency}
-                                        </div>
-                                      </td>
-                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
-                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
-                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
-                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
-                                    </tr>
-                                  })
-                                  : null
-                                }
-                              </tbody>
-                            </table> </>
-                        ) : (
-                          <div className="favouriteData">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                            <p>No Data Available</p>
-                          </div>
-                        )
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
-
-              {/* <div className={`tab-pane ${activeTab === "Trending" ? 'active' : ""}`}>
-                <div className="card  py-2">
-                  <div className="card-body p-0 trending_table">
-                    <div className="table-responsive">
-                      {
-                        coinData && coinData?.length > 0 ? (
-                          <>
-                       
-                            <table className="table ">
-                              <thead>
-                                <tr>
-                                  <th> #</th>
-                                  <th> Name</th>
-                                  <th> Price</th>
-                                  <th> 24H </th>
-                                  <th>	Volume(24H)</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {coinData?.reverse().map((item, index) => {
-
-                                  return (
-                                    <tr key={index} onClick={() => nextPage(item)} >
-                                      <td className="">
-                                        {index + 1}
-                                      </td>
-                                      <td>
-                                        <div className="td_div">
-                                          {item?.base_currency}
-                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
-                                          {item?.quote_currency}
-                                        </div>
-                                      </td>
-                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
-                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
-                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
-                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                          </>
-                        ) : (
-                          <div className="favouriteData">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                            <p>No Data Available</p>
-                          </div>
-                        )
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </section>
