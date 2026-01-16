@@ -9,6 +9,8 @@ import DashboardHeader from '../../../customComponents/DashboardHeader';
 import { ProfileContext } from '../../../context/ProfileProvider';
 import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import { alertErrorMessage } from '../../../customComponents/CustomAlertMessage';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper";
 
 
 const Dashboard = (props) => {
@@ -128,7 +130,7 @@ const Dashboard = (props) => {
       <div className="dashboard_right">
 
         <DashboardHeader props={props} />
-        <div className="estimated_balance dash_balance">
+        <div className="estimated_balance dash_balance desktop_view">
           <div className='div_tag'>
             <div className="balance_chart_left">
               <div className="d-flex justify-content-between">
@@ -209,6 +211,149 @@ const Dashboard = (props) => {
           </div>
 
         </div>
+
+
+
+
+        <div className="estimated_balance dash_balance mobile_view">
+
+          <Swiper
+            modules={[Pagination]}
+            pagination={{ clickable: true }}
+            spaceBetween={20}
+            slidesPerView={1}
+          >
+
+            {/* Newest Pair */}
+            <SwiperSlide>
+              <div className='div_tag'>
+                <div className="balance_chart_left">
+                  <div className="d-flex justify-content-between">
+                    <h4>Newest (Pair)</h4>
+                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
+                  </div>
+
+                  <div className="select_price">
+                    <ul className='wallet_price_list'>
+                      <li>
+                        <h3 className={`${highlightCoins?.new?.change > 0 ? "text-success" : "text-danger"}`}>
+                          {highlightCoins?.new?.buy_price || 0.00} {highlightCoins?.new?.quote_currency || "---"} |
+                          {highlightCoins?.new?.change || 0.00}%
+                        </h3>
+                      </li>
+                      <li><span>≈ {highlightCoins?.new?.base_currency_fullname || "---"}</span></li>
+                    </ul>
+
+                    <div className="dashboardsummary_bottom">
+                      <h4>{highlightCoins?.new?.base_currency || "---"}/{highlightCoins?.new?.quote_currency || "---"}</h4>
+                      <Link className="btn" to={`/trade/${highlightCoins?.new?.base_currency || "base"}_${highlightCoins?.new?.quote_currency || "quote"}`}>
+                        Make Trade
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Top Gainer */}
+            <SwiperSlide>
+              <div className='div_tag'>
+                <div className="balance_chart_left">
+                  <div className="d-flex justify-content-between">
+                    <h4>Top gainer (24h)</h4>
+                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
+                  </div>
+
+                  <div className="select_price">
+                    <ul className='wallet_price_list'>
+                      <li>
+                        <h3 className={`${highlightCoins?.topGainer?.change > 0 ? "text-success" : "text-danger"}`}>
+                          {highlightCoins?.topGainer?.buy_price || 0.00} {highlightCoins?.topGainer?.quote_currency || "---"} |
+                          {highlightCoins?.topGainer?.change || 0.00}%
+                        </h3>
+                      </li>
+                      <li><span>≈ {highlightCoins?.topGainer?.base_currency_fullname || "---"}</span></li>
+                    </ul>
+
+                    <div className="dashboardsummary_bottom">
+                      <h4>{highlightCoins?.topGainer?.base_currency || "---"}/{highlightCoins?.topGainer?.quote_currency || "---"}</h4>
+                      <Link className="btn" to={`/trade/${highlightCoins?.topGainer?.base_currency || "base"}_${highlightCoins?.topGainer?.quote_currency || "quote"}`}>
+                        Make Trade
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Top Loser */}
+            <SwiperSlide>
+              <div className='div_tag'>
+                <div className="balance_chart_left">
+                  <div className="d-flex justify-content-between">
+                    <h4>Top Loser (24h)</h4>
+                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
+                  </div>
+
+                  <div className="select_price">
+                    <ul className='wallet_price_list'>
+                      <li>
+                        <h3 className={`${highlightCoins?.topLoser?.change > 0 ? "text-success" : "text-danger"}`}>
+                          {highlightCoins?.topLoser?.buy_price || 0.00} {highlightCoins?.topLoser?.quote_currency || "---"} |
+                          {highlightCoins?.topLoser?.change || 0.00}%
+                        </h3>
+                      </li>
+                      <li><span>≈ {highlightCoins?.topLoser?.base_currency_fullname || "---"}</span></li>
+                    </ul>
+
+                    <div className="dashboardsummary_bottom">
+                      <h4>{highlightCoins?.topLoser?.base_currency || "---"}/{highlightCoins?.topLoser?.quote_currency || "---"}</h4>
+                      <Link className="btn" to={`/trade/${highlightCoins?.topLoser?.base_currency || "base"}_${highlightCoins?.topLoser?.quote_currency || "quote"}`}>
+                        Make Trade
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* High Volume */}
+            <SwiperSlide>
+              <div className='div_tag'>
+                <div className="balance_chart_left">
+                  <div className="d-flex justify-content-between">
+                    <h4>High Volume (24H)</h4>
+                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
+                  </div>
+
+                  <div className="select_price">
+                    <ul className='wallet_price_list'>
+                      <li>
+                        <h3 className={`${highlightCoins?.topVolumne?.change > 0 ? "text-success" : "text-danger"}`}>
+                          {highlightCoins?.topVolumne?.buy_price || 0.00} {highlightCoins?.topVolumne?.quote_currency || "---"} |
+                          {highlightCoins?.topVolumne?.change || 0.00}%
+                        </h3>
+                      </li>
+                      <li><span>≈ {highlightCoins?.topVolumne?.base_currency_fullname || "---"}</span></li>
+                    </ul>
+
+                    <div className="dashboardsummary_bottom">
+                      <h4>{highlightCoins?.topVolumne?.base_currency || "---"}/{highlightCoins?.topVolumne?.quote_currency || "---"}</h4>
+                      <Link className="btn" to={`/trade/${highlightCoins?.topVolumne?.base_currency || "base"}_${highlightCoins?.topVolumne?.quote_currency || "quote"}`}>
+                        Make Trade
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+          </Swiper>
+
+        </div>
+
+
+
 
         <div className="dashboard_listing_section">
           <div className="listing_left_outer">
@@ -546,7 +691,7 @@ const Dashboard = (props) => {
                       {props?.userDetails?.kycVerified === 0 ? (
                         <Link to="/user_profile/kyc">Verify</Link>
                       ) : props?.userDetails?.kycVerified === 1 ? (
-                        <span  className='kycpendingbtn'>KYC Pending</span>
+                        <span className='kycpendingbtn'>KYC Pending</span>
                       ) : props?.userDetails?.kycVerified === 2 ? (
                         <span className='kycapprovedbtn'>KYC Approved</span>
                       ) : props?.userDetails?.kycVerified === 3 ? (

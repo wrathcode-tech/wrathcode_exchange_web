@@ -15030,6 +15030,7 @@ button.btn_claim:active {
     background: transparent;
     border: none;
     padding: 15px 20px 10px;
+    text-align: left;
     color: #ffffff80;
     font-size: 12px;
     font-weight: 300;
@@ -16041,6 +16042,10 @@ button.primary_btn.prevStep {
         left: 100px;
     }
 
+    .kycvector {
+        min-width: 250px;
+    }
+
 }
 
 
@@ -16257,6 +16262,37 @@ button.primary_btn.prevStep {
         gap: 20px;
     }
 
+    .supportsection {
+        width: 100%;
+    }
+
+    .kycvector {
+        min-width: 180px;
+        width: 180px;
+    }
+
+    .kyc_verif_bnr button.kyc.btn {
+        max-width: 100%;
+        font-size: 13px;
+        padding: 8px;
+        margin-top: 18px;
+    }
+
+    .kyc_account.d-flex {
+        margin-top: 22px;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .currency_list_b ul {
+        gap: 24px;
+        max-width: 100%;
+    }
+
+    .savebtn button {
+        font-size: 13px;
+    }
+
     .swap_outer_section {
         width: 100%;
         padding: 20px 0px 10px;
@@ -16268,6 +16304,14 @@ button.primary_btn.prevStep {
 
     .swap_ustd_bl .from button {
         font-size: 15px;
+    }
+
+    ul.launchpadlist li {
+        font-size: 18px;
+    }
+
+    ul.launchpadlist li span {
+        font-size: 13px;
     }
 
     .exchange_earning_bnr h2 {
@@ -17310,6 +17354,7 @@ button.primary_btn.prevStep {
 
     .dashboard_right {
         padding-right: 30px;
+        padding-left: 250px;
     }
 
     .deposit_crypto_block_coin {
@@ -17480,6 +17525,33 @@ button.primary_btn.prevStep {
 
     .icon_notificaton_r ul li.downloadtabs {
         display: none;
+    }
+
+    ul.kyclist li {
+        font-size: 12px;
+    }
+
+    .kyc_verif_bnr {
+        padding: 15px 20px;
+        margin-top: 20px;
+        gap: 15px;
+    }
+
+    .kycvector {
+        min-width: 110px;
+        width: 110px;
+    }
+
+    .two_factor_list h6 {
+        font-size: 14px;
+    }
+
+    .estimated_balance.desktop_view {
+        display: none;
+    }
+
+    .estimated_balance.mobile_view {
+        display: block;
     }
 
     .exchange_earning_bnr h2 {
@@ -18783,9 +18855,72 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:767px) {
 
+
+    .supportsection h4 {
+        font-size: 18px;
+    }
+
+    .supportsection {
+        padding-top: 10px;
+    }
+
+
     .mobiletable {
         display: block;
         margin-bottom: 15px;
+    }
+
+    h2.mb-0.pb-0 {
+        font-size: 20px;
+    }
+
+    .kyc_verif_bnr_wrapper {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .kyc_verif_bnr {
+        flex-direction: column;
+    }
+
+    .kysbnr_cnt {
+        width: 100%;
+    }
+
+    .kyc_verif_bnr_wrapper .account_benifits .row {
+        margin-top: 10px;
+        row-gap: 24px;
+    }
+
+    .mobile_view .swiper-pagination span {
+        position: relative;
+        right: inherit;
+    }
+
+    .estimated_balance .swiper-pagination {
+        bottom: 4px !important;
+    }
+
+    .factor_bl {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .two_factor_list .lftcnt {
+        width: 100%;
+    }
+
+    .enable {
+        width: 100%;
+    }
+
+    .two_factor_list button.btn {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .estimated_balance .div_tag {
+        padding-bottom: 30px;
     }
 
     .desktoptable {
@@ -19231,7 +19366,7 @@ button.primary_btn.prevStep {
 
     .afterloginheader .navbar-toggler {
         right: 6px;
-        top: 2px;
+        top: 5px;
     }
 
     .hand_shake_cntr {
@@ -19686,10 +19821,15 @@ button.primary_btn.prevStep {
     .user_list_top.walletbalance_t {
         flex-direction: column;
         padding: 12px 0px;
+        align-items: start;
     }
 
     .user_list_top.walletbalance_t .user_search {
         width: 100%;
+    }
+
+    body .modal-content {
+        border-radius: 0px;
     }
 
     .scan_img {
@@ -21868,12 +22008,34 @@ button.primary_btn.prevStep {
     }
 
     .two_factor_list {
-        padding: 15px;
+        padding: 0px;
         margin-top: 15px;
+    }
+
+    .getotp {
+        font-size: 12px;
     }
 
     .dashboard_right_side.profileslider {
         margin: 10px auto;
+    }
+
+    .currency_list_b ul {
+        gap: 18px;
+        max-width: 100%;
+        margin-top: 10px;
+    }
+
+    .currency_list_b ul li h6 {
+        font-size: 12px;
+    }
+
+    .savebtn button {
+        font-size: 12px;
+    }
+
+    .savebtn {
+        margin: 20px 0px 0px;
     }
 
     .hot_spot_outer {
@@ -22377,14 +22539,35 @@ button.primary_btn.prevStep {
         margin: 15px 0px 18px;
     }
 
+    .launchpad_hero_s .cnt_banner {
+        width: 100%;
+        text-align: center;
+    }
+
+    .subscribe_data_info {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+
 }
 
 
 @media screen and (max-width:660px) {
 
+    .project_coin h2 {
+        font-size: 20px;
+    }
+
     .factor_bl {
         gap: 15px;
         font-size: 12px;
+    }
+
+    ul.launchpadlist {
+        gap: 15px;
+        margin-top: 20px;
+        flex-direction: column;
     }
 
     .balance_vector {
@@ -22887,10 +23070,6 @@ button.primary_btn.prevStep {
         right: 34px;
         top: 9px;
         gap: 3px;
-    }
-
-    .afterloginheader .navbar-toggler {
-        top: 2px;
     }
 
     .pagination_list {
@@ -23824,6 +24003,10 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:414px) {
 
+    .currency_list_b ul {
+        flex-direction: column;
+    }
+
     .navigation .navbar-toggler img {
         width: 15px;
     }
@@ -24156,7 +24339,7 @@ button.primary_btn.prevStep {
     }
 
     .otp_code_in2 button {
-        padding: 9px 10px 7px;
+        padding: 7px 10px 5px;
         font-size: 11px;
     }
 
@@ -24474,7 +24657,7 @@ button.primary_btn.prevStep {
     }
 
     .afterloginheader .navbar-toggler {
-        top: 1px;
+        top: 3px;
     }
 
     header .logo {

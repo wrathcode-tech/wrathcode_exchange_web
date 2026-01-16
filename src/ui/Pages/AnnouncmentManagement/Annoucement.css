@@ -675,6 +675,8 @@ ul.registration_list li span {
     background-color: #515760;
     font-size: 10px;
     gap: 3px;
+    text-align: left;
+    line-height: 14px;
     padding: 3px 7px;
 }
 
@@ -716,8 +718,10 @@ ul.registration_list li span {
     gap: 15px;
 }
 
-.trade.websitebtn button.whitebtn{ background-color: #5a5d61;
-    color: #F2F4F6; }
+.trade.websitebtn button.whitebtn {
+    background-color: #5a5d61;
+    color: #F2F4F6;
+}
 
 .trading_process .usdt_selected {
     display: flex;
@@ -2165,9 +2169,69 @@ ul.exclusive_list li span.sellsub {
         gap: 20px;
     }
 
+    ul.registration_list li {
+        font-size: 13px;
+    }
+
+    .detail_top_launchpad .coin_lft ul.subcate li button {
+        font-size: 12px;
+    }
+
+    ul.registration_list li span {
+        font-size: 12px;
+    }
+
+    .top_tpl ul li {
+        font-size: 15px;
+        padding: 20px;
+    }
+
+    .tradetpl {
+        padding: 20px;
+    }
+
+    .tradetpl button {
+        font-size: 12px;
+    }
+
+    ul.exclusive_list li {
+        font-size: 15px;
+    }
+
+    .usdtdetail li {
+        font-size: 14px;
+        padding: 18px;
+    }
+
+    .total_time_ri ul li {
+        font-size: 16px;
+    }
+
     .filter_tabs button {
         font-size: 15px;
         padding: 6px 20px !important;
+    }
+
+    .subscribe_user_bl {
+        padding: 18px;
+    }
+
+    .subscribe_user_lft img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .subscribe_user_lft {
+        gap: 10px;
+    }
+
+    .subscribe_user_lft h4 {
+        font-size: 16px;
+        gap: 7px;
+    }
+
+    .userinfo_top {
+        gap: 8px;
     }
 
     .highlight_row {
@@ -2515,6 +2579,149 @@ ul.exclusive_list li span.sellsub {
 
 @media screen and (max-width:767px) {
 
+    .detail_top_launchpad {
+        flex-direction: column;
+        gap: 22px;
+        margin: 18px 0px;
+    }
+
+    ul.registration_list li {
+        font-size: 13px;
+    }
+
+    ul.registration_list li span {
+        font-size: 12px;
+    }
+
+    .detail_top_launchpad .coin_lft ul.subcate li button {
+        font-size: 12px;
+    }
+
+    .detail_top_launchpad .coin_cnt span {
+        font-size: 12px;
+    }
+
+    .total_distribution {
+        width: 100%;
+    }
+
+    .top_tpl ul li {
+        font-size: 16px;
+        padding: 20px;
+    }
+
+    .top_tpl ul li span {
+        font-size: 12px;
+    }
+
+    .launchpad_hero_s .row {
+        flex-direction: column;
+    }
+
+    .tradetpl button {
+        font-size: 13px;
+    }
+
+    .tradetpl {
+        padding: 20px;
+    }
+
+    .usdtpool_bl {
+        margin: 30px 0px 20px;
+    }
+
+    .tbl_flex button.poolbtn {
+        font-size: 16px;
+    }
+
+    .tbl_flex {
+        gap: 24px;
+    }
+
+    .commit_usdt_del {
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 18px;
+    }
+
+    .commit_usdt_del .coin_lft {
+        gap: 14px;
+    }
+
+    ul.exclusive_list li {
+        font-size: 15px;
+    }
+
+    ul.exclusive_list li span {
+        font-size: 12px;
+    }
+
+    ul.exclusive_list {
+        gap: 18px;
+    }
+
+    .future_trading_block p {
+        font-size: 12px;
+        margin: 0px;
+    }
+
+    .future_trading_block .toplimit {
+        margin: 15px 0px 0px;
+    }
+
+    .future_trading_block .trade button {
+        padding: 6px 15px;
+        font-size: 12px;
+    }
+
+    .trade.websitebtn {
+        gap: 7px;
+    }
+
+    .futures_trading_s h3 {
+        font-size: 18px;
+    }
+
+    .usdtdetail li {
+        font-size: 12px;
+        padding: 15px;
+    }
+
+
+    .commit_usdt_del .coin_cnt h3 {
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .launchpad_hero_s .row .col-sm-7 {
+        width: 100%;
+    }
+
+    .launchpad_hero_s .row .col-sm-5 {
+        width: 100%;
+    }
+
+    .total_time_ri ul li {
+        font-size: 13px;
+    }
+
+    .total_time_ri ul li span {
+        font-size: 12px;
+    }
+
+    .coin img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .coin_cnt h3 {
+        font-size: 18px;
+    }
+
+    .coin_cnt span {
+        font-size: 13px;
+    }
+
     .filter_tab_btn {
         font-size: 14px;
         padding: 10px 20px;
@@ -2854,6 +3061,81 @@ ul.exclusive_list li span.sellsub {
         gap: 20px;
     }
 
+    .coin img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .detail_top_launchpad .hd.d-flex {
+        align-items: start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .coin_lft ul.subcate {
+        padding-left: 0px;
+    }
+
+    .coin_lft {
+        align-items: baseline;
+    }
+
+    .future_trading_block .toplimit {
+        flex-direction: column;
+    }
+
+    ul.registration_list {
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .coin .useredit img {
+        width: 15px;
+        height: 15px;
+    }
+
+    .useredit {
+        width: 15px;
+        right: -7px;
+        bottom: 3px;
+        height: 15px;
+    }
+
+    .future_trading_block p {
+        width: 100%;
+    }
+
+    .trade.websitebtn {
+        width: 100%;
+    }
+
+    ul.exclusive_list {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .launchpad_hero_s p {
+        font-size: 12px;
+    }
+
+    .project_crypto_bl {
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0px;
+    }
+
+    button.viewdel_btn a {
+        padding: 2px;
+    }
+
+    ul.exclusivelist li span {
+        font-size: 12px;
+    }
+
+    .project_top {
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
     .project_coin button {
         font-size: 12px !important;
         padding: 6px 14px !important;
@@ -2998,6 +3280,7 @@ ul.exclusive_list li span.sellsub {
     .coin {
         width: 30px;
         height: 30px;
+        min-width: 30px;
     }
 
     .cnt_banner {
@@ -3019,7 +3302,11 @@ ul.exclusive_list li span.sellsub {
     }
 
     .filter_tabs button.btn {
-        min-width: 100px;
+        min-width: 90px;
+    }
+
+    .filter_tabs {
+        gap: 8px;
     }
 
     .cnt_topic {
@@ -3077,6 +3364,11 @@ ul.exclusive_list li span.sellsub {
 
     .view_morebtn {
         margin: 20px 0px 0px;
+    }
+
+    .userinfo_top {
+        flex-direction: column;
+        align-items: start;
     }
 
 }
