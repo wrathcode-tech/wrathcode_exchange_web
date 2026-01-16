@@ -174,15 +174,12 @@ const TransactionHistory = (props) => {
                           </tr>
                         ))
                       ) : (
-                        <tr rowSpan="5">
+                        <tr rowSpan="5" className="no-data-row">
                           <td colSpan="12">
-                            <div className="no_data_outer">
+                            <div className="no-data-wrapper">
                               <div className="no_data_vector">
                                 <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
                               </div>
-
-                              <p>No Data Available</p>
 
                             </div>
 

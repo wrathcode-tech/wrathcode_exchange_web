@@ -10,8 +10,8 @@ import { Link } from 'react-router-dom';
 import { ProfileContext } from '../../../context/ProfileProvider';
 
 const DepositPage = () => {
-    const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
-  
+  const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
+
   const [availableCurrency, setAvailableCurrency] = useState([]);
   const [allData, setAllData] = useState([]);
   const [searchPair, setSearchPair] = useState("");
@@ -93,7 +93,7 @@ const DepositPage = () => {
     setCheckDepositStatus(true)
     await new Promise((resolve) => {
       setTimeout(() => {
-    handleVerifyDeposit("checkPayment")
+        handleVerifyDeposit("checkPayment")
         resolve();
 
       }, 10000);
@@ -121,7 +121,7 @@ const DepositPage = () => {
       }
       if (status === "checkPayment") {
         setCheckDepositStatus(false)
-        AuthService.transfer_funds(result?.data,result?.currency)
+        AuthService.transfer_funds(result?.data, result?.currency)
       }
     })
     setLoadingDeposit(false)
@@ -139,7 +139,7 @@ const DepositPage = () => {
   const handleSelectNetwork = (item) => {
     setSelectedNetwork(item);
     $("#network_pop_up").modal('hide');
-    getDepostAddress(false,item)
+    getDepostAddress(false, item)
 
   };
 
@@ -158,7 +158,7 @@ const DepositPage = () => {
   };
 
 
-  const getDepostAddress = async (generate,selectedNetwork) => {
+  const getDepostAddress = async (generate, selectedNetwork) => {
     setDepositAddress("");
     LoaderHelper.loaderStatus(true);
     await AuthService.generateAddress(generate, selectedNetwork).then((result) => {
@@ -303,7 +303,7 @@ const DepositPage = () => {
 
               {/* <!-- Modal Network Pop Up Start --> */}
 
-              <div className="modal fade search_form search_coin" id="network_pop_up" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal fade search_form search_coin" id="network_pop_up" tabIndex="-1" aria-labelledby="exampleModalLabel">
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
@@ -392,11 +392,11 @@ const DepositPage = () => {
 
 
 
-                    <div className="d-flex items-center justify-content-start scaner_block_s">
+                  <div className="d-flex items-center justify-content-start scaner_block_s">
 
 
-                      <div className="col-sm-6 login_btn" onClick={() => { getDepostAddress(true,selectedNetwork) }}>
-                        <input type="button" value="Generate Address" />
+                    <div className="col-sm-6 login_btn" onClick={() => { getDepostAddress(true, selectedNetwork) }}>
+                      <input type="button" value="Generate Address" />
 
                     </div>
                   </div>
@@ -521,7 +521,7 @@ const DepositPage = () => {
                 </div>
               </div>
             </div>
-            <div className="news_announcement">
+            {/* <div className="news_announcement">
               <div className="announcements_top">
                 <h2>Announcements</h2>
                 <a href="/announcment_info">More &gt;</a>
@@ -545,7 +545,7 @@ const DepositPage = () => {
                   </div>
                 </marquee>
               }
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -619,14 +619,14 @@ const DepositPage = () => {
                         <td onClick={() => handleDepositModal(item)}>View</td>
                       </tr>
                     )
-                  }) : <tr rowSpan="5 " className='justify-content-center'>
+                  }) : <tr rowSpan="5" className="no-data-row2">
                     <td colSpan="12">
-                      <div className="no_data_outer">
+                      <div className="no-data-wrapper">
                         <div className="no_data_vector">
                           <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                         </div>
-                        <p>No Data Available</p>
                       </div>
+
                     </td>
                   </tr>}
                 </tbody>

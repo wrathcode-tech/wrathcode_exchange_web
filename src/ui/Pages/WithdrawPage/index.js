@@ -643,7 +643,7 @@ const WithdrawPage = (props) => {
               </div>
             </div>
 
-            <div className="news_announcement">
+            {/* <div className="news_announcement">
 
               <div className="announcements_top">
                 <h2>Announcements</h2>
@@ -677,7 +677,7 @@ const WithdrawPage = (props) => {
                 </marquee>
               }
 
-            </div>
+            </div> */}
 
           </div>
 
@@ -748,20 +748,16 @@ const WithdrawPage = (props) => {
                       <td onClick={() => handleWithdrawModal(item)}>View</td>
                     </tr>
                   )
-                }) : <tr rowSpan="5 " className='justify-content-center'>
-                  <td colSpan="12">
-                    <div className="no_data_outer">
-                      <div className="no_data_vector">
-                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                      </div>
-
-                      <p>No Data Available</p>
-
+                }) : <tr rowSpan="5" className="no-data-row2">
+                <td colSpan="12">
+                  <div className="no-data-wrapper">
+                    <div className="no_data_vector">
+                      <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                     </div>
+                  </div>
 
-                  </td>
-                </tr>}
+                </td>
+              </tr>}
 
 
 

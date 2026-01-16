@@ -2119,8 +2119,12 @@ ul.exclusive_list li span.sellsub {
 
     .top_header_dash {
         gap: 20px;
-        overflow: auto;
         padding-bottom: 0px;
+    }
+
+    .top_header_dash .profile_id_s {
+        overflow: auto;
+        padding-bottom: 4px;
     }
 
     .h2,
@@ -3052,6 +3056,10 @@ ul.exclusive_list li span.sellsub {
         margin-top: 0px;
     }
 
+    .launchpad_detail_s {
+        padding: 20px 0px;
+    }
+
 }
 
 @media screen and (max-width:660px) {
@@ -3059,6 +3067,10 @@ ul.exclusive_list li span.sellsub {
     .complete_project_s .coin_data_table {
         grid-template-columns: repeat(1, 1fr);
         gap: 20px;
+    }
+
+    .dashboard_right .dashboard_listing_section.Overview_mid .coin_right {
+        align-items: center;
     }
 
     .coin img {

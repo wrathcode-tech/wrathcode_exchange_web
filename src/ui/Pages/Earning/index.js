@@ -419,7 +419,7 @@ function Earning() {
                     <div className="no_data_vector">
                       <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                     </div>
-                    <p>No data found</p>
+                    {/* <p>No data found</p> */}
                   </div>}
 
                   <div className='all_product_data'>
@@ -676,7 +676,7 @@ function Earning() {
                                   <div className="no_data_vector">
                                     <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                                   </div>
-                                  {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                  {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
                                 </div>
                               </td>
                             </tr>}
@@ -747,7 +747,7 @@ function Earning() {
 
                                   </div>
 
-                                  {token ? <p>No plan found</p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                  {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
 
 
                                 </div>

@@ -164,11 +164,11 @@ const ProfilePage = (props) => {
                       Bonus History
                     </Link>
                   </li>
-                  <li onClick={() => toggleContent("Launchpad Transactions")} className={`${(currentPage === "Launchpad Transactions") && "active"} `}>
+                  {/* <li onClick={() => toggleContent("Launchpad Transactions")} className={`${(currentPage === "Launchpad Transactions") && "active"} `}>
                     <Link to="launchpad_transactions" className="rounded">
                       Launchpad Transactions
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </li>
@@ -211,11 +211,11 @@ const ProfilePage = (props) => {
                       Bank Details
                     </Link>
                   </li> */}
-                  <li onClick={() => toggleContent("Currency Preference")} className={`${(currentPage === "Currency Preference") && "active"} `}>
+                  {/* <li onClick={() => toggleContent("Currency Preference")} className={`${(currentPage === "Currency Preference") && "active"} `}>
                     <Link to="currency_preference" className="rounded">
                       Currency Preference
                     </Link>
-                  </li>
+                  </li> */}
                   <li onClick={() => toggleContent("Support")} className={`${(currentPage === "Support") && "active"} `}>
                     <Link to="support" className="rounded">
                       Support
@@ -234,15 +234,15 @@ const ProfilePage = (props) => {
                 </div>
               </Link>
             </li>
-            <li onClick={() => toggleContent("giveaway")} className={`${currentPage === "giveaway" && "active"} mb-1`}>
+            {/* <li onClick={() => toggleContent("giveaway")} className={`${currentPage === "giveaway" && "active"} mb-1`}>
               <Link to="giveaway">
                 <img className='darkicon' src="/images/earning_icon3.svg" alt="giveaway" width={26} />
                 <div className="dashboard_menu_hd">
                   Giveaways
-                  {/* <p>Participate in exclusive events and earn exciting rewards instantly.</p> */}
+                 
                 </div>
               </Link>
-            </li>
+            </li> */}
 
             {/* <li
               onClick={() => toggleContent("launchpadTransactions")}
@@ -283,11 +283,11 @@ const ProfilePage = (props) => {
                       Two Factor Authentication
                     </Link>
                   </li>
-                  <li onClick={() => toggleContent("Reset Password")} className={`${(currentPage === "Reset Password") && "active"} `}>
+                  {/* <li onClick={() => toggleContent("Reset Password")} className={`${(currentPage === "Reset Password") && "active"} `}>
                     <Link to="password_security" className="rounded">
                       Reset Password
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </li>

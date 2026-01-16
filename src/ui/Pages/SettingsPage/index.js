@@ -68,15 +68,12 @@ const SettingsPage = (props) => {
         const imgData = URL.createObjectURL(file);
         setLocalSelfy(imgData);
         setMyfile(file);
-        alertSuccessMessage(file?.name)
-        $("#exampleModal_2").modal('hide');
-        modalBackdropRemove()
-        $("#exampleModal_3").modal('show');
+        alertSuccessMessage("Profile picture selected: " + file?.name);
       } else {
         if (!allowedTypes.includes(file.type)) {
           alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
         } else {
-          alertErrorMessage("Max image size is 2MB.");
+          alertErrorMessage("Max image size is 5MB.");
         }
       }
     }
@@ -131,48 +128,51 @@ const SettingsPage = (props) => {
 
 
   const editavatar = async () => {
+    if (!myfile || typeof myfile === 'string') {
+      return Promise.resolve(); // No file to upload
+    }
     var formData = new FormData();
     formData.append("profilepicture", myfile);
     LoaderHelper.loaderStatus(true);
-    await AuthService.editavatar(formData).then(async (result) => {
+    return await AuthService.editavatar(formData).then(async (result) => {
       if (result?.success) {
         LoaderHelper.loaderStatus(false);
         try {
-          $("#exampleModal_3").modal('hide');
-          modalBackdropRemove()
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          alertSuccessMessage(result?.message);
+          alertSuccessMessage(result?.message || "Profile picture updated successfully");
           handleUserDetails();
+          return true;
         } catch {
           alertErrorMessage(result?.message);
+          return false;
         }
       } else {
         LoaderHelper.loaderStatus(false);
         alertErrorMessage(result?.message);
+        return false;
       }
     });
   };
 
   const editusername = async () => {
     if (!firstName?.trim() && !lastName?.trim()) {
-      return
+      return Promise.resolve(false);
     }
     LoaderHelper.loaderStatus(true);
-    await AuthService.editusername(firstName, lastName).then(async (result) => {
+    return await AuthService.editusername(firstName, lastName).then(async (result) => {
       if (result?.success) {
         LoaderHelper.loaderStatus(false);
         try {
-          $("#exampleModal_2").modal('hide');
-          modalBackdropRemove()
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          alertSuccessMessage(result?.message);
+          alertSuccessMessage(result?.message || "Name updated successfully");
           handleUserDetails();
+          return true;
         } catch {
           alertErrorMessage(result?.message);
+          return false;
         }
       } else {
         LoaderHelper.loaderStatus(false);
         alertErrorMessage(result?.message);
+        return false;
       }
     });
   };
@@ -364,6 +364,7 @@ const SettingsPage = (props) => {
               <div className="lftcnt">
                 <h6><img src="/images/lock_icon.svg" alt="Authenticator App" /> Name & Avatar</h6>
                 <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
+                <button className="btn" data-bs-toggle="modal" data-bs-target="#editAvatarModal">Edit Avatar</button>
               </div>
 
               <div className="enable"><img src="/images/user.png" alt="user" />Pallav-Soni</div>
@@ -464,6 +465,128 @@ const SettingsPage = (props) => {
 
         </div>
 
+
+
+        <div className="modal fade search_form" id="editAvatarModal" tabIndex="-1" aria-labelledby="editAvatarModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="editAvatarModalLabel" style={{ color: '#fff', fontSize: '18px', fontWeight: '600' }}>Edit Avatar</h5>
+                <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body" style={{ padding: '24px', textAlign: 'center' }}>
+                <div style={{ position: 'relative', display: 'inline-block', marginBottom: '30px' }}>
+                  <div style={{ 
+                    width: '200px', 
+                    height: '200px', 
+                    borderRadius: '50%', 
+                    border: '2px dashed #666', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    margin: '0 auto'
+                  }}>
+                    <img 
+                      src={localSelfy || (myfile ? (typeof myfile === 'string' ? `${ApiConfig.baseImage}${myfile}` : URL.createObjectURL(myfile)) : (props?.userDetails?.profilepicture ? `${ApiConfig.baseImage}${props?.userDetails?.profilepicture}` : "/images/user.png"))} 
+                      alt="Avatar Preview" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover',
+                        borderRadius: '50%'
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/user.png";
+                      }}
+                    />
+                    <label 
+                      htmlFor="avatarImageUploadModal"
+                      style={{
+                        position: 'absolute',
+                        bottom: '10px',
+                        right: '10px',
+                        background: '#22c55e',
+                        borderRadius: '50%',
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        border: '3px solid #12121a',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      <img src="/images/edit_icon.svg" alt="edit" style={{ width: '20px', height: '20px', filter: 'brightness(0) invert(1)' }} />
+                    </label>
+                    <input 
+                      type="file" 
+                      id="avatarImageUploadModal" 
+                      accept="image/png,image/jpeg,image/jpg" 
+                      onChange={handleChangeSelfie}
+                      style={{ display: 'none' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                  <button 
+                    type="button"
+                    data-bs-dismiss="modal"
+                    style={{
+                      padding: '12px 24px',
+                      background: '#2a2a3a',
+                      border: '1px solid #2a2a3a',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => e.target.style.background = '#3a3a4a'}
+                    onMouseLeave={(e) => e.target.style.background = '#2a2a3a'}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={async () => {
+                      if (myfile && typeof myfile !== 'string') {
+                        const result = await editavatar();
+                        if (result) {
+                          const modal = window.bootstrap.Modal.getInstance(document.getElementById('editAvatarModal'));
+                          if (modal) modal.hide();
+                          modalBackdropRemove();
+                        }
+                      } else {
+                        alertErrorMessage("Please select an image first");
+                      }
+                    }}
+                    style={{
+                      padding: '12px 24px',
+                      background: '#ffdc88',
+                      border: 'none',
+                      borderRadius: '8px',
+                      color: '#000',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => e.target.style.background = '#ffd966'}
+                    onMouseLeave={(e) => e.target.style.background = '#ffdc88'}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
         <div className="modal fade search_form" id="mobilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -698,27 +821,88 @@ const SettingsPage = (props) => {
 
                 <form className="profile_form">
 
-                  <div class="user_img">
-                    <img src="/images/user.png" alt="user" />
-                    <div class="edit_user"> <img src="/images/edit_icon.svg" alt="edit" /></div>
+                  <div className="user_img">
+                    <img 
+                      src={localSelfy || (myfile ? (typeof myfile === 'string' ? `${ApiConfig.baseImage}${myfile}` : URL.createObjectURL(myfile)) : (props?.userDetails?.profilepicture ? `${ApiConfig.baseImage}${props?.userDetails?.profilepicture}` : "/images/user.png"))} 
+                      alt="user" 
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/user.png";
+                      }}
+                    />
+                    <label 
+                      htmlFor="profileImageUpload"
+                      className="edit_user"
+                    >
+                      <img src="/images/edit_icon.svg" alt="edit"/>
+                    </label>
+                    <input 
+                      type="file" 
+                      id="profileImageUpload" 
+                      accept="image/png,image/jpeg,image/jpg" 
+                      onChange={handleChangeSelfie}
+                      style={{ display: 'none' }}
+                    />
                   </div>
 
 
                   <div className="emailinput">
                     <label>First Name</label>
                     <div className="d-flex">
-                      <input type="text" placeholder="Pallav" />
+                      <input 
+                        type="text" 
+                        placeholder="Enter first name" 
+                        value={firstName === "undefined" || !firstName ? "" : firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="emailinput">
                     <label>Last Name</label>
                     <div className="d-flex">
-                      <input type="text" placeholder="Soni" />
+                      <input 
+                        type="text" 
+                        placeholder="Enter last name" 
+                        value={lastName === "undefined" || !lastName ? "" : lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
                     </div>
                   </div>
 
-                  <button className="submit">Submit</button>
+                  <button 
+                    className="submit" 
+                    type="button"
+                    onClick={async () => {
+                      let avatarUpdated = false;
+                      let nameUpdated = false;
+                      
+                      // First upload profile picture if changed
+                      if (myfile && typeof myfile !== 'string') {
+                        avatarUpdated = await editavatar();
+                      }
+                      
+                      // Then update name
+                      if (firstName?.trim() || lastName?.trim()) {
+                        nameUpdated = await editusername();
+                      }
+                      
+                      // Close modal if at least one update was attempted
+                      if (avatarUpdated !== undefined || nameUpdated !== undefined) {
+                        const modal = window.bootstrap.Modal.getInstance(document.getElementById('profilepop'));
+                        if (modal) modal.hide();
+                        modalBackdropRemove();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        // Reset local preview after successful upload
+                        if (avatarUpdated) {
+                          setLocalSelfy("");
+                        }
+                      }
+                    }}
+                    disabled={(!firstName?.trim() && !lastName?.trim() && (!myfile || typeof myfile === 'string'))}
+                  >
+                    Submit
+                  </button>
 
                 </form>
 

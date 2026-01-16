@@ -758,10 +758,10 @@ ul.social_media a {
     cursor: pointer;
 }
 
-/* .hot_trading_s table tbody tr:hover {
+.hot_trading_s table tbody tr:hover {
     box-shadow: 0px 0px 20px #f3ba2b49;
-    transform: scale(1.1);
-} */
+    transform: scale(1.02);
+}
 
 .hot_trading_s table tbody tr:hover .right_t a {
     background-color: #f3bb2b;
@@ -2902,7 +2902,7 @@ canvas.qr_img.img-fluid {
     visibility: hidden;
     left: -250px;
     width: 300px;
-    background-color: #191C1E;
+    background-color: #2b313c;
     padding: 24px;
     border-radius: 10px;
     position: absolute;
@@ -4918,8 +4918,8 @@ body .red {
 }
 
 .qrcode {
-    background-color: #202630;
-    border: 1px solid #2D333C;
+    background-color: #2b313c;
+    border: 1px solid #2b313c;
     border-radius: 10px;
     padding: 15px;
     width: 190px;
@@ -5383,11 +5383,11 @@ td.right_t.price_tb span {
     flex-direction: column-reverse;
     min-width: 240px;
     left: -140px;
-    background-color: #191C1E;
+    background-color:#2b313c;
     justify-content: start;
     border-radius: 15px;
     align-items: start;
-    border: 1px solid #191C1E;
+    border: 1px solid #2b313c;
 }
 
 .header_notification .more_btn a {
@@ -6660,6 +6660,15 @@ form.buysellform.data-sell .form-control {
 .trading_platform_section h2 span {
     color: #f3bb2b;
     display: block;
+}
+
+.recent_deposit_list table tr.no-data-row2:hover {
+    background-color: transparent;
+}
+
+.recent_deposit_list table tr.no-data-row2 {
+    justify-content: center;
+    text-align: center;
 }
 
 .trading_services {
@@ -8652,8 +8661,56 @@ td.tradebtn a {
 
 .transaction_history_t .dashboard_summary table {
     margin-top: 0px;
+    height: 100%;
 }
 
+.no-data-row td {
+    height: 560px;
+    padding: 0;
+}
+
+
+#profilepop label.edit_user {
+    position: absolute;
+    bottom: 0px;
+    opacity: 0;
+    right: 0px;
+    border: none;
+    background: rgb(46 51 59 / 88%);
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#profilepop .user_img:hover label.edit_user {
+    opacity: 1;
+}
+
+.no-data-row2 td {
+    height: 340px;
+    padding: 0;
+}
+
+.transaction_history_t table tr.no-data-row:hover {
+    background-color: transparent;
+}
+
+/* center alignment */
+.no-data-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* vertical center */
+    justify-content: center;
+    /* horizontal center */
+    flex-direction: column;
+    text-align: center;
+}
 
 .header_right .button_outer .login_btn.deposit-btn {
     background: transparent;
@@ -8693,7 +8750,7 @@ td.tradebtn a {
     right: -450px;
     width: 430px;
     height: 100%;
-    background-color: #1a1a1a;
+    background-color: #212328;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     transition: right 0.6s ease-in-out;
     padding: 75px 32px 32px;
@@ -10524,7 +10581,7 @@ body.light_theme .withdrawal_rightside button {
 
 .price_max_total .d-flex {
     align-items: center;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .wallet_transfer button.btn {
@@ -10535,14 +10592,23 @@ body.light_theme .withdrawal_rightside button {
 }
 
 .price_max_total input[type="number"] {
-    padding: 10px 32px;
+    padding: 10px 18px;
+    font-size: 13px;
     background-color: transparent;
     border: none;
     width: 90%;
     color: #fff;
 }
 
-.price_max_total input[type="number"]:focus-visible {
+.price_card_body2 {
+    padding: 0px 5px;
+}
+
+.scroll_y_reverse .orderbook-table td.text-danger {
+    width: 88px;
+}
+
+orderbook-table .price_max_total input[type="number"]:focus-visible {
     outline: none;
 }
 
@@ -10784,6 +10850,13 @@ td.text-danger {
 .market_update_table .table tbody tr {
     border-radius: 6px;
     cursor: pointer;
+    transition: all 1s;
+    cursor: pointer;
+}
+
+.market_update_table .table tbody tr:hover {
+    box-shadow: 0px 0px 20px #f3ba2b25;
+    transform: scale(1.02);
 }
 
 .market_page .table> :not(caption)>tr th:last-child {
@@ -11505,7 +11578,7 @@ table td.action_td {
 }
 
 .table-responsive {
-    min-height: 200px;
+    min-height: 350px;
     max-height: 460px;
 }
 
@@ -14719,10 +14792,21 @@ button.btn_claim:active {
     margin-top: 0px;
 }
 
+#editAvatarModal .selfie_circle {
+    width: 200px;
+    margin: 15px auto;
+}
+
+.form_select select option {
+    background-color: #4B515D;
+    color: #fff;
+}
+
 #profilepop .user_img {
     width: 80px;
     height: 80px;
     margin: 0 auto;
+    overflow: hidden;
     align-items: center;
     justify-content: center;
 }
@@ -15565,13 +15649,46 @@ button.primary_btn.prevStep {
 .estimated_balance h6 {
     font-weight: 400;
     color: #848E9C;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.estimated_balance h6 button {
+    padding: 0px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #848E9C;
 }
 
 .supportinquery .profile_form button.submit {
-    width: 100%;
-    margin-top: 0px;
+    width: 300px;
+    max-width: 100%;
+    margin: 0 auto;
     border: 0px;
     border-radius: 7px;
+    font-size: 16px;
+    background-color:#F3BB2B;
+    color: #000;
+    /* border-radius: 50px; */
+    border: none;
+    font-weight: 500;
+}
+
+.verify_authenticator_s {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0px 30px;
+}
+
+.verify_authenticator_s p{ margin: 15px auto; max-width: 60%; }
+
+.verify_authenticator_s img{ width: 120px; }
+
+.transaction_history_t .table-responsive {
+    min-height: 600px;
+    max-height: 600px;
 }
 
 .btn-deposit {
@@ -16262,6 +16379,31 @@ button.primary_btn.prevStep {
         gap: 20px;
     }
 
+    .no-data-row td {
+        height: 300px;
+    }
+
+    .searchBar.custom-tabs.search_active {
+        width: 200px;
+    }
+
+    .wallet_tabs {
+        gap: 12px;
+    }
+
+    .estimated_balance button.btn {
+        font-size: 13px;
+    }
+
+    .transaction_history_t .table-responsive {
+        min-height: 300px;
+        max-height: 300px;
+    }
+
+    .trade_marketvalue .price {
+        font-size: 22px;
+    }
+
     .supportsection {
         width: 100%;
     }
@@ -16368,9 +16510,12 @@ button.primary_btn.prevStep {
         font-size: 13px;
     }
 
-    .dashboard_summary th,
-    td {
-        padding: 7px 9px;
+    .dashboard_summary td {
+        padding: 7px 5px;
+    }
+
+    .dashboard_summary th {
+        padding: 7px 5px;
     }
 
     .crypto_dashboard {
@@ -17519,12 +17664,26 @@ button.primary_btn.prevStep {
         padding: 8px 18px;
     }
 
+    .d-flex.gap-2.mt-3.mt-md-0 {
+        padding-top: 15px;
+    }
+
+
 }
 
 @media screen and (max-width:991px) {
 
+
+    .dashboard_right .col-sm-10 {
+        width: 100%;
+    }
+
     .icon_notificaton_r ul li.downloadtabs {
         display: none;
+    }
+
+    .wallet_tabs .tab_btn {
+        font-size: 16px;
     }
 
     ul.kyclist li {
@@ -17866,9 +18025,12 @@ button.primary_btn.prevStep {
         font-size: 12px;
     }
 
-    .transaction_history_t table tr td,
-    tr th {
-        padding: 10px 12px !important;
+    .transaction_history_t table tr td {
+        padding: 10px 7px !important;
+    }
+
+    .transaction_history_t table tr th {
+        padding: 10px 7px !important;
     }
 
     .listing_left_outer .dashboard_summary ul li button {
@@ -18110,7 +18272,7 @@ button.primary_btn.prevStep {
     }
 
     .mt-0.market_prices.market_update_sec .d-flex-between.mb-3.custom_dlflex {
-        padding-top: 30px;
+        padding-top: 10px;
         gap: 18px;
     }
 
@@ -18119,9 +18281,8 @@ button.primary_btn.prevStep {
         overflow: auto;
         white-space: nowrap;
         flex-wrap: nowrap;
-        top: 15px;
+        top: 5px;
         position: relative;
-        padding-bottom: 10px;
     }
 
     .earning_section_cate .user_search form {
@@ -18305,10 +18466,6 @@ button.primary_btn.prevStep {
 
     .currency_logo {
         padding: 15px 0px 20px;
-    }
-
-    .top_header_dash {
-        overflow: auto;
     }
 
     .twofactor_outer_s .row {
@@ -18858,6 +19015,15 @@ button.primary_btn.prevStep {
 
     .supportsection h4 {
         font-size: 18px;
+    }
+
+    .d-flex.gap-2.mt-3.mt-md-0 {
+        margin: 0px !important;
+    }
+
+
+    .listing_left_outer.full_width.transaction_history_t .market_section.spotorderhist {
+        padding-top: 20px;
     }
 
     .supportsection {
@@ -19451,11 +19617,16 @@ button.primary_btn.prevStep {
     }
 
     .search_form.modal.fade .modal-dialog {
-        top: 0px;
+        top: inherit;
+        bottom: 0px;
     }
 
     .modal-dialog h4 {
         font-size: 18px;
+    }
+
+    .wallet-sub {
+        font-size: 13px;
     }
 
     .modal.search_form input {
@@ -19565,9 +19736,9 @@ button.primary_btn.prevStep {
         max-width: 100%;
     }
 
-    /* .hot_trading_s table tbody tr:hover {
+    .hot_trading_s table tbody tr:hover {
         transform: scale(1);
-    } */
+    }
 
     .login_btn input[type="button"] {
         font-size: 14px;
@@ -20012,6 +20183,23 @@ button.primary_btn.prevStep {
 
     .top_header_dash .user_img {
         width: 32px;
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .top_header_dash .user_img>img {
+        width: 22px;
+    }
+
+    span.hide button {
+        white-space: nowrap;
+    }
+
+    .edit_user {
+        right: -5px;
+        bottom: 0px;
+        width: 16px;
+        height: 16px;
     }
 
     ul.wallet_price_list {
@@ -20530,7 +20718,17 @@ button.primary_btn.prevStep {
 
     .dashboard_listing_section.Overview_mid {
         padding-left: 0px;
+        margin-top: 18px;
     }
+
+    .Overview_mid .coin_view_top {
+        margin-top: 0px;
+    }
+
+    .Overview_mid .searchBar.custom-tabs {
+        margin-top: 0px;
+    }
+
 
     .assets_wallets_section .dashboard_summary {
         height: 100%;
@@ -21727,7 +21925,6 @@ button.primary_btn.prevStep {
     }
 
     .estimated_balance .justify-content-between {
-        justify-content: center !important;
         align-items: center;
         gap: 7px;
     }
@@ -21937,12 +22134,12 @@ button.primary_btn.prevStep {
     }
 
     .deposit_crypto_left .search_form .modal-content {
-        width: 90%;
-        margin: 30px auto;
+        width: 100%;
+        margin: 0px auto;
     }
 
     .deposit_crypto_block_coin h2 {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .amount_sysmble {
@@ -21981,11 +22178,11 @@ button.primary_btn.prevStep {
     }
 
     .accordion-button {
-        font-size: 16px !important;
+        font-size: 14px !important;
     }
 
     .deposit_crypto_right .accordion-body {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .transaction_top_select .select_option {
@@ -22549,14 +22746,69 @@ button.primary_btn.prevStep {
         gap: 18px;
     }
 
+    .dashboard_listing_section.Overview_mid .overview_section {
+        margin: 0px 0px 0px 0px;
+    }
+
+    .dashboard_right .dashboard_listing_section.Overview_mid .estimated_balance {
+        margin-top: 0px;
+    }
+
+    .listing_left_outer.full_width.transaction_history_t {
+        margin-top: 0px;
+    }
+
 
 }
 
 
 @media screen and (max-width:660px) {
 
+
+    .transaction_history_t .spotorderhist .top_heading {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 0px;
+    }
+
     .project_coin h2 {
         font-size: 20px;
+    }
+
+    .estimated_balance button.btn {
+        font-size: 12px;
+        padding: 5px 12px !important;
+    }
+
+    .wallet_tabs {
+        gap: 12px;
+    }
+
+    .Overview_mid .coin_view_top {
+        flex-direction: column;
+        align-items: start;
+        gap: 12px;
+    }
+
+    .searchBar.custom-tabs.search_active {
+        width: 180px;
+    }
+
+    .scan_img {
+        width: 60px;
+    }
+
+    body .search_form.search_coin .modal-body {
+        padding: 0px 15px 15px !important;
+    }
+
+    .deposit_address_s .typography-body3 {
+        width: 60px;
+    }
+
+    .login_btn input[type="button"] {
+        font-size: 13px;
+        padding: 5px 12px;
     }
 
     .factor_bl {
@@ -24275,7 +24527,7 @@ button.primary_btn.prevStep {
     }
 
     .top_heading h4 {
-        font-size: 16px;
+        font-size: 15px;
         margin: 0px;
     }
 
@@ -24776,6 +25028,54 @@ button.primary_btn.prevStep {
 @media screen and (max-width: 767px) {
     .market_trade_crypto_slider {
         padding: 0 15px;
+    }
+
+
+    /* Bootstrap Modal - Bottom Sheet Style for Mobile */
+    .modal.fade {
+        padding: 0 !important;
+    }
+
+    .modal.fade .modal-dialog {
+        margin: 0;
+        max-width: 100%;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transform: translateY(100%);
+        transition: transform 0.3s ease-out;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .modal.fade.show .modal-dialog {
+        transform: translateY(0);
+    }
+
+    .modal.fade .modal-dialog.modal-dialog-centered {
+        align-items: flex-end;
+    }
+
+    .modal.fade .modal-content {
+        border-radius: 0px;
+        border: none;
+        margin: 0;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal.fade.show .modal-dialog {
+        transform: translateY(0);
+    }
+
+    .modal.fade:not(.show) .modal-dialog {
+        transform: translateY(100%);
     }
 
     .market_trade_crypto_slider .market-crypto-swiper {

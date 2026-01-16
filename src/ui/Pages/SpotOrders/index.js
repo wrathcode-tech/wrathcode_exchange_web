@@ -60,32 +60,6 @@ const SpotOrders = (props) => {
       <div className="dashboard_listing_section Overview_mid">
 
 
-        <div className='overview_section'>
-          <div className='estimated_balance'>
-            <h6>Estimated Balance <i class="ri-eye-line"></i></h6>
-            <div class="wallet-header d-flex flex-wrap align-items-center justify-content-between">
-              <div>
-                <div class="wallet-title">
-                  0 USDT
-                </div>
-                <div class="wallet-sub mt-1">
-                  ≈ 0.00 USD
-                  <span>Today’s PNL 0.00 USD (0.00%) <i class="ri-arrow-right-s-line"></i></span>
-                </div>
-              </div>
-
-              <div class="d-flex gap-2 mt-3 mt-md-0">
-                <button class="btn btn-deposit px-4">Deposit</button>
-                <button class="btn btn-outline-custom px-4">Withdraw</button>
-                <button class="btn btn-outline-custom px-4" data-bs-toggle="modal" data-bs-target="#kycModal">Transfer</button>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
         <div className="listing_left_outer full_width transaction_history_t">
           <div className="market_section spotorderhist">
             <div className="top_heading">
@@ -181,12 +155,11 @@ const SpotOrders = (props) => {
                         )}
                       </>
 
-                    ) : <tr rowSpan="5">
+                    ) : <tr rowSpan="5" className="no-data-row">
                       <td colSpan="12">
-                        <div className="favouriteData">
+                        <div className="no-data-wrapper">
                           <div className="no_data_s">
                             <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                            <p>No Data Available</p>
                           </div>
                         </div>
                       </td>

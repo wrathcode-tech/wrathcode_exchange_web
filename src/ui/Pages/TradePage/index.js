@@ -1104,51 +1104,55 @@ const Trade = () => {
                                                         <div className="price_card">
 
                                                             {/* SELL ORDERS */}
-                                                            <div className="price_card_body scroll_y scroll_y_reverse">
-                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                                    <thead>
+                                                            <div className="price_card_body2">
+                                                            <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                            <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
                                                                         <tr>
-                                                                            <th>Price ({SelectedCoin?.quote_currency})</th>
-                                                                            <th className="text-end">Quantity ({SelectedCoin?.base_currency})</th>
-                                                                            <th className="text-end">Total ({SelectedCoin?.quote_currency})</th>
+                                                                            <th style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Price ({SelectedCoin?.quote_currency})</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Quantity ({SelectedCoin?.base_currency})</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Total ({SelectedCoin?.quote_currency})</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
-                                                                        {SellOrders?.length > 0 && !loader ? (
-                                                                            SellOrders.map((data, index) => {
-                                                                                const fill = maxSellVolume
-                                                                                    ? Math.min((data.remaining / maxSellVolume) * 100, 100)
-                                                                                    : 0;
+                                                            </table>
+                                                            </div>
+                                                            <div className="price_card_body scroll_y scroll_y_reverse" style={{ position: 'relative', minHeight: '200px' }}>
+                                                                {loader && (!SellOrders || SellOrders.length === 0) ? (
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '200px' }}>
+                                                                        <div className="spinner-border" style={{ width: '1.5rem', height: '1.5rem', borderColor: 'rgba(255, 255, 255, 0.3)', borderRightColor: 'transparent' }} />
+                                                                    </div>
+                                                                ) : (
+                                                                    <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
+                                                                        <tbody>
+                                                                            {SellOrders?.length > 0 && !loader ? (
+                                                                                SellOrders.map((data, index) => {
+                                                                                    const fill = maxSellVolume
+                                                                                        ? Math.min((data.remaining / maxSellVolume) * 100, 100)
+                                                                                        : 0;
 
-                                                                                return (
-                                                                                    <tr
-                                                                                        key={index}
-                                                                                        style={{
-                                                                                            cursor: "pointer",
-                                                                                            background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
-                                                                                        }}
-                                                                                        onClick={() => {
-                                                                                            setbuyamount(data.remaining.toFixed(8));
-                                                                                            infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
-                                                                                        }}
-                                                                                    >
-                                                                                        <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
-                                                                                        <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
-                                                                                        <td className="text-danger text-end">
-                                                                                            {(data.price * data.remaining).toFixed(priceDecimal)}
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                );
-                                                                            })
-                                                                        ) : (
-                                                                            <tr>
-                                                                                <td colSpan="3" className="text-center">
-                                                                                    <div className="spinner-border text-primary" />
-                                                                                </td>
-                                                                            </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table>
+                                                                                    return (
+                                                                                        <tr
+                                                                                            key={index}
+                                                                                            style={{
+                                                                                                cursor: "pointer",
+                                                                                                background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                            }}
+                                                                                            onClick={() => {
+                                                                                                setbuyamount(data.remaining.toFixed(8));
+                                                                                                infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                            }}
+                                                                                        >
+                                                                                            <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
+                                                                                            <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                            <td className="text-danger text-end">
+                                                                                                {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    );
+                                                                                })
+                                                                            ) : null}
+                                                                        </tbody>
+                                                                    </table>
+                                                                )}
                                                             </div>
 
                                                             {/* MARKET PRICE */}
@@ -1161,44 +1165,51 @@ const Trade = () => {
                                                             </div>
 
                                                             {/* BUY ORDERS */}
-                                                            <div className="price_card_body scroll_y">
-                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                                    <tbody>
-                                                                        {BuyOrders?.length > 0 && !loader ? (
-                                                                            BuyOrders.map((data, index) => {
-                                                                                const fill = maxBuyVolume
-                                                                                    ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
-                                                                                    : 0;
-
-                                                                                return (
-                                                                                    <tr
-                                                                                        key={index}
-                                                                                        style={{
-                                                                                            cursor: "pointer",
-                                                                                            background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
-                                                                                        }}
-                                                                                        onClick={() => {
-                                                                                            setsellAmount(data.remaining.toFixed(8));
-                                                                                            infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
-                                                                                        }}
-                                                                                    >
-                                                                                        <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
-                                                                                        <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
-                                                                                        <td className="text-green text-end">
-                                                                                            {(data.price * data.remaining).toFixed(priceDecimal)}
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                );
-                                                                            })
-                                                                        ) : (
+                                                            <div className="price_card_body scroll_y" style={{ position: 'relative', minHeight: '200px' }}>
+                                                                {loader && (!BuyOrders || BuyOrders.length === 0) ? (
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '200px' }}>
+                                                                        <div className="spinner-border" style={{ width: '1.5rem', height: '1.5rem', borderColor: 'rgba(255, 255, 255, 0.3)', borderRightColor: 'transparent' }} />
+                                                                    </div>
+                                                                ) : (
+                                                                    <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
+                                                                        <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)' }}>
                                                                             <tr>
-                                                                                <td colSpan="3" className="text-center">
-                                                                                    <div className="spinner-border text-primary" />
-                                                                                </td>
+                                                                                <th style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Price ({SelectedCoin?.quote_currency})</th>
+                                                                                <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Quantity ({SelectedCoin?.base_currency})</th>
+                                                                                <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Total ({SelectedCoin?.quote_currency})</th>
                                                                             </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {BuyOrders?.length > 0 && !loader ? (
+                                                                                BuyOrders.map((data, index) => {
+                                                                                    const fill = maxBuyVolume
+                                                                                        ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
+                                                                                        : 0;
+
+                                                                                    return (
+                                                                                        <tr
+                                                                                            key={index}
+                                                                                            style={{
+                                                                                                cursor: "pointer",
+                                                                                                background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                            }}
+                                                                                            onClick={() => {
+                                                                                                setsellAmount(data.remaining.toFixed(8));
+                                                                                                infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                            }}
+                                                                                        >
+                                                                                            <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
+                                                                                            <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                            <td className="text-green text-end">
+                                                                                                {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    );
+                                                                                })
+                                                                            ) : null}
+                                                                        </tbody>
+                                                                    </table>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1206,13 +1217,13 @@ const Trade = () => {
                                                     {/* ================= BUY ONLY ================= */}
                                                     <div className="tab-pane fade px-0" id="buy_orders">
                                                         <div className="price_card">
-                                                            <div className="price_card_body scroll_y">
-                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                                    <thead>
+                                                            <div className="price_card_body scroll_y" style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
+                                                                    <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
                                                                         <tr>
-                                                                            <th>Price</th>
-                                                                            <th className="text-end">Quantity</th>
-                                                                            <th className="text-end">Total</th>
+                                                                            <th style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Price</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Quantity</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Total</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -1250,13 +1261,13 @@ const Trade = () => {
                                                     {/* ================= SELL ONLY ================= */}
                                                     <div className="tab-pane fade px-0" id="sell_orders">
                                                         <div className="price_card">
-                                                            <div className="price_card_body scroll_y">
-                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                                    <thead>
+                                                            <div className="price_card_body scroll_y" style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
+                                                                    <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
                                                                         <tr>
-                                                                            <th>Price</th>
-                                                                            <th className="text-end">Quantity</th>
-                                                                            <th className="text-end">Total</th>
+                                                                            <th style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Price</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Quantity</th>
+                                                                            <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Total</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -1299,17 +1310,17 @@ const Trade = () => {
                                         {(orderBookActiveTab === "tradehistory" && showTab !== "order_book") && (
                                             <div className="trade_history_tab">
 
-                                                <div className="table-responsive">
-                                                    <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                        <thead>
+                                                <div className="table-responsive" style={{ position: 'relative', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+                                                    <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
+                                                        <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
                                                             <tr>
-                                                                <th className="text-start">
+                                                                <th className="text-start" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>
                                                                     Price ({SelectedCoin?.quote_currency})
                                                                 </th>
-                                                                <th className="text-end">
+                                                                <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>
                                                                     Quantity ({SelectedCoin?.base_currency})
                                                                 </th>
-                                                                <th className="text-end">
+                                                                <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>
                                                                     Time
                                                                 </th>
                                                             </tr>

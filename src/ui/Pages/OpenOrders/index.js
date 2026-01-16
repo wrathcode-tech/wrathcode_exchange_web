@@ -133,16 +133,12 @@ const OpenOrders = (props) => {
                           </tr>
                         ))
                       ) : (
-                        <tr rowSpan="5">
+                        <tr rowSpan="5" className="no-data-row">
                           <td colSpan="12">
-                            <div className="no_data_outer">
+                            <div className="no-data-wrapper">
                               <div className="no_data_vector">
                                 <img src="/images/no_data_vector.svg" alt="no-data" />
-
                               </div>
-
-                              <p>No Data Available</p>
-
                             </div>
 
                           </td>

@@ -177,7 +177,7 @@ const TwofactorPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/verified_icon.svg" alt="Email Verification" /> pl***9@gmail.com</div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#twofaInfoModal">Change</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#emailverifyModal">Change</button>
 
             </div>
 
@@ -188,7 +188,7 @@ const TwofactorPage = (props) => {
               </div>
 
               <div className="enable"><img src="/images/enabled_icon.svg" alt="Not Enabled" />Not Enabled</div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#twofaInfoModal">Set Up</button>
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#verifymobileModal">Set Up</button>
 
             </div>
 
@@ -203,202 +203,140 @@ const TwofactorPage = (props) => {
 
             </div>
 
-
-
-
           </div>
-
-
-
         </div>
+      </div>
 
 
 
-        {/* <div className="dashboard_listing_section Overview_mid">
+      <div className="modal fade search_form" id="twofaInfoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
 
+                <h5 className="modal-title" id="exampleModalLabel">Verify Authenticator</h5>
+                <p>Check your inbox and type the OTP to confirm your email address securely.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
 
-          <div className="kyc_approval_s activity_logs twofactor_outer_s">
+              <div className="verify_authenticator_s">  
+                <img src="/images/verifylock.svg" alt="Verify" />
+                <p>Enter the 6-digit code from your authenticator 
+                app to complete verification .</p>
+              </div>
 
-            <div className="row">
+              <div className="verify_authenticator_form">
 
-              <div className="col-sm-8">
+                <form className="profile_form">
 
-
-                <div className="cnt">
-                  <h3>2FA Security</h3>
-                  <p>Setup 2FA for more security</p>
-
-                  <div className="Security_factor">
-
-                    <p>Select Two Factor Authentication for your security.</p>
-
-                    <div className="two_factor_list">
-
-                      <div className="factor_bl">
-                        Authenticator App
-                        <label className="switch">
-                          <input type="checkbox" id="twoFactorSwitch" onClick={() => setCheckedAuth(2)} checked={checkedAuth === 2} />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div className="factor_bl">
-                        Email OTP
-                        <label className="switch">
-                          <input type="checkbox" id="twoFactorSwitch" onClick={() => setCheckedAuth(1)} checked={checkedAuth === 1} disabled={!emailID} />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div className="factor_bl">
-                        Mobile OTP
-                        <label className="switch">
-                          <input type="checkbox" id="twoFactorSwitch" onClick={() => setCheckedAuth(3)} checked={checkedAuth === 3} disabled={!props?.userDetails?.mobileNumber} />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div className="factor_bl">
-                        None
-                        <label className="switch">
-                          <input type="checkbox" id="twoFactorSwitch" onClick={() => setCheckedAuth(0)} checked={checkedAuth === 0} />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-
-
+                  <div className="emailinput">
+                    <label>Enter code </label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="123456" />
                     </div>
-
-                    <button className="save_btn" type="button" disabled={checkedAuth === props?.userDetails['2fa']} onClick={() => checkType()}>Save Settings</button>
-                    <button className="save_btn" type="button" data-bs-toggle="modal" data-bs-target="#scaner_code">email Settings</button>
-
-
-
-
-             
-                    <div className="modal fade scaner_pop_up" id="scaner" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h2>Authenticator App</h2>
-
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
-                          </div>
-                          <div className="modal-body">
-
-                            <div className="scaner_img">
-                              <img src={googleQr} alt="scan" />
-                            </div>
-
-                            <input type="text" className="code_scaner" value={googleCode} />
-                            <small onClick={copyCode}>Click to copy code</small>
-
-                            <button className="save_btn" type="button" onClick={() => hideStep()}>Next</button>
-
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-
-
-
-
-
-                   Modal Select Two Factor Authentication for your security scaner pop-up 
-                    <div className="modal fade scaner_pop_up" id="scaner_code" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div className="modal-dialog verifypop modal-dialog-centered">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <img src="/images/smartphone_icon.svg" alt="Verify smartphone" />
-                            <h2>Authenticator App</h2>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
-                          </div>
-                          <div className="modal-body">
-
-                            <input type="text" className="input_text" placeholder="Enter Code.." value={vCode} onChange={(e) => { setVcode(e.target.value) }} />
-
-                            <button className="save_btn" type="button" disabled={!vCode} onClick={() => Update2Fa(checkedAuth, vCode, checkedAuth === 0 ? emailID : checkedAuth === 1 ? emailID : checkedAuth === 2 ? emailID : mobileNumber)}>Submit</button>
-
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-
-
-                   Modal Select Email/mobile otp
-                    <div className="modal fade scaner_pop_up" id="otp" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div className="modal-dialog verifypop modal-dialog-centered">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <img src="/images/smartphone_icon.svg" alt="Verify smartphone" />
-                            <h2>Verify  OTP</h2>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
-                          </div>
-                          <div className="modal-body">
-
-                            <input type="text" className="input_text" placeholder="Enter Code.." value={vCode} onChange={(e) => { setVcode(e.target.value) }} />
-
-                            {checkedAuth === 0 ? <button className="save_btn" type="button" onClick={() => Update2Fa(checkedAuth, vCode, props?.userDetails['2fa'] === 0 ? emailID : props?.userDetails['2fa'] === 1 ? emailID : props?.userDetails['2fa'] === 2 ? (emailID || mobileNumber) : mobileNumber)} disabled={!vCode}>Submit</button> :
-                              <button className="save_btn" type="button" onClick={() => Update2Fa(checkedAuth, vCode, checkedAuth === 0 ? emailID : checkedAuth === 1 ? emailID : checkedAuth === 2 ? emailID : mobileNumber)} disabled={!vCode}>Submit</button>}
-
-
-
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-
-
-
                   </div>
 
+                  <button className="submit">Submit</button>
 
-                </div>
+                </form>
+
 
               </div>
 
-              <div className="col-sm-4">
-                <div className="serurity_vector">
-                  <img src="/images/security_icon2.svg" alt="icon" />
-                </div>
-              </div>
-
-
-            </div>
-
-
-          </div>
-
-        
-        </div> */}
-
-      </div>
-
-      {/* Two-Factor info modal */}
-      <div className="modal fade" id="twofaInfoModal" tabIndex="-1" aria-labelledby="twofaInfoModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content kyc_modal">
-            <div className="modal-header">
-              <h5 className="modal-title" id="twofaInfoModalLabel">Enable Two-Factor Authentication</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <p className="mb-3">To secure your account, please follow the steps below:</p>
-              <ul className="mb-0">
-                <li>Download or open your Authenticator App (Google/Microsoft).</li>
-                <li>Scan the QR code we provide, or enter the secret key manually.</li>
-                <li>Enter the 6-digit code from the app to verify and finish setup.</li>
-              </ul>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="primary_btn" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
+
       </div>
+
+
+      <div className="modal fade search_form" id="emailverifyModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Verify Email OTP</h5>
+                <p>Check your inbox and type the OTP to confirm your email address securely.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+              <div className="verify_authenticator_s">  
+                <img src="/images/verifyemail.svg" alt="Verify" />
+                <p>We ‘ve sent a verification code to your 
+                email pa***64@gmail.com </p>
+              </div>
+
+              <div className="verify_authenticator_form">
+
+                <form className="profile_form">
+
+                  <div className="emailinput">
+                    <label>Enter verification code</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="123456" />
+                      <div class="getotp">Resend Code</div>
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div className="modal fade search_form" id="verifymobileModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered ">
+            <div className="modal-content">
+              <div className="modal-header">
+
+                <h5 className="modal-title" id="exampleModalLabel">Verify Mobile OTP</h5>
+                <p>Check your inbox and type the OTP to confirm your email address securely.</p>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+              <div className="verify_authenticator_s">  
+                <img src="/images/verifymobile.svg" alt="Verify" />
+                <p>We've sent a verification code to your mobile 
+                number ending in 8820</p>
+              </div>
+
+              <div className="verify_authenticator_form">
+
+                <form className="profile_form">
+
+                  <div className="emailinput">
+                    <label>Enter verification code</label>
+                    <div className="d-flex">
+                      <input type="text" placeholder="123456" />
+                      <div class="getotp">Resend Code</div>
+                    </div>
+                  </div>
+
+                  <button className="submit">Submit</button>
+
+                </form>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
     </>
   );
 };

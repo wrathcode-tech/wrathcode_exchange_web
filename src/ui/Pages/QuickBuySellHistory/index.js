@@ -120,20 +120,17 @@ const QuickBuySellHistory = (props) => {
                         </tr>
                       ))
                     ) : (
-                      <tr rowSpan="5">
-                        <td colSpan="12">
-                          <div className="no_data_outer">
-                            <div className="no_data_vector">
-                              <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                      <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_vector">
+                                <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                              </div>
 
                             </div>
 
-                            <p>No Data Available</p>
-
-                          </div>
-
-                        </td>
-                      </tr>
+                          </td>
+                        </tr>
                     )}
                   </tbody>
                 </table>

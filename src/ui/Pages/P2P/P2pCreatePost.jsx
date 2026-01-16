@@ -533,25 +533,16 @@ const P2pCreatePost = () => {
         return selectedSellerPaymentMethod.map(m => m.name || m.type);
     };
 
-    // Helper to get input style with error state
-    const getInputStyle = (fieldName, baseStyle) => ({
-        ...baseStyle,
-        border: fieldErrors[fieldName] ? '1px solid #ef4444' : baseStyle.border || '1px solid #2a2a3a',
-        boxShadow: fieldErrors[fieldName] ? '0 0 0 3px rgba(239, 68, 68, 0.1)' : 'none'
-    });
+    // Helper to get input class with error state
+    const getInputClass = (fieldName, baseClass) => {
+        return `${baseClass} ${fieldErrors[fieldName] ? 'error' : ''}`;
+    };
 
     // Error message component
     const FieldError = ({ fieldName }) => {
         if (!fieldErrors[fieldName]) return null;
         return (
-            <div style={{
-                color: '#ef4444',
-                fontSize: isMobile ? '11px' : '12px',
-                marginTop: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-            }}>
+            <div className="p2p-create-post-field-error">
                 <span>⚠</span> {fieldErrors[fieldName]}
             </div>
         );
@@ -1177,39 +1168,39 @@ const P2pCreatePost = () => {
                     </div>
                 )}
 
-                <div style={styles.container}>
+                <div className="p2p-create-post-container">
                     {/* Form Section */}
-                    <div style={styles.formCard}>
-                        <div style={styles.header}>
-                            <h2 style={styles.title}>Create New Post</h2>
-                            <p style={styles.subtitle}>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                    <div className="p2p-create-post-form-card">
+                        <div className="p2p-create-post-header">
+                            <h2 className="p2p-create-post-title">Create New Post</h2>
+                            <p className="p2p-create-post-subtitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
                         </div>
 
                         {/* Stepper */}
-                        <div style={styles.stepper}>
-                            <div style={styles.stepCircle(currentStep === 1, currentStep > 1)}>
+                        <div className="p2p-create-post-stepper">
+                            <div className={`p2p-create-post-step-circle ${currentStep === 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
                                 {currentStep > 1 ? '✓' : '1'}
                             </div>
-                            <div style={styles.stepLine(currentStep > 1)}></div>
-                            <div style={styles.stepCircle(currentStep === 2, currentStep > 2)}>
+                            <div className={`p2p-create-post-step-line ${currentStep > 1 ? 'completed' : ''}`}></div>
+                            <div className={`p2p-create-post-step-circle ${currentStep === 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
                                 {currentStep > 2 ? '✓' : '2'}
                             </div>
-                            <div style={styles.stepLine(currentStep > 2)}></div>
-                            <div style={styles.stepCircle(currentStep === 3, false)}>3</div>
+                            <div className={`p2p-create-post-step-line ${currentStep > 2 ? 'completed' : ''}`}></div>
+                            <div className={`p2p-create-post-step-circle ${currentStep === 3 ? 'active' : ''}`}>3</div>
                         </div>
 
                         {/* Step 1: I want to use + Price Settings */}
                         {currentStep === 1 && (
                             <>
-                                <div style={styles.sectionTitle}>
-                                    <span style={styles.sectionIcon}>▶</span>
+                                <div className="p2p-create-post-section-title">
+                                    <span className="p2p-create-post-section-icon">▶</span>
                                     I want to use
                                 </div>
-                                <div style={styles.gridTwoCol}>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Fiat</label>
+                                <div className="p2p-create-post-grid-two-col">
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Fiat</label>
                                         <select
-                                            style={getInputStyle('fiat', styles.select)}
+                                            className={getInputClass('fiat', 'p2p-create-post-select')}
                                             value={formData.fiat}
                                             onChange={(e) => handleInput("fiat", e.target.value)}
                                         >
@@ -1218,10 +1209,10 @@ const P2pCreatePost = () => {
                                         </select>
                                         <FieldError fieldName="fiat" />
                                     </div>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Side</label>
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Side</label>
                                         <select
-                                            style={getInputStyle('side', styles.select)}
+                                            className={getInputClass('side', 'p2p-create-post-select')}
                                             value={formData.side}
                                             onChange={(e) => handleInput("side", e.target.value)}
                                         >
@@ -1230,10 +1221,10 @@ const P2pCreatePost = () => {
                                         </select>
                                         <FieldError fieldName="side" />
                                     </div>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Crypto</label>
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Crypto</label>
                                         <select
-                                            style={getInputStyle('crypto', styles.select)}
+                                            className={getInputClass('crypto', 'p2p-create-post-select')}
                                             value={formData.crypto}
                                             onChange={(e) => handleInput("crypto", e.target.value)}
                                         >
@@ -1244,36 +1235,36 @@ const P2pCreatePost = () => {
                                     </div>
                                 </div>
 
-                                <div style={styles.feeBox}>Fee: 0%</div>
+                                <div className="p2p-create-post-fee-box">Fee: 0%</div>
 
                                 <div style={{ marginTop: isMobile ? '24px' : '32px' }}>
-                                    <div style={styles.sectionTitle}>
-                                        <span style={styles.sectionIcon}>▶</span>
+                                    <div className="p2p-create-post-section-title">
+                                        <span className="p2p-create-post-section-icon">▶</span>
                                         Price Settings
                                     </div>
-                                    <div style={styles.gridTwoCol}>
-                                        <div style={styles.inputGroup}>
-                                            <label style={styles.label}>Price Type</label>
+                                    <div className="p2p-create-post-grid-two-col">
+                                        <div className="p2p-create-post-input-group">
+                                            <label className="p2p-create-post-label">Price Type</label>
                                             <select
-                                                style={styles.select}
+                                                className="p2p-create-post-select"
                                                 value={formData.priceType}
                                                 onChange={(e) => handleInput("priceType", e.target.value)}
                                             >
                                                 <option value="FIXED">Fixed</option>
                                             </select>
                                         </div>
-                                        <div style={styles.inputGroup}>
-                                            <label style={styles.label}>Fixed Price</label>
-                                            <div style={getInputStyle('fixedPrice', styles.inputWithSuffix)}>
+                                        <div className="p2p-create-post-input-group">
+                                            <label className="p2p-create-post-label">Fixed Price</label>
+                                            <div className={getInputClass('fixedPrice', 'p2p-create-post-input-with-suffix')}>
                                                 <input
                                                     type="number"
-                                                    style={styles.inputInner}
+                                                    className="p2p-create-post-input-inner"
                                                     value={formData.fixedPrice}
                                                     onChange={(e) => handleInput("fixedPrice", e.target.value)}
                                                     placeholder="e.g. 85.50"
                                                     onWheel={(e) => e.target.blur()}
                                                 />
-                                                <span style={styles.inputSuffix}>{formData.fiat}</span>
+                                                <span className="p2p-create-post-input-suffix">{formData.fiat}</span>
                                             </div>
                                             <FieldError fieldName="fixedPrice" />
                                         </div>
@@ -1323,11 +1314,11 @@ const P2pCreatePost = () => {
                                     Transaction Settings
                                 </div>
 
-                                <div style={styles.gridTwoCol}>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Payment Time Limit</label>
+                                <div className="p2p-create-post-grid-two-col">
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Payment Time Limit</label>
                                         <select
-                                            style={getInputStyle('paymentTimeLimit', styles.select)}
+                                            className={getInputClass('paymentTimeLimit', 'p2p-create-post-select')}
                                             value={formData.paymentTimeLimit}
                                             onChange={(e) => handleInput("paymentTimeLimit", e.target.value)}
                                         >
@@ -1339,61 +1330,61 @@ const P2pCreatePost = () => {
                                         </select>
                                         <FieldError fieldName="paymentTimeLimit" />
                                     </div>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Volume</label>
-                                        <div style={getInputStyle('volume', styles.inputWithSuffix)}>
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Volume</label>
+                                        <div className={getInputClass('volume', 'p2p-create-post-input-with-suffix')}>
                                             <input
                                                 type="number"
-                                                style={styles.inputInner}
+                                                className="p2p-create-post-input-inner"
                                                 value={formData.volume}
                                                 onChange={(e) => handleInput("volume", e.target.value)}
                                                 placeholder="Enter Volume"
                                                 onWheel={(e) => e.target.blur()}
                                             />
-                                            <span style={styles.inputSuffix}>{formData.crypto}</span>
+                                            <span className="p2p-create-post-input-suffix">{formData.crypto}</span>
                                             {formData.side === "SELL" && (
-                                                <span style={styles.availableText}>Available</span>
+                                                <span className="p2p-create-post-available-text">Available</span>
                                             )}
                                         </div>
                                         {fieldErrors.volume ? (
                                             <FieldError fieldName="volume" />
                                         ) : formData.side === "SELL" ? (
-                                            <div style={styles.helperText}>
+                                            <div className="p2p-create-post-helper-text">
                                                 {loader.balance ? 'Loading balance...' : `Available: ${availableBalance} ${formData.crypto}`}
                                             </div>
                                         ) : null}
                                     </div>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Min</label>
-                                        <div style={getInputStyle('min', styles.inputWithSuffix)}>
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Min</label>
+                                        <div className={getInputClass('min', 'p2p-create-post-input-with-suffix')}>
                                             <input
                                                 type="number"
-                                                style={styles.inputInner}
+                                                className="p2p-create-post-input-inner"
                                                 value={formData.min}
                                                 onChange={(e) => handleInput("min", e.target.value)}
                                                 placeholder="e.g. 500"
                                                 onWheel={(e) => e.target.blur()}
                                             />
-                                            <span style={styles.inputSuffix}>{formData.fiat}</span>
+                                            <span className="p2p-create-post-input-suffix">{formData.fiat}</span>
                                         </div>
                                         {fieldErrors.min ? (
                                             <FieldError fieldName="min" />
                                         ) : (
-                                            <div style={styles.helperText}>at least 200 {formData.fiat}</div>
+                                            <div className="p2p-create-post-helper-text">at least 200 {formData.fiat}</div>
                                         )}
                                     </div>
-                                    <div style={styles.inputGroup}>
-                                        <label style={styles.label}>Max</label>
-                                        <div style={getInputStyle('max', styles.inputWithSuffix)}>
+                                    <div className="p2p-create-post-input-group">
+                                        <label className="p2p-create-post-label">Max</label>
+                                        <div className={getInputClass('max', 'p2p-create-post-input-with-suffix')}>
                                             <input
                                                 type="number"
-                                                style={styles.inputInner}
+                                                className="p2p-create-post-input-inner"
                                                 value={formData.max}
                                                 onChange={(e) => handleInput("max", e.target.value)}
                                                 placeholder="e.g. 10000"
                                                 onWheel={(e) => e.target.blur()}
                                             />
-                                            <span style={styles.inputSuffix}>{formData.fiat}</span>
+                                            <span className="p2p-create-post-input-suffix">{formData.fiat}</span>
                                         </div>
                                         {fieldErrors.max && (
                                             <FieldError fieldName="max" />
@@ -1625,7 +1616,8 @@ const P2pCreatePost = () => {
                                             }}>
                                                 <input
                                                     type="number"
-                                                    style={getInputStyle('registeredDays', { ...styles.input, width: '80px', padding: '8px 12px' })}
+                                                    className={`p2p-create-post-input ${fieldErrors['registeredDays'] ? 'error' : ''}`}
+                                                    style={{ width: '80px', padding: '8px 12px' }}
                                                     value={formData.registeredDays}
                                                     onChange={(e) => handleInput("registeredDays", e.target.value)}
                                                     min="0"

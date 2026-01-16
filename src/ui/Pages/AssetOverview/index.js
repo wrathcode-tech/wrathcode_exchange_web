@@ -18,6 +18,7 @@ const AssetOverview = () => {
   const [selectedCurrency, setSelectedCurrency] = useState({});
   const [currencyData, setCurrencyData] = useState([]);
   const [searchCoin, setSearchCoin] = useState("");
+  const [searchPair, setSearchPair] = useState("");
   const [walletType, setWalletType] = useState([]);
   const [fromWalletType, setFromWalletType] = useState("");
   const [toWalletType, setToWalletType] = useState("");
@@ -26,6 +27,11 @@ const AssetOverview = () => {
   const [currenctTab, setCurrenctTab] = useState("");
   const [showBalance, setShowBalance] = useState("");
   const [activeTab, setActiveTab] = useState("assets");
+  const [availableCurrency, setAvailableCurrency] = useState([]);
+  console.log(availableCurrency, "availableCurrency");
+  const [selectedNetwork, setSelectedNetwork] = useState("");
+  const [depositAddress, setDepositAddress] = useState("");
+  const [allData, setAllData] = useState([]);
 
 
   const [hideAssets, setHideAssets] = useState(true);
@@ -45,6 +51,45 @@ const AssetOverview = () => {
     } catch (error) {
     }
     finally { LoaderHelper.loaderStatus(false); }
+  };
+
+  const handleSelectDepositCoin = (item) => {
+    setSelectedCurrency(item);
+    setSelectedNetwork("");
+    setDepositAddress("");
+    setSearchPair("");
+    // Close only the assets_crypto_modal, keep kycModal open
+    // Use manual DOM manipulation to avoid closing parent modal
+    const modalElement = document.getElementById('assets_crypto_modal');
+    if (modalElement) {
+      // Remove show class and backdrop
+      modalElement.classList.remove('show');
+      modalElement.style.display = 'none';
+      modalElement.setAttribute('aria-hidden', 'true');
+      modalElement.removeAttribute('aria-modal');
+      
+      // Remove backdrop for this specific modal only
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(backdrop => {
+        // Only remove if it's the last backdrop (child modal's backdrop)
+        if (backdrop && backdrop.parentNode) {
+          const backdropZIndex = window.getComputedStyle(backdrop).zIndex;
+          // Remove only the topmost backdrop (child modal)
+          if (parseInt(backdropZIndex) > 1040) {
+            backdrop.remove();
+          }
+        }
+      });
+      
+      // Ensure parent modal stays open
+      const parentModal = document.getElementById('kycModal');
+      if (parentModal) {
+        parentModal.classList.add('show');
+        parentModal.style.display = 'block';
+        parentModal.setAttribute('aria-hidden', 'false');
+        parentModal.setAttribute('aria-modal', 'true');
+      }
+    }
   };
 
   const getWalletType = async () => {
@@ -228,6 +273,38 @@ const AssetOverview = () => {
 
   }, [selectedCurrency, fromWalletType, toWalletType]);
 
+
+  const getDepositActiveCoins = async () => {
+    LoaderHelper.loaderStatus(true);
+    await AuthService.depositActiveCoins().then(async (result) => {
+      if (result?.success) {
+        try {
+          setAvailableCurrency(result?.data)
+          setAllData(result?.data)
+
+        } catch (error) {
+
+        }
+      }
+    });
+    LoaderHelper.loaderStatus(false);
+  };
+
+  useEffect(() => {
+    getDepositActiveCoins();
+  }, []);
+  useEffect(() => {
+    if (searchPair) {
+      const filteredPair = allData?.filter((item) => item?.short_name?.toLowerCase()?.includes(searchPair?.toLowerCase()));
+      setAvailableCurrency(filteredPair)
+
+    } else {
+      setAvailableCurrency(allData)
+    }
+  }, [searchPair]);
+
+
+
   return (
     <>
 
@@ -237,7 +314,7 @@ const AssetOverview = () => {
           <div className="col-sm-10">
             <div className='overview_section'>
               <div className='estimated_balance'>
-                <h6>Estimated Balance <i class="ri-eye-line"></i></h6>
+                <h6>Estimated Balance <button><i class="ri-eye-line"></i></button></h6>
                 <div class="wallet-header d-flex flex-wrap align-items-center justify-content-between">
                   <div>
                     <div class="wallet-title">
@@ -1017,17 +1094,15 @@ const AssetOverview = () => {
                                 </tr>
                               ))
                             ) : (
-                              <tr>
+                              <tr rowSpan="5" className="no-data-row2">
                                 <td colSpan="12">
-                                  <div className="no_data_outer">
+                                  <div className="no-data-wrapper">
                                     <div className="no_data_vector">
-                                      <img
-                                        src="/images/no_data_vector.svg"
-                                        alt="no-data"
-                                      />
+                                      <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                                     </div>
-                                    <p>No Data Available</p>
+
                                   </div>
+
                                 </td>
                               </tr>
                             )}
@@ -1084,17 +1159,14 @@ const AssetOverview = () => {
                                   </tr>
                                 ))
                               ) : (
-                                <tr>
+                                <tr rowSpan="5" className="no-data-row2">
                                   <td colSpan="12">
-                                    <div className="no_data_outer">
+                                    <div className="no-data-wrapper">
                                       <div className="no_data_vector">
-                                        <img
-                                          src="/images/no_data_vector.svg"
-                                          alt="no-data"
-                                        />
+                                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                                       </div>
-                                      <p>No Data Available</p>
                                     </div>
+
                                   </td>
                                 </tr>
                               )}
@@ -1440,8 +1512,21 @@ const AssetOverview = () => {
                   <h6>Crypto</h6>
 
                   <div className='coin_cryptofiled'>
-                    <button data-bs-toggle="modal" data-bs-target="#exampleModal"><span><img src="/images/tether_icon.png" alt="Crypto" />Crypto</span>
-                    <i class="ri-arrow-down-s-fill"></i></button>
+                    <button 
+                      type="button"
+                      data-bs-toggle="modal" 
+                      data-bs-target="#assets_crypto_modal"
+                    >
+                      {Object.keys(selectedCurrency)?.length > 0 ? (
+                        <span>
+                          <img src={ApiConfig?.baseImage + selectedCurrency?.icon_path} alt={selectedCurrency?.short_name} width="20px" />
+                          {selectedCurrency?.short_name || selectedCurrency?.currency || 'Crypto'}
+                        </span>
+                      ) : (
+                        <span><img src="/images/tether_icon.png" alt="Crypto" />Crypto</span>
+                      )}
+                      <i class="ri-arrow-down-s-fill"></i>
+                    </button>
                   </div>
                 </div>
                 <div className='crypto_selectcoin'>
@@ -1469,6 +1554,96 @@ const AssetOverview = () => {
 
 
       {/* <!-- Modal kyc End --> */}
+
+
+
+
+
+      {/* <!-- Modal Search Coin Start --> */}
+
+      <div className="modal fade search_form search_coin" id="assets_crypto_modal" tabIndex="-1" aria-labelledby="assetsCryptoModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="assetsCryptoModalLabel">Select Crypto</h4>
+              <button 
+                type="button" 
+                className="btn-close" 
+                aria-label="Close"
+                onClick={() => {
+                  const modalElement = document.getElementById('assets_crypto_modal');
+                  if (modalElement) {
+                    modalElement.classList.remove('show');
+                    modalElement.style.display = 'none';
+                    modalElement.setAttribute('aria-hidden', 'true');
+                    modalElement.removeAttribute('aria-modal');
+                    
+                    // Remove only the topmost backdrop
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => {
+                      const backdropZIndex = window.getComputedStyle(backdrop).zIndex;
+                      if (parseInt(backdropZIndex) > 1040) {
+                        backdrop.remove();
+                      }
+                    });
+                    
+                    // Ensure parent modal stays open
+                    const parentModal = document.getElementById('kycModal');
+                    if (parentModal) {
+                      parentModal.classList.add('show');
+                      parentModal.style.display = 'block';
+                      parentModal.setAttribute('aria-hidden', 'false');
+                      parentModal.setAttribute('aria-modal', 'true');
+                    }
+                  }
+                }}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <input type="text" placeholder="Search coin name " value={searchPair} onChange={(e) => setSearchPair(e.target.value)} />
+              </form>
+
+              <div className="hot_trading_t">
+                <div className='table-responsive'>
+                  <table>
+                    <tbody>
+                      {availableCurrency?.length > 0 ? availableCurrency?.filter((item) => {
+                        if (!searchPair) return true;
+                        const searchTerm = searchPair.toLowerCase();
+                        const currencyName = item?.name?.toLowerCase() || '';
+                        const shortName = item?.short_name?.toLowerCase() || '';
+                        return currencyName.includes(searchTerm) || shortName.includes(searchTerm);
+                      }).map((item) => {
+                        return (
+                          <tr 
+                            key={item?.currency_id || item?.id || Math.random()}
+                            onClick={() => handleSelectDepositCoin(item)} 
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <td>
+                              <div className="td_first">
+                                <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} alt="icon" width="30px" /></div>
+                                <div className="price_heading"> {item?.short_name} <br /> </div>
+                              </div>
+                            </td>
+                            <td className="right_t price_tb">{item?.name}</td>
+                          </tr>
+                        )
+                      }) : ""}
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- Modal Search Coin Start End --> */}
+
 
 
     </>
