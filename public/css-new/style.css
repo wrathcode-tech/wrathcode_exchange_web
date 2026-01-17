@@ -728,7 +728,8 @@ ul.social_media a {
 }
 
 .search_outer_blog {
-    background-color: #1a1a1a;
+    background-color: #181a20;
+    border: 1px solid #373E4B;
     padding: 24px;
     border-radius: 15px;
     display: flex;
@@ -1574,10 +1575,10 @@ ul.social_media {
 }
 
 .crypto_cta {
-    border: 1px solid #5b5b5b;
+    border: 1px solid #373E4B;
     padding-left: 60px;
     border-radius: 10px;
-    background-color: #111114;
+    background-color: #373E4B;
     overflow: hidden;
 }
 
@@ -1609,7 +1610,7 @@ a.startbtn:hover {
 }
 
 .hot_articles_s {
-    padding: 60px 0px;
+    padding: 60px 0px 20px;
 }
 
 .hot_articles_s h2 {
@@ -1710,7 +1711,7 @@ video {
 }
 
 .block_blog {
-    border: 1px solid #494949;
+    border: 1px solid #373E4B;
     border-radius: 10px;
     overflow: hidden;
     height: 100%;
@@ -1786,9 +1787,10 @@ section.featured_blog h2 {
 }
 
 .subscribe_form {
-    background-color: #1a1a1a;
+    background-color: #373E4B;
     border-radius: 10px;
     padding: 60px;
+    margin-bottom: 32px;
 }
 
 .email_icon {
@@ -3597,15 +3599,15 @@ section.inner-page-banner.bg-2 .inner {
 }
 
 .crypto_list ul li {
-    background-color: #111621;
+    background-color: #373E4B;
     padding: 16px;
-    border-radius: 18px;
-    border: 1px solid #000;
+    border-radius: 15px;
+    border: 1px solid #373E4B;
 }
 
 .meme_listing_section {
     padding: 40px 0px 0px;
-    background-color: #0a0a0a;
+    background-color: #181A20;
     color: #fff;
     display: inline-block;
     width: 100%;
@@ -3621,7 +3623,7 @@ section.inner-page-banner.bg-2 .inner {
 }
 
 .what_coin_s p {
-    font-size: 18px;
+    font-size: 14px;
     margin: 0px;
     color: #cdcdcd;
 }
@@ -5383,7 +5385,7 @@ td.right_t.price_tb span {
     flex-direction: column-reverse;
     min-width: 240px;
     left: -140px;
-    background-color:#2b313c;
+    background-color: #2b313c;
     justify-content: start;
     border-radius: 15px;
     align-items: start;
@@ -6752,8 +6754,8 @@ form.buysellform.data-sell .form-control {
 }
 
 .coin-card_itemcnt h6 {
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 13px;
+    font-weight: 300;
 }
 
 .pagination_list ul.pagination {
@@ -7148,13 +7150,14 @@ img.animation_effect.bitcoin {
 
 
 .meme_hero_s {
+    background-color: #181A20;
     padding: 60px 0px 20px;
     position: relative;
     color: #fff;
-    background-image: url(../images/banner_bg_l.png);
+    /* background-image: url(../images/banner_bg_l.png);
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
 }
 
 
@@ -8592,6 +8595,20 @@ td.tradebtn a {
     padding-right: 7px;
 }
 
+.no_data_outer .table-responsive {
+    align-items: center;
+    display: flex;
+}
+
+.earning_list_block .table-responsive {
+    min-height: 300px;
+}
+
+.select_option select option {
+    background-color: #2b313c;
+    color: #fff !important;
+}
+
 .transaction_top_select .select_option select option {
     color: #000;
 }
@@ -9255,6 +9272,8 @@ button.subscribe_btn a {
 
 .meme_listing_section .top_heading {
     align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 }
 
 .meme_listing_section .top_heading h4 {
@@ -12194,13 +12213,13 @@ section.st_sec .card-body {
 
 .blog_section_b {
     color: #fff;
-    background-color: #111114;
+    background-color: #181A20;
     /* padding: 50px 0px; */
-    /* background-image: url(../images/buler_bg.png); */
+    /* background-image: url(../images/buler_bg.png); 
     background-position-y: top;
     background-position-x: right;
     background-size: contain;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
 }
 
 
@@ -15669,7 +15688,7 @@ button.primary_btn.prevStep {
     border: 0px;
     border-radius: 7px;
     font-size: 16px;
-    background-color:#F3BB2B;
+    background-color: #F3BB2B;
     color: #000;
     /* border-radius: 50px; */
     border: none;
@@ -15682,9 +15701,14 @@ button.primary_btn.prevStep {
     margin: 10px 0px 30px;
 }
 
-.verify_authenticator_s p{ margin: 15px auto; max-width: 60%; }
+.verify_authenticator_s p {
+    margin: 15px auto;
+    max-width: 60%;
+}
 
-.verify_authenticator_s img{ width: 120px; }
+.verify_authenticator_s img {
+    width: 120px;
+}
 
 .transaction_history_t .table-responsive {
     min-height: 600px;
@@ -15943,6 +15967,42 @@ button.primary_btn.prevStep {
     font-weight: 300;
     padding: 5px !important;
     border-bottom: 1px solid #282D36;
+}
+
+.account_table .td_first {
+    position: relative;
+    padding-left: 16px;
+}
+
+.account_table .td_first::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #DB54A2;
+}
+
+.account_table .td_first.spot::before {
+    background-color: #4C7ECF;
+}
+
+.account_table .td_first.swap::before {
+    background-color: #B2CD52;
+}
+
+.account_table .td_first.staking::before {
+    background-color: #DCA451;
+}
+
+.account_table .td_first.futures::before {
+    background-color: #CC3D3D;
+}
+
+.account_table td.amount_td span {
+    display: block;
 }
 
 @media screen and (max-width:1700px) {
@@ -16377,6 +16437,20 @@ button.primary_btn.prevStep {
 
     .top_total_bar {
         gap: 20px;
+    }
+
+    .hot_articles_s h2 {
+        font-size: 24px;
+    }
+
+    .custom-tab-content .table>thead th {
+        font-size: 11px;
+        padding: 4px 7px !important;
+    }
+
+    .market_update_sec .table> :not(caption)>*>* {
+        padding: 10px 7px;
+        font-size: 11px;
     }
 
     .no-data-row td {
@@ -16818,6 +16892,7 @@ button.primary_btn.prevStep {
 
     .assets_wallets_section .market_section {
         min-height: 100%;
+        padding: 15px;
     }
 
     .highlights_crypto_s .vector_icon_slide {
@@ -18372,7 +18447,7 @@ button.primary_btn.prevStep {
     }
 
     footer h3 {
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .overview_summary_currency .slick-track {
@@ -19012,6 +19087,31 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:767px) {
 
+    .desktop_view {
+        display: none;
+    }
+
+    .all_product_data .mobile_view span {
+        position: relative;
+        right: 0px;
+    }
+
+    body .all_product_data .mobile_view {
+        padding: 5px 0px;
+    }
+
+    .crypto_tabs_mbl ul {
+        gap: 5px;
+    }
+
+    .mobile_view {
+        display: block;
+    }
+
+    .dashboard_summary .price_heading span {
+        position: relative;
+        right: 0px;
+    }
 
     .supportsection h4 {
         font-size: 18px;
@@ -21408,7 +21508,7 @@ button.primary_btn.prevStep {
     }
 
     .hot_articles_s {
-        padding: 32px 0px;
+        padding: 32px 0px 0px;
     }
 
     .hot_articles_s h2 {
@@ -21418,6 +21518,11 @@ button.primary_btn.prevStep {
     .subscribe_form {
         padding: 24px;
         text-align: center;
+        margin-bottom: 0px;
+    }
+
+    .cta_img {
+        width: 240px;
     }
 
     .subscribe_form h4 {
@@ -22758,6 +22863,25 @@ button.primary_btn.prevStep {
         margin-top: 0px;
     }
 
+    body .dashboard_summary .mobile_view {
+        padding: 0px;
+        background-color: transparent;
+    }
+
+    .dashboard_right .dashboard_listing_section.Overview_mid .assets_wallets_section .mobile_view {
+        margin: 5px 0px 0px;
+        padding: 0px;
+        background-color: transparent;
+    }
+
+    table tr td.price_change_value span {
+        display: block;
+        line-height: 10px;
+    }
+
+    .market_page img.coinimg {
+        margin-right: 5px !important;
+    }
 
 }
 
@@ -22769,6 +22893,10 @@ button.primary_btn.prevStep {
         flex-direction: column;
         gap: 5px;
         margin-bottom: 0px;
+    }
+
+    .market_section .dashboard_summary th {
+        font-size: 11px;
     }
 
     .project_coin h2 {
@@ -23138,6 +23266,7 @@ button.primary_btn.prevStep {
 
     .dashboard_summary ul.nav-tabs {
         gap: 12px;
+        margin-top: 10px !important;
     }
 
     .listing_left_outer .dashboard_summary ul li button {
@@ -24189,6 +24318,15 @@ button.primary_btn.prevStep {
         max-width: 210px;
     }
 
+    .all_product_data table tr td {
+        font-size: 10px;
+        padding: 8px 7px;
+    }
+
+    .all_product_data table tr th {
+        font-size: 10px;
+        padding: 6px 7px !important;
+    }
 
     .button_outer .scantophdr {
         padding-top: 4px;
@@ -24214,7 +24352,7 @@ button.primary_btn.prevStep {
     }
 
     .withdrawal_outer::before {
-        height: 74%;
+        height: 76%;
     }
 
     .ant-card {
@@ -24247,8 +24385,12 @@ button.primary_btn.prevStep {
     }
 
     .crypto_tabs_mbl ul li button {
-        font-size: 13px;
+        font-size: 12px;
         padding: 7px 5px;
+    }
+
+    p {
+        font-size: 12px;
     }
 
 }
@@ -24257,6 +24399,10 @@ button.primary_btn.prevStep {
 
     .currency_list_b ul {
         flex-direction: column;
+    }
+
+    .dashboard_summary ul.nav-tabs {
+        gap: 8px;
     }
 
     .navigation .navbar-toggler img {
@@ -24706,11 +24852,11 @@ button.primary_btn.prevStep {
     }
 
     a.more_btn {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .dashboard_summary td {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .dashboard_summary .price_heading span {
@@ -24721,8 +24867,12 @@ button.primary_btn.prevStep {
         font-size: 10px;
     }
 
+    .dashboard_summary td {
+        font-size: 10px;
+    }
+
     .dashboard_summary th {
-        font-size: 11px;
+        font-size: 10px;
         white-space: nowrap;
     }
 
@@ -24775,6 +24925,10 @@ button.primary_btn.prevStep {
         width: 150px;
     }
 
+    .Overview_mid .dashboard_summary tr td a {
+        width: auto;
+    }
+
     .assets_wallets_section .coin_view_top .search_icon input[type="search"] {
         width: 100%;
     }
@@ -24783,12 +24937,8 @@ button.primary_btn.prevStep {
         font-size: 11px;
     }
 
-    .assets_wallets_section .market_section {
-        padding: 18px;
-    }
-
     .my_assets_summary_t {
-        padding: 18px;
+        padding: 15px;
     }
 
     .my_assets_summary_t.wallet_transfer {
@@ -25030,6 +25180,18 @@ button.primary_btn.prevStep {
         padding: 0 15px;
     }
 
+    .all_product_data h3 {
+        margin-bottom: 10px;
+        padding-left: 0px;
+    }
+
+    .select-option::before {
+        height: 142%;
+    }
+
+    .withdrawal_outer::before {
+        height: 74.5%;
+    }
 
     /* Bootstrap Modal - Bottom Sheet Style for Mobile */
     .modal.fade {
@@ -25065,6 +25227,8 @@ button.primary_btn.prevStep {
         max-height: 90vh;
         overflow-y: auto;
     }
+
+.dashboard_summary .mobile_view span{ position: relative; right: 0px; }
 
     .modal-backdrop {
         background-color: rgba(0, 0, 0, 0.5);

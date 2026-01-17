@@ -654,7 +654,7 @@ const Market = () => {
                     </div>
                   </div>
 
- 
+
                   <div className="card-body p-0 mobiletable">
                     <div className="table-responsive">
                       {token ? (
@@ -680,17 +680,17 @@ const Market = () => {
                                         </span>
                                         <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
                                         {item?.base_currency}/{item?.quote_currency}
-                                       
+
                                       </div>
                                       <b>Vol {formatNumber(item?.volume, 5)}</b>
                                     </td>
                                     <td><b>{formatNumber(item?.buy_price, 5)}</b>
-                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
+                                      <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
                                     </td>
-                                   
+
                                     <td><b>{formatNumber(item?.high, 5)}</b>
-                                    <br />
-                                    <b>{formatNumber(item?.low, 5)}</b></td>
+                                      <br />
+                                      <b>{formatNumber(item?.low, 5)}</b></td>
                                   </tr>
                                 );
                               })}
@@ -711,7 +711,7 @@ const Market = () => {
                       )}
                     </div>
                   </div>
-                 
+
 
                 </div>
               </div>
@@ -783,65 +783,58 @@ const Market = () => {
                       ) : (
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                          <p>No Data Available</p>
+
                         </div>
                       )}
                     </div>
                   </div>
 
-                
+
                   <div className="card-body p-0 mobiletable">
                     <div className="table-responsive">
-                      {token ? (
-                        (favCoins?.length > 0) ?
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th>Pair/24h Vol</th>
-                                <th>Price</th>
-                                <th>24H Change</th>
+                      {fiterPairData?.length > 0 ? (
+                        <table className="table ">
+                          <thead>
+                            <tr>
+                              <th>Pair/Vol</th>
+                              <th>Price/Change</th>
+                              <th>High/Low</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {fiterPairData ? fiterPairData.map((item, index) => (
+                              <tr key={index} onClick={() => nextPage(item)} >
+                                <td>
+                                  <div className="td_div">
+                                    {token && (
+                                      <span className={"star_btn btn_icon active"}>
+                                        <i className={favCoins.includes(item?._id) ? "ri ri-star-fill text-warning me-2 " : "ri ri-star-line me-2 "} onClick={() => { handleAddFav(item?._id); }} ></i>
+                                      </span>
+                                    )}
+                                    <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2 " />
+                                    {item?.base_currency}/
+                                    {item?.quote_currency}
+                                  </div>
+                                  <b>{formatNumber(item?.volume, 5)}</b>
+                                </td>
+                                <td className="price_change_value">
+                                  <b>{formatNumber(item?.buy_price, 5)}</b>
+                                  <span className={item?.change >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>{formatNumber(item?.change, 5)}</b></span>
+                                </td>
+
+                                <td className="price_change_value color-green"><b>{formatNumber(item?.high, 5)}</b>
+                                  <span className="text-danger"><b>{formatNumber(item?.low, 5)}</b></span>
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {fiterPairData && fiterPairData.map((item, index) => {
-                                // if (!favCoins.includes(item?._id)) return null;
-                                return (
-                                  favCoins.includes(item?._id) &&
-                                  <tr key={index} onClick={() => nextPage(item)} >
-                                    <td>
-                                      <div className="td_div">
-                                        <span className="star_btn btn_icon active">
-                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
-                                        </span>
-                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
-                                        {item?.base_currency}/{item?.quote_currency}
-                                       
-                                      </div>
-                                      <b>Vol {formatNumber(item?.volume, 5)}</b>
-                                    </td>
-                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
-                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
-                                    </td>
-                                   
-                                    <td><b>{formatNumber(item?.high, 5)}</b>
-                                    <br />
-                                    <b>{formatNumber(item?.low, 5)}</b></td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                          :
-                          <div className="favouriteData">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                            <p>No Data Available</p>
-                          </div>
+                            ))
+                              : null
+                            }
+                          </tbody>
+                        </table>
                       ) : (
-                        <div className="py-5 favouriteData">
+                        <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                          <p className="mt-2">No results.... Go to&nbsp;
-                            <Link className="btn-link" to="/login"><b>&nbsp; Sign in &nbsp;</b></Link>&nbsp;and add your favorite coins from Spot.
-                          </p>
+
                         </div>
                       )}
                     </div>
@@ -863,110 +856,112 @@ const Market = () => {
                   <li><button>Trending</button></li>
                 </ul>
                 <div className="card  py-2">
-                  <div className="card-body p-0 gainers_table desktoptable">
+                  <div className="card-body p-0 desktoptable">
+                    <div className="mrt_row">
+                    </div>
                     <div className="table-responsive">
-                      {topGainers && topGainers?.length > 0 ? (
-                        <>
-                          {/* <h5 className="text-center">Biggest Gainers</h5> */}
-                          <table className="table ">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th className="name"> Pair</th>
-                                <th> Price</th>
-                                <th> 24H </th>
-                                <th> Volume(24H)</th>
+                      {fiterPairData?.length > 0 ? (
+                        <table className="table ">
+                          <thead>
+                            <tr>
+                              <th> Pair</th>
+                              <th> Price</th>
+                              <th> 24H Change</th>
+                              <th> 24H High</th>
+                              <th> 24H Low</th>
+                              <th> 24H Vol</th>
+                              {/* <th> Chart</th> */}
+                              <th> Operation</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {fiterPairData ? fiterPairData.map((item, index) => (
+                              <tr key={index} onClick={() => nextPage(item)} >
+                                <td>
+                                  <div className="td_div">
+                                    {token && (
+                                      <span className={"star_btn btn_icon active"}>
+                                        <i className={favCoins.includes(item?._id) ? "ri ri-star-fill text-warning me-2 " : "ri ri-star-line me-2 "} onClick={() => { handleAddFav(item?._id); }} ></i>
+                                      </span>
+                                    )}
+                                    <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2 " />
+                                    {item?.base_currency}/
+                                    {item?.quote_currency}
+                                  </div>
+                                </td>
+                                <td><b>{formatNumber(item?.buy_price, 5)}</b> </td>
+                                <td className={item?.change >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>{formatNumber(item?.change, 5)}</b></td>
+                                <td className=" color-green"><b>{formatNumber(item?.high, 5)}</b></td>
+                                <td className="text-danger"><b>{formatNumber(item?.low, 5)}</b></td>
+                                <td><b>{formatNumber(item?.volume, 5)}</b></td>
+                                {/* <td>
+                                <img src={item?.change >= 0 ? "/images/trade_count_range.svg" : "/images/trade_count_red.svg"} alt="svg" /> 
+        
+                                  </td> */}
+                                <td> <span onClick={() => nextPage(item)} className="btn custom-btn btn-sm cursor-pointer"><span>Trade</span></span></td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {topGainers
-                                ? topGainers
-                                  .map((item, index) => {
-                                    return <tr key={index} onClick={() => nextPage(item)}  >
-                                      <td className="">
-                                        {index + 1}
-                                      </td>
-                                      <td>
-                                        <div className="td_div">
-                                          {item?.base_currency}
-                                          <small>&nbsp; | {item?.symbol}</small>&nbsp;
-                                          {item?.quote_currency}
-                                        </div>
-                                      </td>
-                                      <td><b>{formatNumber(item?.buy_price, 5)}</b></td>
-                                      <td className={item?.change_percentage >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>
-                                        <i className={item?.change_percentage >= 0 ? "ri-arrow-up-s-fill me-1" : "ri-arrow-down-s-fill me-1"}></i>
-                                        {formatNumber(item?.change_percentage, 5)}%</b> </td>
-                                      <td> <b> {formatNumber(item?.volume, 5)} </b> </td>
-                                    </tr>
-                                  })
-                                : null
-                              }
-                            </tbody>
-                          </table> </>
+                            ))
+                              : null
+                            }
+                          </tbody>
+                        </table>
                       ) : (
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                           <p>No Data Available</p>
                         </div>
-                      )
-                      }
+                      )}
                     </div>
                   </div>
-               
+
                 </div>
 
+               
                 <div className="card-body p-0 mobiletable">
                     <div className="table-responsive">
-                      {token ? (
-                        (favCoins?.length > 0) ?
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th>Pair/24h Vol</th>
-                                <th>Price</th>
-                                <th>24H Change</th>
+                      {fiterPairData?.length > 0 ? (
+                        <table className="table ">
+                          <thead>
+                            <tr>
+                              <th>Pair/Vol</th>
+                              <th>Price/Change</th>
+                              <th>High/Low</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {fiterPairData ? fiterPairData.map((item, index) => (
+                              <tr key={index} onClick={() => nextPage(item)} >
+                                <td>
+                                  <div className="td_div">
+                                    {token && (
+                                      <span className={"star_btn btn_icon active"}>
+                                        <i className={favCoins.includes(item?._id) ? "ri ri-star-fill text-warning me-2 " : "ri ri-star-line me-2 "} onClick={() => { handleAddFav(item?._id); }} ></i>
+                                      </span>
+                                    )}
+                                    <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2 " />
+                                    {item?.base_currency}/
+                                    {item?.quote_currency}
+                                  </div>
+                                  <b>{formatNumber(item?.volume, 5)}</b>
+                                </td>
+                                <td className="price_change_value">
+                                  <b>{formatNumber(item?.buy_price, 5)}</b>
+                                  <span className={item?.change >= 0 ? "color-green text-green" : "color-red text-danger"} ><b>{formatNumber(item?.change, 5)}</b></span>
+                                </td>
+
+                                <td className="price_change_value color-green"><b>{formatNumber(item?.high, 5)}</b>
+                                  <span className="text-danger"><b>{formatNumber(item?.low, 5)}</b></span>
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {fiterPairData && fiterPairData.map((item, index) => {
-                                // if (!favCoins.includes(item?._id)) return null;
-                                return (
-                                  favCoins.includes(item?._id) &&
-                                  <tr key={index} onClick={() => nextPage(item)} >
-                                    <td>
-                                      <div className="td_div">
-                                        <span className="star_btn btn_icon active">
-                                          <i className="ri-star-fill text-warning me-2" onClick={() => { handleAddFav(item?._id); }}></i>
-                                        </span>
-                                        <img alt="" src={ApiConfig.baseImage + item?.icon_path} className="img-fluid icon_img coinimg me-2" />
-                                        {item?.base_currency}/{item?.quote_currency}
-                                      </div>
-                                      <b>Vol {formatNumber(item?.volume, 5)}</b>
-                                    </td>
-                                    <td><b>{formatNumber(item?.buy_price, 5)}</b>
-                                    <div className={item?.change >= 0 ? "color-green green" : "color-red text-danger"}><b>{formatNumber(item?.change, 5)}</b> </div>
-                                    </td>
-                                   
-                                    <td><b>{formatNumber(item?.high, 5)}</b>
-                                    <br />
-                                    <b>{formatNumber(item?.low, 5)}</b></td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                          :
-                          <div className="favouriteData">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                            <p>No Data Available</p>
-                          </div>
+                            ))
+                              : null
+                            }
+                          </tbody>
+                        </table>
                       ) : (
-                        <div className="py-5 favouriteData">
+                        <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                          <p className="mt-2">No results.... Go to&nbsp;
-                            <Link className="btn-link" to="/login"><b>&nbsp; Sign in &nbsp;</b></Link>&nbsp;and add your favorite coins from Spot.
-                          </p>
+
                         </div>
                       )}
                     </div>

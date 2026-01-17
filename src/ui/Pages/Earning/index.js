@@ -415,15 +415,19 @@ function Earning() {
                         </Slider>
                       </div>
                     );
-                  }) : <div className="no_data_outer">
+                  }) :  <div className=' d-flex justify-content-center'>
+                  <div className="no_data_outer">
+                  <div className="table-responsive">
                     <div className="no_data_vector">
-                      <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                      <img src="/images/no_data_vector.svg" alt="no-data" />
                     </div>
-                    {/* <p>No data found</p> */}
-                  </div>}
+                  </div>
+                </div>
+                </div>}
 
                   <div className='all_product_data'>
                     <h3>All Products</h3>
+                    <div className='desktop_view'>
                     <table class="table ">
                       <thead>
                         <tr>
@@ -540,6 +544,114 @@ function Earning() {
                         </tr>
                       </tbody>
                     </table>
+                    </div>
+
+                    <div className='mobile_view'>
+                    <table class="table ">
+                      <thead>
+                        <tr>
+                          <th> Token</th>
+                          <th> Est. APR</th>
+                          <th> Duration</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                      </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                      </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                      </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                      </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                      </tr>
+                        <tr>
+                          <td>
+                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
+                          </td>
+                          <td>15.00% ~ 600.00%</td>
+                          <td>30/360 days</td>
+                       </tr>
+                      </tbody>
+                    </table>
+                    </div>
+
+
                   </div>
 
 
@@ -670,16 +782,17 @@ function Earning() {
                               </tr>
                             )
                           }) :
-                            <tr rowSpan="5">
-                              <td colSpan="12">
-                                <div className="no_data_outer">
-                                  <div className="no_data_vector">
-                                    <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                  </div>
-                                  {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-                                </div>
-                              </td>
-                            </tr>}
+                          <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" alt="no-data" />
+                              </div>
+                              {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
+
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                       {/* <div className="pagination_list">
@@ -739,11 +852,11 @@ function Earning() {
 
                             )
                           }) :
-                            <tr rowSpan="5">
+                            <tr rowSpan="5" className="no-data-row">
                               <td colSpan="12">
-                                <div className="no_data_outer">
-                                  <div className="no_data_vector">
-                                    <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" alt="no-data" />
 
                                   </div>
 
@@ -753,7 +866,8 @@ function Earning() {
                                 </div>
 
                               </td>
-                            </tr>}
+                            </tr>
+                            }
                         </tbody>
                       </table>
                     </div>

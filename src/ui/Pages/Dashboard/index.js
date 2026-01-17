@@ -407,6 +407,7 @@ const Dashboard = (props) => {
                 </ul>
                 <div className="tab-content" id="myTabContent">
                   <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div className='desktop_view'>
                     <div className='table-responsive'>
                       <table>
                         <thead>
@@ -449,8 +450,55 @@ const Dashboard = (props) => {
                         </tbody>
                       </table>
                     </div>
+                    </div>
+                    
+                    <div className='mobile_view'>
+                    <div className='table-responsive'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th className="right_t">24 High/Change</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {coinData?.length > 0 ? coinData?.map((item) => {
+                            return (
+                              <>
+                                <tr>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                    </div>
+                                  </td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
+                                  <td className="right_t">{formatNumber(item?.high, 5)}
+                                  {item?.change_percentage > 0 ? <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
+                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}</td>
+                            
+                                </tr>
+                              </>
+                            )
+                          }) : <tr rowSpan="5">
+                            <td colSpan="12">
+                              <div className="no_data_outer">
+                                <div className="no_data_vector">
+                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                </div>
+                                <p>No Data Available</p>
+                              </div>
+                            </td>
+                          </tr>}
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+
                   </div>
                   <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div className='desktop_view'>
                     <div className='table-responsive'>
                       <table>
                         <thead>
@@ -499,8 +547,63 @@ const Dashboard = (props) => {
                         </tbody>
                       </table>
                     </div>
+                    </div>
+
+                    <div className='mobile_view'>
+                    <div className='table-responsive'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th className="right_t">24H High/Change</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
+                            return (
+                              <>
+                                <tr>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                    </div>
+                                  </td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                  <td className="right_t">{formatNumber(item?.high, 5)}
+                                  {item?.change_percentage > 0 ? 
+                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
+                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                  </td>
+                                </tr>
+                              </>
+                            )
+                          }) : <tr rowSpan="5">
+                            <td colSpan="12">
+                              <div className="no_data_outer">
+                                <div className="no_data_vector">
+                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+
+                                </div>
+
+                                <p>No Data Available</p>
+
+                              </div>
+
+                            </td>
+                          </tr>}
+
+
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+
+
                   </div>
                   <div className="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <div className='desktop_view'>
                     <div className='table-responsive'>
                       <table>
                         <thead>
@@ -549,8 +652,62 @@ const Dashboard = (props) => {
                         </tbody>
                       </table>
                     </div>
+                    </div>
+
+                    <div className='mobile_view'>
+                    <div className='table-responsive'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th className="right_t">24H High/Change</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
+
+                            return (
+                              <>
+                                <tr>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                    </div>
+                                  </td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                  <td className="right_t">{formatNumber(item?.high, 5)}
+                                  {item?.change_percentage > 0 ? 
+                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
+                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                  </td>
+                                </tr>
+                              </>
+                            )
+                          }) : <tr rowSpan="5">
+                            <td colSpan="12">
+                              <div className="no_data_outer">
+                                <div className="no_data_vector">
+                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+
+                                </div>
+
+                                <p>No Data Available</p>
+
+                              </div>
+
+                            </td>
+                          </tr>}
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+
                   </div>
                   <div className="tab-pane fade" id="favorite" role="tabpanel" aria-labelledby="favorite-tab">
+                    <div className='desktop_view'>
                     <div className='table-responsive'>
                       <table>
                         <thead>
@@ -596,8 +753,59 @@ const Dashboard = (props) => {
                         </tbody>
                       </table>
                     </div>
+                    </div>
+
+                    <div className='mobile_view'>
+                    <div className='table-responsive'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th className='right_t'>24H High/Change</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
+                            return (
+                              favCoins.includes(item?._id) &&
+
+                              <>
+                                <tr>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                    </div>
+                                  </td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                  <td className='right_t'>{formatNumber(item?.high, 5)}
+                                  {item?.change_percentage > 0 ? 
+                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
+                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                  </td>
+                              </tr>
+                              </>
+                            )
+                          }) : <tr rowSpan="5">
+                            <td colSpan="12">
+                              <div className="no_data_outer">
+                                <div className="no_data_vector">
+                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                </div>
+                                <p>No Data Available</p>
+                              </div>
+                            </td>
+                          </tr>}
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+
                   </div>
                   <div className="tab-pane fade" id="gainers" role="tabpanel" aria-labelledby="gainers-tab">
+                    <div className='desktop_view'>
                     <div className='table-responsive'>
                       <table>
                         <thead>
@@ -647,6 +855,60 @@ const Dashboard = (props) => {
                         </tbody>
                       </table>
                     </div>
+                    </div>
+
+                    <div className='mobile_view'>
+                    <div className='table-responsive'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Coin</th>
+                            <th>Price</th>
+                            <th className="right_t">24H High/Change</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
+                            return (
+                              item?.change_percentage > 0 &&
+
+                              <>
+                                <tr>
+                                  <td>
+                                    <div className="td_first">
+                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                    </div>
+                                  </td>
+                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                  <td className='right_t'>{formatNumber(item?.high, 5)}
+                                  {item?.change_percentage > 0 ?
+                                   <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
+                                   <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                   </td>
+                              </tr>
+                              </>
+                            )
+                          }) : <tr rowSpan="5">
+                            <td colSpan="12">
+                              <div className="no_data_outer">
+                                <div className="no_data_vector">
+                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+
+                                </div>
+
+                                <p>No Data Available</p>
+
+                              </div>
+
+                            </td>
+                          </tr>}
+                        </tbody>
+                      </table>
+                    </div>
+                    </div>
+
                   </div>
                 </div>
               </div>

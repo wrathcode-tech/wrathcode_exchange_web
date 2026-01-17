@@ -200,13 +200,15 @@ const NotificationPage = (props) => {
 
                 </div>
               ) : (
+               
                 <div className=' d-flex justify-content-center'>
                   <div className="no_data_outer">
+                  <div className="table-responsive">
                     <div className="no_data_vector">
                       <img src="/images/no_data_vector.svg" alt="no-data" />
                     </div>
-                    <p>No Notifications Found</p>
                   </div>
+                </div>
                 </div>)}
 
             </div>

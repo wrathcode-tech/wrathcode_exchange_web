@@ -1479,11 +1479,10 @@ html[data-theme="light"] .price_card_head {
     font-family: "Roboto", sans-serif;
 }
 
-
 .trade_favourites_lft .spotLists {
     display: block;
     border-radius: 0px;
-    height: 100%;
+    height: 99.6%;
     padding-top: 12px;
 }
 
@@ -2503,22 +2502,62 @@ html[data-theme='light'] .bs_tab_row {
 @media screen and (max-width:1440px) {
 
     .trade_card.p-2.overflow_card.mb-1 {
-        width: calc(100% + 297px);
+        width: calc(100% + 237px);
     }
 
     .assets_btn {
         gap: 10px;
     }
 
+    .trade-wrapper .orderbook-table th {
+        font-size: 10px !important;
+        padding: 4px 5px;
+    }
 
+    .trade-wrapper .orderbook-table td {
+        font-size: 10px !important;
+        padding: 4px 5px !important;
+    }
+
+    .card_header_title {
+        font-size: 12px;
+    }
+
+    ul.favorites_list_tabs li button {
+        font-size: 12px;
+        padding: 0px 0px 5px;
+    }
+
+    ul.favorites_list_tabs {
+        gap: 10px;
+        margin: 5px 5px;
+    }
+
+    .assets_btn button {
+        font-size: 12px;
+        padding: 5px 5px;
+    }
 
 }
 
 @media screen and (max-width:1367px) {
 
     .trade_card.p-2.overflow_card.mb-1 {
-        width: calc(100% + 282px);
+        width: calc(100% + 226px);
     }
+
+    .trade_favourites_lft .spotLists {
+        height: 100%;
+    }
+
+    .bs_dropbox .trade_card.trade_chart.buysell_card {
+        width: 98.5%;
+    }
+
+    div#tab_3 {
+        border-radius: 0px;
+    }
+
 
 }
 
@@ -2542,7 +2581,7 @@ html[data-theme='light'] .bs_tab_row {
     }
 
     div#tab_3 {
-        border-radius: 10px;
+        border-radius: 0px;
     }
 
     div#tab_4 {

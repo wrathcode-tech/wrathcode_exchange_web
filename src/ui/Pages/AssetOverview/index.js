@@ -67,7 +67,7 @@ const AssetOverview = () => {
       modalElement.style.display = 'none';
       modalElement.setAttribute('aria-hidden', 'true');
       modalElement.removeAttribute('aria-modal');
-      
+
       // Remove backdrop for this specific modal only
       const backdrops = document.querySelectorAll('.modal-backdrop');
       backdrops.forEach(backdrop => {
@@ -80,7 +80,7 @@ const AssetOverview = () => {
           }
         }
       });
-      
+
       // Ensure parent modal stays open
       const parentModal = document.getElementById('kycModal');
       if (parentModal) {
@@ -1044,79 +1044,7 @@ const AssetOverview = () => {
                   {/* TAB 1 : YOUR ORIGINAL CONTENT */}
                   {activeTab === "assets" && (
                     <div className="dashboard_summary">
-
-                      <div className="table-responsive">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>Coin</th>
-                              <th>Available Balance</th>
-                              <th>In-Order Balance</th>
-                              <th>Bonus</th>
-                              <th className="right_td">Action</th>
-                            </tr>
-                          </thead>
-
-                          <tbody>
-                            {filteredCoinList?.length > 0 ? (
-                              filteredCoinList.map((item, index) => (
-                                <tr key={index}>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon">
-                                        <img
-                                          src={ApiConfig?.baseImage + item?.icon_path}
-                                          height="30"
-                                          alt="icon"
-                                        />
-                                      </div>
-                                      <div className="price_heading">
-                                        {item?.short_name}
-                                        <br />
-                                        <span>{item?.currency}</span>
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  <td>{item?.balance}</td>
-                                  <td>{item?.locked_balance}</td>
-                                  <td>{item?.bonus}</td>
-                                  <td className="right_td">
-                                    <div className='d-flex gap-3 justify-content-end'>
-                                      <a className="text-white" href="#">
-                                        Convert
-                                      </a>
-                                      <a className="text-white" href="/asset_managemnet/deposit">
-                                        Trade
-                                      </a>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr rowSpan="5" className="no-data-row2">
-                                <td colSpan="12">
-                                  <div className="no-data-wrapper">
-                                    <div className="no_data_vector">
-                                      <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                    </div>
-
-                                  </div>
-
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 2 : DUMMY CONTENT */}
-                  {activeTab === "dummy" && (
-                    <div className="dashboard_summary dummy_tab">
-                      <div className='d-flex gap-3 justify-content-between account_tabcnt'>
-
+                      <div className='desktop_view'>
                         <div className="table-responsive">
                           <table>
                             <thead>
@@ -1135,10 +1063,17 @@ const AssetOverview = () => {
                                   <tr key={index}>
                                     <td>
                                       <div className="td_first">
+                                        <div className="icon">
+                                          <img
+                                            src={ApiConfig?.baseImage + item?.icon_path}
+                                            height="30"
+                                            alt="icon"
+                                          />
+                                        </div>
                                         <div className="price_heading">
                                           {item?.short_name}
                                           <br />
-                                          {/* <span>{item?.currency}</span> */}
+                                          <span>{item?.currency}</span>
                                         </div>
                                       </div>
                                     </td>
@@ -1165,6 +1100,7 @@ const AssetOverview = () => {
                                       <div className="no_data_vector">
                                         <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
                                       </div>
+
                                     </div>
 
                                   </td>
@@ -1173,7 +1109,186 @@ const AssetOverview = () => {
                             </tbody>
                           </table>
                         </div>
+                      </div>
+                      <div className='mobile_view'>
+                        <div className="table-responsive">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Coin</th>
+                                <th>Available/Order Balance</th>
+                                <th>Bonus</th>
+                              </tr>
+                            </thead>
 
+                            <tbody>
+                              {filteredCoinList?.length > 0 ? (
+                                filteredCoinList.map((item, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon">
+                                          <img
+                                            src={ApiConfig?.baseImage + item?.icon_path}
+                                            height="30"
+                                            alt="icon"
+                                          />
+                                        </div>
+                                        <div className="price_heading">
+                                          {item?.short_name}
+                                          <br />
+                                          <span>{item?.currency}</span>
+                                        </div>
+                                      </div>
+                                    </td>
+
+                                    <td>{item?.balance}<br></br>{item?.locked_balance}</td>
+                                    <td>{item?.bonus}</td>
+
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr rowSpan="5" className="no-data-row2">
+                                  <td colSpan="12">
+                                    <div className="no-data-wrapper">
+                                      <div className="no_data_vector">
+                                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                                      </div>
+
+                                    </div>
+
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* TAB 2 : DUMMY CONTENT */}
+                  {activeTab === "dummy" && (
+                    <div className="dashboard_summary dummy_tab account_table">
+                      <div className='d-flex gap-3 justify-content-between account_tabcnt'>
+
+                        <div className="table-responsive">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Account</th>
+                                <th>Amount</th>
+                                <th>Ratio</th>
+                                <th className="right_td">Action</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <div className="td_first">
+                                    Main
+                                  </div>
+                                </td>
+
+                                <td className="amount_td">0.00<span>$00.00</span></td>
+                                <td>0.00</td>
+                                <td className="right_td">
+                                  <div className='d-flex gap-3 justify-content-end'>
+                                    <a className="text-white" href="#">
+                                      Convert
+                                    </a>
+                                    <a className="text-white" href="/asset_managemnet/deposit">
+                                      Trade
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div className="td_first spot">
+                                    Spot
+                                  </div>
+                                </td>
+
+                                <td className="amount_td">0.00<span>$00.00</span></td>
+                                <td>0.00</td>
+                                <td className="right_td">
+                                  <div className='d-flex gap-3 justify-content-end'>
+                                    <a className="text-white" href="#">
+                                      Convert
+                                    </a>
+                                    <a className="text-white" href="/asset_managemnet/deposit">
+                                      Trade
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div className="td_first swap">
+                                    Swap
+                                  </div>
+                                </td>
+
+                                <td className="amount_td">0.00<span>$00.00</span></td>
+                                <td>0.00</td>
+                                <td className="right_td">
+                                  <div className='d-flex gap-3 justify-content-end'>
+                                    <a className="text-white" href="#">
+                                      Convert
+                                    </a>
+                                    <a className="text-white" href="/asset_managemnet/deposit">
+                                      Trade
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div className="td_first staking">
+                                    Staking
+                                  </div>
+                                </td>
+
+                                <td className="amount_td">0.00<span>$00.00</span></td>
+                                <td>0.00</td>
+                                <td className="right_td">
+                                  <div className='d-flex gap-3 justify-content-end'>
+                                    <a className="text-white" href="#">
+                                      Convert
+                                    </a>
+                                    <a className="text-white" href="/asset_managemnet/deposit">
+                                      Trade
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div className="td_first futures">
+                                    Futures
+                                  </div>
+                                </td>
+
+                                <td className="amount_td">0.00<span>$00.00</span></td>
+                                <td>0.00</td>
+                                <td className="right_td">
+                                  <div className='d-flex gap-3 justify-content-end'>
+                                    <a className="text-white" href="#">
+                                      Convert
+                                    </a>
+                                    <a className="text-white" href="/asset_managemnet/deposit">
+                                      Trade
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </table>
+                        </div>
 
                       </div>
                     </div>
@@ -1512,9 +1627,9 @@ const AssetOverview = () => {
                   <h6>Crypto</h6>
 
                   <div className='coin_cryptofiled'>
-                    <button 
+                    <button
                       type="button"
-                      data-bs-toggle="modal" 
+                      data-bs-toggle="modal"
                       data-bs-target="#assets_crypto_modal"
                     >
                       {Object.keys(selectedCurrency)?.length > 0 ? (
@@ -1566,9 +1681,9 @@ const AssetOverview = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="assetsCryptoModalLabel">Select Crypto</h4>
-              <button 
-                type="button" 
-                className="btn-close" 
+              <button
+                type="button"
+                className="btn-close"
                 aria-label="Close"
                 onClick={() => {
                   const modalElement = document.getElementById('assets_crypto_modal');
@@ -1577,7 +1692,7 @@ const AssetOverview = () => {
                     modalElement.style.display = 'none';
                     modalElement.setAttribute('aria-hidden', 'true');
                     modalElement.removeAttribute('aria-modal');
-                    
+
                     // Remove only the topmost backdrop
                     const backdrops = document.querySelectorAll('.modal-backdrop');
                     backdrops.forEach(backdrop => {
@@ -1586,7 +1701,7 @@ const AssetOverview = () => {
                         backdrop.remove();
                       }
                     });
-                    
+
                     // Ensure parent modal stays open
                     const parentModal = document.getElementById('kycModal');
                     if (parentModal) {
@@ -1616,9 +1731,9 @@ const AssetOverview = () => {
                         return currencyName.includes(searchTerm) || shortName.includes(searchTerm);
                       }).map((item) => {
                         return (
-                          <tr 
+                          <tr
                             key={item?.currency_id || item?.id || Math.random()}
-                            onClick={() => handleSelectDepositCoin(item)} 
+                            onClick={() => handleSelectDepositCoin(item)}
                             style={{ cursor: 'pointer' }}
                           >
                             <td>

@@ -3090,6 +3090,11 @@ ul.exclusive_list li span.sellsub {
 
     .coin_lft {
         align-items: baseline;
+        width: 100%;
+    }
+
+.project_top .coin_cnt .hd.d-flex {
+        gap: 18px;
     }
 
     .future_trading_block .toplimit {
