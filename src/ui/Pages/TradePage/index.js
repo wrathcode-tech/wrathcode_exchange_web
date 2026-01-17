@@ -2279,7 +2279,7 @@ const Trade = () => {
 
                         <div className="trade_account_summary_assets">
 
-                            <div class="trade_summary_table_lft mt-0 position_order">
+                            <div class="trade_summary_table_lft mt-0 position_order trade_summary_table_lft_position_order">
                                 <div class="top_th_easyop border-0">
                                     <ul class="position_list">
                                         <li class={`nav-item positions ${positionOrderTab === "positions" ? "active" : ""}`} role="presentation">

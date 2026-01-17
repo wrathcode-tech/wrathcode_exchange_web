@@ -453,6 +453,7 @@ const Swap = () => {
               </form>
             </div> */}
           </div>
+          <div className="desktop_view2">
           <div className='table-responsive'>
             <table>
               <thead>
@@ -487,6 +488,36 @@ const Swap = () => {
             </table>
 
           </div>
+          </div>
+
+          <div className="mobile_view">
+          <div className='table-responsive'>
+            <table>
+              <thead>
+                <tr>
+                  <th>Swapping Currencies</th>
+                  <th>Pay Amount</th>
+                  <th>Get Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactionHistory?.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
+                      <td>{item?.pay_amount} {item?.from}</td>
+                      <td>{item?.get_amount} {item?.to}</td>
+                    </tr>
+                  )
+                })}
+
+              </tbody>
+            </table>
+
+          </div>
+          </div>
+
+
         </div>
 
       </div>

@@ -88,6 +88,17 @@ header .logo img.eaglelogo {
     padding: 0px !important;
     color: #DADADA;
     font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.navigation nav ul li.dropdown .dropdown-toggle:hover,
+.navigation nav ul li.dropdown .dropdown-toggle:focus {
+    color: #ffb800;
+}
+
+.navigation nav ul li.dropdown.show .dropdown-toggle,
+.nav-item.dropdown.show .nav-link.dropdown-toggle {
+    color: #ffb800;
 }
 
 .trade_summary_table_lft tr td {
@@ -2276,8 +2287,57 @@ body .slick-dots li.slick-active button:before {
 }
 
 .navbar-expand-lg .navbar-nav .dropdown-menu {
-    background-color: #0a0a0a;
+    background-color: #181a20;
     width: 200px;
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+    margin-top: 18px;
+    /* box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); */
+    min-width: 200px;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu li {
+    margin: 0;
+    list-style: none;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item,
+.navbar-expand-lg .navbar-nav .dropdown-menu a {
+    color: #fff;
+    padding: 10px 18px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item:hover,
+.navbar-expand-lg .navbar-nav .dropdown-menu a:hover {
+    background-color: #2B313C;
+    color: #fff;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item:focus,
+.navbar-expand-lg .navbar-nav .dropdown-menu a:focus,
+.navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item.active,
+.navbar-expand-lg .navbar-nav .dropdown-menu a.active {
+    background-color: #2B313C;
+    color: #fff;
+}
+
+/* Dropdown menu icons (chevron right) */
+.navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item i,
+.navbar-expand-lg .navbar-nav .dropdown-menu a i {
+    font-size: 16px;
+    opacity: 0.7;
 }
 
 .navigation .navbar-nav .nav-link.active,
@@ -8690,6 +8750,20 @@ td.tradebtn a {
     padding: 0;
 }
 
+.position_order .no-data-row td {
+    height: 300px;
+}
+
+
+body .trade_summary_table_lft_position_order.position_order .table-responsive {
+    max-height: 360px;
+    min-height: 360px;
+}
+
+.trade_summary_table_lft_position_order.position_order .no-data-row td {
+    height: 360px;
+}
+
 
 #profilepop label.edit_user {
     position: absolute;
@@ -9001,7 +9075,7 @@ p.user_info a {
         height: 4px;
         display: none;
     }
-    
+
     .profile_id_s:active::-webkit-scrollbar,
     .profile_id_s:focus::-webkit-scrollbar {
         display: block;
@@ -11228,11 +11302,13 @@ header.sticky-top.afterloginheader {
     font-weight: 300;
     white-space: nowrap;
     font-size: 12px;
+    padding: 3px 10px;
 }
 
 .dashboard_recent_s td {
-    font-size: 13px;
+    font-size: 12px;
     color: #ffffffd6;
+    padding: 10px;
 }
 
 .no_data {
@@ -13730,11 +13806,46 @@ body.light_theme .trade_btn button a {
 }
 
 body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu a {
+    color: #333;
+}
+
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item:hover,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu a:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item:focus,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu a:focus,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item.active,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu a.active {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu .dropdown-item i,
+body.light_theme .navbar-expand-lg .navbar-nav .dropdown-menu a i {
+    color: #666;
 }
 
 body.light_theme .navigation nav ul li ul li a:hover {
     background-color: #D4D4D4;
+}
+
+body.light_theme .navigation nav ul li ul li a {
+    color: #4E4E4E;
+}
+
+body.light_theme .navigation nav ul li ul li a:focus {
+    background-color: #D4D4D4;
+    color: #000;
 }
 
 body.light_theme .profit_costs_cta_outer {
@@ -15798,10 +15909,13 @@ img.profileimg {
     border-radius: 100%;
 }
 
-.trade_summary_table_lft .table-responsive .table-responsive {
-    min-height: 100%; }
+body .trade_summary_table_lft .table-responsive .table-responsive {
+    min-height: 100%; max-height: 100%;
+}
 
-.transaction_history_t table tr:hover{ background-color: transparent; }
+.transaction_history_t table tr:hover {
+    background-color: transparent;
+}
 
 .btn-deposit {
     background: #f0b90b;
@@ -16220,6 +16334,40 @@ button.view_more_btn {
     font-weight: 500;
 }
 
+
+.trade_summary_table_lft.position_order .table-responsive {
+    max-height: 300px;
+    min-height: 300px;
+}
+
+#twofaInfoModal .qr_code {
+    padding-left: 0px;
+    width: 230px;
+    margin: 20px auto;
+}
+
+#twofaInfoModal .qr_code img{ width: 100%; }
+.coypcodetext {
+    width: 100%;
+    background-color: #4B515D;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-radius: 5px;
+}
+
+.coypcodetext p { margin: 0px; color: #ffffffad; }
+
+button.copy_code {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    color: #fff;
+    font-weight: 200;
+}
+
+
 @media screen and (max-width:1700px) {
 
     .refrefer_earn_outer {
@@ -16298,6 +16446,9 @@ button.view_more_btn {
     .navigation {
         padding-left: 0px;
     }
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+        margin-top: 21px; }
 
     .security_list li h3 {
         font-size: 32px;
@@ -16654,9 +16805,24 @@ button.view_more_btn {
 
 @media screen and (max-width:1200px) {
 
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        margin-top: 18px;
+    }
 
     .order_history_mobile_view {
         display: block;
+    }
+
+    .swap_usdtdata button.btn {
+        padding: 8px 15px;
+    }
+
+    .dashboard_recent_s .mobile_view {
+        display: block;
+    }
+
+    .dashboard_recent_s td {
+        font-size: 12px;
     }
 
     .desktop_view2 {
@@ -17976,7 +18142,15 @@ button.view_more_btn {
 
 @media screen and (max-width:991px) {
 
-.position_order .order_history_mobile_view{ margin: 15px 0px 40px; }
+    .position_order .order_history_mobile_view {
+        margin: 15px 0px 40px;
+    }
+
+    .dashboard_recent_s .mobile_view {
+        background-color: transparent;
+        padding: 0px;
+    }
+
 
     .dashboard_right .col-sm-10 {
         width: 100%;
@@ -19311,6 +19485,7 @@ button.view_more_btn {
     .trade_summary_table_lft .table-responsive {
         justify-content: start !important;
     }
+
     .order_history_mobile_view {
         margin-top: 0px;
     }
@@ -19323,12 +19498,16 @@ button.view_more_btn {
         display: none;
     }
 
+    #twofaInfoModal .qr_code {
+        width: 110px; }
+
     .user_profile_cnt h3 {
         gap: 20px;
     }
 
-.top_header_dash .user_profile {
-        padding: 0px 0px; }
+    .top_header_dash .user_profile {
+        padding: 0px 0px;
+    }
 
     .all_product_data .mobile_view span {
         position: relative;

@@ -208,8 +208,73 @@ const TwofactorPage = (props) => {
       </div>
 
 
-
       <div className="modal fade search_form" id="twofaInfoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered ">
+          <div className="modal-content">
+            <div className="modal-header">
+
+              <h5 className="modal-title" id="exampleModalLabel">Setup Authenticator</h5>
+              <p>Secure your account by linking it with an authenticator app for one-time codes.</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+
+              <div className="verify_authenticator_s">
+                <img src="/images/authenticator_vector.svg" alt="authenticator" />
+                <p>Scan this QR code with your authenticator app
+                  (Google Authenticator, Authy, etc.)</p>
+
+                <div className="qr_code">
+                  <img src="/images/scanqr_code.svg" alt="QR code" />
+                </div>
+
+              </div>
+
+              <div className="verify_authenticator_form">
+
+                <form className="profile_form">
+
+                <div className="coypcodetext">
+                  <p>Copy this code and enter it in your authenticator app:</p>
+                  <button className="copy_code" onClick={copyCode}><i className="ri-file-copy-line"></i></button>
+                </div>
+
+                  <button 
+                    className="submit" 
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Close parent modal
+                      const twofaModal = window.bootstrap?.Modal?.getInstance(document.getElementById('twofaInfoModal'));
+                      if (twofaModal) {
+                        twofaModal.hide();
+                      }
+                      // Open continue modal after a short delay
+                      setTimeout(() => {
+                        const continueModalElement = document.getElementById('continueModal');
+                        if (continueModalElement) {
+                          const continueModal = window.bootstrap?.Modal?.getInstance(continueModalElement) || new window.bootstrap.Modal(continueModalElement);
+                          continueModal.show();
+                        }
+                      }, 300);
+                    }}
+                  >
+                    Continue
+                  </button>
+
+                </form>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div className="modal fade search_form" id="continueModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
@@ -252,20 +317,20 @@ const TwofactorPage = (props) => {
 
 
       <div className="modal fade search_form" id="emailverifyModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered ">
-            <div className="modal-content">
-              <div className="modal-header">
+        <div className="modal-dialog modal-dialog-centered ">
+          <div className="modal-content">
+            <div className="modal-header">
 
-                <h5 className="modal-title" id="exampleModalLabel">Verify Email OTP</h5>
-                <p>Check your inbox and type the OTP to confirm your email address securely.</p>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
+              <h5 className="modal-title" id="exampleModalLabel">Verify Email OTP</h5>
+              <p>Check your inbox and type the OTP to confirm your email address securely.</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
 
-              <div className="verify_authenticator_s">  
+              <div className="verify_authenticator_s">
                 <img src="/images/verifyemail.svg" alt="Verify" />
-                <p>We ‘ve sent a verification code to your 
-                email pa***64@gmail.com </p>
+                <p>We ‘ve sent a verification code to your
+                  email pa***64@gmail.com </p>
               </div>
 
               <div className="verify_authenticator_form">
@@ -295,20 +360,20 @@ const TwofactorPage = (props) => {
 
 
       <div className="modal fade search_form" id="verifymobileModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered ">
-            <div className="modal-content">
-              <div className="modal-header">
+        <div className="modal-dialog modal-dialog-centered ">
+          <div className="modal-content">
+            <div className="modal-header">
 
-                <h5 className="modal-title" id="exampleModalLabel">Verify Mobile OTP</h5>
-                <p>Check your inbox and type the OTP to confirm your email address securely.</p>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
+              <h5 className="modal-title" id="exampleModalLabel">Verify Mobile OTP</h5>
+              <p>Check your inbox and type the OTP to confirm your email address securely.</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
 
-              <div className="verify_authenticator_s">  
+              <div className="verify_authenticator_s">
                 <img src="/images/verifymobile.svg" alt="Verify" />
-                <p>We've sent a verification code to your mobile 
-                number ending in 8820</p>
+                <p>We've sent a verification code to your mobile
+                  number ending in 8820</p>
               </div>
 
               <div className="verify_authenticator_form">

@@ -2494,7 +2494,28 @@ html[data-theme='light'] .bs_tab_row {
 @media screen and (max-width:1550px) {
 
     .trade_card.p-2.overflow_card.mb-1 {
-        width: calc(100% + 36%);
+        width: calc(100% + 33.6%);
+    }
+
+    ul.favorites_list_tabs {
+        gap: 12px;
+        margin: 12px 7px;
+    }
+
+    .trade_card .table> :not(caption)>*>* {
+        font-size: 11px;
+    }
+
+    .trade-wrapper .orderbook-table th {
+        padding: 4px 7px;
+    }
+
+    .trade-wrapper .orderbook-table td {
+        padding: 4px 7px;
+    }
+
+    ul.favorites_list_tabs li button {
+        font-size: 13px;
     }
 
 }
@@ -3395,9 +3416,9 @@ html[data-theme='light'] .bs_tab_row {
     }
 }
 
-@media (max-width: 480px) { 
-  
-    #tab_1{
-      height: 400px !important;
-      } 
-  }
+@media (max-width: 480px) {
+
+    #tab_1 {
+        height: 400px !important;
+    }
+}
