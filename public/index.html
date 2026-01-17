@@ -159,27 +159,27 @@
 
 
 <script>
+  $(document).on('click', '.trade_movers_tb .nav-tabs .nav-item', function (e) {
+    e.preventDefault();
 
-  $(document).ready(function () {
-    $('.trade_movers_tb .nav-tabs .nav-item').on('click', function (e) {
-      e.preventDefault();
+    var $container = $(this).closest('.trade_movers_tb');
 
-      var $container = $(this).closest('.trade_movers_tb');
+    if ($(this).hasClass('active')) {
+      return;
+    }
 
-      if ($(this).hasClass('active')) {
-        return;
-      }
+    // remove active from all tabs
+    $container.find('.nav-tabs .nav-item').removeClass('active');
+    $container.find('.tab-pane').removeClass('active show');
 
-      $container.find('.nav-tabs .nav-item').removeClass('active');
-      $container.find('.tab-pane').removeClass('active show');
+    // add active to clicked tab
+    $(this).addClass('active');
 
-      $(this).addClass('active');
-      var target = $(this).find('a').attr('href');
-      $container.find(target).addClass('active show');
-    });
+    var target = $(this).find('a').attr('href');
+    $container.find(target).addClass('active show');
   });
-
 </script>
+
 
 <script>
 

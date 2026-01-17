@@ -34,6 +34,8 @@ function UsdMFutures() {
     const [balance, setBalance] = useState({ baseCurrency: 0, quoteCurrency: 0 });
     const [estimatedportfolio, setEstimatedportfolio] = useState(0);
     const [leverageOptions, setLeverageOptions] = useState([]);
+    const [showAllListItems, setShowAllListItems] = useState({ 0: false, 1: false, 2: false });
+    const [showExecutedTrades, setShowExecutedTrades] = useState({ 0: false, 1: false, 2: false });
 
 
     const [showTpSlOption, setShowTpSlOption] = useState(false);
@@ -1056,12 +1058,12 @@ function UsdMFutures() {
                                                                 {SellOrders?.length > 0 ?
                                                                     <table>
                                                                         <thead>
-                                                                        <tr>
-                                                                            <th>Price ({selectedCoin?.margin_asset || "---"})</th>
-                                                                            <th>Size ({selectedCoin?.short_name || "---"})</th>
-                                                                            <th>Sum ({selectedCoin?.short_name || "---"})</th>
-                                                                        </tr>
-                                                                    </thead>
+                                                                            <tr>
+                                                                                <th>Price ({selectedCoin?.margin_asset || "---"})</th>
+                                                                                <th>Size ({selectedCoin?.short_name || "---"})</th>
+                                                                                <th>Sum ({selectedCoin?.short_name || "---"})</th>
+                                                                            </tr>
+                                                                        </thead>
                                                                         <tbody>
                                                                             {SellOrders?.length > 0 ? (
                                                                                 SellOrders.map((item) => {
@@ -1183,7 +1185,7 @@ function UsdMFutures() {
                                                 {activeInnerTab === "buy_orders" && (
                                                     <div className="tab-pane show active" id="buy_orders">
                                                         <div className="table_info_data">
-                                                            
+
                                                             <div className="table-responsive">
                                                                 {BuyOrders?.length > 0 ? <table>
                                                                     <thead>
@@ -2132,74 +2134,407 @@ function UsdMFutures() {
 
                             </ul>
                             <div className='cnt_table positions'>
-                                <div class="table-responsive">
-                                    {openPositions?.length > 0 ?
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Symbol</th>
-                                                    <th>Size</th>
-                                                    <th>Entry Price</th>
-                                                    <th>Mark Price</th>
-                                                    <th>Liq. Price</th>
-                                                    <th>Isolated Margin</th>
-                                                    <th>Maintenance Margin</th>
-                                                    <th>PNL</th>
-                                                    <th className='yellowcolor'>MKT Close</th>
-                                                    {/* <th>Reverse</th> */}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {openPositions?.map((pos) => {
-                                                    const oppositeSide = pos.side === "LONG" ? "SHORT" : "LONG";
+                                <div className="desktop_view2">
+                                    <div class="table-responsive">
+                                        {openPositions?.length > 0 ?
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Symbol</th>
+                                                        <th>Size</th>
+                                                        <th>Entry Price</th>
+                                                        <th>Mark Price</th>
+                                                        <th>Liq. Price</th>
+                                                        <th>Isolated Margin</th>
+                                                        <th>Maintenance Margin</th>
+                                                        <th>PNL</th>
+                                                        <th className='yellowcolor'>MKT Close</th>
+                                                        {/* <th>Reverse</th> */}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {openPositions?.map((pos) => {
+                                                        const oppositeSide = pos.side === "LONG" ? "SHORT" : "LONG";
 
-                                                    const handleReverse = () => {
-                                                        // place double quantity opposite order
-                                                        placeReverseOrder(oppositeSide, pos.quantity, pos.leverage, pos._id, pos.side, pos.pair_id);
-                                                    };
+                                                        const handleReverse = () => {
+                                                            // place double quantity opposite order
+                                                            placeReverseOrder(oppositeSide, pos.quantity, pos.leverage, pos._id, pos.side, pos.pair_id);
+                                                        };
 
 
-                                                    return (
-                                                        <tr key={pos._id}>
-                                                            <td className={pos?.side === "LONG" ? "text-green" : "text-red"}>
-                                                                {pos.symbol}
-                                                                <div className='fulltbl'>
-                                                                    <span className='subtxt'>Perp </span>
-                                                                    <span className='subtxt'>{pos.leverage}x</span>
-                                                                </div>
-                                                            </td>
-                                                            <td >{toFixedFive(pos.quantity)} {pos.baseCurrency} </td>
-                                                            <td>{toFixedFive(pos.entryPrice)}</td>
-                                                            <td>{toFixedFive(pos.lastMarkPrice)}</td>
-                                                            <td>{toFixedFive(pos.liquidationPrice) || "---"}</td>
-                                                            <td >{toFixedFive(pos.isolatedMargin)} {pos.marginAsset || "USDT"} (Cross)</td>
-                                                            <td>{toFixedFive(pos.maintenanceMargin)} {pos.marginAsset || "USDT"}</td>
-                                                            <td className={pos.unrealizedPnl >= 0 ? "text-green" : "text-red"}>{toFixedFive(pos.unrealizedPnl)} </td>
-                                                            <td>
-                                                                <button type='button' onClick={() => closePosition(pos._id)}>Market Close</button>
-                                                            </td>
-                                                            {/* <td>
+                                                        return (
+                                                            <tr key={pos._id}>
+                                                                <td className={pos?.side === "LONG" ? "text-green" : "text-red"}>
+                                                                    {pos.symbol}
+                                                                    <div className='fulltbl'>
+                                                                        <span className='subtxt'>Perp </span>
+                                                                        <span className='subtxt'>{pos.leverage}x</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td >{toFixedFive(pos.quantity)} {pos.baseCurrency} </td>
+                                                                <td>{toFixedFive(pos.entryPrice)}</td>
+                                                                <td>{toFixedFive(pos.lastMarkPrice)}</td>
+                                                                <td>{toFixedFive(pos.liquidationPrice) || "---"}</td>
+                                                                <td >{toFixedFive(pos.isolatedMargin)} {pos.marginAsset || "USDT"} (Cross)</td>
+                                                                <td>{toFixedFive(pos.maintenanceMargin)} {pos.marginAsset || "USDT"}</td>
+                                                                <td className={pos.unrealizedPnl >= 0 ? "text-green" : "text-red"}>{toFixedFive(pos.unrealizedPnl)} </td>
+                                                                <td>
+                                                                    <button type='button' onClick={() => closePosition(pos._id)}>Market Close</button>
+                                                                </td>
+                                                                {/* <td>
                                                                 <button className='reverse' type='button' onClick={handleReverse}>Reverse</button>
                                                             </td> */}
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                            <div className="no_data_s">
-                                                <img src="/images/option-img/search_not_found.svg" className='img-fluid ' alt="no data" width="80" />
-                                                {/* <small>No open position</small> */}
-                                            </div>
-                                        </p>}
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table> : <tr rowSpan="5" className="no-data-row">
+                                                <td colSpan="12">
+                                                    <div className="no-data-wrapper">
+                                                        <div className="no_data_s">
+                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>}
 
+                                    </div>
                                 </div>
+
+                                <div className='order_history_mobile_view'>
+
+                                    <div className='d-flex'>
+                                        <div className='order_datalist'>
+                                            <ul className='listdata'>
+                                                <li>
+                                                    <span className='date'>USDT (TRC20)</span>
+                                                    <span className='date_light'>2025-08-14</span>
+                                                </li>
+                                                <li>
+                                                    <span>Time</span>
+                                                    <span>12:00:00</span>
+                                                </li>
+                                                <li>
+                                                    <span>Currency Pair</span>
+                                                    <span>BTC/USD</span>
+                                                </li>
+                                                <li>
+                                                    <span>Side</span>
+                                                    <span>Buy</span>
+                                                </li>
+                                                <li>
+                                                    <span>Price</span>
+                                                    <span>10000</span>
+                                                </li>
+                                                {showAllListItems[0] && (
+                                                    <>
+                                                        <li>
+                                                            <span>Average</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Quantity</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Remaining</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Total</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Fee</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Order Type</span>
+                                                            <span>Market</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-success'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-danger'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-warning'>Executed</span>
+                                                        </li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                            <button
+                                                type="button"
+                                                className="view_more_btn"
+                                                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                            >
+                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                            </button>
+
+                                            <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                    <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                </button>
+                                                {showExecutedTrades[0] && (
+                                                    <div className='executed_trades_list_items'>
+                                                        <ul>
+                                                            <li>Trade #1:</li>
+                                                            <li>Trading Price: <span>10000</span></li>
+                                                            <li>Executed: <span>10000</span></li>
+                                                            <li>Trading Fee: <span>10000</span></li>
+                                                            <li>Total: <span>10000</span></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
                             </div>
 
                             <div className='cnt_table open'>
-                                <div class="table-responsive">
-                                    {OpenOrders?.length > 0 ?
-                                        <table>
+                                <div className="desktop_view2">
+                                    <div class="table-responsive">
+                                        {OpenOrders?.length > 0 ?
+                                            <table>
 
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Symbol</th>
+                                                        <th>Type</th>
+                                                        <th>Side</th>
+                                                        <th>Price</th>
+                                                        <th>Average</th>
+                                                        <th>Amount</th>
+                                                        <th>Filled</th>
+                                                        <th>Reduce Only</th>
+                                                        <th>Post Only</th>
+                                                        <th>Trigger Conditi ons</th>
+                                                        <th>TP/SL</th>
+                                                        <th>TIF</th>
+                                                        <th className='yellowcolor'>Cancel All</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {(
+                                                        OpenOrders.map((order) => {
+                                                            // Determine trigger condition display
+                                                            let triggerCondition = "---";
+                                                            if (order.isSL && order.positionSide) {
+                                                                triggerCondition =
+                                                                    order.positionSide === "LONG"
+                                                                        ? `<= ${pricePrecision(order.price)}`
+                                                                        : `>= ${pricePrecision(order.price)}`;
+                                                            } else if (order.isTP && order.positionSide) {
+                                                                triggerCondition =
+                                                                    order.positionSide === "LONG"
+                                                                        ? `>=  ${pricePrecision(order.price)}`
+                                                                        : `<= ${pricePrecision(order.price)}`;
+                                                            }
+
+                                                            return (
+                                                                <tr key={order._id}>
+                                                                    {/* Time */}
+                                                                    <td>
+                                                                        {new Date(order.createdAt).toLocaleDateString()}{" "}
+                                                                        <span className="time">{new Date(order.createdAt).toLocaleTimeString()}</span>
+                                                                    </td>
+
+                                                                    {/* Symbol */}
+                                                                    <td>
+                                                                        {order.symbol}
+                                                                        <div className="fulltbl">
+                                                                            <span className="subtxt">Perp </span>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    {/* Type */}
+                                                                    <td>{order.type} {order.isTP ? "TAKE PROFIT" : order.isSL ? "STOP LOSS" : ""}</td>
+
+                                                                    {/* Side */}
+                                                                    <td className={order.side === "LONG" ? "greencolor" : "redcolor"}>
+                                                                        {order.side === "LONG" ? "Buy" : "Sell"}
+                                                                    </td>
+
+                                                                    {/* Price */}
+                                                                    <td>
+                                                                        {!order.isTP && !order.isSL
+                                                                            ? order.price
+                                                                                ? pricePrecision(order.price)
+                                                                                : "-"
+                                                                            : "---"}
+                                                                    </td>
+
+                                                                    {/* Avg Filled Price */}
+                                                                    <td>{pricePrecision(order.avgFillPrice) || "---"}</td>
+
+                                                                    {/* Amount / Quantity */}
+                                                                    <td>{order.quantity} {order.baseCurrency}</td>
+
+                                                                    {/* Filled */}
+                                                                    <td>{order.filledQty || 0} {order.baseCurrency}</td>
+
+                                                                    {/* Reduce Only */}
+                                                                    <td>{order.reduceOnly ? "Yes" : "No"}</td>
+
+                                                                    {/* Post Only */}
+                                                                    <td>{order.postOnly ? "Yes" : "No"}</td>
+
+                                                                    {/* Trigger Conditions */}
+                                                                    <td>{triggerCondition}</td>
+
+                                                                    {/* TP/SL */}
+                                                                    <td className={order.isTP ? "text-green" : order.isSL ? "text-red" : ""}>
+                                                                        {order.isTP
+                                                                            ? pricePrecision(order.takeProfitPnl)
+                                                                            : order.isSL
+                                                                                ? pricePrecision(order.stopLossPnl)
+                                                                                : "---"}
+                                                                    </td>
+
+
+                                                                    {/* TIF */}
+                                                                    <td>{order.timeInForce || "GTC"}</td>
+
+                                                                    {/* Cancel / Action */}
+                                                                    <td className="yellowcolor">
+                                                                        <button type='button' onClick={() => cancelFutureOrder(order?.orderId)}>
+                                                                            Cancel <i className="ri-delete-bin-6-line"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })
+                                                    )}
+                                                </tbody>
+
+                                            </table> : <tr rowSpan="5" className="no-data-row">
+                                                <td colSpan="12">
+                                                    <div className="no-data-wrapper">
+                                                        <div className="no_data_s">
+                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className='order_history_mobile_view'>
+
+                                    <div className='d-flex'>
+                                        <div className='order_datalist'>
+                                            <ul className='listdata'>
+                                                <li>
+                                                    <span className='date'>USDT (TRC20)</span>
+                                                    <span className='date_light'>2025-08-14</span>
+                                                </li>
+                                                <li>
+                                                    <span>Time</span>
+                                                    <span>12:00:00</span>
+                                                </li>
+                                                <li>
+                                                    <span>Currency Pair</span>
+                                                    <span>BTC/USD</span>
+                                                </li>
+                                                <li>
+                                                    <span>Side</span>
+                                                    <span>Buy</span>
+                                                </li>
+                                                <li>
+                                                    <span>Price</span>
+                                                    <span>10000</span>
+                                                </li>
+                                                {showAllListItems[0] && (
+                                                    <>
+                                                        <li>
+                                                            <span>Average</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Quantity</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Remaining</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Total</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Fee</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Order Type</span>
+                                                            <span>Market</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-success'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-danger'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-warning'>Executed</span>
+                                                        </li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                            <button
+                                                type="button"
+                                                className="view_more_btn"
+                                                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                            >
+                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                            </button>
+
+                                            <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                    <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                </button>
+                                                {showExecutedTrades[0] && (
+                                                    <div className='executed_trades_list_items'>
+                                                        <ul>
+                                                            <li>Trade #1:</li>
+                                                            <li>Trading Price: <span>10000</span></li>
+                                                            <li>Executed: <span>10000</span></li>
+                                                            <li>Trading Fee: <span>10000</span></li>
+                                                            <li>Total: <span>10000</span></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div className='cnt_table order_history'>
+                                <div className="desktop_view2">
+                                    <div class="table-responsive">
+                                        {ordersHistory?.length > 0 ? <table>
                                             <thead>
                                                 <tr>
                                                     <th>Time</th>
@@ -2211,359 +2546,539 @@ function UsdMFutures() {
                                                     <th>Amount</th>
                                                     <th>Filled</th>
                                                     <th>Reduce Only</th>
-                                                    <th>Post Only</th>
-                                                    <th>Trigger Conditi ons</th>
                                                     <th>TP/SL</th>
-                                                    <th>TIF</th>
-                                                    <th className='yellowcolor'>Cancel All</th>
+                                                    <th>Status</th>
+                                                    <th className="yellowcolor">Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {ordersHistory.map((order) => (
+                                                    <tr key={order._id}>
+                                                        {/* Time */}
+                                                        <td>
+                                                            {new Date(order.createdAt).toLocaleDateString()}{" "}
+                                                            <span className="time">
+                                                                {new Date(order.createdAt).toLocaleTimeString()}
+                                                            </span>
+                                                        </td>
+
+                                                        {/* Symbol */}
+                                                        <td>
+                                                            {order.symbol}
+                                                            <div className="fulltbl">
+                                                                <span className="subtxt">Perp</span>
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Type */}
+                                                        <td>{order.type}</td>
+
+                                                        {/* Side */}
+                                                        <td className={order.side === "LONG" ? "text-green" : "text-red"}>
+                                                            {order.side === "LONG" ? "Buy" : "Sell"}
+                                                        </td>
+
+                                                        {/* Price */}
+                                                        <td>
+                                                            {order.price
+                                                                ? toFixedFive(order.price)
+                                                                : "---"}
+                                                        </td>
+                                                        <td>
+                                                            {order.avgFillPrice
+                                                                ? toFixedFive(order.avgFillPrice)
+                                                                : "-"}
+                                                        </td>
+
+                                                        {/* Amount */}
+                                                        <td>
+                                                            {toFixedFive(order.quantity)} {order.baseCurrency}
+                                                        </td>
+
+                                                        {/* Filled */}
+                                                        <td>
+                                                            {toFixedFive(order.filledQty)} {order.baseCurrency}
+                                                        </td>
+
+                                                        {/* Reduce Only */}
+                                                        <td>{order.reduceOnly ? "Yes" : "No"}</td>
+
+
+                                                        {/* TP/SL */}
+                                                        <td>
+                                                            {order.isTP ? "TP" : order.isSL ? "SL" : "--"}
+                                                        </td>
+
+                                                        {/* Status */}
+                                                        <td className={order.status ? "text-green" : "text-red"}>{order.status}</td>
+
+                                                        {/* Error  */}
+                                                        <td className="yellowcolor">
+                                                            {order.error || "---"}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table> : <tr rowSpan="5" className="no-data-row">
+                                            <td colSpan="12">
+                                                <div className="no-data-wrapper">
+                                                    <div className="no_data_s">
+                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>}
+                                    </div>
+                                </div>
+
+                                <div className='order_history_mobile_view'>
+
+                                    <div className='d-flex'>
+                                        <div className='order_datalist'>
+                                            <ul className='listdata'>
+                                                <li>
+                                                    <span className='date'>USDT (TRC20)</span>
+                                                    <span className='date_light'>2025-08-14</span>
+                                                </li>
+                                                <li>
+                                                    <span>Time</span>
+                                                    <span>12:00:00</span>
+                                                </li>
+                                                <li>
+                                                    <span>Currency Pair</span>
+                                                    <span>BTC/USD</span>
+                                                </li>
+                                                <li>
+                                                    <span>Side</span>
+                                                    <span>Buy</span>
+                                                </li>
+                                                <li>
+                                                    <span>Price</span>
+                                                    <span>10000</span>
+                                                </li>
+                                                {showAllListItems[0] && (
+                                                    <>
+                                                        <li>
+                                                            <span>Average</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Quantity</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Remaining</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Total</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Fee</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Order Type</span>
+                                                            <span>Market</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-success'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-danger'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-warning'>Executed</span>
+                                                        </li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                            <button
+                                                type="button"
+                                                className="view_more_btn"
+                                                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                            >
+                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                            </button>
+
+                                            <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                    <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                </button>
+                                                {showExecutedTrades[0] && (
+                                                    <div className='executed_trades_list_items'>
+                                                        <ul>
+                                                            <li>Trade #1:</li>
+                                                            <li>Trading Price: <span>10000</span></li>
+                                                            <li>Executed: <span>10000</span></li>
+                                                            <li>Trading Fee: <span>10000</span></li>
+                                                            <li>Total: <span>10000</span></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className='cnt_table exercise_history'>
+                                <div className="desktop_view2">
+                                    <div class="table-responsive">
+                                        {tradeHistory.length > 0 ? <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Symbol</th>
+                                                    <th>Type</th>
+                                                    <th>Side</th>
+                                                    <th>Price</th>
+                                                    <th>Amount</th>
+                                                    <th>Fee</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {(
-                                                    OpenOrders.map((order) => {
-                                                        // Determine trigger condition display
-                                                        let triggerCondition = "---";
-                                                        if (order.isSL && order.positionSide) {
-                                                            triggerCondition =
-                                                                order.positionSide === "LONG"
-                                                                    ? `<= ${pricePrecision(order.price)}`
-                                                                    : `>= ${pricePrecision(order.price)}`;
-                                                        } else if (order.isTP && order.positionSide) {
-                                                            triggerCondition =
-                                                                order.positionSide === "LONG"
-                                                                    ? `>=  ${pricePrecision(order.price)}`
-                                                                    : `<= ${pricePrecision(order.price)}`;
-                                                        }
+                                                    tradeHistory.map((trade) => {
+                                                        const createdAt = new Date(trade.createdAt);
+                                                        const date = createdAt.toISOString().split("T")[0];
+                                                        const time = createdAt.toTimeString().split(" ")[0];
 
                                                         return (
-                                                            <tr key={order._id}>
+                                                            <tr key={trade._id}>
                                                                 {/* Time */}
                                                                 <td>
-                                                                    {new Date(order.createdAt).toLocaleDateString()}{" "}
-                                                                    <span className="time">{new Date(order.createdAt).toLocaleTimeString()}</span>
+                                                                    {date} <span className="time">{time}</span>
                                                                 </td>
 
                                                                 {/* Symbol */}
-                                                                <td>
-                                                                    {order.symbol}
+                                                                <td className={trade.side === "LONG" ? "text-green" : "text-red"}>
+                                                                    {trade.symbol}
                                                                     <div className="fulltbl">
-                                                                        <span className="subtxt">Perp </span>
+                                                                        <span className="subtxt">Perp</span>
                                                                     </div>
                                                                 </td>
 
-                                                                {/* Type */}
-                                                                <td>{order.type} {order.isTP ? "TAKE PROFIT" : order.isSL ? "STOP LOSS" : ""}</td>
+                                                                {/* Order Type */}
+                                                                <td>{trade.role === "TAKER" ? "Market" : "Limit"}</td>
 
                                                                 {/* Side */}
-                                                                <td className={order.side === "LONG" ? "greencolor" : "redcolor"}>
-                                                                    {order.side === "LONG" ? "Buy" : "Sell"}
+                                                                <td className={trade.side === "LONG" ? "text-green" : "text-red"}>
+                                                                    {trade.side === "LONG" ? "BUY" : "SELL"}
                                                                 </td>
 
                                                                 {/* Price */}
                                                                 <td>
-                                                                    {!order.isTP && !order.isSL
-                                                                        ? order.price
-                                                                            ? pricePrecision(order.price)
-                                                                            : "-"
-                                                                        : "---"}
+                                                                    {toFixedFive(trade.price)}{" "}
                                                                 </td>
 
-                                                                {/* Avg Filled Price */}
-                                                                <td>{pricePrecision(order.avgFillPrice) || "---"}</td>
-
-                                                                {/* Amount / Quantity */}
-                                                                <td>{order.quantity} {order.baseCurrency}</td>
-
-                                                                {/* Filled */}
-                                                                <td>{order.filledQty || 0} {order.baseCurrency}</td>
-
-                                                                {/* Reduce Only */}
-                                                                <td>{order.reduceOnly ? "Yes" : "No"}</td>
-
-                                                                {/* Post Only */}
-                                                                <td>{order.postOnly ? "Yes" : "No"}</td>
-
-                                                                {/* Trigger Conditions */}
-                                                                <td>{triggerCondition}</td>
-
-                                                                {/* TP/SL */}
-                                                                <td className={order.isTP ? "text-green" : order.isSL ? "text-red" : ""}>
-                                                                    {order.isTP
-                                                                        ? pricePrecision(order.takeProfitPnl)
-                                                                        : order.isSL
-                                                                            ? pricePrecision(order.stopLossPnl)
-                                                                            : "---"}
+                                                                {/* Amount */}
+                                                                <td>
+                                                                    {toFixedFive(trade.quantity)}{" "}
                                                                 </td>
 
+                                                                {/* Fee */}
+                                                                <td>{toFixedFive(trade.fee)}</td>
 
-                                                                {/* TIF */}
-                                                                <td>{order.timeInForce || "GTC"}</td>
 
-                                                                {/* Cancel / Action */}
-                                                                <td className="yellowcolor">
-                                                                    <button type='button' onClick={() => cancelFutureOrder(order?.orderId)}>
-                                                                        Cancel <i className="ri-delete-bin-6-line"></i>
-                                                                    </button>
-                                                                </td>
                                                             </tr>
                                                         );
                                                     })
                                                 )}
                                             </tbody>
+                                        </table> : <tr rowSpan="5" className="no-data-row">
+                                            <td colSpan="12">
+                                                <div className="no-data-wrapper">
+                                                    <div className="no_data_s">
+                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>}
 
-                                        </table> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                            <div className="no_data_s">
-                                                <img src="/images/option-img/search_not_found.svg" className='img-fluid ' alt="no data" width="80" />
-                                                {/* <small>No open position</small> */}
+                                    </div>
+                                </div>
+
+                                <div className='order_history_mobile_view'>
+
+                                    <div className='d-flex'>
+                                        <div className='order_datalist'>
+                                            <ul className='listdata'>
+                                                <li>
+                                                    <span className='date'>USDT (TRC20)</span>
+                                                    <span className='date_light'>2025-08-14</span>
+                                                </li>
+                                                <li>
+                                                    <span>Time</span>
+                                                    <span>12:00:00</span>
+                                                </li>
+                                                <li>
+                                                    <span>Currency Pair</span>
+                                                    <span>BTC/USD</span>
+                                                </li>
+                                                <li>
+                                                    <span>Side</span>
+                                                    <span>Buy</span>
+                                                </li>
+                                                <li>
+                                                    <span>Price</span>
+                                                    <span>10000</span>
+                                                </li>
+                                                {showAllListItems[0] && (
+                                                    <>
+                                                        <li>
+                                                            <span>Average</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Quantity</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Remaining</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Total</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Fee</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Order Type</span>
+                                                            <span>Market</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-success'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-danger'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-warning'>Executed</span>
+                                                        </li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                            <button
+                                                type="button"
+                                                className="view_more_btn"
+                                                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                            >
+                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                            </button>
+
+                                            <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                    <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                </button>
+                                                {showExecutedTrades[0] && (
+                                                    <div className='executed_trades_list_items'>
+                                                        <ul>
+                                                            <li>Trade #1:</li>
+                                                            <li>Trading Price: <span>10000</span></li>
+                                                            <li>Executed: <span>10000</span></li>
+                                                            <li>Trading Fee: <span>10000</span></li>
+                                                            <li>Total: <span>10000</span></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </p>
-                                    }
-                                </div>
-                            </div>
 
-                            <div className='cnt_table order_history'>
-                                <div class="table-responsive">
-                                    {ordersHistory?.length > 0 ? <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Time</th>
-                                                <th>Symbol</th>
-                                                <th>Type</th>
-                                                <th>Side</th>
-                                                <th>Price</th>
-                                                <th>Average</th>
-                                                <th>Amount</th>
-                                                <th>Filled</th>
-                                                <th>Reduce Only</th>
-                                                <th>TP/SL</th>
-                                                <th>Status</th>
-                                                <th className="yellowcolor">Description</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {ordersHistory.map((order) => (
-                                                <tr key={order._id}>
-                                                    {/* Time */}
-                                                    <td>
-                                                        {new Date(order.createdAt).toLocaleDateString()}{" "}
-                                                        <span className="time">
-                                                            {new Date(order.createdAt).toLocaleTimeString()}
-                                                        </span>
-                                                    </td>
-
-                                                    {/* Symbol */}
-                                                    <td>
-                                                        {order.symbol}
-                                                        <div className="fulltbl">
-                                                            <span className="subtxt">Perp</span>
-                                                        </div>
-                                                    </td>
-
-                                                    {/* Type */}
-                                                    <td>{order.type}</td>
-
-                                                    {/* Side */}
-                                                    <td className={order.side === "LONG" ? "text-green" : "text-red"}>
-                                                        {order.side === "LONG" ? "Buy" : "Sell"}
-                                                    </td>
-
-                                                    {/* Price */}
-                                                    <td>
-                                                        {order.price
-                                                            ? toFixedFive(order.price)
-                                                            : "---"}
-                                                    </td>
-                                                    <td>
-                                                        {order.avgFillPrice
-                                                            ? toFixedFive(order.avgFillPrice)
-                                                            : "-"}
-                                                    </td>
-
-                                                    {/* Amount */}
-                                                    <td>
-                                                        {toFixedFive(order.quantity)} {order.baseCurrency}
-                                                    </td>
-
-                                                    {/* Filled */}
-                                                    <td>
-                                                        {toFixedFive(order.filledQty)} {order.baseCurrency}
-                                                    </td>
-
-                                                    {/* Reduce Only */}
-                                                    <td>{order.reduceOnly ? "Yes" : "No"}</td>
-
-
-                                                    {/* TP/SL */}
-                                                    <td>
-                                                        {order.isTP ? "TP" : order.isSL ? "SL" : "--"}
-                                                    </td>
-
-                                                    {/* Status */}
-                                                    <td className={order.status ? "text-green" : "text-red"}>{order.status}</td>
-
-                                                    {/* Error  */}
-                                                    <td className="yellowcolor">
-                                                        {order.error || "---"}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                        <div className="no_data_s">
-                                            <img src="/images/option-img/search_not_found.svg" className='img-fluid ' alt="no data" width="80" />
-                                            {/* <small>No open position</small> */}
                                         </div>
-                                    </p>}
-                                </div>
-                            </div>
-                            <div className='cnt_table exercise_history'>
-
-                                <div class="table-responsive">
-                                    {tradeHistory.length > 0 ? <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Time</th>
-                                                <th>Symbol</th>
-                                                <th>Type</th>
-                                                <th>Side</th>
-                                                <th>Price</th>
-                                                <th>Amount</th>
-                                                <th>Fee</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(
-                                                tradeHistory.map((trade) => {
-                                                    const createdAt = new Date(trade.createdAt);
-                                                    const date = createdAt.toISOString().split("T")[0];
-                                                    const time = createdAt.toTimeString().split(" ")[0];
-
-                                                    return (
-                                                        <tr key={trade._id}>
-                                                            {/* Time */}
-                                                            <td>
-                                                                {date} <span className="time">{time}</span>
-                                                            </td>
-
-                                                            {/* Symbol */}
-                                                            <td className={trade.side === "LONG" ? "text-green" : "text-red"}>
-                                                                {trade.symbol}
-                                                                <div className="fulltbl">
-                                                                    <span className="subtxt">Perp</span>
-                                                                </div>
-                                                            </td>
-
-                                                            {/* Order Type */}
-                                                            <td>{trade.role === "TAKER" ? "Market" : "Limit"}</td>
-
-                                                            {/* Side */}
-                                                            <td className={trade.side === "LONG" ? "text-green" : "text-red"}>
-                                                                {trade.side === "LONG" ? "BUY" : "SELL"}
-                                                            </td>
-
-                                                            {/* Price */}
-                                                            <td>
-                                                                {toFixedFive(trade.price)}{" "}
-                                                            </td>
-
-                                                            {/* Amount */}
-                                                            <td>
-                                                                {toFixedFive(trade.quantity)}{" "}
-                                                            </td>
-
-                                                            {/* Fee */}
-                                                            <td>{toFixedFive(trade.fee)}</td>
 
 
-                                                        </tr>
-                                                    );
-                                                })
-                                            )}
-                                        </tbody>
-                                    </table> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                        <div className="no_data_s">
-                                            <img src="/images/option-img/search_not_found.svg" className='img-fluid ' alt="no data" width="80" />
-                                            {/* <small>No open position</small> */}
-                                        </div>
-                                    </p>}
-
+                                    </div>
                                 </div>
 
                             </div>
                             <div className='cnt_table position_history'>
+                                <div className="desktop_view2">
+                                    <div class="table-responsive">
+                                        {closePositions?.length > 0 ? <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Symbol</th>
+                                                    <th>Size</th>
+                                                    <th>Entry Price</th>
+                                                    <th>Exit Price</th>
+                                                    <th>PNL</th>
+                                                    <th>Open</th>
+                                                    <th>Closed</th>
+                                                    <th>Is liquidated?</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    closePositions?.map((pos) => {
+                                                        const createdAt = new Date(pos.createdAt);
+                                                        const updatedAt = new Date(pos.updatedAt);
 
-                                <div class="table-responsive">
-                                    {closePositions?.length > 0 ? <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Symbol</th>
-                                                <th>Size</th>
-                                                <th>Entry Price</th>
-                                                <th>Exit Price</th>
-                                                <th>PNL</th>
-                                                <th>Open</th>
-                                                <th>Closed</th>
-                                                <th>Is liquidated?</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                closePositions?.map((pos) => {
-                                                    const createdAt = new Date(pos.createdAt);
-                                                    const updatedAt = new Date(pos.updatedAt);
+                                                        const openDate = createdAt.toISOString().split("T")[0];
+                                                        const openTime = createdAt.toTimeString().split(" ")[0];
 
-                                                    const openDate = createdAt.toISOString().split("T")[0];
-                                                    const openTime = createdAt.toTimeString().split(" ")[0];
+                                                        const closeDate = updatedAt.toISOString().split("T")[0];
+                                                        const closeTime = updatedAt.toTimeString().split(" ")[0];
 
-                                                    const closeDate = updatedAt.toISOString().split("T")[0];
-                                                    const closeTime = updatedAt.toTimeString().split(" ")[0];
+                                                        return (
+                                                            <tr key={pos._id}>
+                                                                <td className={pos?.side === "LONG" ? "text-green" : "text-red"}>
+                                                                    {pos.symbol}
+                                                                    <div className="fulltbl">
+                                                                        <span className="subtxt">Perp </span>
+                                                                        <span className="subtxt">{pos?.side} </span>
+                                                                        <span className="subtxt">{pos.leverage}x</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    {pos?.side === "LONG"
+                                                                        ? toFixedFive(pos.totalLongQty)
+                                                                        : toFixedFive(pos.totalShortQty)}{" "}
+                                                                    {pos.baseCurrency}
+                                                                </td>
+                                                                <td>{toFixedFive(pos.entryPrice)}</td>
+                                                                <td>{toFixedFive(pos.exit_price)}</td>
+                                                                <td
+                                                                    className={
+                                                                        pos.realizedPnl >= 0 ? "text-green" : "text-red"
+                                                                    }
+                                                                >
+                                                                    {toFixedFive(pos.realizedPnl)}
+                                                                </td>
+                                                                <td>
+                                                                    {openDate} <span className="time">{openTime}</span>
+                                                                </td>
+                                                                <td>
+                                                                    {closeDate} <span className="time">{closeTime}</span>
+                                                                </td>
+                                                                <td>
+                                                                    {pos.liquidated ? "YES" : "NO"}
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </tbody>
+                                        </table> : <tr rowSpan="5" className="no-data-row">
+                                            <td colSpan="12">
+                                                <div className="no-data-wrapper">
+                                                    <div className="no_data_s">
+                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>}
 
-                                                    return (
-                                                        <tr key={pos._id}>
-                                                            <td className={pos?.side === "LONG" ? "text-green" : "text-red"}>
-                                                                {pos.symbol}
-                                                                <div className="fulltbl">
-                                                                    <span className="subtxt">Perp </span>
-                                                                    <span className="subtxt">{pos?.side} </span>
-                                                                    <span className="subtxt">{pos.leverage}x</span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                {pos?.side === "LONG"
-                                                                    ? toFixedFive(pos.totalLongQty)
-                                                                    : toFixedFive(pos.totalShortQty)}{" "}
-                                                                {pos.baseCurrency}
-                                                            </td>
-                                                            <td>{toFixedFive(pos.entryPrice)}</td>
-                                                            <td>{toFixedFive(pos.exit_price)}</td>
-                                                            <td
-                                                                className={
-                                                                    pos.realizedPnl >= 0 ? "text-green" : "text-red"
-                                                                }
-                                                            >
-                                                                {toFixedFive(pos.realizedPnl)}
-                                                            </td>
-                                                            <td>
-                                                                {openDate} <span className="time">{openTime}</span>
-                                                            </td>
-                                                            <td>
-                                                                {closeDate} <span className="time">{closeTime}</span>
-                                                            </td>
-                                                            <td>
-                                                                {pos.liquidated ? "YES" : "NO"}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })
-                                            }
-                                        </tbody>
-                                    </table> : <p className="text-center no-data h-100 mb-0 center_b" >
-                                        <div className="no_data_s">
-                                            <img src="/images/option-img/search_not_found.svg" className='img-fluid ' alt="no data" width="80" />
-                                            {/* <small>No open position</small> */}
+                                    </div>
+                                </div>
+
+                                <div className='order_history_mobile_view'>
+
+                                    <div className='d-flex'>
+                                        <div className='order_datalist'>
+                                            <ul className='listdata'>
+                                                <li>
+                                                    <span className='date'>USDT (TRC20)</span>
+                                                    <span className='date_light'>2025-08-14</span>
+                                                </li>
+                                                <li>
+                                                    <span>Time</span>
+                                                    <span>12:00:00</span>
+                                                </li>
+                                                <li>
+                                                    <span>Currency Pair</span>
+                                                    <span>BTC/USD</span>
+                                                </li>
+                                                <li>
+                                                    <span>Side</span>
+                                                    <span>Buy</span>
+                                                </li>
+                                                <li>
+                                                    <span>Price</span>
+                                                    <span>10000</span>
+                                                </li>
+                                                {showAllListItems[0] && (
+                                                    <>
+                                                        <li>
+                                                            <span>Average</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Quantity</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Remaining</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Total</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Fee</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Order Type</span>
+                                                            <span>Market</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-success'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-danger'>Executed</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Status</span>
+                                                            <span className='text-warning'>Executed</span>
+                                                        </li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                            <button
+                                                type="button"
+                                                className="view_more_btn"
+                                                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                            >
+                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                            </button>
+
+                                            <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                    <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                </button>
+                                                {showExecutedTrades[0] && (
+                                                    <div className='executed_trades_list_items'>
+                                                        <ul>
+                                                            <li>Trade #1:</li>
+                                                            <li>Trading Price: <span>10000</span></li>
+                                                            <li>Executed: <span>10000</span></li>
+                                                            <li>Trading Fee: <span>10000</span></li>
+                                                            <li>Total: <span>10000</span></li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+
                                         </div>
-                                    </p>}
 
+
+                                    </div>
                                 </div>
 
                             </div>

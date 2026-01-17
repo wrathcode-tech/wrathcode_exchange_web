@@ -13,6 +13,8 @@ const SpotOrders = (props) => {
   const limit = 10;
   const [expandedRow, setExpandedRow] = useState(null);
   const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+  const [showAllListItems, setShowAllListItems] = useState({ 0: false, 1: false, 2: false });
+  const [showExecutedTrades, setShowExecutedTrades] = useState({ 0: false, 1: false, 2: false });
 
 
   const handleTradeHistory = async (skip, limit) => {
@@ -60,17 +62,17 @@ const SpotOrders = (props) => {
       <div className="dashboard_listing_section Overview_mid">
 
 
-        <div className="listing_left_outer full_width transaction_history_t">
+        <div className="listing_left_outer full_width transaction_history_t desktop_view2">
           <div className="market_section spotorderhist">
             <div className="top_heading">
               <h4>Spot order history</h4>
               <div class="coin_right">
                 <div class="searchBar custom-tabs">
                   <i class="ri-search-2-line"></i>
-              <input type="search" class="custom_search" placeholder="Search Crypto"/>
-              </div><div class="checkbox">
-                <input type="checkbox"/>Hide 0 Balance</div>
-                </div>
+                  <input type="search" class="custom_search" placeholder="Search Crypto" />
+                </div><div class="checkbox">
+                  <input type="checkbox" />Hide 0 Balance</div>
+              </div>
 
             </div>
             <div className="dashboard_summary">
@@ -203,7 +205,288 @@ const SpotOrders = (props) => {
               }
             </div>
           </div>
+
         </div>
+
+        <div className='order_history_mobile_view'>
+          <h5>Spot order history</h5>
+          <div className='d-flex'>
+            <div className='order_datalist'>
+              <ul className='listdata'>
+                <li>
+                  <span className='date'>USDT (TRC20)</span>
+                  <span className='date_light'>2025-08-14</span>
+                </li>
+                <li>
+                  <span>Time</span>
+                  <span>12:00:00</span>
+                </li>
+                <li>
+                  <span>Currency Pair</span>
+                  <span>BTC/USD</span>
+                </li>
+                <li>
+                  <span>Side</span>
+                  <span>Buy</span>
+                </li>
+                <li>
+                  <span>Price</span>
+                  <span>10000</span>
+                </li>
+                {showAllListItems[0] && (
+                  <>
+                    <li>
+                      <span>Average</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Quantity</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Remaining</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Total</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Fee</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Order Type</span>
+                      <span>Market</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-success'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-danger'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-warning'>Executed</span>
+                    </li>
+                  </>
+                )}
+              </ul>
+              <button
+                type="button"
+                className="view_more_btn"
+                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+              >
+                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+              </button>
+
+              <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                  <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                </button>
+                {showExecutedTrades[0] && (
+                  <div className='executed_trades_list_items'>
+                    <ul>
+                      <li>Trade #1:</li>
+                      <li>Trading Price: <span>10000</span></li>
+                      <li>Executed: <span>10000</span></li>
+                      <li>Trading Fee: <span>10000</span></li>
+                      <li>Total: <span>10000</span></li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+            <div className='order_datalist'>
+              <ul className='listdata'>
+                <li>
+                  <span className='date'>USDT (TRC20)</span>
+                  <span className='date_light'>2025-08-14</span>
+                </li>
+                <li>
+                  <span>Time</span>
+                  <span>12:00:00</span>
+                </li>
+                <li>
+                  <span>Currency Pair</span>
+                  <span>BTC/USD</span>
+                </li>
+                <li>
+                  <span>Side</span>
+                  <span>Buy</span>
+                </li>
+                <li>
+                  <span>Price</span>
+                  <span>10000</span>
+                </li>
+                {showAllListItems[1] && (
+                  <>
+                    <li>
+                      <span>Average</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Quantity</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Remaining</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Total</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Fee</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Order Type</span>
+                      <span>Market</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-success'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-danger'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-warning'>Executed</span>
+                    </li>
+                  </>
+                )}
+              </ul>
+              <button
+                type="button"
+                className="view_more_btn"
+                onClick={() => setShowAllListItems({ ...showAllListItems, 1: !showAllListItems[1] })}
+              >
+                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+              </button>
+
+              <div className={`executed_trades_list ${showExecutedTrades[1] ? 'active' : ''}`}>
+                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 1: !showExecutedTrades[1] })}>
+                  <i className={`ri-arrow-drop-down-line ${showExecutedTrades[1] ? 'rotated' : ''}`}></i>Executed Trades
+                </button>
+                {showExecutedTrades[1] && (
+                  <div className='executed_trades_list_items'>
+                    <ul>
+                      <li>Trade #1:</li>
+                      <li>Trading Price: <span>10000</span></li>
+                      <li>Executed: <span>10000</span></li>
+                      <li>Trading Fee: <span>10000</span></li>
+                      <li>Total: <span>10000</span></li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+
+            <div className='order_datalist'>
+              <ul className='listdata'>
+                <li>
+                  <span className='date'>USDT (TRC20)</span>
+                  <span className='date_light'>2025-08-14</span>
+                </li>
+                <li>
+                  <span>Time</span>
+                  <span>12:00:00</span>
+                </li>
+                <li>
+                  <span>Currency Pair</span>
+                  <span>BTC/USD</span>
+                </li>
+                <li>
+                  <span>Side</span>
+                  <span>Buy</span>
+                </li>
+                <li>
+                  <span>Price</span>
+                  <span>10000</span>
+                </li>
+                {showAllListItems[2] && (
+                  <>
+                    <li>
+                      <span>Average</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Quantity</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Remaining</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Total</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Fee</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Order Type</span>
+                      <span>Market</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-success'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-danger'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-warning'>Executed</span>
+                    </li>
+                  </>
+                )}
+              </ul>
+              <button
+                type="button"
+                className="view_more_btn"
+                onClick={() => setShowAllListItems({ ...showAllListItems, 2: !showAllListItems[2] })}
+              >
+                {showAllListItems[2] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+              </button>
+
+              <div className={`executed_trades_list ${showExecutedTrades[2] ? 'active' : ''}`}>
+                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 2: !showExecutedTrades[2] })}>
+                  <i className={`ri-arrow-drop-down-line ${showExecutedTrades[2] ? 'rotated' : ''}`}></i>Executed Trades
+                </button>
+                {showExecutedTrades[2] && (
+                  <div className='executed_trades_list_items'>
+                    <ul>
+                      <li>Trade #1:</li>
+                      <li>Trading Price: <span>10000</span></li>
+                      <li>Executed: <span>10000</span></li>
+                      <li>Trading Fee: <span>10000</span></li>
+                      <li>Total: <span>10000</span></li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+           
+          </div>
+        </div>
+
+
       </div>
     </div>
   );

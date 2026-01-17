@@ -10,6 +10,8 @@ const OpenOrders = (props) => {
   const [totalAllOpen, setTotalAllOpen] = useState([]);
   const [skipAllOrder, setSkipAllOrder] = useState(0);
   const limitAllorder = 10;
+  const [showAllListItems, setShowAllListItems] = useState({ 0: false, 1: false, 2: false });
+  const [showExecutedTrades, setShowExecutedTrades] = useState({ 0: false, 1: false, 2: false });
 
 
   const handleOpenOrders = async (skipAllOrder, limitAllorder) => {
@@ -75,7 +77,7 @@ const OpenOrders = (props) => {
   useEffect(() => {
     handleOpenOrders(skipAllOrder, limitAllorder)
 
-  }, []);
+  }, [skipAllOrder]);
 
   return (
     <>
@@ -86,7 +88,7 @@ const OpenOrders = (props) => {
 
         <div className="dashboard_listing_section Overview_mid">
 
-          <div className="listing_left_outer full_width transaction_history_t">
+          <div className="listing_left_outer full_width transaction_history_t desktop_view2">
 
             <div className="market_section spotorderhist">
               <div className="top_heading">
@@ -191,6 +193,101 @@ const OpenOrders = (props) => {
 
 
           </div>
+
+          <div className='order_history_mobile_view'>
+          <h5>All open orders</h5>
+          <div className='d-flex'>
+            <div className='order_datalist'>
+              <ul className='listdata'>
+                <li>
+                  <span className='date'>USDT (TRC20)</span>
+                  <span className='date_light'>2025-08-14</span>
+                </li>
+                <li>
+                  <span>Time</span>
+                  <span>12:00:00</span>
+                </li>
+                <li>
+                  <span>Currency Pair</span>
+                  <span>BTC/USD</span>
+                </li>
+                <li>
+                  <span>Side</span>
+                  <span>Buy</span>
+                </li>
+                <li>
+                  <span>Price</span>
+                  <span>10000</span>
+                </li>
+                {showAllListItems[0] && (
+                  <>
+                    <li>
+                      <span>Average</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Quantity</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Remaining</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Total</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Fee</span>
+                      <span>10000</span>
+                    </li>
+                    <li>
+                      <span>Order Type</span>
+                      <span>Market</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-success'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-danger'>Executed</span>
+                    </li>
+                    <li>
+                      <span>Status</span>
+                      <span className='text-warning'>Executed</span>
+                    </li>
+                  </>
+                )}
+              </ul>
+              <button
+                type="button"
+                className="view_more_btn"
+                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+              >
+                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+              </button>
+
+              <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                  <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                </button>
+                {showExecutedTrades[0] && (
+                  <div className='executed_trades_list_items'>
+                    <ul>
+                      <li>Trade #1:</li>
+                      <li>Trading Price: <span>10000</span></li>
+                      <li>Executed: <span>10000</span></li>
+                      <li>Trading Fee: <span>10000</span></li>
+                      <li>Total: <span>10000</span></li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </div>
 
 
         </div>

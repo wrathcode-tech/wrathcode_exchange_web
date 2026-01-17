@@ -1866,12 +1866,12 @@ function ClassicOptions() {
 
                                             <div className='buysell_heder padding_space_l'>
                                                 <ul class="limit_tabs custom-tabs mb-3">
-                                                    <li class="nav-item positions_two" role="presentation">
+                                                    <li class={`nav-item positions_two ${Side === "BUY" ? "active" : ""}`} role="presentation">
                                                         <button onClick={() => setSide("BUY")}>
                                                             <span> Buy</span>
                                                         </button>
                                                     </li>
-                                                    <li class="nav-item open_two selltab" role="presentation">
+                                                    <li class={`nav-item open_two selltab ${Side === "SELL" ? "active" : ""}`} role="presentation">
                                                         <button class="selltab" id="sell-tab" onClick={() => setSide("SELL")}>
                                                             <span>Sell</span>
                                                         </button>
@@ -1879,7 +1879,7 @@ function ClassicOptions() {
                                                 </ul>
                                             </div>
 
-                                            <div className='cnt_table_two positions_two'>
+                                            <div className={`cnt_table_two positions_two ${Side === "BUY" ? "active" : ""}`}>
 
                                                 <form class="price_info">
                                                     <div class="price_inputbl">
@@ -1982,7 +1982,7 @@ function ClassicOptions() {
 
                                             </div>
 
-                                            <div className='cnt_table_two open_two'>
+                                            <div className={`cnt_table_two open_two ${Side === "SELL" ? "active" : ""}`}>
 
                                                 <form class="price_info">
                                                     <div class="price_inputbl">

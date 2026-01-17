@@ -484,19 +484,12 @@ const SettingsPage = (props) => {
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'center',
-                    overflow: 'hidden',
                     position: 'relative',
                     margin: '0 auto'
                   }}>
-                    <img 
+                    <img className="profileimg" 
                       src={localSelfy || (myfile ? (typeof myfile === 'string' ? `${ApiConfig.baseImage}${myfile}` : URL.createObjectURL(myfile)) : (props?.userDetails?.profilepicture ? `${ApiConfig.baseImage}${props?.userDetails?.profilepicture}` : "/images/user.png"))} 
                       alt="Avatar Preview" 
-                      style={{ 
-                        width: '100%', 
-                        height: '100%', 
-                        objectFit: 'cover',
-                        borderRadius: '50%'
-                      }}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/images/user.png";

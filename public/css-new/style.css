@@ -7431,6 +7431,10 @@ span.subdel {
     margin-top: 46px;
 }
 
+.position_order .desktop_view2 {
+    width: 100%;
+}
+
 .top_header_dash {
     display: flex;
     gap: 20px;
@@ -8942,6 +8946,73 @@ p.user_info a {
     justify-content: normal;
     width: 100%;
     align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    min-width: 0;
+    flex-wrap: nowrap;
+}
+
+.profile_id_s::-webkit-scrollbar {
+    height: 6px;
+    display: none;
+}
+
+.profile_id_s:hover::-webkit-scrollbar,
+.profile_id_s:active::-webkit-scrollbar,
+.profile_id_s:focus::-webkit-scrollbar {
+    display: block;
+}
+
+.profile_id_s::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.profile_id_s::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile_id_s:hover::-webkit-scrollbar-thumb,
+.profile_id_s:active::-webkit-scrollbar-thumb,
+.profile_id_s:focus::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+}
+
+.profile_id_s:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+.profile_id_s:active,
+.profile_id_s:focus {
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+/* Mobile scrollbar visibility */
+@media screen and (max-width: 991px) {
+    .profile_id_s::-webkit-scrollbar {
+        height: 4px;
+        display: none;
+    }
+    
+    .profile_id_s:active::-webkit-scrollbar,
+    .profile_id_s:focus::-webkit-scrollbar {
+        display: block;
+    }
+}
+
+/* Desktop scrollbar visibility */
+@media screen and (min-width: 992px) {
+    .profile_id_s:hover::-webkit-scrollbar {
+        display: block;
+    }
 }
 
 img.round_img {
@@ -15715,6 +15786,23 @@ button.primary_btn.prevStep {
     max-height: 600px;
 }
 
+.transaction_history_t .table-responsive .table-responsive {
+    min-height: 100%;
+    max-height: 200px;
+}
+
+img.profileimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.trade_summary_table_lft .table-responsive .table-responsive {
+    min-height: 100%; }
+
+.transaction_history_t table tr:hover{ background-color: transparent; }
+
 .btn-deposit {
     background: #f0b90b;
     color: #000;
@@ -16005,6 +16093,133 @@ button.primary_btn.prevStep {
     display: block;
 }
 
+.order_history_mobile_view {
+    width: 100%;
+    display: none;
+    margin-top: 20px;
+}
+
+.order_datalist {
+    width: 100%;
+    background-color: rgb(43 49 60);
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.order_datalist .listdata {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid #ffffff9c;
+    padding-bottom: 24px;
+}
+
+.order_datalist .listdata li {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #ffffff;
+}
+
+.order_datalist .listdata li span.date {
+    color: #fff !important;
+    font-size: 14px;
+    margin: 0px;
+}
+
+.order_history_mobile_view .d-flex {
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order_datalist .listdata li span.date_light {
+    color: #ffffffa3 !important;
+    margin: 0px;
+}
+
+button.view_more_btn {
+    background-color: transparent;
+    color: #f3bb2b;
+    border: none;
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+    margin-top: -22px;
+    font-weight: 400;
+    font-size: 20px;
+    transform: rotate(180deg);
+}
+
+.order_datalist .listdata li span:first-child {
+    color: #ffffffa3;
+    width: 50%;
+    text-align: left;
+}
+
+.order_datalist .listdata li span:last-child {
+    width: 50%;
+    text-align: right;
+}
+
+.executed_trades_list button {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.executed_trades_list {
+    margin: 10px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    text-align: right;
+    align-items: end;
+}
+
+.executed_trades_list_items {
+    background-color: #2f3643;
+    width: 100%;
+    padding: 10px;
+    border-radius: 7px;
+    margin-top: 15px;
+}
+
+.executed_trades_list_items ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.executed_trades_list_items ul li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 18px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #ffffffa3;
+}
+
+.executed_trades_list_items ul li span:first-child {
+    width: 50%;
+    text-align: left;
+}
+
+.executed_trades_list_items ul li span:last-child {
+    width: 50%;
+    text-align: right;
+    color: #fff;
+}
+
+.executed_trades_list_items ul li span:last-child span {
+    color: #fff;
+    font-weight: 500;
+}
+
 @media screen and (max-width:1700px) {
 
     .refrefer_earn_outer {
@@ -16055,7 +16270,11 @@ button.primary_btn.prevStep {
     }
 
     .navigation nav ul li a {
-        font-size: 14px;
+        font-size: 13px;
+    }
+
+    .navigation nav ul li.dropdown .dropdown-toggle {
+        font-size: 13px;
     }
 
     .serurity_vector {
@@ -16434,6 +16653,15 @@ button.primary_btn.prevStep {
 }
 
 @media screen and (max-width:1200px) {
+
+
+    .order_history_mobile_view {
+        display: block;
+    }
+
+    .desktop_view2 {
+        display: none;
+    }
 
     .top_total_bar {
         gap: 20px;
@@ -17748,6 +17976,7 @@ button.primary_btn.prevStep {
 
 @media screen and (max-width:991px) {
 
+.position_order .order_history_mobile_view{ margin: 15px 0px 40px; }
 
     .dashboard_right .col-sm-10 {
         width: 100%;
@@ -19082,6 +19311,9 @@ button.primary_btn.prevStep {
     .trade_summary_table_lft .table-responsive {
         justify-content: start !important;
     }
+    .order_history_mobile_view {
+        margin-top: 0px;
+    }
 
 }
 
@@ -19090,6 +19322,13 @@ button.primary_btn.prevStep {
     .desktop_view {
         display: none;
     }
+
+    .user_profile_cnt h3 {
+        gap: 20px;
+    }
+
+.top_header_dash .user_profile {
+        padding: 0px 0px; }
 
     .all_product_data .mobile_view span {
         position: relative;
@@ -25228,7 +25467,10 @@ button.primary_btn.prevStep {
         overflow-y: auto;
     }
 
-.dashboard_summary .mobile_view span{ position: relative; right: 0px; }
+    .dashboard_summary .mobile_view span {
+        position: relative;
+        right: 0px;
+    }
 
     .modal-backdrop {
         background-color: rgba(0, 0, 0, 0.5);

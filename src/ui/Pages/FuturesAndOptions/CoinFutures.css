@@ -3296,6 +3296,11 @@ button.bn-button.button__buy.sellbtn {
         width: 100%;
     }
 
+    
+    .futuresflex .assets_right {
+        width: 100%;
+    }
+
     .trade_option_bl {
         padding: 20px;
     }
@@ -3579,6 +3584,7 @@ button.bn-button.button__buy.sellbtn {
     #TVFuturesChartContainer iframe {
         height: 600px !important;
     }
+
 
     body .modal.currency_popup_s .modal-dialog {
         min-width: 90%;

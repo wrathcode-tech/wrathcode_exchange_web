@@ -437,16 +437,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                </div>
-                                <p>No Data Available</p>
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -481,16 +480,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                </div>
-                                <p>No Data Available</p>
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -528,20 +526,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
 
 
                         </tbody>
@@ -579,20 +572,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
 
 
                         </tbody>
@@ -635,20 +623,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -686,20 +669,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -740,16 +718,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                </div>
-                                <p>No Data Available</p>
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -788,16 +765,15 @@ const Dashboard = (props) => {
                               </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                                </div>
-                                <p>No Data Available</p>
+                          }) :<tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -838,20 +814,15 @@ const Dashboard = (props) => {
                                 </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>
@@ -890,20 +861,15 @@ const Dashboard = (props) => {
                               </tr>
                               </>
                             )
-                          }) : <tr rowSpan="5">
-                            <td colSpan="12">
-                              <div className="no_data_outer">
-                                <div className="no_data_vector">
-                                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                </div>
-
-                                <p>No Data Available</p>
-
+                          }) : <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_s">
+                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                               </div>
-
-                            </td>
-                          </tr>}
+                            </div>
+                          </td>
+                        </tr>}
                         </tbody>
                       </table>
                     </div>

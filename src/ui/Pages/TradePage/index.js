@@ -62,6 +62,9 @@ const Trade = () => {
     const [showTab, setShowTab] = useState("chart");
     const [showBuySellTab, setShowBuySellTab] = useState("");
     const [orderBookActiveTab, setOrderBookActiveTab] = useState("orderbook");
+    const [positionOrderTab, setPositionOrderTab] = useState("positions");
+    const [showAllListItems, setShowAllListItems] = useState({ 0: false, 1: false, 2: false, 3: false, 4: false, 5: false });
+    const [showExecutedTrades, setShowExecutedTrades] = useState({ 0: false, 1: false, 2: false, 3: false, 4: false, 5: false });
     const [Coins, setCoins] = useState([]);
     const [expandedRowIndex, setExpandedRowIndex] = useState(null);
     const [activeBuyPercent, setActiveBuyPercent] = useState(null);
@@ -1206,11 +1209,11 @@ const Trade = () => {
                                 {/* tab 1 */}
                                 <div id="tab_1" className={`cc_tab ${showTab !== "chart" && "d-none"}`} >
                                     {!SelectedCoin?.base_currency ?
-                                        <div style={{ width: '100%', height: '100%',  alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-                                                <div className="spinner-border text-primary" role="status" />
+                                        <div style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                                            <div className="spinner-border text-primary" role="status" />
 
                                         </div> :
-                                        
+
                                         // <></>
                                         <TVChartContainer symbol={`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`} />
                                     }
@@ -1339,35 +1342,35 @@ const Trade = () => {
                                                                                         ? Math.min((data.remaining / maxSellVolume) * 100, 100)
                                                                                         : 0;
 
-                                                                                return (
-                                                                                    <tr
-                                                                                        key={index}
-                                                                                        style={{
-                                                                                            cursor: "pointer",
-                                                                                            background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
-                                                                                        }}
-                                                                                        onClick={() => {
-                                                                                            setbuyamount(formatQuantity(data.remaining));
-                                                                                            infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
-                                                                                        }}
-                                                                                    >
-                                                                                        <td className="text-danger">{formatPrice(data.price)}</td>
-                                                                                        <td className="text-end">{formatQuantity(data.remaining)}</td>
-                                                                                        <td className="text-danger text-end">
-                                                                                            {formatPrice(data.price * data.remaining)}
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                );
-                                                                            })
-                                                                        ) : (
-                                                                            <tr>
-                                                                                <td colSpan="3" className="text-center">
-                                                                                    <div className="spinner-border text-primary" />
-                                                                                </td>
-                                                                            </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table>
+                                                                                    return (
+                                                                                        <tr
+                                                                                            key={index}
+                                                                                            style={{
+                                                                                                cursor: "pointer",
+                                                                                                background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                            }}
+                                                                                            onClick={() => {
+                                                                                                setbuyamount(formatQuantity(data.remaining));
+                                                                                                infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
+                                                                                            }}
+                                                                                        >
+                                                                                            <td className="text-danger">{formatPrice(data.price)}</td>
+                                                                                            <td className="text-end">{formatQuantity(data.remaining)}</td>
+                                                                                            <td className="text-danger text-end">
+                                                                                                {formatPrice(data.price * data.remaining)}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    );
+                                                                                })
+                                                                            ) : (
+                                                                                <tr>
+                                                                                    <td colSpan="3" className="text-center">
+                                                                                        <div className="spinner-border text-primary" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            )}
+                                                                        </tbody>
+                                                                    </table>
                                                                 )}
                                                             </div>
 
@@ -1401,35 +1404,35 @@ const Trade = () => {
                                                                                         ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
                                                                                         : 0;
 
-                                                                                return (
-                                                                                    <tr
-                                                                                        key={index}
-                                                                                        style={{
-                                                                                            cursor: "pointer",
-                                                                                            background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
-                                                                                        }}
-                                                                                        onClick={() => {
-                                                                                            setsellAmount(formatQuantity(data.remaining));
-                                                                                            infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
-                                                                                        }}
-                                                                                    >
-                                                                                        <td className="text-green">{formatPrice(data.price)}</td>
-                                                                                        <td className="text-end">{formatQuantity(data.remaining)}</td>
-                                                                                        <td className="text-green text-end">
-                                                                                            {formatPrice(data.price * data.remaining)}
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                );
-                                                                            })
-                                                                        ) : (
-                                                                            <tr>
-                                                                                <td colSpan="3" className="text-center">
-                                                                                    <div className="spinner-border text-primary" />
-                                                                                </td>
-                                                                            </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table>
+                                                                                    return (
+                                                                                        <tr
+                                                                                            key={index}
+                                                                                            style={{
+                                                                                                cursor: "pointer",
+                                                                                                background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                            }}
+                                                                                            onClick={() => {
+                                                                                                setsellAmount(formatQuantity(data.remaining));
+                                                                                                infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
+                                                                                            }}
+                                                                                        >
+                                                                                            <td className="text-green">{formatPrice(data.price)}</td>
+                                                                                            <td className="text-end">{formatQuantity(data.remaining)}</td>
+                                                                                            <td className="text-green text-end">
+                                                                                                {formatPrice(data.price * data.remaining)}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    );
+                                                                                })
+                                                                            ) : (
+                                                                                <tr>
+                                                                                    <td colSpan="3" className="text-center">
+                                                                                        <div className="spinner-border text-primary" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            )}
+                                                                        </tbody>
+                                                                    </table>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -2279,183 +2282,382 @@ const Trade = () => {
                             <div class="trade_summary_table_lft mt-0 position_order">
                                 <div class="top_th_easyop border-0">
                                     <ul class="position_list">
-                                        <li class="nav-item positions" role="presentation">
-                                            <button>Open Orders</button>
+                                        <li class={`nav-item positions ${positionOrderTab === "positions" ? "active" : ""}`} role="presentation">
+                                            <button onClick={() => setPositionOrderTab("positions")}>Open Orders</button>
                                         </li>
-                                        <li class="nav-item open" role="presentation">
-                                            <button>Order History</button>
+                                        <li class={`nav-item open ${positionOrderTab === "open" ? "active" : ""}`} role="presentation">
+                                            <button onClick={() => setPositionOrderTab("open")}>Order History</button>
                                         </li>
 
                                     </ul>
-                                    <div className='cnt_table positions'>
-                                        <div className="table-responsive" style={{ height: '353px' }}>
+                                    <div className={`cnt_table positions ${positionOrderTab === "positions" ? "active" : ""}`}>
 
-                                            <table className="table table_home ">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Trading Pair</th>
-                                                        <th> Date</th>
-                                                        <th> Type</th>
-                                                        <th> <div className="num-div justify-content-start">
-                                                            <select className=" form-select num-select p-0 input-select cursor-pointer" name="" value={orderType} onChange={(e) => { setorderType(e.target.value) }}>
-                                                                <option value="All">All</option>
-                                                                <option value="BUY">Buy</option>
-                                                                <option value="SELL">Sell</option>
-                                                            </select>
-                                                        </div></th>
-                                                        <th> Price</th>
-                                                        <th>Amount</th>
-                                                        <th>Remaining</th>
-                                                        <th>Filled</th>
-                                                        <th>Total</th>
-                                                        <th> Action </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {openOrders?.length > 0 ? openOrders.map((item, index) =>
-                                                        (orderType === item?.side || orderType === 'All') &&
-                                                        <tr key={index}>
-                                                            <td>{`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`}</td>
-                                                            <td>
-                                                                <small>
-                                                                    <div className="c_view justify-content-start" >
-                                                                        <span>{moment(item?.updatedAt).format("DD/MM/YYYY  ")}
-                                                                            <small>{moment(item?.updatedAt).format("hh:mm")}</small>
-                                                                        </span>
-                                                                    </div>
-                                                                </small>
-                                                            </td>
-                                                            <td>{item?.order_type}</td>
-                                                            <td>{item?.side}</td>
-                                                            <td>{item?.price?.toFixed(8)}</td>
-                                                            <td>{item?.quantity?.toFixed(8)}</td>
-                                                            <td>{item?.remaining?.toFixed(8)}</td>
-                                                            <td>{item?.filled?.toFixed(8)}</td>
-                                                            <td>{(item?.price * item?.quantity)?.toFixed(8)}</td>
-                                                            <td>
-                                                                <button className="btn text-danger btn-sm btn-icon" type="button" onClick={() => { cancelOrder(item?._id) }}><i className="ri-delete-bin-6-line pr-0"></i>
-                                                                </button>
-                                                            </td>
+                                        <div className="desktop_view2">
+                                            <div className="table-responsive" style={{ height: '353px' }}>
+
+                                                <table className="table table_home ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Trading Pair</th>
+                                                            <th> Date</th>
+                                                            <th> Type</th>
+                                                            <th> <div className="num-div justify-content-start">
+                                                                <select className=" form-select num-select p-0 input-select cursor-pointer" name="" value={orderType} onChange={(e) => { setorderType(e.target.value) }}>
+                                                                    <option value="All">All</option>
+                                                                    <option value="BUY">Buy</option>
+                                                                    <option value="SELL">Sell</option>
+                                                                </select>
+                                                            </div></th>
+                                                            <th> Price</th>
+                                                            <th>Amount</th>
+                                                            <th>Remaining</th>
+                                                            <th>Filled</th>
+                                                            <th>Total</th>
+                                                            <th> Action </th>
                                                         </tr>
-                                                    ) : <tr rowSpan="5">
-                                                        <td colSpan="12">
-                                                            <div className="favouriteData">
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                                                    <p>No Data Available</p>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                    </div>
-
-                                    <div className='cnt_table open'>
-                                        <div className="table-responsive" style={{ height: '353px' }} >
-                                            <table className="table table_home ">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th>Trading Pair</th>
-                                                        <th> <div className="num-div justify-content-start">
-                                                            <select className=" form-select num-select p-0 input-select cursor-pointer" value={pastOrderType} onChange={(e) => { setpastOrderType(e.target.value) }}>
-                                                                <option value="All">All</option>
-                                                                <option value="BUY">Buy</option>
-                                                                <option value="SELL">Sell</option>
-                                                            </select>
-                                                        </div></th>
-                                                        <th>Price</th>
-                                                        <th>Average</th>
-                                                        <th>Quantity</th>
-                                                        <th>Remaining</th>
-                                                        <th>Total</th>
-                                                        <th>Fee</th>
-                                                        <th>Order Type</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {pastOrders?.length > 0 ? pastOrders.map((item, index) =>
-                                                        (item?.side === pastOrderType || pastOrderType === "All") &&
-                                                        <>
-                                                            <tr key={index} onClick={() => setExpandedRowIndex(expandedRowIndex === index ? null : index)} className="cursor-pointer">
+                                                    </thead>
+                                                    <tbody>
+                                                        {openOrders?.length > 0 ? openOrders.map((item, index) =>
+                                                            (orderType === item?.side || orderType === 'All') &&
+                                                            <tr key={index}>
+                                                                <td>{`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`}</td>
                                                                 <td>
-
-                                                                    <div className="c_view justify-content-start">
-                                                                        {item?.executed_prices?.length > 0 && (
-                                                                            <p className="ms-2 mx-2 text-xl d-inline text-success">{expandedRowIndex === index ? '▾' : '▸'}</p>
-                                                                        )}
-                                                                        <span>{moment(item?.updatedAt).format("DD/MM/YYYY")}
-                                                                            <small>{moment(item?.updatedAt).format("hh:mm")}</small>
-                                                                        </span>
-                                                                    </div>
+                                                                    <small>
+                                                                        <div className="c_view justify-content-start" >
+                                                                            <span>{moment(item?.updatedAt).format("DD/MM/YYYY  ")}
+                                                                                <small>{moment(item?.updatedAt).format("hh:mm")}</small>
+                                                                            </span>
+                                                                        </div>
+                                                                    </small>
                                                                 </td>
-                                                                <td>{item?.side === "BUY" ? `${item?.ask_currency}/${item?.pay_currency}` : `${item?.pay_currency}/${item?.ask_currency}`}</td>
-                                                                <td>{item?.side}</td>
-                                                                <td>{nineDecimalFormat(item?.price)}</td>
-                                                                <td>{nineDecimalFormat(item?.avg_execution_price)}</td>
-                                                                <td>{nineDecimalFormat(item?.quantity)}</td>
-                                                                <td>{nineDecimalFormat(item?.remaining)}</td>
-                                                                <td>{nineDecimalFormat(item?.quantity * item?.avg_execution_price)}</td>
-                                                                <td>{nineDecimalFormat(item?.total_fee)} {item?.ask_currency}</td>
                                                                 <td>{item?.order_type}</td>
-                                                                <td className={`text-${item?.status === "FILLED" ? "success" : item?.status === "CANCELLED" ? "danger" : "warning"}`}>
-                                                                    {item?.status === 'FILLED' ? 'EXECUTED' : item?.status}
-
+                                                                <td>{item?.side}</td>
+                                                                <td>{item?.price?.toFixed(8)}</td>
+                                                                <td>{item?.quantity?.toFixed(8)}</td>
+                                                                <td>{item?.remaining?.toFixed(8)}</td>
+                                                                <td>{item?.filled?.toFixed(8)}</td>
+                                                                <td>{(item?.price * item?.quantity)?.toFixed(8)}</td>
+                                                                <td>
+                                                                    <button className="btn text-danger btn-sm btn-icon" type="button" onClick={() => { cancelOrder(item?._id) }}><i className="ri-delete-bin-6-line pr-0"></i>
+                                                                    </button>
                                                                 </td>
                                                             </tr>
+                                                        ) : <tr rowSpan="5" className="no-data-row">
+                                                        <td colSpan="12">
+                                                          <div className="no-data-wrapper">
+                                                            <div className="no_data_s">
+                                                              <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                            </div>
+                                                          </div>
+                                                        </td>
+                                                      </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
 
-                                                            {/* Sub-row for executed trades */}
-                                                            {expandedRowIndex === index && item?.executed_prices?.length > 0 && (
-                                                                <tr>
-                                                                    <td colSpan="12">
-                                                                        <div className='table-responsive bg-dark'>
-                                                                            <table className="table table_home   ">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>#</th>
-                                                                                        <th>Trading price	</th>
-                                                                                        <th>Executed</th>
-                                                                                        <th>Trading Fee</th>
-                                                                                        <th>Total</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    {item.executed_prices.map((trade, i) => (
-                                                                                        <tr key={i}>
-                                                                                            <td>{i + 1}</td>
-                                                                                            <td >{nineDecimalFormat(trade.price)} {item?.side === "BUY" ? `${item?.pay_currency}` : `${item?.ask_currency}`}</td>
-                                                                                            <td>{nineDecimalFormat(trade.quantity)} {item?.side === "BUY" ? `${item?.ask_currency}` : `${item?.pay_currency}`}</td>
-                                                                                            <td>{nineDecimalFormat(+trade.fee)} {item?.ask_currency}</td>
-                                                                                            <td>{nineDecimalFormat(+trade.price * trade.quantity)}</td>
-                                                                                        </tr>
-                                                                                    ))}
-                                                                                </tbody>
-                                                                            </table>
+                                            </div>
+                                        </div>
+
+                                        <div className='order_history_mobile_view'>
+
+                                            <div className='d-flex'>
+                                                <div className='order_datalist'>
+                                                    <ul className='listdata'>
+                                                        <li>
+                                                            <span className='date'>USDT (TRC20)</span>
+                                                            <span className='date_light'>2025-08-14</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Time</span>
+                                                            <span>12:00:00</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Currency Pair</span>
+                                                            <span>BTC/USD</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Side</span>
+                                                            <span>Buy</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Price</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        {showAllListItems[0] && (
+                                                            <>
+                                                                <li>
+                                                                    <span>Average</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Quantity</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Remaining</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Total</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Fee</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Order Type</span>
+                                                                    <span>Market</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-success'>Executed</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-danger'>Executed</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-warning'>Executed</span>
+                                                                </li>
+                                                            </>
+                                                        )}
+                                                    </ul>
+                                                    <button
+                                                        type="button"
+                                                        className="view_more_btn"
+                                                        onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                                    >
+                                                        {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+
+                                                    </button>
+
+                                                    <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                        <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                            <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                        </button>
+                                                        {showExecutedTrades[0] && (
+                                                            <div className='executed_trades_list_items'>
+                                                                <ul>
+                                                                    <li>Trade #1:</li>
+                                                                    <li>Trading Price: <span>10000</span></li>
+                                                                    <li>Executed: <span>10000</span></li>
+                                                                    <li>Trading Fee: <span>10000</span></li>
+                                                                    <li>Total: <span>10000</span></li>
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className={`cnt_table open ${positionOrderTab === "open" ? "active" : ""}`}>
+
+                                        <div className="desktop_view2">
+                                            <div className="table-responsive" style={{ height: '353px' }} >
+                                                <table className="table table_home ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Trading Pair</th>
+                                                            <th> <div className="num-div justify-content-start">
+                                                                <select className=" form-select num-select p-0 input-select cursor-pointer" value={pastOrderType} onChange={(e) => { setpastOrderType(e.target.value) }}>
+                                                                    <option value="All">All</option>
+                                                                    <option value="BUY">Buy</option>
+                                                                    <option value="SELL">Sell</option>
+                                                                </select>
+                                                            </div></th>
+                                                            <th>Price</th>
+                                                            <th>Average</th>
+                                                            <th>Quantity</th>
+                                                            <th>Remaining</th>
+                                                            <th>Total</th>
+                                                            <th>Fee</th>
+                                                            <th>Order Type</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {pastOrders?.length > 0 ? pastOrders.map((item, index) =>
+                                                            (item?.side === pastOrderType || pastOrderType === "All") &&
+                                                            <>
+                                                                <tr key={index} onClick={() => setExpandedRowIndex(expandedRowIndex === index ? null : index)} className="cursor-pointer">
+                                                                    <td>
+
+                                                                        <div className="c_view justify-content-start">
+                                                                            {item?.executed_prices?.length > 0 && (
+                                                                                <p className="ms-2 mx-2 text-xl d-inline text-success">{expandedRowIndex === index ? '▾' : '▸'}</p>
+                                                                            )}
+                                                                            <span>{moment(item?.updatedAt).format("DD/MM/YYYY")}
+                                                                                <small>{moment(item?.updatedAt).format("hh:mm")}</small>
+                                                                            </span>
                                                                         </div>
                                                                     </td>
+                                                                    <td>{item?.side === "BUY" ? `${item?.ask_currency}/${item?.pay_currency}` : `${item?.pay_currency}/${item?.ask_currency}`}</td>
+                                                                    <td>{item?.side}</td>
+                                                                    <td>{nineDecimalFormat(item?.price)}</td>
+                                                                    <td>{nineDecimalFormat(item?.avg_execution_price)}</td>
+                                                                    <td>{nineDecimalFormat(item?.quantity)}</td>
+                                                                    <td>{nineDecimalFormat(item?.remaining)}</td>
+                                                                    <td>{nineDecimalFormat(item?.quantity * item?.avg_execution_price)}</td>
+                                                                    <td>{nineDecimalFormat(item?.total_fee)} {item?.ask_currency}</td>
+                                                                    <td>{item?.order_type}</td>
+                                                                    <td className={`text-${item?.status === "FILLED" ? "success" : item?.status === "CANCELLED" ? "danger" : "warning"}`}>
+                                                                        {item?.status === 'FILLED' ? 'EXECUTED' : item?.status}
+
+                                                                    </td>
                                                                 </tr>
-                                                            )}
-                                                        </>
 
-                                                    ) : <tr rowSpan="5">
+                                                                {/* Sub-row for executed trades */}
+                                                                {expandedRowIndex === index && item?.executed_prices?.length > 0 && (
+                                                                    <tr>
+                                                                        <td colSpan="12">
+                                                                            <div className='table-responsive bg-dark'>
+                                                                                <table className="table table_home   ">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>#</th>
+                                                                                            <th>Trading price	</th>
+                                                                                            <th>Executed</th>
+                                                                                            <th>Trading Fee</th>
+                                                                                            <th>Total</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        {item.executed_prices.map((trade, i) => (
+                                                                                            <tr key={i}>
+                                                                                                <td>{i + 1}</td>
+                                                                                                <td >{nineDecimalFormat(trade.price)} {item?.side === "BUY" ? `${item?.pay_currency}` : `${item?.ask_currency}`}</td>
+                                                                                                <td>{nineDecimalFormat(trade.quantity)} {item?.side === "BUY" ? `${item?.ask_currency}` : `${item?.pay_currency}`}</td>
+                                                                                                <td>{nineDecimalFormat(+trade.fee)} {item?.ask_currency}</td>
+                                                                                                <td>{nineDecimalFormat(+trade.price * trade.quantity)}</td>
+                                                                                            </tr>
+                                                                                        ))}
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )}
+                                                            </>
+
+                                                        ) : <tr rowSpan="5" className="no-data-row">
                                                         <td colSpan="12">
-                                                            <div className="favouriteData">
-                                                                <div className="no_data_s">
-                                                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                                                    <p>No Data Available</p>
-                                                                </div>
+                                                          <div className="no-data-wrapper">
+                                                            <div className="no_data_s">
+                                                              <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                                                             </div>
+                                                          </div>
                                                         </td>
-                                                    </tr>}
-                                                </tbody>
-                                            </table>
+                                                      </tr>}
+                                                    </tbody>
+                                                </table>
 
+                                            </div>
                                         </div>
+                                        <div className='order_history_mobile_view'>
+
+                                            <div className='d-flex'>
+                                                <div className='order_datalist'>
+                                                    <ul className='listdata'>
+                                                        <li>
+                                                            <span className='date'>USDT (TRC20)</span>
+                                                            <span className='date_light'>2025-08-14</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Time</span>
+                                                            <span>12:00:00</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Currency Pair</span>
+                                                            <span>BTC/USD</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Side</span>
+                                                            <span>Buy</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Price</span>
+                                                            <span>10000</span>
+                                                        </li>
+                                                        {showAllListItems[0] && (
+                                                            <>
+                                                                <li>
+                                                                    <span>Average</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Quantity</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Remaining</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Total</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Fee</span>
+                                                                    <span>10000</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Order Type</span>
+                                                                    <span>Market</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-success'>Executed</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-danger'>Executed</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Status</span>
+                                                                    <span className='text-warning'>Executed</span>
+                                                                </li>
+                                                            </>
+                                                        )}
+                                                    </ul>
+                                                    <button
+                                                        type="button"
+                                                        className="view_more_btn"
+                                                        onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
+                                                    >
+                                                        {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                    </button>
+
+                                                    <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
+                                                        <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
+                                                            <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
+                                                        </button>
+                                                        {showExecutedTrades[0] && (
+                                                            <div className='executed_trades_list_items'>
+                                                                <ul>
+                                                                    <li>Trade #1:</li>
+                                                                    <li>Trading Price: <span>10000</span></li>
+                                                                    <li>Executed: <span>10000</span></li>
+                                                                    <li>Trading Fee: <span>10000</span></li>
+                                                                    <li>Total: <span>10000</span></li>
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
                                     </div>
 
                                 </div>
