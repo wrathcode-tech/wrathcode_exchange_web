@@ -20,6 +20,7 @@ export default function TVChartContainer({ symbol }) {
       return;
     }
     const Theme = sessionStorage.getItem('theme');
+    const isMobile = window.innerWidth <= 480;
 
     const widgetOptions = {
       symbol: `${symbol}`,
@@ -35,7 +36,7 @@ export default function TVChartContainer({ symbol }) {
       intraday_multipliers: ['1', '60'],
       custom_css_url: 'css/style.css',
       hide_resolution_in_legend: true,
-      height: '625px',
+      height: isMobile ? '400px' : '625px',
       time_frames: [
         { text: '1D', resolution: 'D', description: '1 Day' },
         { text: '1W', resolution: 'W', description: '1 Week' },

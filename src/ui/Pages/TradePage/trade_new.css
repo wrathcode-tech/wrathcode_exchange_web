@@ -3394,3 +3394,10 @@ html[data-theme='light'] .bs_tab_row {
         display: flex !important;
     }
 }
+
+@media (max-width: 480px) { 
+  
+    #tab_1{
+      height: 400px !important;
+      } 
+  }

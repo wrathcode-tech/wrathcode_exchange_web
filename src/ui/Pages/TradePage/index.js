@@ -419,6 +419,10 @@ const Trade = () => {
 
 
     const handleOrderPlace = async (infoPlaceOrder, buyprice, buyamount, base_currency_id, quote_currency_id, side) => {
+        // Validate order before placing
+        if (!validateOrder(buyprice, buyamount, side)) {
+            return;
+        }
         LoaderHelper.loaderStatus(true);
         await AuthService.placeOrder(infoPlaceOrder, buyprice, buyamount, base_currency_id, quote_currency_id, side).then((result) => {
             if (result?.success) {
@@ -613,9 +617,106 @@ const Trade = () => {
         }
     };
 
+    // Get decimal places from tick_size or step_size
+    const getDecimalPlaces = (value) => {
+        if (!value || value >= 1) return 0;
+        const str = value.toString();
+        if (str.includes('e-')) {
+            return parseInt(str.split('e-')[1]);
+        }
+        const decimalPart = str.split('.')[1];
+        return decimalPart ? decimalPart.length : 0;
+    };
+
+    // Get price precision based on tick_size
+    const getPricePrecision = () => {
+        const tickSize = SelectedCoin?.tick_size;
+        if (tickSize === undefined || tickSize === null) return 8; // default if no tick_size
+        return getDecimalPlaces(tickSize);
+    };
+
+    // Get quantity precision based on step_size
+    const getQuantityPrecision = () => {
+        const stepSize = SelectedCoin?.step_size;
+        if (stepSize === undefined || stepSize === null) return 8; // default if no step_size
+        return getDecimalPlaces(stepSize);
+    };
+
+    // Format price based on tick_size precision
+    const formatPrice = (price) => {
+        if (price === undefined || price === null || isNaN(price)) return '0';
+        const precision = getPricePrecision();
+        return parseFloat(Number(price).toFixed(precision));
+    };
+
+    // Format quantity based on step_size precision
+    const formatQuantity = (qty) => {
+        if (qty === undefined || qty === null || isNaN(qty)) return '0';
+        const precision = getQuantityPrecision();
+        return parseFloat(Number(qty).toFixed(precision));
+    };
+
+    // Validate order before placing
+    const validateOrder = (price, quantity, side) => {
+        const tick_size = SelectedCoin?.tick_size || 0.01;
+        const step_size = SelectedCoin?.step_size || 0.00001;
+        const min_notional = SelectedCoin?.min_notional || 5;
+        const min_order_qty = SelectedCoin?.min_order_qty || 0.00001;
+        const max_order_qty = SelectedCoin?.max_order_qty || 9000;
+
+        const numPrice = parseFloat(price);
+        const numQuantity = parseFloat(quantity);
+        const total = numPrice * numQuantity;
+
+        // Validate price tick_size
+        const pricePrecision = getDecimalPlaces(tick_size);
+        const priceMultiplier = Math.pow(10, pricePrecision);
+        if (Math.round(numPrice * priceMultiplier) % Math.round(tick_size * priceMultiplier) !== 0) {
+            alertErrorMessage(`Price must be a multiple of ${tick_size}`);
+            return false;
+        }
+
+        // Validate quantity step_size
+        const qtyPrecision = getDecimalPlaces(step_size);
+        const qtyMultiplier = Math.pow(10, qtyPrecision);
+        if (Math.round(numQuantity * qtyMultiplier) % Math.round(step_size * qtyMultiplier) !== 0) {
+            alertErrorMessage(`Quantity must be a multiple of ${step_size}`);
+            return false;
+        }
+
+        // Validate max_order_qty
+        if (numQuantity > max_order_qty) {
+            alertErrorMessage(`Maximum order quantity is ${max_order_qty} ${SelectedCoin?.base_currency}`);
+            return false;
+        }
+
+        // Validate min_notional (minimum order value)
+        if (total < min_notional) {
+            alertErrorMessage(`Minimum order value is ${min_notional} ${SelectedCoin?.quote_currency}`);
+            return false;
+        }
+
+        // Validate insufficient funds
+        if (side === 'BUY') {
+            const availableBalance = BuyCoinBal || 0;
+            if (total > availableBalance) {
+                alertErrorMessage(`Insufficient funds`);
+                return false;
+            }
+        } else if (side === 'SELL') {
+            const availableBalance = SellCoinBal || 0;
+            if (numQuantity > availableBalance) {
+                alertErrorMessage(`Insufficient funds`);
+                return false;
+            }
+        }
+
+        return true;
+    };
 
     const formatTotal = (value) => {
-        const finalValue = value?.toFixed(8)?.replace(/\.?0+$/, '');
+        const precision = getPricePrecision();
+        const finalValue = value?.toFixed(precision)?.replace(/\.?0+$/, '');
         let formattedNum = finalValue?.toString();
         let result = formattedNum?.replace(/^0\.0*/, '');
         const decimalPart = finalValue?.toString()?.split('.')[1];
@@ -638,7 +739,116 @@ const Trade = () => {
         }
     };
 
-    const toFixed8 = (data) => Math.floor(data * 1000000) / 1000000;
+    const toFixed8 = (data) => {
+        const precision = getQuantityPrecision();
+        const multiplier = Math.pow(10, precision);
+        return Math.floor(data * multiplier) / multiplier;
+    };
+
+    // Check if a value being typed could lead to a valid price >= tick_size
+    const isValidPriceInput = (value) => {
+        if (value === '' || value === '0') return true;
+        const tickSize = SelectedCoin?.tick_size || 0.01;
+        const pricePrecision = getPricePrecision();
+
+        // Check decimal precision
+        const regex = new RegExp(`^\\d*\\.?\\d{0,${pricePrecision}}$`);
+        if (!regex.test(value)) return false;
+
+        // If it ends with a dot, allow it (user is still typing)
+        if (value.endsWith('.')) return true;
+
+        const numValue = parseFloat(value);
+        if (isNaN(numValue)) return false;
+
+        // If value is 0, allow (will be validated on submit)
+        if (numValue === 0) return true;
+
+        // Value must be >= tick_size
+        return numValue >= tickSize;
+    };
+
+    // Check if a value being typed could lead to a valid quantity >= step_size
+    const isValidQuantityInput = (value) => {
+        if (value === '' || value === '0') return true;
+        const stepSize = SelectedCoin?.step_size || 0.00001;
+        const qtyPrecision = getQuantityPrecision();
+
+        // Check decimal precision
+        const regex = new RegExp(`^\\d*\\.?\\d{0,${qtyPrecision}}$`);
+        if (!regex.test(value)) return false;
+
+        // If it ends with a dot, allow it (user is still typing)
+        if (value.endsWith('.')) return true;
+
+        const numValue = parseFloat(value);
+        if (isNaN(numValue)) return false;
+
+        // If value is 0, allow (will be validated on submit)
+        if (numValue === 0) return true;
+
+        // Value must be >= step_size
+        return numValue >= stepSize;
+    };
+
+    // Handle price input - strictly block values below tick_size
+    const handlePriceInput = (value, setter) => {
+        if (isValidPriceInput(value)) {
+            setter(value);
+        }
+    };
+
+    // Handle quantity input - strictly block values below step_size
+    const handleQuantityInput = (value, setter) => {
+        if (isValidQuantityInput(value)) {
+            setter(value);
+        }
+    };
+
+    // Round value to nearest step/tick on blur (cleanup)
+    const handlePriceBlur = (value, setter) => {
+        if (value === '' || value === '0' || value === '0.') {
+            setter('');
+            return;
+        }
+        const tickSize = SelectedCoin?.tick_size || 0.01;
+        const numValue = parseFloat(value);
+        if (isNaN(numValue) || numValue === 0) {
+            setter('');
+            return;
+        }
+        // Ensure minimum tick_size
+        if (numValue < tickSize) {
+            setter(tickSize.toString());
+            return;
+        }
+        // Round to nearest tick_size
+        const rounded = Math.round(numValue / tickSize) * tickSize;
+        const precision = getPricePrecision();
+        setter(parseFloat(rounded.toFixed(precision)).toString());
+    };
+
+    const handleQuantityBlur = (value, setter) => {
+        if (value === '' || value === '0' || value === '0.') {
+            setter('');
+            return;
+        }
+        const stepSize = SelectedCoin?.step_size || 0.00001;
+        const numValue = parseFloat(value);
+        if (isNaN(numValue) || numValue === 0) {
+            setter('');
+            return;
+        }
+        // Ensure minimum step_size
+        if (numValue < stepSize) {
+            setter(stepSize.toString());
+            return;
+        }
+        // Round to nearest step_size
+        const rounded = Math.round(numValue / stepSize) * stepSize;
+        const precision = getQuantityPrecision();
+        setter(parseFloat(rounded.toFixed(precision)).toString());
+    };
 
     const maxBuyVolume = Math.max(...BuyOrders.map(order => order.remaining), 1);
     const maxSellVolume = Math.max(...SellOrders.map(order => order.remaining), 1);
@@ -682,28 +892,28 @@ const Trade = () => {
                                     </div>
                                 </div>
 
-                               <ul className="favorites_list_tabs">
-                                   {token && (
-                                       <li>
-                                           <button 
-                                               className={coinFilter === 'FAV' ? 'active' : ''} 
-                                               onClick={() => setcoinFilter('FAV')}
-                                           >
-                                               Favourites
-                                           </button>
-                                       </li>
-                                   )}
-                                   {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)),"BTC","BNB","ETH"].map((quoteCurrency, idx) => (
-                                       <li key={idx}>
-                                           <button 
-                                               className={coinFilter === quoteCurrency ? 'active' : ''} 
-                                               onClick={() => setcoinFilter(quoteCurrency)}
-                                           >
-                                               {quoteCurrency}
-                                           </button>
-                                       </li>
-                                   ))}
-                                </ul> 
+                                <ul className="favorites_list_tabs">
+                                    {token && (
+                                        <li>
+                                            <button
+                                                className={coinFilter === 'FAV' ? 'active' : ''}
+                                                onClick={() => setcoinFilter('FAV')}
+                                            >
+                                                Favourites
+                                            </button>
+                                        </li>
+                                    )}
+                                    {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)), "BTC", "BNB", "ETH"].map((quoteCurrency, idx) => (
+                                        <li key={idx}>
+                                            <button
+                                                className={coinFilter === quoteCurrency ? 'active' : ''}
+                                                onClick={() => setcoinFilter(quoteCurrency)}
+                                            >
+                                                {quoteCurrency}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
 
                                 {/* Table */}
                                 <div className="price_card table-responsive">
@@ -729,7 +939,7 @@ const Trade = () => {
                                                     if (coinFilter !== "FAV" && (data?.quote_currency !== coinFilter && data?.base_currency !== coinFilter)) {
                                                         return null;
                                                     }
-                                                  
+
 
                                                     const isActive =
                                                         SelectedCoin?.base_currency === data?.base_currency &&
@@ -776,7 +986,7 @@ const Trade = () => {
                                                                                     : "text-danger"
                                                                             }
                                                                         >
-                                                                         {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
+                                                                            {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
                                                                         </span>
                                                                         <span className="tokensubcnt">{parseFloat(data?.change?.toFixed(5)) || 0}</span>
                                                                     </div>
@@ -996,18 +1206,18 @@ const Trade = () => {
                                 {/* tab 1 */}
                                 <div id="tab_1" className={`cc_tab ${showTab !== "chart" && "d-none"}`} >
                                     {!SelectedCoin?.base_currency ?
-                                        <div style={{ width: '100%', }}>
-                                            <div className="loading-wave" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                                                <div className="loading-bar"></div>
-                                                <div className="loading-bar"></div>
-                                                <div className="loading-bar"></div>
-                                                <div className="loading-bar"></div>
-                                            </div>
+                                        <div style={{ width: '100%', height: '100%',  alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                                                <div className="spinner-border text-primary" role="status" />
+
                                         </div> :
+                                        
                                         // <></>
                                         <TVChartContainer symbol={`${SelectedCoin?.base_currency}/${SelectedCoin?.quote_currency}`} />
                                     }
+
                                 </div>
+
+
                                 {/* tab 2 */}
                                 <div id="tab_2" className={`cc_tab ${showTab !== "token_info" && "d-none"}`} >
                                     <div className="inf_row scroll_y" >
@@ -1105,15 +1315,15 @@ const Trade = () => {
 
                                                             {/* SELL ORDERS */}
                                                             <div className="price_card_body2">
-                                                            <table className="table table-sm table-borderless mb-0 orderbook-table">
-                                                            <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
+                                                                <table className="table table-sm table-borderless mb-0 orderbook-table">
+                                                                    <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bs-body-bg, #12121a)', display: 'table-header-group' }}>
                                                                         <tr>
                                                                             <th style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Price ({SelectedCoin?.quote_currency})</th>
                                                                             <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Quantity ({SelectedCoin?.base_currency})</th>
                                                                             <th className="text-end" style={{ position: 'sticky', top: 0, background: 'var(--bs-body-bg, #12121a)' }}>Total ({SelectedCoin?.quote_currency})</th>
                                                                         </tr>
                                                                     </thead>
-                                                            </table>
+                                                                </table>
                                                             </div>
                                                             <div className="price_card_body scroll_y scroll_y_reverse" style={{ position: 'relative', minHeight: '200px' }}>
                                                                 {loader && (!SellOrders || SellOrders.length === 0) ? (
@@ -1129,39 +1339,44 @@ const Trade = () => {
                                                                                         ? Math.min((data.remaining / maxSellVolume) * 100, 100)
                                                                                         : 0;
 
-                                                                                    return (
-                                                                                        <tr
-                                                                                            key={index}
-                                                                                            style={{
-                                                                                                cursor: "pointer",
-                                                                                                background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
-                                                                                            }}
-                                                                                            onClick={() => {
-                                                                                                setbuyamount(data.remaining.toFixed(8));
-                                                                                                infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
-                                                                                            }}
-                                                                                        >
-                                                                                            <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
-                                                                                            <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
-                                                                                            <td className="text-danger text-end">
-                                                                                                {(data.price * data.remaining).toFixed(priceDecimal)}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    );
-                                                                                })
-                                                                            ) : null}
-                                                                        </tbody>
-                                                                    </table>
+                                                                                return (
+                                                                                    <tr
+                                                                                        key={index}
+                                                                                        style={{
+                                                                                            cursor: "pointer",
+                                                                                            background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
+                                                                                        }}
+                                                                                        onClick={() => {
+                                                                                            setbuyamount(formatQuantity(data.remaining));
+                                                                                            infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
+                                                                                        }}
+                                                                                    >
+                                                                                        <td className="text-danger">{formatPrice(data.price)}</td>
+                                                                                        <td className="text-end">{formatQuantity(data.remaining)}</td>
+                                                                                        <td className="text-danger text-end">
+                                                                                            {formatPrice(data.price * data.remaining)}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })
+                                                                        ) : (
+                                                                            <tr>
+                                                                                <td colSpan="3" className="text-center">
+                                                                                    <div className="spinner-border text-primary" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        )}
+                                                                    </tbody>
+                                                                </table>
                                                                 )}
                                                             </div>
 
-                                                            {/* MARKET PRICE */}
                                                             <div className="mrkt_trde_tab justify-content-center">
                                                                 <b className={isPricePositive ? "text-green" : "text-danger"}>
-                                                                    {buyprice?.toFixed(8)}
+                                                                    {formatPrice(buyprice)}
                                                                 </b>
                                                                 <i className={`ri-arrow-${isPricePositive ? "up" : "down"}-line ri-xl mx-3 ${isPricePositive ? "text-green" : "text-danger"}`} />
-                                                                <span>{priceChange?.toFixed(priceDecimal)}%</span>
+                                                                <span>{parseFloat(priceChange?.toFixed(2))}%</span>
                                                             </div>
 
                                                             {/* BUY ORDERS */}
@@ -1186,29 +1401,35 @@ const Trade = () => {
                                                                                         ? Math.min((data.remaining / maxBuyVolume) * 100, 100)
                                                                                         : 0;
 
-                                                                                    return (
-                                                                                        <tr
-                                                                                            key={index}
-                                                                                            style={{
-                                                                                                cursor: "pointer",
-                                                                                                background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
-                                                                                            }}
-                                                                                            onClick={() => {
-                                                                                                setsellAmount(data.remaining.toFixed(8));
-                                                                                                infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
-                                                                                            }}
-                                                                                        >
-                                                                                            <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
-                                                                                            <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
-                                                                                            <td className="text-green text-end">
-                                                                                                {(data.price * data.remaining).toFixed(priceDecimal)}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    );
-                                                                                })
-                                                                            ) : null}
-                                                                        </tbody>
-                                                                    </table>
+                                                                                return (
+                                                                                    <tr
+                                                                                        key={index}
+                                                                                        style={{
+                                                                                            cursor: "pointer",
+                                                                                            background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
+                                                                                        }}
+                                                                                        onClick={() => {
+                                                                                            setsellAmount(formatQuantity(data.remaining));
+                                                                                            infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
+                                                                                        }}
+                                                                                    >
+                                                                                        <td className="text-green">{formatPrice(data.price)}</td>
+                                                                                        <td className="text-end">{formatQuantity(data.remaining)}</td>
+                                                                                        <td className="text-green text-end">
+                                                                                            {formatPrice(data.price * data.remaining)}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })
+                                                                        ) : (
+                                                                            <tr>
+                                                                                <td colSpan="3" className="text-center">
+                                                                                    <div className="spinner-border text-primary" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        )}
+                                                                    </tbody>
+                                                                </table>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -1240,14 +1461,14 @@ const Trade = () => {
                                                                                         background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
                                                                                     }}
                                                                                     onClick={() => {
-                                                                                        setsellAmount(data.remaining.toFixed(8));
-                                                                                        infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                        setsellAmount(formatQuantity(data.remaining));
+                                                                                        infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
                                                                                     }}
                                                                                 >
-                                                                                    <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
-                                                                                    <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-green">{formatPrice(data.price)}</td>
+                                                                                    <td className="text-end">{formatQuantity(data.remaining)}</td>
                                                                                     <td className="text-green text-end">
-                                                                                        {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                        {formatPrice(data.price * data.remaining)}
                                                                                     </td>
                                                                                 </tr>
                                                                             );
@@ -1284,14 +1505,14 @@ const Trade = () => {
                                                                                         background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
                                                                                     }}
                                                                                     onClick={() => {
-                                                                                        setbuyamount(data.remaining.toFixed(8));
-                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                        setbuyamount(formatQuantity(data.remaining));
+                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
                                                                                     }}
                                                                                 >
-                                                                                    <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
-                                                                                    <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                    <td className="text-danger">{formatPrice(data.price)}</td>
+                                                                                    <td className="text-end">{formatQuantity(data.remaining)}</td>
                                                                                     <td className="text-danger text-end">
-                                                                                        {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                        {formatPrice(data.price * data.remaining)}
                                                                                     </td>
                                                                                 </tr>
                                                                             );
@@ -1615,15 +1836,15 @@ const Trade = () => {
                                                                                                         background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
                                                                                                     }}
                                                                                                     onClick={() => {
-                                                                                                        setbuyamount(data.remaining.toFixed(8));
-                                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                                        setbuyamount(formatQuantity(data.remaining));
+                                                                                                        infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
                                                                                                     }}
                                                                                                 >
                                                                                                     <td className="text-danger">
-                                                                                                        {data.price.toFixed(priceDecimal)}
+                                                                                                        {formatPrice(data.price)}
                                                                                                     </td>
                                                                                                     <td className="text-end">
-                                                                                                        {data.remaining.toFixed(priceDecimal)}
+                                                                                                        {formatQuantity(data.remaining)}
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             );
@@ -1648,7 +1869,7 @@ const Trade = () => {
                                                                     {/* MARKET PRICE */}
                                                                     <div className="mrkt_trde_tab justify-content-center">
                                                                         <b className={isPricePositive ? "text-green" : "text-danger"}>
-                                                                            {buyprice?.toFixed(8)}
+                                                                            {formatPrice(buyprice)}
                                                                         </b>
                                                                         <i
                                                                             className={
@@ -1657,7 +1878,7 @@ const Trade = () => {
                                                                                     : "ri-arrow-down-line ri-xl mx-3 text-danger"
                                                                             }
                                                                         />
-                                                                        <span>{priceChange?.toFixed(priceDecimal)}%</span>
+                                                                        <span>{parseFloat(priceChange?.toFixed(2))}%</span>
                                                                     </div>
 
                                                                     {/* BUY ORDERS */}
@@ -1678,15 +1899,15 @@ const Trade = () => {
                                                                                                     background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
                                                                                                 }}
                                                                                                 onClick={() => {
-                                                                                                    setsellAmount(data.remaining.toFixed(8));
-                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                                    setsellAmount(formatQuantity(data.remaining));
+                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
                                                                                                 }}
                                                                                             >
                                                                                                 <td className="text-green">
-                                                                                                    {data.price.toFixed(priceDecimal)}
+                                                                                                    {formatPrice(data.price)}
                                                                                                 </td>
                                                                                                 <td className="text-end">
-                                                                                                    {data.remaining.toFixed(priceDecimal)}
+                                                                                                    {formatQuantity(data.remaining)}
                                                                                                 </td>
                                                                                             </tr>
                                                                                         );
@@ -1736,14 +1957,14 @@ const Trade = () => {
                                                                                                     background: `linear-gradient(to left, ${orderBookColor?.buy} ${fill}%, transparent ${fill}%)`
                                                                                                 }}
                                                                                                 onClick={() => {
-                                                                                                    setsellAmount(data.remaining.toFixed(8));
-                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(data.price);
+                                                                                                    setsellAmount(formatQuantity(data.remaining));
+                                                                                                    infoPlaceOrder !== "MARKET" && setsellOrderPrice(formatPrice(data.price));
                                                                                                 }}
                                                                                             >
-                                                                                                <td className="text-green">{data.price.toFixed(priceDecimal)}</td>
-                                                                                                <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-green">{formatPrice(data.price)}</td>
+                                                                                                <td className="text-end">{formatQuantity(data.remaining)}</td>
                                                                                                 <td className="text-green text-end">
-                                                                                                    {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                                    {formatPrice(data.price * data.remaining)}
                                                                                                 </td>
                                                                                             </tr>
                                                                                         );
@@ -1786,14 +2007,14 @@ const Trade = () => {
                                                                                                     background: `linear-gradient(to left, ${orderBookColor?.sell} ${fill}%, transparent ${fill}%)`
                                                                                                 }}
                                                                                                 onClick={() => {
-                                                                                                    setbuyamount(data.remaining.toFixed(8));
-                                                                                                    infoPlaceOrder !== "MARKET" && setbuyOrderPrice(data.price);
+                                                                                                    setbuyamount(formatQuantity(data.remaining));
+                                                                                                    infoPlaceOrder !== "MARKET" && setbuyOrderPrice(formatPrice(data.price));
                                                                                                 }}
                                                                                             >
-                                                                                                <td className="text-danger">{data.price.toFixed(priceDecimal)}</td>
-                                                                                                <td className="text-end">{data.remaining.toFixed(priceDecimal)}</td>
+                                                                                                <td className="text-danger">{formatPrice(data.price)}</td>
+                                                                                                <td className="text-end">{formatQuantity(data.remaining)}</td>
                                                                                                 <td className="text-danger text-end">
-                                                                                                    {(data.price * data.remaining).toFixed(priceDecimal)}
+                                                                                                    {formatPrice(data.price * data.remaining)}
                                                                                                 </td>
                                                                                             </tr>
                                                                                         );
@@ -1856,15 +2077,10 @@ const Trade = () => {
                                                                             <label>Price</label>
                                                                             <div className="input-group">
                                                                                 {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"---Best Market Price---"} readOnly /> : <input type="text" className="form-control" disabled={infoPlaceOrder === 'MARKET'} value={buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : formatTotal(buyprice)}
-
-                                                                                    onChange={(e) => {
-                                                                                        const value = e.target.value;
-                                                                                        const regex = /^\d{0,8}(\.\d{0,8})?$/;
-                                                                                        if (regex.test(value) || value === '') {
-                                                                                            setbuyOrderPrice(value);
-                                                                                        }
-                                                                                    }}
-
+                                                                                    step={SelectedCoin?.tick_size || 0.01}
+                                                                                    min={SelectedCoin?.tick_size || 0.01}
+                                                                                    onChange={(e) => handlePriceInput(e.target.value, setbuyOrderPrice)}
+                                                                                    onBlur={(e) => handlePriceBlur(e.target.value, setbuyOrderPrice)}
                                                                                 />}
 
                                                                                 <span className="input-group-text text-start"><small>  {SelectedCoin?.quote_currency}</small></span>
@@ -1873,12 +2089,11 @@ const Trade = () => {
                                                                         <div className="form-group  mb-3" >
                                                                             <label>Amount</label>
                                                                             <div className="input-group ">
-                                                                                <input type="number" aria-invalid="true" className="form-control" value={buyamount}
-                                                                                    onChange={(e) => {
-                                                                                        if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
-                                                                                            setbuyamount(e.target.value)
-                                                                                        }
-                                                                                    }}
+                                                                                <input type="text" aria-invalid="true" className="form-control" value={buyamount}
+                                                                                    step={SelectedCoin?.step_size || 0.00001}
+                                                                                    min={SelectedCoin?.step_size || 0.00001}
+                                                                                    onChange={(e) => handleQuantityInput(e.target.value, setbuyamount)}
+                                                                                    onBlur={(e) => handleQuantityBlur(e.target.value, setbuyamount)}
                                                                                 />
                                                                                 <span className="input-group-text text-start"><small> {SelectedCoin?.base_currency}</small></span>
                                                                             </div>
@@ -1894,7 +2109,7 @@ const Trade = () => {
                                                                         </div>
                                                                         <div className="form-group" >
                                                                             <div className="btn-group btn-group-mini  mb-3 process_step" role="group" aria-label="Basic radio toggle button group">
-                                                                             
+
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio125" autoComplete="off" checked={activeBuyPercent === 25} readOnly />
                                                                                 <label className={`btn btn-outline-success ${activeBuyPercent === 25 ? 'active' : ''}`} htmlFor="btnradio125" onClick={() => { setActiveBuyPercent(25); setbuyamount(toFixed8(((BuyCoinBal / 100) * 25) / (buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice))) }} >25%</label>
                                                                                 <input type="radio" className="btn-check" name="btnradio" id="btnradio250" autoComplete="off" checked={activeBuyPercent === 50} readOnly />
@@ -1909,18 +2124,15 @@ const Trade = () => {
                                                                         {/* <small className="mb-2">Minimal Buy : 10 USDT</small> */}
                                                                         <>
                                                                             {token ?
-                                                                                KycStatus === 0 || KycStatus == 1 || KycStatus == 3 ?
-                                                                                    <Link to={KycStatus == 1 ? "" : '/user_profile/kyc'
-                                                                                    } className={`btn custom-btn w-100 btn-mini w-100 my-3 my-md-0 ${KycStatus === 1 ? "btn-warning" : KycStatus === 0 ? "btn-warning" : "btn-danger"}`}>
-                                                                                        {KycStatus == 1 ? "Verification Pending" : KycStatus == 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
+                                                                                KycStatus === 0 || KycStatus === 1 || KycStatus === 3 ?
+                                                                                    <Link to={KycStatus === 1 ? "" : '/user_profile/kyc'
+                                                                                    } className={`btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0`}>
+                                                                                        {KycStatus === 1 ? "Verification Pending" : KycStatus === 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
                                                                                     </Link> :
-                                                                                    nineDecimalFormat(+buyprice * +buyamount) < 10 ?
-                                                                                        <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0" disabled >
-                                                                                            Buy {SelectedCoin?.base_currency}
-                                                                                        </button> : <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
-                                                                                            onClick={() => handleOrderPlace(infoPlaceOrder, buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice, buyamount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'BUY')}>
-                                                                                            Buy {SelectedCoin?.base_currency}
-                                                                                        </button>
+                                                                                    <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
+                                                                                        onClick={() => handleOrderPlace(infoPlaceOrder, buyOrderPrice !== undefined || buyOrderPrice ? buyOrderPrice : buyprice, buyamount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'BUY')}>
+                                                                                        Buy {SelectedCoin?.base_currency}
+                                                                                    </button>
                                                                                 :
                                                                                 <div className="order-btns my-2" >
                                                                                     <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
@@ -1953,18 +2165,12 @@ const Trade = () => {
                                                                             <div className="input-group ">
                                                                                 {infoPlaceOrder === 'MARKET' ? <input type="text" className="form-control" value={"Best Market Price"} readOnly />
                                                                                     :
-
                                                                                     <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" value={sellOrderPrice !== undefined || sellOrderPrice ? sellOrderPrice : formatTotal(sellPrice)}
-
-                                                                                        onChange={(e) => {
-                                                                                            if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
-                                                                                                setsellOrderPrice(e.target.value)
-                                                                                            }
-                                                                                        }}
-
+                                                                                        step={SelectedCoin?.tick_size || 0.01}
+                                                                                        min={SelectedCoin?.tick_size || 0.01}
+                                                                                        onChange={(e) => handlePriceInput(e.target.value, setsellOrderPrice)}
+                                                                                        onBlur={(e) => handlePriceBlur(e.target.value, setsellOrderPrice)}
                                                                                         disabled={infoPlaceOrder === 'MARKET'} />}
-
-
 
                                                                                 <span className="input-group-text text-start" ><small> {SelectedCoin?.quote_currency}</small></span>
                                                                             </div>
@@ -1973,11 +2179,10 @@ const Trade = () => {
                                                                             <label>Amount</label>
                                                                             <div className="input-group ">
                                                                                 <input type="text" aria-invalid="true" className="form-control" aria-label="Amount (to the nearest dollar)" value={sellAmount}
-                                                                                    onChange={(e) => {
-                                                                                        if (/^\d{0,8}(\.\d{0,8})?$/.test(e.target.value) || e.target.value === '') {
-                                                                                            setsellAmount(e.target.value)
-                                                                                        }
-                                                                                    }}
+                                                                                    step={SelectedCoin?.step_size || 0.00001}
+                                                                                    min={SelectedCoin?.step_size || 0.00001}
+                                                                                    onChange={(e) => handleQuantityInput(e.target.value, setsellAmount)}
+                                                                                    onBlur={(e) => handleQuantityBlur(e.target.value, setsellAmount)}
                                                                                 />
                                                                                 <span className="input-group-text text-start"><small>{SelectedCoin?.base_currency}</small></span>
                                                                             </div>
@@ -2009,18 +2214,15 @@ const Trade = () => {
                                                                         <>
 
                                                                             {token ?
-                                                                                KycStatus === 0 || KycStatus == 1 || KycStatus == 3 ?
-                                                                                    <Link to={KycStatus == 1 ? "" : '/user_profile/kyc'
-                                                                                    } className={`btn custom-btn w-100 btn-mini w-100 my-3 my-md-0 ${KycStatus === 1 ? "btn-warning" : KycStatus === 0 ? "btn-warning" : "btn-danger"}`}>
-                                                                                        {KycStatus == 1 ? "Verification Pending" : KycStatus == 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
+                                                                                KycStatus === 0 || KycStatus === 1 || KycStatus === 3 ?
+                                                                                    <Link to={KycStatus === 1 ? "" : '/user_profile/kyc'
+                                                                                    } className={`btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0`}>
+                                                                                        {KycStatus === 1 ? "Verification Pending" : KycStatus === 0 ? "Submit Kyc" : "Kyc Rejected Verify Again"}
                                                                                     </Link> :
-                                                                                    sellAmount < nineDecimalFormat(10 / SelectedCoin?.buy_price) ?
-                                                                                        <button button type='button' className="btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0" disabled >
-                                                                                            Sell {SelectedCoin?.base_currency}
-                                                                                        </button> : <button button type='button' className="btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0"
-                                                                                            onClick={() => handleOrderPlace(infoPlaceOrder, sellOrderPrice !== undefined || sellOrderPrice ? sellOrderPrice : sellPrice, sellAmount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'SELL')} disabled={!sellAmount || !token || sellAmount === '0'}>
-                                                                                            Sell {SelectedCoin?.base_currency}
-                                                                                        </button>
+                                                                                    <button type='button' className="btn custom-btn btn-danger btn-mini w-100 my-3 my-md-0"
+                                                                                        onClick={() => handleOrderPlace(infoPlaceOrder, sellOrderPrice !== undefined || sellOrderPrice ? sellOrderPrice : sellPrice, sellAmount, SelectedCoin?.base_currency_id, SelectedCoin?.quote_currency_id, 'SELL')} disabled={!sellAmount || !token || sellAmount === '0'}>
+                                                                                        Sell {SelectedCoin?.base_currency}
+                                                                                    </button>
                                                                                 :
                                                                                 <div className="order-btns my-2" >
                                                                                     <button type='button' className="btn custom-btn btn-success btn-mini  w-100 my-3 my-md-0"
@@ -2042,8 +2244,8 @@ const Trade = () => {
 
 
                                                             <div className="freerate">
-                                                            <span>Fee rate</span>  Maker 0%/ Taker 0.01%
-                                                        </div>
+                                                                <span>Fee rate</span>  Maker 0%/ Taker 0.01%
+                                                            </div>
 
                                                         </div>
 
@@ -2379,25 +2581,25 @@ const Trade = () => {
                                 <ul className="favorites_list_tabs">
                                     {token && (
                                         <li>
-                                            <button 
-                                                className={coinFilter === 'FAV' ? 'active' : ''} 
+                                            <button
+                                                className={coinFilter === 'FAV' ? 'active' : ''}
                                                 onClick={() => setcoinFilter('FAV')}
                                             >
                                                 Favourites
                                             </button>
                                         </li>
                                     )}
-                                    {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)),"BTC","BNB","ETH"].map((quoteCurrency, idx) => (
+                                    {CoinPairDetails && [...new Set(CoinPairDetails.map(item => item?.quote_currency)), "BTC", "BNB", "ETH"].map((quoteCurrency, idx) => (
                                         <li key={idx}>
-                                            <button 
-                                                className={coinFilter === quoteCurrency ? 'active' : ''} 
+                                            <button
+                                                className={coinFilter === quoteCurrency ? 'active' : ''}
                                                 onClick={() => setcoinFilter(quoteCurrency)}
                                             >
                                                 {quoteCurrency}
                                             </button>
                                         </li>
                                     ))}
-                                </ul> 
+                                </ul>
 
                                 {/* Table */}
                                 <div className="price_card table-responsive">
@@ -2469,7 +2671,7 @@ const Trade = () => {
                                                                                     : "text-danger"
                                                                             }
                                                                         >
-                                                                         {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
+                                                                            {data?.change_percentage >= 0 ? `+${Number(parseFloat(data?.change_percentage)?.toFixed(5))}` : Number(parseFloat(data?.change_percentage)?.toFixed(5))}%
                                                                         </span>
                                                                         <span className="tokensubcnt">{parseFloat(data?.change?.toFixed(5)) || 0}</span>
                                                                     </div>

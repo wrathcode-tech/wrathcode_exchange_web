@@ -201,7 +201,7 @@ function Routing() {
         <Route path="/p2p-orders" element={token ? <P2pOrders /> : <Navigate to="/login" replace />} />
         <Route path="/p2p-profile" element={token ? <P2pProfile /> : <Navigate to="/login" replace />} />
       </Routes>
-      {isChartPage || isLoginPage || isSignupPage || isDashboardPages || isAssetPages || isComingSoonPage || isForgotPass || accountVerification || accountActivate || isFuturesPage || isOptionPage ? null : <Footer />}
+      {location.pathname === '/' && <Footer />}
     </>
   );
 }
