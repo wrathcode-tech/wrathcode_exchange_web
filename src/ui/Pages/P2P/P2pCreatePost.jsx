@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { alertErrorMessage, alertSuccessMessage } from '../../../customComponents/CustomAlertMessage';
 import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
@@ -7,6 +8,7 @@ import P2pLayout from './P2pLayout';
 import { ProfileContext } from '../../../context/ProfileProvider';
 
 const P2pCreatePost = () => {
+    const navigate = useNavigate();
     const { userDetails } = useContext(ProfileContext);
 
     // Check if KYC is completed (kycVerified === 2 means verified)
@@ -303,7 +305,8 @@ const P2pCreatePost = () => {
             agree: true,
             completedKyc: false,
             registeredUser: false,
-            registeredDays: "0"
+            registeredDays: "0",
+            status: "ONLINE"
         });
         setSelectedBuyerPaymentMethod([]);
         setSelectedSellerPaymentMethod([]);
@@ -324,6 +327,7 @@ const P2pCreatePost = () => {
             minLimit: formData.min,
             maxLimit: formData.max,
             remarks: formData.remarks,
+            isOnline: formData.status === "ONLINE",
             counterpartyCondition: {
                 isRegisteredCond: formData.registeredUser,
                 registerDays: formData.registeredDays,
@@ -350,6 +354,8 @@ const P2pCreatePost = () => {
                 const modal = window.bootstrap.Modal.getInstance(document.getElementById('confirmpostModal'));
                 if (modal) modal.hide();
                 resetForm();
+                // Navigate to My Ads page to see the created ad
+                navigate('/p2p-my-ads');
             } else {
                 LoaderHelper.loaderStatus(false);
                 alertErrorMessage(result?.message);

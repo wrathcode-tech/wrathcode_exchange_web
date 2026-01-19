@@ -216,7 +216,7 @@ const P2pProfile = () => {
 
     return (
         <P2pLayout title="User Profile">
-            <div className="p2p-dashboard-container">
+            <div className="p2p-dashboard-container p2p-profile-container">
                 {/* Profile Header */}
                 <div className="p2p-profile-header">
                     <div className="p2p-profile-header-inner mobileview">
@@ -299,7 +299,7 @@ const P2pProfile = () => {
                 </div>
 
                 {/* Tabs */}
-
+<div className="p2p-profile-tabs paymentprofiletabs">
                 <h4 className='p2p-profile-tab'>
                     <i className={"ri-bank-card-line"}></i> P2P Payment Methods
 
@@ -433,6 +433,7 @@ const P2pProfile = () => {
                         <p>No data available</p>
                     </div>
                 )}
+                </div>
             </div>
 
             {/* Add Payment Method Modal */}
