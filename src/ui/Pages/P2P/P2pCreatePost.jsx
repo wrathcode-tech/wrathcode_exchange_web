@@ -367,6 +367,8 @@ const P2pCreatePost = () => {
 
             if (result?.success) {
                 const fiatList = result?.data || [];
+                console.log(fiatList,'fiatListfiatList>');
+                
                 setFiats(fiatList);
 
                 // Set default fiat: INR if exists, otherwise first item
@@ -945,7 +947,7 @@ const P2pCreatePost = () => {
 
         return (
             <div style={styles.previewCard}>
-                {/* Header */}
+              
                 <div style={{
                     padding: isMobile ? '16px' : '20px 24px',
                     background: formData.side === 'BUY' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)',
@@ -1245,29 +1247,36 @@ const P2pCreatePost = () => {
                                     <div className="p2p-create-post-grid-two-col">
                                         <div className="p2p-create-post-input-group">
                                             <label className="p2p-create-post-label">Price Type</label>
-                                            <select
-                                                className="p2p-create-post-select"
-                                                value={formData.priceType}
-                                                onChange={(e) => handleInput("priceType", e.target.value)}
-                                            >
-                                                <option value="FIXED">Fixed</option>
-                                            </select>
-                                        </div>
-                                        <div className="p2p-create-post-input-group">
-                                            <label className="p2p-create-post-label">Fixed Price</label>
-                                            <div className={getInputClass('fixedPrice', 'p2p-create-post-input-with-suffix')}>
-                                                <input
-                                                    type="number"
-                                                    className="p2p-create-post-input-inner"
-                                                    value={formData.fixedPrice}
-                                                    onChange={(e) => handleInput("fixedPrice", e.target.value)}
-                                                    placeholder="e.g. 85.50"
-                                                    onWheel={(e) => e.target.blur()}
-                                                />
-                                                <span className="p2p-create-post-input-suffix">{formData.fiat}</span>
+                                            <div className="p2p-radio-group">
+                                                <label className="p2p-radio-label">
+                                                    <input
+                                                        type="radio"
+                                                        name="priceType"
+                                                        value="FIXED"
+                                                        checked={formData.priceType === "FIXED"}
+                                                        onChange={(e) => handleInput("priceType", e.target.value)}
+                                                        className="p2p-radio-input"
+                                                    />
+                                                    <span className="p2p-radio-text">Fixed Price</span>
+                                                </label>
                                             </div>
-                                            <FieldError fieldName="fixedPrice" />
                                         </div>
+
+                                    </div>
+                                    <div className="p2p-create-post-input-group mt-3">
+                                        <label className="p2p-create-post-label">Fixed Price</label>
+                                        <div className={getInputClass('fixedPrice', 'p2p-create-post-input-with-suffix')}>
+                                            <input
+                                                type="number"
+                                                className="p2p-create-post-input-inner"
+                                                value={formData.fixedPrice}
+                                                onChange={(e) => handleInput("fixedPrice", e.target.value)}
+                                                placeholder="e.g. 85.50"
+                                                onWheel={(e) => e.target.blur()}
+                                            />
+                                            <span className="p2p-create-post-input-suffix">{formData.fiat}</span>
+                                        </div>
+                                        <FieldError fieldName="fixedPrice" />
                                     </div>
                                 </div>
 
@@ -1298,8 +1307,34 @@ const P2pCreatePost = () => {
                                     )}
                                 </div>
 
-                                <div style={styles.buttonGroup}>
-                                    <button style={styles.btnPrimary} onClick={nextStep}>
+                                <div className='pricehigh_box'>
+                                    <div className='pricehigh_box_item_container d-flex align-items-center '>
+                                        <div className='pricehigh_box_item'>
+                                            <div className='pricehigh_box_item_title'>
+                                                <span>Your Price</span>
+                                                ₹1,614.00
+                                            </div>
+                                        </div>
+                                        <div className='pricehigh_box_item'>
+                                            <div className='pricehigh_box_item_title'>
+                                                <span>Highest Order Price</span>
+                                                ₹1,814.00
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='helpguide'>
+                                    <i class="ri-question-line"></i> help & Guide
+                                    </div>
+
+                                </div>
+
+
+                                <div className='d-flex align-items-center justify-content-between btnnextback'>
+                                <button className='btn-secondary backbtn' onClick={nextStep}>
+                                        Back
+                                    </button>
+                                    <button className='btn-primary nextbtn' onClick={nextStep}>
                                         Continue
                                     </button>
                                 </div>
@@ -1679,7 +1714,7 @@ const P2pCreatePost = () => {
                     </div>
 
                     {/* Desktop Preview Card */}
-                    {!isTablet && <PreviewCard />}
+                    {/* {!isTablet && <PreviewCard />} */}
                 </div>
             </div>
 

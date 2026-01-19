@@ -315,8 +315,8 @@ h4.p2p-profile-tab:hover {
 }
 
 .selectpaymetpop.modal.fade .modal-dialog {
-    width: 480px;
-    min-width: 480px;
+  width: 480px;
+  min-width: 480px;
 }
 
 .p2p-sidebar::-webkit-scrollbar-thumb:hover {
@@ -345,7 +345,7 @@ h4.p2p-profile-tab:hover {
 .p2p-toggle-wrapper {
   display: flex;
   background: #2B313C;
-  border-radius:6px;
+  border-radius: 6px;
   padding: 4px;
   gap: 4px;
 }
@@ -364,15 +364,17 @@ h4.p2p-profile-tab:hover {
 
 }
 
-.p2p-dashboard-container input:focus { 
+.p2p-dashboard-container input:focus {
   border: 1px solid #ffffff00 !important;
 }
 
-.p2p-dashboard-container select:focus-visible { 
-outline: none !important;
+.p2p-dashboard-container select:focus-visible {
+  outline: none !important;
 }
 
-.binance-chat-input input:focus { border: none !important; }
+.binance-chat-input input:focus {
+  border: none !important;
+}
 
 button:disabled {
   background-color: #181a1f !important;
@@ -389,7 +391,9 @@ button:disabled {
   color: #fff;
 }
 
-.p2p-toggle-btn.p2p-active-buy:hover{   background: #5EBA89; }
+.p2p-toggle-btn.p2p-active-buy:hover {
+  background: #5EBA89;
+}
 
 .p2p-toggle-btn:hover:not(.p2p-active-buy):not(.p2p-active-sell) {
   color: #fff;
@@ -402,7 +406,7 @@ button:disabled {
   flex-wrap: wrap;
   gap: 16px;
   align-items: flex-end;
-  margin-bottom:20px;
+  margin-bottom: 20px;
   padding: 0 8px;
 }
 
@@ -1299,7 +1303,7 @@ button:disabled {
 
   .p2p-sidebar.p2p-open {
     transform: translateX(0);
-    background:#000;
+    background: #000;
   }
 
   .p2p-sidebar-close {
@@ -1825,7 +1829,7 @@ button:disabled {
     padding: 14px 16px 8px;
     background: #1a1a2200;
     border-radius: 10px 10px 0 0;
-    border:1px solid #424251;
+    border: 1px solid #424251;
     border-bottom: none;
   }
 
@@ -1844,7 +1848,7 @@ button:disabled {
     display: flex;
     align-items: center;
     background: #1a1a2200;
-    border:1px solid #424251;
+    border: 1px solid #424251;
     border-top: none;
     border-radius: 0 0 10px 10px;
     padding: 0 16px 14px;
@@ -1885,7 +1889,7 @@ button:disabled {
     justify-content: space-between;
     padding: 14px 16px;
     background: #1a1a2200;
-    border:1px solid #424251;
+    border: 1px solid #424251;
     border-radius: 10px;
     color: #888;
     font-size: 14px;
@@ -3411,10 +3415,10 @@ button:disabled {
     color: #f5f5f5;
   }
 
-.selectpaymetpop.modal.fade .modal-dialog {
+  .selectpaymetpop.modal.fade .modal-dialog {
     width: 100%;
     min-width: 100%;
-}
+  }
 
 }
 
@@ -3426,10 +3430,10 @@ button:disabled {
     margin: 0 auto;
   }
 
-.selectpaymetpop.modal.fade .modal-dialog {
+  .selectpaymetpop.modal.fade .modal-dialog {
     width: 100%;
     min-width: 100%;
-}
+  }
 
   .myadsheading .p2p-mobile-card-user-info h4 {
     font-size: 12px;
@@ -4520,10 +4524,11 @@ button.p2p-mobile-view-btn i {
   .p2p-pagination-wrapper:not(.p2p-mobile) {
     display: none;
   }
-.p2p-payment-method-qr {
+
+  .p2p-payment-method-qr {
     flex-direction: row-reverse;
     justify-content: space-between;
-}
+  }
 
 
 }
@@ -6118,8 +6123,8 @@ button.p2p-mobile-view-btn i {
   }
 
   .p2p-main-content.p2p-mobile .p2p-mobile-card-actions .p2p-myads-action-btn {
-        min-width: 100%;
-    } 
+    min-width: 100%;
+  }
 
 }
 
@@ -6368,7 +6373,7 @@ button.p2p-mobile-view-btn i {
 }
 
 .p2p-orders-table tbody tr:hover {
-  background:#2B313C;
+  background: #2B313C;
 }
 
 /* Mobile Order Card Footer */
@@ -6969,7 +6974,8 @@ button.p2p-mobile-view-btn i {
     gap: 6px;
     padding: 8px 16px;
     border-radius: 6px;
-    font-size: 12px; }
+    font-size: 12px;
+  }
 
 
 
@@ -11221,7 +11227,7 @@ body.light_theme .p2p-loading-container {
 /* P2P Create Post Styles */
 .p2p-create-post-container {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 200px;
   gap: 24px;
   max-width: 100%;
   width: 100%;
@@ -11242,16 +11248,15 @@ body.light_theme .p2p-loading-container {
 
 .p2p-create-post-form-card {
   background: #2B313C;
-    border-radius: 12px;
-    border: 1px solid #2B313C;
-    padding: 32px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    position: relative;
-  border-radius: 16px;
-  border: 1px solid #1e1e2d;
+  border-radius: 12px;
+  border: 1px solid #2B313C;
+  padding: 32px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+  border-radius: 12px;
   padding: 32px;
   width: 100%;
   max-width: 100%;
@@ -11297,7 +11302,7 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-subtitle {
-  color: #666;
+  color: #949AA4;
   font-size: 14px;
   margin: 0;
 }
@@ -11311,9 +11316,10 @@ body.light_theme .p2p-loading-container {
 .p2p-create-post-stepper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   margin-bottom: 32px;
   gap: 0;
+  width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -11323,17 +11329,17 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-step-circle {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 400;
   background: transparent;
-  border: 2px solid #2a2a3a;
-  color: #666;
+  border: 1px solid #ffffff60;
+  color: #ffffff60;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
@@ -11347,9 +11353,9 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-step-circle.active {
-  background: #ffdc88;
-  border-color: #ffdc88;
-  color: #fff;
+  background: #F3BB2B;
+  border-color: #F3BB2B;
+  color: #000;
 }
 
 .p2p-create-post-step-circle.completed {
@@ -11359,9 +11365,9 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-step-line {
-  width: 120px;
-  height: 2px;
-  background: #2a2a3a;
+  width:310px;
+  height: 1px;
+  background: #ffffff60;
   transition: all 0.3s ease;
 }
 
@@ -11386,7 +11392,7 @@ body.light_theme .p2p-loading-container {
   align-items: center;
   gap: 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   color: #fff;
   margin-bottom: 20px;
 }
@@ -11403,7 +11409,7 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-input-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -11419,9 +11425,9 @@ body.light_theme .p2p-loading-container {
 
 .p2p-create-post-label {
   display: block;
-  color: #888;
+  color: #A2A9B6;
   font-size: 13px;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 @media (max-width: 767px) {
@@ -11435,11 +11441,11 @@ body.light_theme .p2p-loading-container {
   max-width: 100%;
   min-width: 0;
   padding: 14px 44px 14px 16px;
-  background: #0d0d14;
-  border: 1px solid #2a2a3a;
+  background: #373F4D;
+  border: 1px solid #373F4D;
   border-radius: 10px;
-  color: #fff;
-  font-size: 14px;
+  color: #A2A9B6;
+  font-size: 13px;
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
@@ -11494,8 +11500,8 @@ body.light_theme .p2p-loading-container {
 .p2p-create-post-input-with-suffix {
   display: flex;
   align-items: center;
-  background: #0d0d14;
-  border: 1px solid #2a2a3a;
+  background: #373F4D;
+  border: 1px solid #373F4D;
   border-radius: 10px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -11523,11 +11529,68 @@ body.light_theme .p2p-loading-container {
   }
 }
 
+.pricehigh_box {
+  width: 100%;
+  background-color: #373D4B;
+  padding: 24px;
+  border-radius: 12px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.pricehigh_box_item_title {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.pricehigh_box_item_container {
+  gap: 90px;
+}
+
+.helpguide {
+  font-size: 12px;
+}
+
+.helpguide i {
+  font-size: 16px;
+}
+
+.btnnextback {
+  margin-top: 24px;
+  gap: 24px;
+}
+
+.btnnextback button {
+  font-size: 16px;
+  color: #fff;
+  padding: 16px 20px;
+  width: 100%;
+  border-radius: 4px;
+  border: none;
+  background-color: #3C424C;
+  font-weight: 500;
+}
+
+.btnnextback button.nextbtn{ background-color: #5EBA89; }
+.btnnextback button.backbtn{width: 40%; }
+
+.pricehigh_box_item_title span {
+  font-size: 12px;
+  font-weight: 300;
+}
+
 .p2p-create-post-input-suffix {
   padding: 14px 16px;
-  color: #888;
+  color: #b9b9b9;
   font-size: 14px;
-  border-left: 1px solid #2a2a3a;
+  border-left: 1px solid #585858;
   white-space: nowrap;
 }
 
@@ -12278,4 +12341,89 @@ body.light_theme .p2p-loading-container {
 .p2p-create-post-preview-footer-available {
   color: #888;
   font-size: 11px;
+}
+
+/* Radio Button Styles */
+.p2p-radio-group {
+  margin-top: 8px;
+}
+
+.p2p-radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.p2p-radio-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 5px solid #666;
+  border-radius: 50%;
+  margin: 0;
+  margin-right: 12px;
+  position: relative;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.p2p-radio-input:checked {
+  border-color: #D9D9D9;
+  background-color: transparent;
+}
+
+.p2p-radio-input:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #222;
+}
+
+.p2p-radio-input:hover {
+  border-color: #999;
+}
+
+.p2p-radio-input:checked:hover {
+  border-color: #fff;
+}
+
+.p2p-radio-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Light Theme Radio Button */
+body.light_theme .p2p-radio-input {
+  border-color: #ccc;
+}
+
+body.light_theme .p2p-radio-input:checked {
+  border-color: #333;
+}
+
+body.light_theme .p2p-radio-input:checked::after {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .p2p-radio-input:hover {
+  border-color: #999;
+}
+
+body.light_theme .p2p-radio-input:checked:hover {
+  border-color: #333;
+}
+
+body.light_theme .p2p-radio-text {
+  color: #333;
 }

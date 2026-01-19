@@ -2081,6 +2081,7 @@ const AuthService = {
     const token = sessionStorage.getItem("token");
     const { baseP2p, getFiatCurrency } = ApiConfig;
     const url = baseP2p + getFiatCurrency;
+    console.log(url,'urlurlurl');
     const headers = {
       "Content-Type": "application/json",
       'Authorization': token
