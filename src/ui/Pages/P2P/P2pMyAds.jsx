@@ -541,20 +541,14 @@ const P2pMyAds = () => {
                                     {ads.length > 0 ? (
                                         ads.map((ad) => (
                                             <React.Fragment key={ad._id}>
-                                                <tr className={expandedAdId === ad._id ? 'p2p-row-expanded' : ''} style={{ background: expandedAdId === ad._id ? 'rgba(255, 220, 136, 0.03)' : 'transparent' }}>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div className="p2p-myads-asset-cell" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                            <span className={`p2p-myads-side-badge ${ad.side === 'BUY' ? 'buy' : 'sell'}`} style={{
-                                                                padding: '5px 10px',
-                                                                borderRadius: '6px',
-                                                                fontSize: '11px',
-                                                                fontWeight: '600',
-                                                                letterSpacing: '0.5px'
-                                                            }}>
+                                                <tr className={expandedAdId === ad._id ? 'p2p-row-expanded' : ''}>
+                                                    <td>
+                                                        <div className="p2p-myads-asset-cell">
+                                                            <span className={`p2p-myads-side-badge ${ad.side === 'BUY' ? 'buy' : 'sell'}`}>
                                                                 {ad.side}
                                                             </span>
-                                                            <div className="p2p-myads-asset-info" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                                <span className="p2p-myads-asset-name" style={{ fontSize: '15px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                            <div className="p2p-myads-asset-info">
+                                                                <span className="p2p-myads-asset-name">
                                                                     {ad.qouteCurrency}
                                                                 </span>
                                                                 {/* <span className="p2p-myads-asset-fiat" style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -563,9 +557,9 @@ const P2pMyAds = () => {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                            <span style={{ fontSize: '16px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                    <td>
+                                                        <div className="p2p-myads-table-cell-content">
+                                                            <span className="p2p-myads-price-text">
                                                                 {Number(ad.fixedPrice).toLocaleString()}    {ad.fiatCurrency}
                                                             </span>
                                                             {/* <span style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -573,9 +567,9 @@ const P2pMyAds = () => {
                                                         </span> */}
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                            <span style={{ fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                    <td>
+                                                        <div className="p2p-myads-table-cell-content">
+                                                            <span className="p2p-myads-volume-text">
                                                                 {ad.volume} {ad.qouteCurrency}
                                                             </span>
                                                             {/* <span style={{ fontSize: '11px', color: '#52525b', marginTop: '2px' }}>
@@ -583,9 +577,9 @@ const P2pMyAds = () => {
                                                         </span> */}
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                            <span style={{ fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                    <td>
+                                                        <div className="p2p-myads-table-cell-content">
+                                                            <span className="p2p-myads-limits-text">
                                                                 {Number(ad.minLimit).toLocaleString()} - {Number(ad.maxLimit).toLocaleString()}
                                                             </span>
                                                             {/* <span style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -593,30 +587,16 @@ const P2pMyAds = () => {
                                                         </span> */}
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                            <div className="p2p-payment-badges" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                                    <td>
+                                                        <div className="p2p-myads-table-cell-content-gap">
+                                                            <div className="p2p-payment-badges">
                                                                 {ad.paymentMethodType?.slice(0, 2).map((method, i) => (
-                                                                    <span key={i} className="p2p-payment-badge" style={{
-                                                                        padding: '4px 8px',
-                                                                        borderRadius: '4px',
-                                                                        fontSize: '11px',
-                                                                        background: 'rgba(255, 220, 136, 0.1)',
-                                                                        // color: '#93c5fd',
-                                                                        border: '1px solid rgba(255, 220, 136, 0.2)'
-                                                                    }}>
+                                                                    <span key={i} className="p2p-payment-badge">
                                                                         {method}
                                                                     </span>
                                                                 ))}
                                                                 {ad.paymentMethodType?.length > 2 && (
-                                                                    <span style={{
-                                                                        padding: '4px 8px',
-                                                                        borderRadius: '4px',
-                                                                        fontSize: '11px',
-                                                                        background: 'rgba(107, 114, 128, 0.1)',
-                                                                        color: '#9ca3af',
-                                                                        border: '1px solid rgba(107, 114, 128, 0.2)'
-                                                                    }}>
+                                                                    <span className="p2p-payment-badge-count">
                                                                         +{ad.paymentMethodType.length - 2}
                                                                     </span>
                                                                 )}
@@ -628,19 +608,11 @@ const P2pMyAds = () => {
                                                         )} */}
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px' }}>
-                                                        <div className="p2p-myads-status-cell" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
+                                                    <td>
+                                                        <div className="p2p-myads-status-cell">
                                                             <span
                                                                 className="p2p-myads-status"
-                                                                style={{
-                                                                    color: getStatusColor(ad.status),
-                                                                    fontSize: '13px',
-                                                                    fontWeight: '500',
-                                                                    padding: '4px 10px',
-                                                                    borderRadius: '6px',
-                                                                    background: 'rgba(255, 255, 255, 0.05)',
-                                                                    display: 'inline-block'
-                                                                }}
+                                                                style={{ color: getStatusColor(ad.status) }}
                                                             >
                                                                 {getStatusLabel(ad.status)}
                                                             </span>
@@ -665,36 +637,13 @@ const P2pMyAds = () => {
                                                         )} */}
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                                                        <div className="p2p-myads-actions" style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                                                    <td className="p2p-myads-actions-cell">
+                                                        <div className="p2p-myads-actions">
                                                             <button
-                                                                className="p2p-myads-action-btn"
+                                                                className={`p2p-myads-action-btn p2p-myads-action-btn-view ${expandedAdId === ad._id ? 'active' : ''}`}
                                                                 onClick={() => toggleExpanded(ad._id)}
-                                                                style={{
-                                                                    padding: '8px 14px',
-                                                                    borderRadius: '6px',
-                                                                    fontSize: '12px',
-                                                                    fontWeight: '500',
-                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                    background: expandedAdId === ad._id ? 'rgba(255, 220, 136, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                                                                    color: '#a1a1aa',
-                                                                    transition: 'all 0.2s ease',
-                                                                    display: 'inline-flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '6px'
-                                                                }}
-                                                                onMouseEnter={(e) => {
-                                                                    e.currentTarget.style.background = 'rgba(255, 220, 136, 0.15)';
-                                                                    e.currentTarget.style.borderColor = 'rgba(255, 220, 136, 0.3)';
-                                                                    e.currentTarget.style.color = '#e5e5e5';
-                                                                }}
-                                                                onMouseLeave={(e) => {
-                                                                    e.currentTarget.style.background = expandedAdId === ad._id ? 'rgba(255, 220, 136, 0.2)' : 'rgba(255, 255, 255, 0.04)';
-                                                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                                                                    e.currentTarget.style.color = '#a1a1aa';
-                                                                }}
                                                             >
-                                                                <i className={`ri-${expandedAdId === ad._id ? 'eye-off' : 'eye'}-line`} style={{ fontSize: '14px' }}></i>
+                                                                <i className={`ri-${expandedAdId === ad._id ? 'eye-off' : 'eye'}-line p2p-myads-action-btn-icon`}></i>
                                                                 {expandedAdId === ad._id ? 'Hide' : 'View'}
                                                             </button>
                                                             {canToggleStatus(ad) && (
@@ -702,66 +651,17 @@ const P2pMyAds = () => {
                                                                     className="p2p-myads-action-btn"
                                                                     onClick={() => handleToggleStatus(ad)}
                                                                     disabled={togglingAdId === ad._id}
-                                                                    style={{
-                                                                        padding: '8px 14px',
-                                                                        borderRadius: '6px',
-                                                                        fontSize: '12px',
-                                                                        fontWeight: '500',
-                                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                        background: 'rgba(255, 255, 255, 0.04)',
-                                                                        color: '#a1a1aa',
-                                                                        transition: 'all 0.2s ease',
-                                                                        display: 'inline-flex',
-                                                                        alignItems: 'center',
-                                                                        gap: '6px',
-                                                                        opacity: togglingAdId === ad._id ? 0.5 : 1
-                                                                    }}
-                                                                    onMouseEnter={(e) => {
-                                                                        if (togglingAdId !== ad._id) {
-                                                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                                                                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-                                                                            e.currentTarget.style.color = '#e5e5e5';
-                                                                        }
-                                                                    }}
-                                                                    onMouseLeave={(e) => {
-                                                                        if (togglingAdId !== ad._id) {
-                                                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                                                                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                                                                            e.currentTarget.style.color = '#a1a1aa';
-                                                                        }
-                                                                    }}
                                                                 >
-                                                                    <i className={`ri-${ad.isOnline ? 'wifi-off' : 'wifi'}-line`} style={{ fontSize: '14px', color: !ad.isOnline ? '#4ade80' : undefined }}></i>
+                                                                    <i className={`ri-${ad.isOnline ? 'wifi-off' : 'wifi'}-line p2p-myads-action-btn-icon ${!ad.isOnline ? 'p2p-myads-action-btn-icon-online' : ''}`}></i>
                                                                     {togglingAdId === ad._id ? '...' : (ad.isOnline ? 'Offline' : 'Online')}
                                                                 </button>
                                                             )}
                                                             {canCloseAd(ad) && (
                                                                 <button
-                                                                    className="p2p-myads-action-btn"
+                                                                    className="p2p-myads-action-btn p2p-myads-action-btn-close"
                                                                     onClick={() => openCloseModal(ad)}
-                                                                    style={{
-                                                                        padding: '8px 14px',
-                                                                        borderRadius: '6px',
-                                                                        fontSize: '12px',
-                                                                        fontWeight: '500',
-                                                                        // border: '1px solid rgba(239, 68, 68, 0.2)',
-                                                                        // background: 'rgba(239, 68, 68, 0.1)',
-                                                                        // color: '#fca5a5',
-                                                                        transition: 'all 0.2s ease',
-                                                                        display: 'inline-flex',
-                                                                        alignItems: 'center',
-                                                                        gap: '6px'
-                                                                    }}
-                                                                    onMouseEnter={(e) => {
-                                                                        e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
-                                                                        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-                                                                    }}
-                                                                    onMouseLeave={(e) => {
-                                                                        e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
-                                                                        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.2)';
-                                                                    }}
                                                                 >
-                                                                    <i className="ri-close-circle-line" style={{ fontSize: '14px' }}></i>
+                                                                    <i className="ri-close-circle-line p2p-myads-action-btn-icon"></i>
                                                                     Close
                                                                 </button>
                                                             )}
@@ -773,33 +673,33 @@ const P2pMyAds = () => {
                                                     <tr className="p2p-expanded-row">
                                                         <td colSpan="7">
                                                             <div className="p2p-myads-expanded-content">
-                                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+                                                                <div className="p2p-myads-expanded-grid">
                                                                     {/* Left Column - Key Metrics */}
-                                                                    <div>
-                                                                        <div className="p2p-myads-expanded-section" style={{ marginBottom: '20px' }}>
-                                                                            <h4 className="p2p-myads-expanded-title" style={{ marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>Volume & Limits</h4>
-                                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Volume</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>
+                                                                    <div className='volumedatails'>
+                                                                        <div className="p2p-myads-expanded-section">
+                                                                            <h4 className="p2p-myads-expanded-title">Volume & Limits</h4>
+                                                                            <div className="p2p-myads-expanded-content-list">
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Volume</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">
                                                                                         {ad.remainingVolume} / {ad.volume} {ad.qouteCurrency}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Limits</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Limits</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">
                                                                                         {Number(ad.minLimit).toLocaleString()} - {Number(ad.maxLimit).toLocaleString()} {ad.fiatCurrency}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Filled</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Filled</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">
                                                                                         {(ad.volume - ad.remainingVolume).toFixed(4)} {ad.qouteCurrency}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Fill Rate</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Fill Rate</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">
                                                                                         {((1 - ad.remainingVolume / ad.volume) * 100).toFixed(1)}%
                                                                                     </span>
                                                                                 </div>
@@ -809,13 +709,13 @@ const P2pMyAds = () => {
                                                                         {/* Payment Methods */}
                                                                         {ad.paymentMethodType && ad.paymentMethodType.length > 0 && (
                                                                             <div className="p2p-myads-expanded-section">
-                                                                                <h4 className="p2p-myads-expanded-title" style={{ marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                                                <h4 className="p2p-myads-expanded-title">
                                                                                     Payment Methods
-                                                                                    <span style={{ fontSize: '12px', color: '#6b7280', marginLeft: '6px', fontWeight: '400' }}>({ad.paymentMethodType?.length || 0})</span>
+                                                                                    <span className="p2p-myads-expanded-title-count">({ad.paymentMethodType?.length || 0})</span>
                                                                                 </h4>
-                                                                                <div className="p2p-myads-expanded-payments" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                                                                <div className="p2p-myads-expanded-payments">
                                                                                     {ad.paymentMethodType?.map((method, i) => (
-                                                                                        <span key={i} className="p2p-payment-badge" style={{ fontSize: '12px', padding: '6px 10px' }}>{method}</span>
+                                                                                        <span key={i} className="p2p-payment-badge p2p-payment-badge-expanded">{method}</span>
                                                                                     ))}
                                                                                 </div>
                                                                             </div>
@@ -823,44 +723,34 @@ const P2pMyAds = () => {
                                                                     </div>
 
                                                                     {/* Right Column - Ad Details */}
-                                                                    <div>
+                                                                    <div className='volumedatails'>
                                                                         <div className="p2p-myads-expanded-section">
-                                                                            <h4 className="p2p-myads-expanded-title" style={{ marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>Ad Details   {canToggleStatus(ad) && (
-                                                                                <span className={`p2p-myads-online-badge ${ad.isOnline ? 'online' : 'offline'}`} style={{
-                                                                                    display: 'inline-flex',
-                                                                                    alignItems: 'center',
-                                                                                    gap: '6px',
-                                                                                    padding: '4px 10px',
-                                                                                    borderRadius: '6px',
-                                                                                    fontSize: '11px',
-                                                                                    fontWeight: '500'
-                                                                                }}>
-                                                                                    <span className="p2p-myads-online-dot" style={{
-                                                                                        width: '6px',
-                                                                                        height: '6px',
-                                                                                        borderRadius: '50%',
-                                                                                        background: ad.isOnline ? '#4ade80' : '#6b7280'
-                                                                                    }}></span>
-                                                                                    {ad.isOnline ? 'Online' : 'Offline'}
-                                                                                </span>
-                                                                            )}</h4>
+                                                                            <h4 className="p2p-myads-expanded-title">
+                                                                                Ad Details
+                                                                                {canToggleStatus(ad) && (
+                                                                                    <span className={`p2p-myads-online-badge ${ad.isOnline ? 'online' : 'offline'}`}>
+                                                                                        <span className="p2p-myads-online-dot"></span>
+                                                                                        {ad.isOnline ? 'Online' : 'Offline'}
+                                                                                    </span>
+                                                                                )}
+                                                                            </h4>
 
-                                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Ad ID</span>
-                                                                                    <span style={{ fontSize: '12px', color: '#e5e5e5', fontFamily: 'monospace' }}>{ad.adUid}</span>
+                                                                            <div className="p2p-myads-expanded-content-list">
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Ad ID</span>
+                                                                                    <span className="p2p-myads-expanded-item-value-small">{ad.adUid}</span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Price Type</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>{ad.priceType}</span>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Price Type</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">{ad.priceType}</span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Payment Time</span>
-                                                                                    <span style={{ fontSize: '14px', color: '#e5e5e5', fontWeight: '500' }}>{ad.paymentTimeLimit} min</span>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Payment Time</span>
+                                                                                    <span className="p2p-myads-expanded-item-value">{ad.paymentTimeLimit} min</span>
                                                                                 </div>
-                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px' }}>
-                                                                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>Created</span>
-                                                                                    <span style={{ fontSize: '12px', color: '#e5e5e5' }}>{formatDate(ad.createdAt)}</span>
+                                                                                <div className="p2p-myads-expanded-item">
+                                                                                    <span className="p2p-myads-expanded-item-label">Created</span>
+                                                                                    <span className="p2p-myads-expanded-item-value-small">{formatDate(ad.createdAt)}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -869,10 +759,10 @@ const P2pMyAds = () => {
 
                                                                 {/* Payment Details (for SELL orders) */}
                                                                 {ad.side === 'SELL' && ad.paymentDetails?.length > 0 && (
-                                                                    <div className="p2p-myads-expanded-section" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                                                        <h4 className="p2p-myads-expanded-title" style={{ marginBottom: '16px', fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>
+                                                                    <div className="p2p-myads-expanded-section p2p-myads-expanded-section-border">
+                                                                        <h4 className="p2p-myads-expanded-title p2p-myads-expanded-title-large">
                                                                             Payment Account Details
-                                                                            <span style={{ fontSize: '12px', color: '#6b7280', marginLeft: '6px', fontWeight: '400' }}>({ad.paymentDetails?.length || 0})</span>
+                                                                            <span className="p2p-myads-expanded-title-count">({ad.paymentDetails?.length || 0})</span>
                                                                         </h4>
                                                                         {renderPaymentDetails(ad.paymentDetails)}
                                                                     </div>
@@ -880,8 +770,8 @@ const P2pMyAds = () => {
 
                                                                 {/* Closed Info (if ad is closed) */}
                                                                 {(ad.status === 'CLOSED' || ad.status === 'CANCELLED' || ad.status === 'FILLED') && ad.closedByUser !== undefined && (
-                                                                    <div className="p2p-myads-expanded-section" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                                                        <h4 className="p2p-myads-expanded-title" style={{ marginBottom: '16px', fontSize: '14px', fontWeight: '600', color: '#e5e5e5' }}>Closure Information</h4>
+                                                                    <div className="p2p-myads-expanded-section p2p-myads-expanded-section-border">
+                                                                        <h4 className="p2p-myads-expanded-title p2p-myads-expanded-title-large">Closure Information</h4>
                                                                         <div className="p2p-myads-closure-info">
                                                                             <div className="p2p-myads-closure-badge">
                                                                                 <span className="p2p-myads-closure-icon">{ad.closedByUser ? '👤' : '⚙️'}</span>
