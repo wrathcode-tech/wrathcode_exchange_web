@@ -52,6 +52,7 @@ const KycPage = (props) => {
 
 
     const [step, setStep] = useState(1);
+    const [modalStep, setModalStep] = useState(0);
 
     useEffect(() => {
         setKycVerified(props?.userDetails?.kycVerified);
@@ -63,6 +64,47 @@ const KycPage = (props) => {
         setReason(props?.userDetails?.kyc_reject_reason);
         setSignupBy(props?.userDetails?.registeredBy);
     }, [props]);
+
+    // Add event listeners for country and ID type changes to remove errors
+    useEffect(() => {
+        const countrySelect = document.getElementById('kycCountry');
+        const idTypeInputs = document.querySelectorAll('input[name="kycIdType"]');
+
+        const handleCountryChange = () => {
+            const countryError = document.getElementById('countryError');
+            const selectBox = document.querySelector('.select_box');
+            if (countryError && countrySelect?.value) {
+                countryError.classList.add('d-none');
+                if (selectBox) selectBox.classList.remove('error');
+            }
+        };
+
+        const handleIdTypeChange = () => {
+            const idTypeError = document.getElementById('idTypeError');
+            const idGrid = document.querySelector('.id_grid');
+            if (idTypeError) {
+                idTypeError.classList.add('d-none');
+                if (idGrid) idGrid.classList.remove('error');
+            }
+        };
+
+        if (countrySelect) {
+            countrySelect.addEventListener('change', handleCountryChange);
+        }
+
+        idTypeInputs.forEach(input => {
+            input.addEventListener('change', handleIdTypeChange);
+        });
+
+        return () => {
+            if (countrySelect) {
+                countrySelect.removeEventListener('change', handleCountryChange);
+            }
+            idTypeInputs.forEach(input => {
+                input.removeEventListener('change', handleIdTypeChange);
+            });
+        };
+    }, [modalStep]);
 
     const handleChangeIdentity = async (event) => {
         event.preventDefault();
@@ -324,6 +366,120 @@ const KycPage = (props) => {
         }
     }
 
+    // Modal step management functions
+    const nextModalStep = () => {
+        const steps = document.querySelectorAll('.kyc_step');
+        if (modalStep < steps.length - 1) {
+            setModalStep((prev) => prev + 1);
+        }
+    };
+
+    const prevModalStep = () => {
+        if (modalStep > 0) {
+            setModalStep((prev) => prev - 1);
+        }
+    };
+
+    const validateModalStep0 = () => {
+        const country = document.getElementById('kycCountry')?.value;
+        const idType = document.querySelector('input[name="kycIdType"]:checked')?.value;
+
+        let isValid = true;
+
+        // Hide previous errors
+        const countryError = document.getElementById('countryError');
+        const idTypeError = document.getElementById('idTypeError');
+        const selectBox = document.querySelector('.select_box');
+        const idGrid = document.querySelector('.id_grid');
+
+        if (countryError) countryError.classList.add('d-none');
+        if (idTypeError) idTypeError.classList.add('d-none');
+        if (selectBox) selectBox.classList.remove('error');
+        if (idGrid) idGrid.classList.remove('error');
+
+        if (!country || country === '') {
+            if (countryError) countryError.classList.remove('d-none');
+            if (selectBox) selectBox.classList.add('error');
+            isValid = false;
+        }
+
+        if (!idType) {
+            if (idTypeError) idTypeError.classList.remove('d-none');
+            if (idGrid) idGrid.classList.add('error');
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
+    // Initialize modal steps when modal opens
+    useEffect(() => {
+        const modal = document.getElementById('kycModal');
+        if (!modal) return;
+
+        const handleModalShow = () => {
+            setModalStep(0);
+            // Show first step, hide others
+            const steps = modal.querySelectorAll('.kyc_step');
+            steps.forEach((step, index) => {
+                if (index === 0) {
+                    step.classList.add('active');
+                    step.style.display = 'block';
+                } else {
+                    step.classList.remove('active');
+                    step.style.display = 'none';
+                }
+            });
+            // Update title
+            const firstStep = steps[0];
+            if (firstStep) {
+                const title = firstStep.getAttribute('data-title');
+                const titleElement = document.getElementById('kycTitle');
+                if (titleElement && title) {
+                    titleElement.textContent = title;
+                }
+            }
+        };
+
+        const handleModalShown = () => {
+            handleModalShow();
+        };
+
+        // Bootstrap 5 modal events
+        modal.addEventListener('show.bs.modal', handleModalShow);
+        modal.addEventListener('shown.bs.modal', handleModalShown);
+
+        return () => {
+            modal.removeEventListener('show.bs.modal', handleModalShow);
+            modal.removeEventListener('shown.bs.modal', handleModalShown);
+        };
+    }, []);
+
+    // Update step visibility when modalStep changes
+    useEffect(() => {
+        const modal = document.getElementById('kycModal');
+        if (!modal) return;
+
+        const steps = modal.querySelectorAll('.kyc_step');
+        if (steps.length === 0) return;
+
+        steps.forEach((step, index) => {
+            if (index === modalStep) {
+                step.classList.add('active');
+                step.style.display = 'block';
+                // Update title
+                const title = step.getAttribute('data-title');
+                const titleElement = document.getElementById('kycTitle');
+                if (titleElement && title) {
+                    titleElement.textContent = title;
+                }
+            } else {
+                step.classList.remove('active');
+                step.style.display = 'none';
+            }
+        });
+    }, [modalStep]);
+
 
     const faqData = [
         {
@@ -405,6 +561,7 @@ const KycPage = (props) => {
                                 <li>✅ Deposit & Withdraw Without Limit</li>
                                 <li>✅ Spot & Futures Trading Unlock</li>
                                 <li>✅ 100% Secure Trading with Verified KYC</li>
+
                             </ul>
 
                             {/* <button className="kyc btn" data-bs-toggle="modal" data-bs-target="#kycModal">Verify </button> */}
@@ -413,9 +570,9 @@ const KycPage = (props) => {
                             <img src="/images/kyc_success_vector.svg" alt="kyc" />
                         </div>
 
-                    </div> 
+                    </div>
 
-                       <div className="kyc_verif_bnr kyc_rejected" style={{ display: "none" }}>
+                    <div className="kyc_verif_bnr kyc_rejected" style={{ display: "none" }}>
                         <div className="kysbnr_cnt">
                             <h5>KYC Rejected </h5>
                             <p>Finish your KYC in just a few minutes and enjoy a seamless experience. Submit your basic details once and get instant access to
@@ -435,7 +592,7 @@ const KycPage = (props) => {
                             <img src="/images/rejectvector.png" alt="kyc" />
                         </div>
 
-                    </div>    
+                    </div>
 
 
                     <div className="kyc_account d-flex">
@@ -1221,7 +1378,12 @@ const KycPage = (props) => {
                                 </div>
                                 <small className="text-danger d-none" id="idTypeError">Please select an ID type</small>
 
-                                <button type="button" className="primary_btn nextStep" data-step="0" data-title="Take a Photo of Your ID Card">Next</button>
+                                <button type="button" className="primary_btn nextStep" onClick={(e) => {
+                                    e.preventDefault();
+                                    if (validateModalStep0()) {
+                                        nextModalStep();
+                                    }
+                                }}>Next</button>
                             </div>
 
 
@@ -1277,8 +1439,14 @@ const KycPage = (props) => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-                                    <button className="primary_btn prevStep">Back</button>
-                                    <button className="primary_btn nextStep" data-title="Take a Photo of Your ">Next</button>
+                                    <button className="primary_btn prevStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        prevModalStep();
+                                    }}>Back</button>
+                                    <button className="primary_btn nextStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        nextModalStep();
+                                    }}>Next</button>
                                 </div>
                             </div>
 
@@ -1320,8 +1488,14 @@ const KycPage = (props) => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-                                    <button className="primary_btn prevStep">Back</button>
-                                    <button className="primary_btn nextStep" data-title="Face Verification">Next</button>
+                                    <button className="primary_btn prevStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        prevModalStep();
+                                    }}>Back</button>
+                                    <button className="primary_btn nextStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        nextModalStep();
+                                    }}>Next</button>
                                 </div>
                             </div>
 
@@ -1331,8 +1505,14 @@ const KycPage = (props) => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-                                    <button className="primary_btn prevStep">Back</button>
-                                    <button className="primary_btn nextStep" data-title="Review">Next</button>
+                                    <button className="primary_btn prevStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        prevModalStep();
+                                    }}>Back</button>
+                                    <button className="primary_btn nextStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        nextModalStep();
+                                    }}>Next</button>
                                 </div>
 
 
@@ -1409,18 +1589,28 @@ const KycPage = (props) => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-                                    <button type="button" className="primary_btn prevStep">Back</button>
+                                    <button type="button" className="primary_btn prevStep" onClick={(e) => {
+                                        e.preventDefault();
+                                        prevModalStep();
+                                    }}>Back</button>
                                     <button
                                         type="button"
                                         className="primary_btn kyc-submit-btn"
                                         onClick={() => {
-                                            if (typeof $ !== 'undefined') {
-                                                // First close the multistep KYC modal
-                                                $('#kycModal').modal('hide');
+                                            const modalElement = document.getElementById('kycModal');
+                                            const submitModalElement = document.getElementById('kycSubmitModal');
+
+                                            if (modalElement && submitModalElement) {
+                                                // Close the multistep KYC modal using Bootstrap 5
+                                                const modal = window.bootstrap?.Modal?.getInstance(modalElement);
+                                                if (modal) {
+                                                    modal.hide();
+                                                }
 
                                                 // After the hide animation, show the verifying popup
                                                 setTimeout(() => {
-                                                    $('#kycSubmitModal').modal('show');
+                                                    const submitModal = new window.bootstrap.Modal(submitModalElement);
+                                                    submitModal.show();
                                                 }, 300);
                                             }
                                         }}
@@ -1461,11 +1651,26 @@ const KycPage = (props) => {
                             <div className="d-flex gap-3 justify-content-center mt-4">
                                 <button type="button" className="primary_btn" style={{ width: 'auto', padding: '10px 30px' }}
                                     onClick={() => {
-                                        $('#kycSubmitModal').modal('hide');
+                                        const submitModalElement = document.getElementById('kycSubmitModal');
+                                        const kycModalElement = document.getElementById('kycModal');
+
+                                        if (submitModalElement) {
+                                            const submitModal = window.bootstrap?.Modal?.getInstance(submitModalElement);
+                                            if (submitModal) {
+                                                submitModal.hide();
+                                            }
+                                        }
+
                                         // Close KYC modal
                                         setTimeout(() => {
-                                            $('#kycModal').modal('hide');
+                                            if (kycModalElement) {
+                                                const kycModal = window.bootstrap?.Modal?.getInstance(kycModalElement);
+                                                if (kycModal) {
+                                                    kycModal.hide();
+                                                }
+                                            }
                                         }, 300);
+
                                         // Call actual submit function
                                         handleKyc();
                                     }}>

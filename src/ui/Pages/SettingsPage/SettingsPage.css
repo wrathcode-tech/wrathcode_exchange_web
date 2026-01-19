@@ -1,0 +1,161 @@
+/* Edit Avatar Modal Styles */
+#editAvatarModalLabel {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.avatar-modal-body {
+  padding: 24px;
+  text-align: center;
+}
+
+.avatar-preview-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.avatar-preview-container {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px dashed #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #1a1a1a;
+}
+
+.avatar-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-edit-label {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 3px solid #12121a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.avatar-edit-label:hover {
+  background: #16a34a;
+  transform: scale(1.05);
+}
+
+.avatar-edit-icon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.avatar-file-input {
+  display: none;
+}
+
+.avatar-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancel-avatar {
+  padding: 12px 24px;
+  background: #2a2a3a;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel-avatar:hover {
+  background: #3a3a4a;
+}
+
+.btn-apply-avatar {
+  padding: 12px 24px;
+  background: #ffdc88;
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-apply-avatar:hover {
+  background: #ffd966;
+}
+
+/* OTP Button Styles */
+.otp-button-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.otp-button-enabled {
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+/* File Input Hidden */
+.hidden-file-input {
+  display: none;
+}
+
+/* Password Validation Styles */
+.text-success {
+  color: #22c55e !important;
+}
+
+.text-danger {
+  color: #ef4444 !important;
+}
+
+/* Password Eye Button Styles */
+.password-eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.password-eye-btn:hover {
+  color: #fff;
+}
+
+.emailinput .d-flex {
+  position: relative;
+}
+
+.emailinput input[type="password"],
+.emailinput input[type="text"] {
+  padding-right: 40px !important;
+}

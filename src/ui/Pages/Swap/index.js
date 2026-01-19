@@ -454,67 +454,67 @@ const Swap = () => {
             </div> */}
           </div>
           <div className="desktop_view2">
-          <div className='table-responsive'>
-            <table>
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>Date</th>
-                  <th>Swapping Currencies</th>
-                  <th>Pay Amount</th>
-                  <th>Get Amount</th>
-                  <th>Swapping Fee</th>
-                  <th>Conversion Rate</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactionHistory?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{moment(item.createdAt).format("YYYY-MM-DD hh:mm A")} </td>
-                      <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
-                      <td>{item?.pay_amount} {item?.from}</td>
-                      <td>{item?.get_amount} {item?.to}</td>
-                      <td>{item?.fee} {item?.from}</td>
-                      <td>1 {item?.from} {"=>"} {item?.conversion_rate} {item?.to}</td>
-                      <td className="text-success">Completed</td>
-                    </tr>
-                  )
-                })}
+            <div className='table-responsive'>
+              <table>
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Date</th>
+                    <th>Swapping Currencies</th>
+                    <th>Pay Amount</th>
+                    <th>Get Amount</th>
+                    <th>Swapping Fee</th>
+                    <th>Conversion Rate</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactionHistory?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{moment(item.createdAt).format("YYYY-MM-DD hh:mm A")} </td>
+                        <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
+                        <td>{item?.pay_amount} {item?.from}</td>
+                        <td>{item?.get_amount} {item?.to}</td>
+                        <td>{item?.fee} {item?.from}</td>
+                        <td>1 {item?.from} {"=>"} {item?.conversion_rate} {item?.to}</td>
+                        <td className="text-success">Completed</td>
+                      </tr>
+                    )
+                  })}
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
 
-          </div>
+            </div>
           </div>
 
           <div className="mobile_view">
-          <div className='table-responsive'>
-            <table>
-              <thead>
-                <tr>
-                  <th>Swapping Currencies</th>
-                  <th>Pay Amount</th>
-                  <th>Get Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactionHistory?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
-                      <td>{item?.pay_amount} {item?.from}</td>
-                      <td>{item?.get_amount} {item?.to}</td>
-                    </tr>
-                  )
-                })}
+            <div className='table-responsive'>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Swapping Currencies</th>
+                    <th>Pay Amount</th>
+                    <th>Get Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactionHistory?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
+                        <td>{item?.pay_amount} {item?.from}</td>
+                        <td>{item?.get_amount} {item?.to}</td>
+                      </tr>
+                    )
+                  })}
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
 
-          </div>
+            </div>
           </div>
 
 
