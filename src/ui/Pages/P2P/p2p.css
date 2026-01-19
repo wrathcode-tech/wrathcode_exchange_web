@@ -1307,9 +1307,11 @@ button:disabled {
   display: none;
 }
 
-.p2p-payment-option.p2p-selected input[type="checkbox"] { display: block; }
+.p2p-payment-option.p2p-selected input[type="checkbox"] {
+  display: block;
+}
 
-.button.p2p-submit-button{
+.button.p2p-submit-button {
   background-color: #fff;
   border: none;
   border-radius: 50px;
@@ -12741,4 +12743,409 @@ body.light_theme .p2p-payment-method-item.selected {
 
 body.light_theme .p2p-payment-method-item-text {
   color: #333;
+}
+
+/* Step 3 Styles */
+.p2p-create-post-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-section-title {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.p2p-create-post-section-icon {
+  color: #ffdc88;
+}
+
+.p2p-create-post-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: #373F4D;
+  border: 1px solid #ffffff40;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  min-height: 80px;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-textarea {
+    padding: 14px 16px;
+    font-size: 14px;
+    min-height: 130px;
+  }
+}
+
+.p2p-create-post-step3-section {
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-step3-section {
+    margin-top: 32px;
+  }
+}
+
+.p2p-create-post-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-checkbox-label {
+    font-size: 14px;
+  }
+}
+
+.p2p-create-post-checkbox-label-wrap {
+  flex-wrap: wrap;
+}
+
+.p2p-create-post-checkbox-label-no-margin {
+  margin-bottom: 0;
+}
+
+.p2p-create-post-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffdc88;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.p2p-create-post-registered-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0;
+  margin-top: 8px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-registered-input-wrapper {
+    margin-left: 8px;
+    margin-top: 0;
+    width: auto;
+  }
+}
+
+.p2p-create-post-registered-input {
+  width: 80px;
+  padding: 8px 12px;
+  background: #373F4D;
+  border: 1px solid #373F4D;
+  border-radius: 10px;
+  color: #a1a1a1;
+  text-align: center;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.p2p-create-post-registered-input.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.p2p-create-post-registered-label {
+  color: #D0D0D0;
+  font-size: 13px;
+}
+
+.p2p-create-post-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.p2p-create-post-radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.p2p-create-post-radio-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #D9D9D9;
+  background-color: #000 !important;
+  border-radius: 50%;
+  margin: 0;
+  margin-right: 12px;
+  position: relative;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.p2p-create-post-radio-input:checked {
+  border-color: #fff;
+  background-color: transparent !important;
+}
+
+.p2p-create-post-step3-section .p2p-create-post-radio-group {
+  flex-direction: row;
+  gap: 48px;
+}
+
+.p2p-layout-wrapper .p2p-create-post-radio-input:focus {
+  border: 5px solid #ffffff !important;
+}
+
+.userprofile_pop .modal-content {
+  background-color: #373E4B;
+}
+
+.userprofile_pop ul.list_upi {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.userprofile_pop ul.list_upi li {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  position: relative;
+  font-weight: 300;
+  font-size: 13px;
+  color: #ffffff9e;
+}
+
+.userprofile_pop ul.list_upi li span{ color: #fff; }
+.userprofile_pop ul.list_upi li span.text-danger{ color: #ef4444; }
+.userprofile_pop ul.list_upi li span.text-success{ color: #22c55e; }  
+
+.userprofile_pop.btnnextback button {
+    background-color: #474D59; }
+
+.userprofile_pop ul.list_upi li::before {
+  position: absolute;
+  left: -15px;
+  top: 0px;
+  content: "";
+  width: 10px;}
+.p2p-create-post-radio-input:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #222;
+}
+
+.p2p-create-post-radio-input:hover {
+  border-color: #999;
+}
+
+.p2p-create-post-radio-input:checked:hover {
+  border-color: #fff;
+}
+
+.p2p-create-post-radio-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.p2p-create-post-agreement-box {
+  background: #0d0d14;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-agreement-box {
+    padding: 16px;
+  }
+}
+
+.p2p-create-post-agreement-text {
+  font-size: 12px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-agreement-text {
+    font-size: 14px;
+  }
+}
+
+.p2p-create-post-field-error {
+  color: #ef4444;
+  font-size: 11px;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-field-error {
+    font-size: 12px;
+  }
+}
+
+.p2p-create-post-field-error-agreement {
+  margin-top: -12px;
+}
+
+.p2p-create-post-button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .p2p-create-post-button-group {
+    margin-top: 32px;
+  }
+}
+
+.p2p-create-post-btn-secondary {
+  flex: 1;
+  padding: 12px 20px;
+  background: #0d0d14;
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.p2p-create-post-btn-secondary:hover {
+  background: #1a1a2a;
+  border-color: #3a3a4a;
+}
+
+.p2p-create-post-btn-primary {
+  flex: 1;
+  padding: 12px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.p2p-create-post-btn-primary:hover {
+  background: #20b855;
+}
+
+.p2p-create-post-btn-primary-sell {
+  background: #ef4444;
+}
+
+.p2p-create-post-btn-primary-sell:hover {
+  background: #dc2626;
+}
+
+.p2p-create-post-btn-primary-buy {
+  background: #22c55e;
+}
+
+.p2p-create-post-btn-primary-buy:hover {
+  background: #20b855;
+}
+
+/* Light Theme Step 3 Styles */
+body.light_theme .p2p-create-post-section-title {
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-section-icon {
+  color: #F4B609;
+}
+
+body.light_theme .p2p-create-post-textarea {
+  background: #f5f5f5;
+  border-color: #E0E0E0;
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-checkbox-label {
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-registered-input {
+  background: #f5f5f5;
+  border-color: #E0E0E0;
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-registered-label {
+  color: #666;
+}
+
+body.light_theme .p2p-create-post-radio-input {
+  border-color: #ccc;
+}
+
+body.light_theme .p2p-create-post-radio-input:checked {
+  border-color: #333;
+}
+
+body.light_theme .p2p-create-post-radio-input:checked::after {
+  background-color: #f5f5f5;
+}
+
+body.light_theme .p2p-create-post-radio-text {
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-agreement-box {
+  background: #f5f5f5;
+}
+
+body.light_theme .p2p-create-post-btn-secondary {
+  background: #f5f5f5;
+  border-color: #E0E0E0;
+  color: #333;
+}
+
+body.light_theme .p2p-create-post-btn-secondary:hover {
+  background: #E8E8E8;
 }

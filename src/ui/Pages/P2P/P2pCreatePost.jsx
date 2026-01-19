@@ -55,7 +55,8 @@ const P2pCreatePost = () => {
         agree: true,
         completedKyc: false,
         registeredUser: false,
-        registeredDays: "0"
+        registeredDays: "0",
+        status: "ONLINE"
     });
 
     // Handle resize
@@ -1609,110 +1610,111 @@ const P2pCreatePost = () => {
                         {/* Step 3: Remarks + Counterparty Conditions */}
                         {currentStep === 3 && (
                             <>
-                                <div style={styles.sectionTitle}>
-                                    <span style={styles.sectionIcon}>▶</span>
+                                <div className="p2p-create-post-section-title">
+                                    <span className="p2p-create-post-section-icon">▶</span>
                                     Remarks (Optional)
                                 </div>
                                 <textarea
-                                    style={styles.textarea}
+                                    className="p2p-create-post-textarea"
                                     value={formData.remarks}
                                     onChange={(e) => handleInput("remarks", e.target.value)}
                                     placeholder="Enter remarks..."
                                 />
 
-                                <div style={{ marginTop: isMobile ? '24px' : '32px' }}>
-                                    <div style={styles.sectionTitle}>
-                                        <span style={styles.sectionIcon}>▶</span>
+                                <div className="p2p-create-post-step3-section">
+                                    <div className="p2p-create-post-section-title">
+                                        <span className="p2p-create-post-section-icon">▶</span>
                                         Counterparty Conditions
                                     </div>
 
-                                    {/* <label style={styles.checkboxLabel}>
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.completedKyc}
-                                            onChange={() => handleInput("completedKyc", !formData.completedKyc)}
-                                            style={styles.checkbox}
-                                        />
-                                        <span>Completed KYC</span>
-                                    </label> */}
-
-                                    <label style={{ ...styles.checkboxLabel, flexWrap: 'wrap' }}>
+                                    <label className="p2p-create-post-checkbox-label p2p-create-post-checkbox-label-wrap">
                                         <input
                                             type="checkbox"
                                             checked={formData.registeredUser}
                                             onChange={() => handleInput("registeredUser", !formData.registeredUser)}
-                                            style={styles.checkbox}
+                                            className="p2p-create-post-checkbox"
                                         />
                                         <span>Registered</span>
                                         {formData.registeredUser && (
-                                            <div style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '8px',
-                                                marginLeft: isMobile ? '0' : '8px',
-                                                marginTop: isMobile ? '8px' : '0',
-                                                width: isMobile ? '100%' : 'auto'
-                                            }}>
+                                            <div className="p2p-create-post-registered-input-wrapper">
                                                 <input
                                                     type="number"
-                                                    className={`p2p-create-post-input ${fieldErrors['registeredDays'] ? 'error' : ''}`}
-                                                    style={{ width: '80px', padding: '8px 12px' }}
+                                                    className={`p2p-create-post-registered-input ${fieldErrors['registeredDays'] ? 'error' : ''}`}
                                                     value={formData.registeredDays}
                                                     onChange={(e) => handleInput("registeredDays", e.target.value)}
                                                     min="0"
                                                 />
-                                                <span style={{ color: '#888' }}>day(s) ago</span>
+                                                <span className="p2p-create-post-registered-label">day(s) ago</span>
                                             </div>
                                         )}
                                     </label>
                                     {fieldErrors.registeredDays && (
-                                        <div style={{
-                                            color: '#ef4444',
-                                            fontSize: isMobile ? '11px' : '12px',
-                                            marginTop: '-8px',
-                                            marginBottom: '16px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '4px'
-                                        }}>
+                                        <div className="p2p-create-post-field-error">
                                             <span>⚠</span> {fieldErrors.registeredDays}
                                         </div>
                                     )}
                                 </div>
 
-                                <div style={styles.agreementBox}>
-                                    <label style={{ ...styles.checkboxLabel, marginBottom: 0 }}>
+                                <div className="p2p-create-post-step3-section">
+                                    <div className="p2p-create-post-section-title">
+                                        <span className="p2p-create-post-section-icon">▶</span>
+                                        Status
+                                    </div>
+                                    <div className="p2p-create-post-radio-group">
+                                        <label className="p2p-create-post-radio-label">
+                                            <input
+                                                type="radio"
+                                                name="status"
+                                                value="ONLINE"
+                                                checked={formData.status === "ONLINE"}
+                                                onChange={(e) => handleInput("status", e.target.value)}
+                                                className="p2p-create-post-radio-input"
+                                            />
+                                            <span className="p2p-create-post-radio-text">Online</span>
+                                        </label>
+                                        <label className="p2p-create-post-radio-label">
+                                            <input
+                                                type="radio"
+                                                name="status"
+                                                value="OFFLINE"
+                                                checked={formData.status === "OFFLINE"}
+                                                onChange={(e) => handleInput("status", e.target.value)}
+                                                className="p2p-create-post-radio-input"
+                                            />
+                                            <span className="p2p-create-post-radio-text">Offline</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="p2p-create-post-agreement-box">
+                                    <label className="p2p-create-post-checkbox-label p2p-create-post-checkbox-label-no-margin">
                                         <input
                                             type="checkbox"
                                             checked={formData.agree}
                                             onChange={() => handleInput("agree", !formData.agree)}
-                                            style={styles.checkbox}
+                                            className="p2p-create-post-checkbox"
                                         />
-                                        <span style={{ fontSize: isMobile ? '12px' : '14px' }}>
+                                        <span className="p2p-create-post-agreement-text">
                                             I Have Read And Agree To Peer-To-Peer (P2P) Service Agreement
                                         </span>
                                     </label>
                                 </div>
                                 {fieldErrors.agree && (
-                                    <div style={{
-                                        color: '#ef4444',
-                                        fontSize: isMobile ? '11px' : '12px',
-                                        marginTop: '-12px',
-                                        marginBottom: '16px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '4px'
-                                    }}>
+                                    <div className="p2p-create-post-field-error p2p-create-post-field-error-agreement">
                                         <span>⚠</span> {fieldErrors.agree}
                                     </div>
                                 )}
 
-                                <div style={styles.buttonGroup}>
-                                    <button style={styles.btnSecondary} onClick={prevStep}>Cancel</button>
-                                    <button style={{ ...styles.btnPrimary, background: formData.side === 'SELL' ? '#ef4444' : '#22c55e' }} onClick={openConfirmModal}>
+                                <div className="d-flex align-items-center justify-content-between btnnextback">
+                                    <button className="btn-secondary backbtn" onClick={prevStep}>Cancel</button>
+                                    <button 
+                                        className={`btn-primary nextbtn ${formData.side === 'SELL' ? 'p2p-create-post-btn-primary-sell' : 'p2p-create-post-btn-primary-buy'}`} 
+                                        onClick={openConfirmModal}
+                                    >
                                         Create Ad
                                     </button>
                                 </div>
+
                             </>
                         )}
                     </div>
@@ -2102,7 +2104,7 @@ const P2pCreatePost = () => {
             {/* Confirm Post Modal */}
             <div className="modal fade payment_method_pop userprofile_pop confirm_post" id="confirmpostModal" tabIndex="-1">
                 <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content bg-dark text-white rounded-4">
+                    <div className="modal-content text-white">
                         <div className="modal-header border-0">
                             <h5 className="modal-title">Confirm to Post</h5>
                             <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -2137,10 +2139,11 @@ const P2pCreatePost = () => {
                                     <li>Remarks<span>{formData.remarks}</span></li>
                                 )}
                             </ul>
-                            <div className="d-flex submit_button">
-                                <button className="btn bgnone" data-bs-dismiss="modal">Cancel</button>
-                                <button className="btn" onClick={handleSubmit}>Confirm Post</button>
+                            <div className="d-flex align-items-center justify-content-between btnnextback">
+                                <button className="btn-secondary backbtn" data-bs-dismiss="modal">Cancel</button>
+                                <button className="btn-primary nextbtn" onClick={handleSubmit}>Confirm Post</button>
                             </div>
+
                         </div>
                     </div>
                 </div>
