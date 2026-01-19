@@ -750,6 +750,30 @@ const P2pCreatePost = () => {
             borderColor: '#ffdc88',
             background: 'rgba(255, 220, 136, 0.1)'
         },
+        tabsContainer: {
+            display: 'flex',
+            gap: '0',
+            marginBottom: isMobile ? '24px' : '32px',
+            borderBottom: '1px solid #2a2a3a'
+        },
+        tabButton: {
+            background: 'transparent',
+            border: 'none',
+            color: '#888',
+            fontSize: isMobile ? '14px' : '16px',
+            fontWeight: '400',
+            padding: isMobile ? '12px 16px' : '14px 20px',
+            cursor: 'pointer',
+            position: 'relative',
+            transition: 'all 0.3s ease',
+            borderBottom: '2px solid transparent',
+            marginBottom: '-1px'
+        },
+        tabButtonActive: {
+            color: '#fff',
+            fontWeight: '500',
+            borderBottom: '2px solid #fff'
+        },
         paymentMethodError: {
             borderColor: '#ef4444',
             boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)'
@@ -1331,7 +1355,7 @@ const P2pCreatePost = () => {
 
 
                                 <div className='d-flex align-items-center justify-content-between btnnextback'>
-                                <button className='btn-secondary backbtn' onClick={nextStep}>
+                                <button className='btn-secondary backbtn' onClick={prevStep}>
                                         Back
                                     </button>
                                     <button className='btn-primary nextbtn' onClick={nextStep}>
@@ -1344,6 +1368,30 @@ const P2pCreatePost = () => {
                         {/* Step 2: Transaction Settings + Payment Method */}
                         {currentStep === 2 && (
                             <>
+                                {/* Buy/Sell Tabs */}
+                                <div style={styles.tabsContainer}>
+                                    <button
+                                        type="button"
+                                        style={{
+                                            ...styles.tabButton,
+                                            ...(formData.side === "BUY" ? styles.tabButtonActive : {})
+                                        }}
+                                        onClick={() => handleInput("side", "BUY")}
+                                    >
+                                        I want to Buy
+                                    </button>
+                                    <button
+                                        type="button"
+                                        style={{
+                                            ...styles.tabButton,
+                                            ...(formData.side === "SELL" ? styles.tabButtonActive : {})
+                                        }}
+                                        onClick={() => handleInput("side", "SELL")}
+                                    >
+                                        I want to Sell
+                                    </button>
+                                </div>
+
                                 <div style={styles.sectionTitle}>
                                     <span style={styles.sectionIcon}>▶</span>
                                     Transaction Settings
@@ -1442,7 +1490,7 @@ const P2pCreatePost = () => {
                                     {formData.side === "SELL" && (
                                         <>
                                             {payments?.length > 0 ? (
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                <div className="p2p-payment-methods-list">
                                                     {payments.map((method) => {
                                                         const isSelected = selectedSellerPaymentMethod.some(m => m._id === method._id);
                                                         // Keys to exclude from display
@@ -1455,30 +1503,16 @@ const P2pCreatePost = () => {
                                                         return (
                                                             <div
                                                                 key={method._id}
-                                                                style={{
-                                                                    background: '#0d0d14',
-                                                                    border: isSelected ? '1px solid #ffdc88' : (fieldErrors.paymentMethod ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid #2a2a3a'),
-                                                                    borderRadius: '10px',
-                                                                    padding: isMobile ? '12px' : '16px',
-                                                                    cursor: 'pointer',
-                                                                    transition: 'all 0.2s ease',
-                                                                    ...(isSelected ? { background: 'rgba(255, 220, 136, 0.1)' } : {})
-                                                                }}
+                                                                className={`p2p-payment-method-card ${isSelected ? 'selected' : ''} ${fieldErrors.paymentMethod ? 'error' : ''}`}
                                                                 onClick={() => toggleSellerPayment(method)}
                                                             >
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                                        <span style={{ color: '#ffdc88', fontSize: isMobile ? '14px' : '15px', fontWeight: '600' }}>
+                                                                <div className="p2p-payment-method-header">
+                                                                    <div className="p2p-payment-method-header-left">
+                                                                        <span className="p2p-payment-method-name">
                                                                             {method.name || method.type}
                                                                         </span>
                                                                         {method.type && method.type !== method.name && (
-                                                                            <span style={{
-                                                                                color: '#666',
-                                                                                fontSize: '11px',
-                                                                                background: '#1a1a2e',
-                                                                                padding: '2px 8px',
-                                                                                borderRadius: '4px'
-                                                                            }}>
+                                                                            <span className="p2p-payment-method-type-badge">
                                                                                 {method.type}
                                                                             </span>
                                                                         )}
@@ -1490,39 +1524,25 @@ const P2pCreatePost = () => {
                                                                         style={styles.checkbox}
                                                                     />
                                                                 </div>
-                                                                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '8px' }}>
+                                                                <div className="p2p-payment-method-fields-grid">
                                                                     {displayFields.map(([key, value]) => (
-                                                                        <div key={key} style={{ fontSize: '12px' }}>
-                                                                            <span style={{ color: '#666' }}>{formatLabel(key)}: </span>
-                                                                            <span style={{ color: '#aaa' }}>{value}</span>
+                                                                        <div key={key} className="p2p-payment-method-field">
+                                                                            <span className="p2p-payment-method-field-label">{formatLabel(key)}: </span>
+                                                                            <span className="p2p-payment-method-field-value">{value}</span>
                                                                         </div>
                                                                     ))}
                                                                 </div>
                                                                 {method.qrCode && (
-                                                                    <div style={{
-                                                                        marginTop: '12px',
-                                                                        paddingTop: '12px',
-                                                                        borderTop: '1px solid #2a2a3a',
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                        gap: '12px'
-                                                                    }}>
+                                                                    <div className="p2p-payment-method-qr-section">
                                                                         <img
                                                                             src={`${ApiConfig.baseImage}${method.qrCode}`}
                                                                             alt="QR Code"
-                                                                            style={{
-                                                                                width: isMobile ? '60px' : '80px',
-                                                                                height: isMobile ? '60px' : '80px',
-                                                                                objectFit: 'contain',
-                                                                                borderRadius: '8px',
-                                                                                background: '#fff',
-                                                                                padding: '4px'
-                                                                            }}
+                                                                            className="p2p-payment-method-qr-image"
                                                                             onError={(e) => {
                                                                                 e.target.style.display = 'none';
                                                                             }}
                                                                         />
-                                                                        <span style={{ color: '#666', fontSize: '11px' }}>QR Code</span>
+                                                                        <span className="p2p-payment-method-qr-label">QR Code</span>
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -1530,15 +1550,7 @@ const P2pCreatePost = () => {
                                                     })}
                                                 </div>
                                             ) : (
-                                                <div style={{
-                                                    color: '#888',
-                                                    fontSize: '13px',
-                                                    padding: '20px',
-                                                    textAlign: 'center',
-                                                    background: '#0d0d14',
-                                                    borderRadius: '10px',
-                                                    border: fieldErrors.paymentMethod ? '1px solid #ef4444' : '1px solid #2a2a3a'
-                                                }}>
+                                                <div className={`p2p-payment-methods-empty ${fieldErrors.paymentMethod ? 'error' : ''}`}>
                                                     No payment methods added. Please add a payment method first.
                                                 </div>
                                             )}
@@ -1547,20 +1559,16 @@ const P2pCreatePost = () => {
 
                                     {/* For BUY: Show available payment method types */}
                                     {formData.side === "BUY" && (
-                                        <div style={styles.paymentGrid}>
+                                        <div className="p2p-payment-grid">
                                             {availablePaymentMathod.slice(0, 6).map((method) => {
                                                 const isSelected = selectedBuyerPaymentMethod.includes(method.name);
                                                 return (
                                                     <div
                                                         key={method._id}
-                                                        style={{
-                                                            ...styles.paymentMethod,
-                                                            ...(isSelected ? styles.paymentMethodActive : {}),
-                                                            ...(fieldErrors.paymentMethod && !isSelected ? { borderColor: 'rgba(239, 68, 68, 0.5)' } : {})
-                                                        }}
+                                                        className={`p2p-payment-method-item ${isSelected ? 'selected' : ''} ${fieldErrors.paymentMethod && !isSelected ? 'error' : ''}`}
                                                         onClick={() => toggleBuyerPayment(method.name)}
                                                     >
-                                                        <span style={{ color: '#fff', fontSize: isMobile ? '13px' : '14px' }}>{method.name}</span>
+                                                        <span className="p2p-payment-method-item-text">{method.name}</span>
                                                         <input
                                                             type="checkbox"
                                                             checked={isSelected}
@@ -1570,35 +1578,31 @@ const P2pCreatePost = () => {
                                                     </div>
                                                 );
                                             })}
+                                             <button
+                                        className="p2p-add-method-button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target={formData.side === "SELL" ? "#sellModal" : "#buyPaymentModal"}
+                                    >
+                                        <span className="p2p-add-method-button-icon">+</span> Add New Method
+                                    </button>
                                         </div>
                                     )}
 
                                     {fieldErrors.paymentMethod && (
-                                        <div style={{
-                                            color: '#ef4444',
-                                            fontSize: isMobile ? '11px' : '12px',
-                                            marginTop: '8px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '4px'
-                                        }}>
+                                        <div className="p2p-payment-method-error">
                                             <span>⚠</span> {fieldErrors.paymentMethod}
                                         </div>
                                     )}
 
-                                    <button
-                                        style={styles.addMethodBtn}
-                                        data-bs-toggle="modal"
-                                        data-bs-target={formData.side === "SELL" ? "#sellModal" : "#buyPaymentModal"}
-                                    >
-                                        <span style={{ fontSize: '18px' }}>+</span> Add New Method
-                                    </button>
+                                   
                                 </div>
 
-                                <div style={styles.buttonGroup}>
-                                    <button style={styles.btnSecondary} onClick={prevStep}>Back</button>
-                                    <button style={styles.btnPrimary} onClick={nextStep}>Continue</button>
+                                <div className='d-flex align-items-center justify-content-between btnnextback'>
+                                    <button className='btn-secondary backbtn' onClick={prevStep}>Back</button>
+                                    <button className='btn-primary nextbtn' onClick={nextStep}>Continue</button>
                                 </div>
+
+
                             </>
                         )}
 
@@ -2058,13 +2062,12 @@ const P2pCreatePost = () => {
                         </div>
                         <div className="modal-body p2p-modal-body">
                             <p style={{ color: '#888', marginBottom: '20px' }}>Select up to 5 methods</p>
-                            <div style={{ marginBottom: '16px' }}>
+                            <div className='payment_search_box'>
                                 <input
                                     type="search"
                                     placeholder="Search payment method..."
                                     value={searchAvailPayment}
                                     onChange={(e) => setSearchAvailPayment(e.target.value)}
-                                    style={styles.input}
                                 />
                             </div>
                             <div className="p2p-modal-options">
@@ -2089,6 +2092,7 @@ const P2pCreatePost = () => {
                                         </label>
                                     ))
                                 }
+                                <button className='p2p-submit-button'>Submit</button>
                             </div>
                         </div>
                     </div>
