@@ -374,8 +374,8 @@ const P2pCreatePost = () => {
 
             if (result?.success) {
                 const fiatList = result?.data || [];
-                console.log(fiatList,'fiatListfiatList>');
-                
+                console.log(fiatList, 'fiatListfiatList>');
+
                 setFiats(fiatList);
 
                 // Set default fiat: INR if exists, otherwise first item
@@ -978,7 +978,7 @@ const P2pCreatePost = () => {
 
         return (
             <div style={styles.previewCard}>
-              
+
                 <div style={{
                     padding: isMobile ? '16px' : '20px 24px',
                     background: formData.side === 'BUY' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)',
@@ -1355,14 +1355,14 @@ const P2pCreatePost = () => {
                                     </div>
 
                                     <div className='helpguide'>
-                                    <i class="ri-question-line"></i> help & Guide
+                                        <i class="ri-question-line"></i> help & Guide
                                     </div>
 
                                 </div>
 
 
                                 <div className='d-flex align-items-center justify-content-between btnnextback'>
-                                <button className='btn-secondary backbtn' onClick={prevStep}>
+                                    <button className='btn-secondary backbtn' onClick={prevStep}>
                                         Back
                                     </button>
                                     <button className='btn-primary nextbtn' onClick={nextStep}>
@@ -1585,13 +1585,13 @@ const P2pCreatePost = () => {
                                                     </div>
                                                 );
                                             })}
-                                             <button
-                                        className="p2p-add-method-button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target={formData.side === "SELL" ? "#sellModal" : "#buyPaymentModal"}
-                                    >
-                                        <span className="p2p-add-method-button-icon">+</span> Add New Method
-                                    </button>
+                                            <button
+                                                className="p2p-add-method-button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target={formData.side === "SELL" ? "#sellModal" : "#buyPaymentModal"}
+                                            >
+                                                <span className="p2p-add-method-button-icon">+</span> Add New Method
+                                            </button>
                                         </div>
                                     )}
 
@@ -1601,7 +1601,7 @@ const P2pCreatePost = () => {
                                         </div>
                                     )}
 
-                                   
+
                                 </div>
 
                                 <div className='d-flex align-items-center justify-content-between btnnextback'>
@@ -1713,8 +1713,8 @@ const P2pCreatePost = () => {
 
                                 <div className="d-flex align-items-center justify-content-between btnnextback">
                                     <button className="btn-secondary backbtn" onClick={prevStep}>Cancel</button>
-                                    <button 
-                                        className={`btn-primary nextbtn ${formData.side === 'SELL' ? 'p2p-create-post-btn-primary-sell' : 'p2p-create-post-btn-primary-buy'}`} 
+                                    <button
+                                        className={`btn-primary nextbtn ${formData.side === 'SELL' ? 'p2p-create-post-btn-primary-sell' : 'p2p-create-post-btn-primary-buy'}`}
                                         onClick={openConfirmModal}
                                     >
                                         Create Ad

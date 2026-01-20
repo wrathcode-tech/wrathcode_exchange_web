@@ -2510,7 +2510,7 @@ h4.p2p-profile-tab:hover {
 }
 
 .p2p-profile-container .p2p-empty-state-card i {
-  font-size: 40px;
+  font-size: 30px;
   color: #fff;
   margin-bottom: 0px;
 }
@@ -2633,6 +2633,10 @@ h4.p2p-profile-tab:hover {
   gap: 2px;
 }
 
+.p2p-empty-state-card .p2p-myads-action-btn {
+  padding: 10px 12px;
+}
+
 .p2p-myads-asset-name {
   font-size: 14px;
   font-weight: 500;
@@ -2725,6 +2729,10 @@ h4.p2p-profile-tab:hover {
   transition: all 0.2s ease;
 }
 
+.payment_method_pop.modal.fade .modal-dialog {
+  min-width: 540px;
+}
+
 .p2p-create-ad-btn-small:hover {
   border-color: rgba(71, 85, 105, 0.8);
   color: #d1d5db;
@@ -2734,9 +2742,9 @@ h4.p2p-profile-tab:hover {
 .p2p-empty-state-mobile {
   text-align: center;
   padding: 40px 20px;
-  background: #12121a;
+  background: #373F4D;
   border-radius: 12px;
-  border: 1px solid #1e1e2d;
+  border: 1px solid #373F4D;
 }
 
 /* Pagination */
@@ -3513,15 +3521,20 @@ h4.p2p-profile-tab:hover {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-bottom: 20px;
-    padding: 0 4px;
+    padding: 20px;
   }
 
   .p2p-myads-stat-card {
     padding: 14px 12px;
-    border-radius: 12px;
-    background: linear-gradient(145deg, #12121a00 0%, #0d0d1400 100%);
-    border: 1px solid #2c2c2c;
-    text-align: center;
+    border-radius: 0px;
+    /* background: linear-gradient(145deg, #12121a00 0%, #0d0d1400 100%); */
+    /* border: 1px solid #2c2c2c; */
+    text-align: left;
+  }
+
+  .p2p-profile-container .p2p-myads-stat-card {
+    border: none;
+    border-bottom: 1px solid #454C59;
   }
 
   .p2p-myads-stat-card-label {
@@ -3551,6 +3564,9 @@ h4.p2p-profile-tab:hover {
     width: 100%;
     margin: 0 auto;
   }
+
+
+
 
   .selectpaymetpop.modal.fade .modal-dialog {
     width: 100%;
@@ -3866,7 +3882,7 @@ h4.p2p-profile-tab:hover {
   .p2p-empty-state-mobile {
     text-align: center;
     padding: 48px 24px;
-    background: linear-gradient(145deg, #12121a 0%, #0d0d14 100%);
+    background: #373F4D;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     margin: 0 4px;
@@ -4169,8 +4185,8 @@ h4.p2p-profile-tab:hover {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background: #1a1a24;
-  border: 1px solid #2a2a3a;
+  background: #373f4d;
+  border: 1px solid #373f4d;
   border-radius: 10px;
   color: #e5e5e5;
   font-size: 14px;
@@ -4180,12 +4196,12 @@ h4.p2p-profile-tab:hover {
 }
 
 .p2p-mobile-filter-toggle:hover {
-  background: #22222d;
-  border-color: #3a3a4a;
+  background: #373f4d;
+  border: 1px solid #373f4d;
 }
 
 .p2p-mobile-filter-toggle.active {
-  background: #22222d;
+  background: #373f4d;
   border-color: #22c55e;
   color: #22c55e;
 }
@@ -4673,9 +4689,9 @@ button.p2p-mobile-view-btn i {
 .p2p-empty-state-mobile {
   text-align: center;
   padding: 48px 20px;
-  background: #12121a;
+  background: #373F4D;
   border-radius: 12px;
-  border: 1px solid #1e1e2d;
+  border: 1px solid #373F4D;
 }
 
 .p2p-empty-state-mobile .p2p-empty-icon {
@@ -6156,6 +6172,8 @@ button.p2p-mobile-view-btn i {
   .p2p-order-main {
     max-width: 100%;
   }
+
+
 }
 
 @media (max-width: 1024px) {
@@ -6506,7 +6524,8 @@ button.p2p-mobile-view-btn i {
 
 .volumedatails .p2p-myads-expanded-item {
   flex-direction: row;
-  gap: 12px; }
+  gap: 12px;
+}
 
 .p2p-orders-table tbody tr:hover {
   background: #2B313C;
@@ -10579,7 +10598,7 @@ button.p2p-mobile-view-btn i {
   }
 
   .p2p-page-content {
-    padding: 0;
+    padding: 18px;
   }
 
   .order-info-row .info-label {
@@ -11433,7 +11452,7 @@ body.light_theme .p2p-loading-container {
 
 @media (max-width: 767px) {
   .p2p-create-post-title {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 
@@ -11513,9 +11532,9 @@ body.light_theme .p2p-loading-container {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 480px) {
   .p2p-create-post-step-line {
-    width: 40px;
+    width: 60px;
   }
 }
 
@@ -11538,6 +11557,25 @@ body.light_theme .p2p-loading-container {
     font-size: 14px;
     margin-bottom: 16px;
   }
+
+  .p2p-nav-item {
+    gap: 10px;
+    padding: 10px 12px 10px 20px;
+    font-size: 13px;
+  }
+
+  .pricehigh_box_item_container {
+    gap: 24px;
+  }
+
+  .pricehigh_box_item_title {
+    font-size: 18px;
+  }
+
+  .pricehigh_box_item_title span {
+    font-size: 10px;
+  }
+
 }
 
 .p2p-create-post-section-icon {
@@ -11555,7 +11593,7 @@ body.light_theme .p2p-loading-container {
 
 @media (max-width: 767px) {
   .p2p-create-post-input-group {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
 }
 
@@ -13131,7 +13169,7 @@ body.light_theme .p2p-payment-method-item-text {
 .p2p-create-post-field-error {
   color: #ef4444;
   font-size: 11px;
-  margin-top: -8px;
+  margin-top: 4px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -13616,4 +13654,130 @@ body.light_theme .p2p-myads-expanded-section-border {
 
 body.light_theme .p2p-row-expanded {
   background: rgba(244, 182, 9, 0.03) !important;
+}
+
+@media (max-width: 1200px) {
+
+  .p2p-create-post-container {
+    grid-template-columns: 1fr 80px;
+  }
+
+  .p2p-myads-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+
+}
+
+
+@media (max-width:767px) {
+
+
+  .p2p-create-post-container {
+    grid-template-columns: 1fr 0px;
+    gap: 0px;
+  }
+
+  .p2p-payment-method-item {
+    margin-bottom: 5px;
+    padding: 8px 12px;
+  }
+
+  .pricehigh_box_item_title {
+    font-size: 18px;
+  }
+
+  .pricehigh_box_item_title span {
+    font-size: 10px;
+  }
+
+
+  .btnnextback button {
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+
+  .p2p-profile-container .p2p-profile-header {
+    padding: 20px;
+  }
+
+  .p2p-profile-tabs.paymentprofiletabs {
+    padding: 0px 15px 20px;
+  }
+
+  .rightalien {
+    text-align: center;
+  }
+
+  .p2p-profile-container .p2p-empty-state-card i {
+    font-size: 26px;
+  }
+
+  .p2p-profile-name {
+    font-size: 18px;
+  }
+
+  .p2p-myads-stat-card {
+    border-right: none;
+    padding: 10px 5px;
+  }
+
+  .p2p-empty-state-mobile {
+    margin: 0px;
+  }
+
+  .p2p-empty-state-mobile .p2p-create-ad-btn-small {
+    padding: 10px 24px;
+    font-size: 12px;
+    margin: 0 auto;
+  }
+
+  .p2p-filter-section.myadsfillter {
+    background: #3f4856;
+    padding: 20px;
+}
+
+}
+
+
+@media (max-width: 660px) {
+
+  .pricehigh_box_item_title {
+    font-size: 18px;
+  }
+
+  .pricehigh_box_item_title span {
+    font-size: 10px;
+  }
+
+  .p2p-myads-stat-card-value {
+    font-size: 13px;
+  }
+
+  .p2p-profile-container .p2p-myads-stats-grid {
+    gap: 10px;
+    padding: 10px 15px;
+  }
+
+  .p2p-profile-container .p2p-myads-stat-card-label {
+    font-size: 11px;
+    text-align: left;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+  }
+
+  .p2p-myads-stat-card-value {
+    font-size: 11px;
+  }
+
+
+  .pricehigh_box {
+    padding: 15px;
+    margin-top: 15px;
+    align-items: start;
+    gap: 12px;
+    flex-direction: column;
+  }
+
+
 }

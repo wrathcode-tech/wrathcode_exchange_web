@@ -2456,8 +2456,8 @@ body .slick-dots li.slick-active button:before {
     border-radius: 50px;
     font-size: 13px;
     color: #F2F4F6;
-    padding: 4px 5px;
-    width: 85px;
+    padding: 4px 12px;
+     width: 150px
 }
 
 .two_factor_list button.btn:hover {
@@ -5275,7 +5275,8 @@ input[type="date"] {
 .modal.search_form .resend {
     font-size: 14px;
     font-weight: 300;
-    margin-right: 15px;
+    margin-right: 12px;
+    white-space: nowrap;
 }
 
 
@@ -6359,8 +6360,9 @@ button.sc-gjLLEI.kuPCgf svg>path {
 }
 
 button {
-    background-color: #f3bb2b;
+    background-color: #e7b641;
     display: block;
+    border: none;
     font-size: 16px;
     font-weight: 600;
     transition: 1s all;
@@ -6371,6 +6373,9 @@ button {
 button:hover {
     background-color: #dfbb66;
 }
+
+body .btn-danger{ background-color: #ed5765; border:1px solid #ed5765; }
+body .btn-success{ background-color: #5EBA89; border:1px solid #5EBA89 ; }
 
 .check_bar.active h5 {
     color: #000;
@@ -9073,6 +9078,10 @@ p.user_info a {
 @media screen and (max-width: 991px) {
     .profile_id_s::-webkit-scrollbar {
         height: 4px;
+        display: none;
+    }
+
+    .crypto_section .hot_spot_outer .top_heading {
         display: none;
     }
 
@@ -14946,12 +14955,14 @@ button.btn_claim:active {
     border-radius: 0px;
     padding: 10px;
     font-size: 12px;
-    color: #949AA4;
+    color: #fff;
     border: none;
     width: 100%;
 }
 
-
+.alert.alert-warning {
+    font-size: 14px;
+}
 
 .profile_form .emailinput textarea {
     font-size: 14px;
@@ -15910,7 +15921,8 @@ img.profileimg {
 }
 
 body .trade_summary_table_lft .table-responsive .table-responsive {
-    min-height: 100%; max-height: 100%;
+    min-height: 100%;
+    max-height: 100%;
 }
 
 .transaction_history_t table tr:hover {
@@ -16346,7 +16358,10 @@ button.view_more_btn {
     margin: 20px auto;
 }
 
-#twofaInfoModal .qr_code img{ width: 100%; }
+#twofaInfoModal .qr_code img {
+    width: 100%;
+}
+
 .coypcodetext {
     width: 100%;
     background-color: #4B515D;
@@ -16357,7 +16372,10 @@ button.view_more_btn {
     border-radius: 5px;
 }
 
-.coypcodetext p { margin: 0px; color: #ffffffad; }
+.coypcodetext p {
+    margin: 0px;
+    color: #ffffffad;
+}
 
 button.copy_code {
     background-color: transparent;
@@ -16366,6 +16384,8 @@ button.copy_code {
     color: #fff;
     font-weight: 200;
 }
+
+.buysell_card.buysell_two .custom-btn{ color:#fff !important; }
 
 
 @media screen and (max-width:1700px) {
@@ -16447,8 +16467,13 @@ button.copy_code {
         padding-left: 0px;
     }
 
-.navbar-expand-lg .navbar-nav .dropdown-menu {
-        margin-top: 21px; }
+    .resources_cnt {
+        padding: 24px;
+    }
+
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        margin-top: 21px;
+    }
 
     .security_list li h3 {
         font-size: 32px;
@@ -17039,7 +17064,13 @@ button.copy_code {
     }
 
     .resources_news .news_img {
-        height: 290px;
+        height:200px;
+    }
+    .resources_news h3 {
+        font-size: 20px;
+    }
+    .resources_cnt {
+        padding: 22px;
     }
 
     .partner_logos {
@@ -18151,6 +18182,9 @@ button.copy_code {
         padding: 0px;
     }
 
+    .custom-tab-content table.table td {
+        font-size: 11px;
+    }
 
     .dashboard_right .col-sm-10 {
         width: 100%;
@@ -19021,15 +19055,15 @@ button.copy_code {
     }
 
     .resources_news .news_img {
-        height: 220px;
+        height: 160px;
     }
 
     .resources_cnt {
-        padding: 24px;
+        padding:20px;
     }
 
     .resources_news h3 {
-        font-size: 20px;
+        font-size:18px;
     }
 
     .trusted_partner {
@@ -19499,7 +19533,8 @@ button.copy_code {
     }
 
     #twofaInfoModal .qr_code {
-        width: 110px; }
+        width: 110px;
+    }
 
     .user_profile_cnt h3 {
         gap: 20px;
