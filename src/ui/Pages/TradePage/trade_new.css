@@ -2159,9 +2159,10 @@ html[data-theme="light"] .buysellform .form-group label {
     padding: 13px;
     border-radius: 0;
     border: 0;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    background: #1e1d30ba;
-    border-top: 1px solid #2c2c3d;
+    background: #1e1d3054;
+    border-top: 1px solid #2c2c3d8a;
 }
 
 html[data-theme='light'] .bs_tab_row {
@@ -2216,6 +2217,8 @@ html[data-theme='light'] .bs_tab_row {
         margin-top: -17px !important;
         border-radius: 0px 0px 10px 10px;
     }
+
+  
 
 }
 
@@ -2635,8 +2638,11 @@ html[data-theme='light'] .bs_tab_row {
 
     .mmn_btm_minus_spc button.btn.btn-danger {
         font-size: 12px;
-        padding: 3px 16px;
+        padding: 6px 16px;
     }
+
+.bs_tab_row button.btn.btn-success {
+        padding: 6px 16px; }
 
 }
 

@@ -1701,7 +1701,7 @@ const AssetOverview = () => {
 
       {/* <!-- Modal Search Coin Start --> */}
 
-      <div className="modal fade search_form search_coin" id="assets_crypto_modal" tabIndex="-1" aria-labelledby="assetsCryptoModalLabel" aria-hidden="true">
+      <div className="modal fade search_form search_coin search_form_modal_2" id="assets_crypto_modal" tabIndex="-1" aria-labelledby="assetsCryptoModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">

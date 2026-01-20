@@ -208,7 +208,8 @@ header .row {
 }
 
 .login_section.forgot_password button:hover {
-    background-color: #f3bb2b; }
+    background-color: #f3bb2b;
+}
 
 /* .herobanner2 .scan_block ul {
     display: flex;
@@ -2461,7 +2462,7 @@ body .slick-dots li.slick-active button:before {
     font-size: 13px;
     color: #F2F4F6;
     padding: 4px 12px;
-     width: 150px
+    width: 150px
 }
 
 .two_factor_list button.btn:hover {
@@ -5092,8 +5093,15 @@ body .search_form.order_detail_pop.modelbg2 td.padding-0 i {
     padding: 0px 7px;
 }
 
-.css-1fqh72q-control{ background-color: transparent !important; border:1px solid #707A8A !important; color: #fff !important; }
-.css-1tp29pa-singleValue{ color: #fff !important; }
+.css-1fqh72q-control {
+    background-color: transparent !important;
+    border: 1px solid #707A8A !important;
+    color: #fff !important;
+}
+
+.css-1tp29pa-singleValue {
+    color: #fff !important;
+}
 
 .earining_calculator_form.convertorusd_outer {
     max-width: 710px;
@@ -6382,8 +6390,15 @@ button:hover {
     background-color: #dfbb66;
 }
 
-body .btn-danger{ background-color: #ed5765; border:1px solid #ed5765; }
-body .btn-success{ background-color: #5EBA89; border:1px solid #5EBA89 ; }
+body .btn-danger {
+    background-color: #ed5765;
+    border: 1px solid #ed5765;
+}
+
+body .btn-success {
+    background-color: #5EBA89;
+    border: 1px solid #5EBA89;
+}
 
 .check_bar.active h5 {
     color: #000;
@@ -7675,7 +7690,7 @@ ul.user_social li {
     min-width: 80px;
     position: absolute;
     right: 10px;
-    bottom:0px;
+    bottom: 0px;
 }
 
 .homebonuspop .modal-dialog {
@@ -7686,7 +7701,7 @@ ul.user_social li {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin:0px 0px 20px;
+    margin: 0px 0px 20px;
 }
 
 .recommendations_block ul {
@@ -9104,6 +9119,9 @@ p.user_info a {
         height: 4px;
         display: none;
     }
+
+    button.btn.btn-success {
+        padding: 7px 16px; }
 
     .crypto_section .hot_spot_outer .top_heading {
         display: none;
@@ -16379,10 +16397,30 @@ button.view_more_btn {
     width: 100%;
     background-color: #4B515D;
     padding: 15px;
+    flex-direction: column;
     display: flex;
+    align-items: start;
     justify-content: space-between;
-    gap: 20px;
+    gap: 5px;
     border-radius: 5px;
+}
+
+.copycodetxt {
+    width: 100%;
+    background-color: #ffffff1f;
+    border-radius: 5px;
+    padding: 0px 10px;
+    margin-top: 3px;
+}
+
+.copycodetxtcode {
+    color: #fff;
+    width: 100%;
+    overflow: auto;
+    white-space: nowrap;
+    border-radius: 5px;
+    font-size: 14px;
+    word-break: break-all;
 }
 
 .coypcodetext p {
@@ -16398,7 +16436,9 @@ button.copy_code {
     font-weight: 200;
 }
 
-.buysell_card.buysell_two .custom-btn{ color:#fff !important; }
+.buysell_card.buysell_two .custom-btn {
+    color: #fff !important;
+}
 
 
 
@@ -16486,7 +16526,8 @@ button.copy_code {
     }
 
     ul.kyclist {
-        font-size: 12px; }
+        font-size: 12px;
+    }
 
     .navigation {
         padding-left: 0px;
@@ -16659,7 +16700,8 @@ button.copy_code {
     }
 
     .block_features h5 {
-        font-size: 14px; }
+        font-size: 14px;
+    }
 
     body .buy_transferbtn a {
         padding: 7px 12px;
@@ -17092,11 +17134,13 @@ button.copy_code {
     }
 
     .resources_news .news_img {
-        height:200px;
+        height: 200px;
     }
+
     .resources_news h3 {
         font-size: 20px;
     }
+
     .resources_cnt {
         padding: 22px;
     }
@@ -19087,11 +19131,11 @@ button.copy_code {
     }
 
     .resources_cnt {
-        padding:20px;
+        padding: 20px;
     }
 
     .resources_news h3 {
-        font-size:18px;
+        font-size: 18px;
     }
 
     .trusted_partner {
@@ -19560,17 +19604,34 @@ button.copy_code {
         display: none;
     }
 
-.login_section .lightlogo{ display: none; }
+  .scroll_y_reverse .orderbook-table td.text-danger {
+        width: auto;
+    }
 
-    .forgot_password a{ margin-top: 0px; }
+    .verify_authenticator_s p {
+        max-width: 100%;
+        font-size: 12px;
+    }
 
-    .modal.search_form#exampleModal .modal-dialog{ margin-top: 0px; }
+    .login_section .lightlogo {
+        display: none;
+    }
+
+    .forgot_password a {
+        margin-top: 0px;
+    }
+
+    .modal.search_form#exampleModal .modal-dialog {
+        margin-top: 0px;
+    }
 
     .form_block_login .email_code .input_filed {
-        padding-right: 50px; }
+        padding-right: 50px;
+    }
 
     #twofaInfoModal .qr_code {
-        width: 110px; margin: 0px auto;
+        width: 110px;
+        margin: 0px auto;
     }
 
     .user_profile_cnt h3 {
@@ -19649,12 +19710,17 @@ button.copy_code {
         flex-direction: row;
     }
 
-    .kyc_verif_bnr_wrapper .account_benifits .row .col-sm-4{ width: 33.33%; }  
+    .kyc_verif_bnr_wrapper .account_benifits .row .col-sm-4 {
+        width: 33.33%;
+    }
+
     .account_benifits {
         padding: 15px;
-    } 
+    }
 
-    .account_benifits h6{ font-size: 12px; }
+    .account_benifits h6 {
+        font-size: 12px;
+    }
 
     .mobile_view .swiper-pagination span {
         position: relative;
@@ -19681,6 +19747,7 @@ button.copy_code {
     .two_factor_list button.btn {
         font-size: 12px;
         width: 100%;
+        padding: 6px 12px;
     }
 
     .estimated_balance .div_tag {
@@ -19874,7 +19941,8 @@ button.copy_code {
     .gallery_crypto {
         border-radius: 18px;
         padding: 18px;
-        min-height: 260px; }
+        min-height: 260px;
+    }
 
     .cryptofuture_s.reverse_security {
         margin-top: 40px;
@@ -20201,11 +20269,11 @@ button.copy_code {
     }
 
     .navi_sidebar li a {
-        padding:10px;
+        padding: 10px;
     }
 
     .navi_sidebar li button {
-        padding:10px;
+        padding: 10px;
     }
 
     .login_section.forgot_password {
@@ -20478,7 +20546,7 @@ button.copy_code {
     }
 
     .dashboard_right_side .features_block {
-        gap:20px;
+        gap: 20px;
     }
 
     .dashboard_right_side {
@@ -22273,7 +22341,8 @@ button.copy_code {
     }
 
     .login_fullhieght {
-        padding: 40px 0px 70px; }
+        padding: 40px 0px 70px;
+    }
 
     .sign_in_form_s {
         padding: 0px;
@@ -25550,7 +25619,7 @@ button.copy_code {
 
 @media screen and (max-width:360px) {
 
- 
+
 
     img.round_img {
         width: 22px !important;
@@ -25767,7 +25836,9 @@ button.copy_code {
         overflow-y: auto;
     }
 
-    .search_form_modal_2.modal.fade .modal-content{ height: 70vh; } 
+    .search_form_modal_2.modal.fade .modal-content {
+        height: 70vh;
+    }
 
     .dashboard_summary .mobile_view span {
         position: relative;

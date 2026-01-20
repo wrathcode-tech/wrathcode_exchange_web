@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 
 const toastStyle = {
-  background: '#2d2d2d',
+  background: '#2b313c',
   color: '#e0e0e0',
   paddingRight: '32px',
 };

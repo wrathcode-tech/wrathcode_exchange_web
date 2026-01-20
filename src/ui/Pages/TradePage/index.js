@@ -1329,7 +1329,8 @@ const Trade = () => {
                                                                 </table>
                                                             </div>
                                                             <div className="price_card_body scroll_y scroll_y_reverse" style={{ position: 'relative', minHeight: '200px' }}>
-                                                                {loader && (!SellOrders || SellOrders.length === 0) ? (
+                                                                {
+                                                                loader && (!SellOrders || SellOrders.length === 0) ? (
                                                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '200px' }}>
                                                                         <div className="spinner-border" style={{ width: '1.5rem', height: '1.5rem', borderColor: 'rgba(255, 255, 255, 0.3)', borderRightColor: 'transparent' }} />
                                                                     </div>
@@ -1337,6 +1338,8 @@ const Trade = () => {
                                                                     <table className="table table-sm table-borderless mb-0 orderbook-table" style={{ width: '100%' }}>
                                                                         <tbody>
                                                                             {SellOrders?.length > 0 && !loader ? (
+                                               
+
                                                                                 SellOrders.map((data, index) => {
                                                                                     const fill = maxSellVolume
                                                                                         ? Math.min((data.remaining / maxSellVolume) * 100, 100)
@@ -1574,20 +1577,15 @@ const Trade = () => {
                                                                     </tr>
                                                                 ))
                                                             ) : (
-                                                                <tr>
-                                                                    <td colSpan="3" className="text-center">
-                                                                        <div className="no_data_s">
-                                                                            <img
-                                                                                src="/images/no_data_vector.svg"
-                                                                                className="img-fluid mb-2"
-                                                                                alt="no data"
-                                                                                width="52"
-                                                                            />
-                                                                            <br />
-                                                                            <small>No data Available</small>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                <tr rowSpan="5" className="no-data-row">
+                      <td colSpan="12">
+                        <div className="no-data-wrapper">
+                          <div className="no_data_s">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                                                             )}
                                                         </tbody>
                                                     </table>
@@ -1648,20 +1646,15 @@ const Trade = () => {
                                                                 </tr>
                                                             ))
                                                         ) : (
-                                                            <tr>
-                                                                <td colSpan="3" className="text-center">
-                                                                    <div className="no_data_s">
-                                                                        <img
-                                                                            src="/images/no_data_vector.svg"
-                                                                            className="img-fluid mb-2"
-                                                                            alt="no data"
-                                                                            width="52"
-                                                                        />
-                                                                        <br />
-                                                                        <small>No data Available</small>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                            <tr rowSpan="5" className="no-data-row">
+                                                            <td colSpan="12">
+                                                              <div className="no-data-wrapper">
+                                                                <div className="no_data_s">
+                                                                  <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                </div>
+                                                              </div>
+                                                            </td>
+                                                          </tr>
                                                         )}
                                                     </tbody>
                                                 </table>
@@ -1715,19 +1708,15 @@ const Trade = () => {
                                                                     </tr>
                                                                 ))
                                                             ) : (
-                                                                <tr>
-                                                                    <td colSpan="3" className="text-center">
-                                                                        <div className="no_data_s">
-                                                                            <img
-                                                                                src="/images/no_data_vector.svg"
-                                                                                className="img-fluid mb-2"
-                                                                                alt="no data"
-                                                                                width="52"
-                                                                            />
-                                                                            <small>No data Available</small>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                <tr rowSpan="5" className="no-data-row">
+                                                                <td colSpan="12">
+                                                                  <div className="no-data-wrapper">
+                                                                    <div className="no_data_s">
+                                                                      <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    </div>
+                                                                  </div>
+                                                                </td>
+                                                              </tr>
                                                             )}
                                                         </tbody>
                                                     </table>
@@ -2343,14 +2332,14 @@ const Trade = () => {
                                                                 </td>
                                                             </tr>
                                                         ) : <tr rowSpan="5" className="no-data-row">
-                                                        <td colSpan="12">
-                                                          <div className="no-data-wrapper">
-                                                            <div className="no_data_s">
-                                                              <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                                            </div>
-                                                          </div>
-                                                        </td>
-                                                      </tr>
+                                                            <td colSpan="12">
+                                                                <div className="no-data-wrapper">
+                                                                    <div className="no_data_s">
+                                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                         }
                                                     </tbody>
                                                 </table>
@@ -2547,14 +2536,14 @@ const Trade = () => {
                                                             </>
 
                                                         ) : <tr rowSpan="5" className="no-data-row">
-                                                        <td colSpan="12">
-                                                          <div className="no-data-wrapper">
-                                                            <div className="no_data_s">
-                                                              <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                                            </div>
-                                                          </div>
-                                                        </td>
-                                                      </tr>}
+                                                            <td colSpan="12">
+                                                                <div className="no-data-wrapper">
+                                                                    <div className="no_data_s">
+                                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>}
                                                     </tbody>
                                                 </table>
 
@@ -2723,16 +2712,12 @@ const Trade = () => {
                                                             </tr>
                                                         ))
                                                     ) : (
-                                                        <tr>
-                                                            <td colSpan="3" className="text-center">
-                                                                <div className="no_data_s">
-                                                                    <img
-                                                                        src="/images/no_data_vector.svg"
-                                                                        className="img-fluid mb-2"
-                                                                        alt="no data"
-                                                                        width="52"
-                                                                    />
-                                                                    <small>No data Available</small>
+                                                        <tr rowSpan="5" className="no-data-row">
+                                                            <td colSpan="12">
+                                                                <div className="no-data-wrapper">
+                                                                    <div className="no_data_s">
+                                                                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                                    </div>
                                                                 </div>
                                                             </td>
                                                         </tr>

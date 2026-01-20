@@ -357,14 +357,17 @@ const TwofactorPage = (props) => {
               <div className="verify_authenticator_form">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                   <div className="coypcodetext">
+
                     <p>Copy this code and enter it in your authenticator app:</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', marginTop: '10px' }}>
-                      <code style={{ padding: '10px 15px', background: '#f0f0f0', borderRadius: '5px', fontSize: '14px', wordBreak: 'break-all' }}>
+                   
+                    <div className="d-flex align-items-center gap-2 copycodetxt">
+                      <code className="copycodetxtcode">
                         {googleCode || 'Loading...'}
                       </code>
                       <button type="button" className="copy_code" onClick={copyCode} style={{ padding: '5px 10px' }}>
                         <i className="ri-file-copy-line"></i>
                       </button>
+                    
                     </div>
                   </div>
 

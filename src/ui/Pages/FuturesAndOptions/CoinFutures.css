@@ -3585,6 +3585,9 @@ button.bn-button.button__buy.sellbtn {
         height: 600px !important;
     }
 
+    .assets_right {
+    padding: 0px 5px; }
+
 
     body .modal.currency_popup_s .modal-dialog {
         min-width: 90%;
