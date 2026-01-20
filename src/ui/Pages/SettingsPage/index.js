@@ -292,9 +292,9 @@ const SettingsPage = (props) => {
 
     const errors = [];
 
-    // Check length (10-32 characters)
-    if (value.length < 10 || value.length > 32) {
-      errors.push('10-32 characters');
+    // Check length (8-30 characters)
+    if (value.length < 8 || value.length > 30) {
+      errors.push('8-30 characters');
     }
 
     // Check for uppercase
@@ -628,18 +628,36 @@ const SettingsPage = (props) => {
 
 
         <div className="twofactor_outer_s">
-          <h5>Change Password</h5>
-          <p>To protect your account, we recommend that you enable at least one 2FA</p>
+          <h5>Security Settings</h5>
+          <p>Manage your account security and password settings</p>
 
           <div className="two_factor_list">
 
             <div className="factor_bl active">
               <div className="lftcnt">
                 <h6><img src="/images/lock_icon.svg" alt="Login Password" /> Login Password</h6>
-                <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
+                <p>Change your account password. You will need to verify with OTP sent to your registered {(userDetails?.registeredBy || props?.userDetails?.registeredBy) === "phone" ? "mobile number" : "email"}.</p>
               </div>
 
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#security_verification">Change</button>
+              <button 
+                className="btn" 
+                onClick={async () => {
+                  // Reset form fields
+                  setPassword("");
+                  setConPassword("");
+                  setPasswordOtp("");
+                  // Send OTP
+                  await handleGetPasswordOtp();
+                  // Open modal
+                  const modalElement = document.getElementById('security_verification');
+                  if (modalElement) {
+                    const modal = new window.bootstrap.Modal(modalElement);
+                    modal.show();
+                  }
+                }}
+              >
+                Change Password
+              </button>
 
             </div>
 
@@ -967,8 +985,8 @@ const SettingsPage = (props) => {
                   <div className="error">
                     {password ? (
                       <>
-                        <span className={password.length >= 10 && password.length <= 32 ? 'text-success' : 'text-danger'}>
-                          {password.length >= 10 && password.length <= 32 ? '✓' : '✗'} 10-32 characters
+                        <span className={password.length >= 8 && password.length <= 30 ? 'text-success' : 'text-danger'}>
+                          {password.length >= 8 && password.length <= 30 ? '✓' : '✗'} 8-30 characters
                         </span>
                         <span className={/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) ? 'text-success' : 'text-danger'}>
                           {/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) ? '✓' : '✗'} At least one uppercase, lowercase, and number.
@@ -979,7 +997,7 @@ const SettingsPage = (props) => {
                       </>
                     ) : (
                       <>
-                        <span>10-32 characters</span>
+                        <span>8-30 characters</span>
                         <span>At least one uppercase, lowercase, and number.</span>
                         <span>Does not contain any spaces.</span>
                       </>
@@ -1005,6 +1023,15 @@ const SettingsPage = (props) => {
                         )}
                       </div>
                     </div>
+                    {conPassword && (
+                      <div className="error" style={{ marginTop: '5px' }}>
+                        {password === conPassword ? (
+                          <span className="text-success">✓ Passwords match</span>
+                        ) : (
+                          <span className="text-danger">✗ Passwords do not match</span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <button

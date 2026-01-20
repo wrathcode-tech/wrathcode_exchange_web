@@ -53,6 +53,8 @@ const KycPage = (props) => {
 
     const [step, setStep] = useState(1);
     const [modalStep, setModalStep] = useState(0);
+    const [modalCountry, setModalCountry] = useState("");
+    const [modalIdType, setModalIdType] = useState("");
 
     useEffect(() => {
         setKycVerified(props?.userDetails?.kycVerified);
@@ -114,9 +116,12 @@ const KycPage = (props) => {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (allowedTypes.includes(file.type) && file.size <= maxSize) {
                 const imgData = URL.createObjectURL(file);
-                setPreviewImages((images) => ({ ...images, doc_front: imgData }))
+                setPreviewImages((images) => ({ ...images, doc_front: imgData }));
                 setLocalFront(file);
-                alertSuccessMessage(file?.name)
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Preview image set for doc_front:", imgData);
+                }
+                alertSuccessMessage(file?.name);
             } else {
                 if (!allowedTypes.includes(file.type)) {
                     alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
@@ -138,9 +143,12 @@ const KycPage = (props) => {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (allowedTypes.includes(file.type) && file.size <= maxSize) {
                 const imgData = URL.createObjectURL(file);
+                setPreviewImages((images) => ({ ...images, doc_back: imgData }));
                 setLocalBack(file);
-                alertSuccessMessage(file?.name)
-                setPreviewImages((images) => ({ ...images, doc_back: imgData }))
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Preview image set for doc_back:", imgData);
+                }
+                alertSuccessMessage(file?.name);
             } else {
                 if (!allowedTypes.includes(file.type)) {
                     alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
@@ -162,9 +170,12 @@ const KycPage = (props) => {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (allowedTypes.includes(file.type) && file.size <= maxSize) {
                 const imgData = URL.createObjectURL(file);
+                setPreviewImages((images) => ({ ...images, selfie: imgData }));
                 setLocalSelfie(file);
-                alertSuccessMessage(file?.name)
-                setPreviewImages((images) => ({ ...images, selfie: imgData }))
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Preview image set for selfie:", imgData);
+                }
+                alertSuccessMessage(file?.name);
             } else {
                 if (!allowedTypes.includes(file.type)) {
                     alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
@@ -186,9 +197,12 @@ const KycPage = (props) => {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (allowedTypes.includes(file.type) && file.size <= maxSize) {
                 const imgData = URL.createObjectURL(file);
+                setPreviewImages((images) => ({ ...images, pan: imgData }));
                 setLocalPanCard(file);
-                alertSuccessMessage(file?.name)
-                setPreviewImages((images) => ({ ...images, pan: imgData }))
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Preview image set for pan:", imgData);
+                }
+                alertSuccessMessage(file?.name);
             } else {
                 if (!allowedTypes.includes(file.type)) {
                     alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
@@ -281,23 +295,25 @@ const KycPage = (props) => {
         formData.append("eotp", emailOtp);
         formData.append("emailId", emailId);
         formData.append("mobileNumber", mobileNumber);
-        LoaderHelper.loaderStatus(true);
-        await AuthService.addkyc(formData).then(async (result) => {
+        try {
+            LoaderHelper.loaderStatus(true);
+            const result = await AuthService.addkyc(formData);
             if (result?.success) {
-                LoaderHelper.loaderStatus(false);
-                try {
-                    alertSuccessMessage(result?.message);
-                    handleResetInput();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    handleUserDetails();
-                } catch (error) {
-                    alertErrorMessage(result?.message);
-                }
+                alertSuccessMessage(result?.message || "KYC submitted successfully");
+                handleResetInput();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                handleUserDetails();
             } else {
-                LoaderHelper.loaderStatus(false);
-                alertErrorMessage(result?.message);
+                alertErrorMessage(result?.message || "Failed to submit KYC. Please try again.");
             }
-        });
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error("Error in handleKyc:", error);
+            }
+            alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while submitting KYC. Please try again.");
+        } finally {
+            LoaderHelper.loaderStatus(false);
+        }
     };
 
     const handleResetInput = () => {
@@ -313,7 +329,98 @@ const KycPage = (props) => {
         setLocalFront("");
         setLocalBack("");
         setLocalSelfie("");
+        setLocalPanCard("");
         setPanCard("");
+        setPreviewImages({ "selfie": "", "doc_front": "", "doc_back": "", "pan": "" });
+    };
+
+    // Modal KYC Submit Handler
+    const handleModalKycSubmit = async () => {
+        // Validate all required fields
+        if (!modalCountry) {
+            alertErrorMessage("Please select a country");
+            return;
+        }
+        if (!modalIdType) {
+            alertErrorMessage("Please select an ID type");
+            return;
+        }
+        if (!aadhar) {
+            alertErrorMessage("Please enter your ID Card number");
+            return;
+        }
+        if (!localFront) {
+            alertErrorMessage("Please upload front side of document");
+            return;
+        }
+        if (!localBack) {
+            alertErrorMessage("Please upload back side of document");
+            return;
+        }
+        if (!panCard) {
+            alertErrorMessage("Please enter Income Tax Identification Number");
+            return;
+        }
+        if (!localPanCard) {
+            alertErrorMessage("Please upload Income Tax document");
+            return;
+        }
+        if (!localSelfie) {
+            alertErrorMessage("Please upload selfie with ID");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("document_front_image", localFront);
+        formData.append("document_back_image", localBack);
+        formData.append("user_selfie", localSelfie);
+        formData.append("pancard_image", localPanCard);
+        formData.append("country", modalCountry);
+        formData.append("document_number", aadhar);
+        formData.append("pancard_number", panCard);
+        formData.append("document_type", modalIdType);
+        formData.append("first_name", firstName || props?.userDetails?.firstName);
+        formData.append("last_name", lastName || props?.userDetails?.lastName);
+        formData.append("emailId", emailId);
+        formData.append("mobileNumber", mobileNumber);
+
+        try {
+            LoaderHelper.loaderStatus(true);
+            const result = await AuthService.addkyc(formData);
+            if (result?.success) {
+                alertSuccessMessage(result?.message || "KYC submitted successfully");
+                
+                // Close KYC modal
+                const modalElement = document.getElementById('kycModal');
+                if (modalElement) {
+                    const modal = window.bootstrap?.Modal?.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                    }
+                }
+                
+                // Show success modal
+                const submitModalElement = document.getElementById('kycSubmitModal');
+                if (submitModalElement) {
+                    setTimeout(() => {
+                        const submitModal = new window.bootstrap.Modal(submitModalElement);
+                        submitModal.show();
+                    }, 300);
+                }
+                
+                resetModalForm();
+                handleUserDetails();
+            } else {
+                alertErrorMessage(result?.message || "Failed to submit KYC. Please try again.");
+            }
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error("Error in handleModalKycSubmit:", error);
+            }
+            alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred. Please try again.");
+        } finally {
+            LoaderHelper.loaderStatus(false);
+        }
     };
 
     const handleSelected = (type) => {
@@ -381,9 +488,6 @@ const KycPage = (props) => {
     };
 
     const validateModalStep0 = () => {
-        const country = document.getElementById('kycCountry')?.value;
-        const idType = document.querySelector('input[name="kycIdType"]:checked')?.value;
-
         let isValid = true;
 
         // Hide previous errors
@@ -397,19 +501,34 @@ const KycPage = (props) => {
         if (selectBox) selectBox.classList.remove('error');
         if (idGrid) idGrid.classList.remove('error');
 
-        if (!country || country === '') {
+        if (!modalCountry || modalCountry === '') {
             if (countryError) countryError.classList.remove('d-none');
             if (selectBox) selectBox.classList.add('error');
+            alertErrorMessage('Please select a country');
             isValid = false;
         }
 
-        if (!idType) {
+        if (!modalIdType) {
             if (idTypeError) idTypeError.classList.remove('d-none');
             if (idGrid) idGrid.classList.add('error');
+            alertErrorMessage('Please select an ID type');
             isValid = false;
         }
 
         return isValid;
+    };
+
+    const resetModalForm = () => {
+        setModalStep(0);
+        setModalCountry("");
+        setModalIdType("");
+        setAadhar("");
+        setPanCard("");
+        setLocalFront("");
+        setLocalBack("");
+        setLocalSelfie("");
+        setLocalPanCard("");
+        setPreviewImages({ "selfie": "", "doc_front": "", "doc_back": "", "pan": "" });
     };
 
     // Initialize modal steps when modal opens
@@ -418,7 +537,7 @@ const KycPage = (props) => {
         if (!modal) return;
 
         const handleModalShow = () => {
-            setModalStep(0);
+            resetModalForm();
             // Show first step, hide others
             const steps = modal.querySelectorAll('.kyc_step');
             steps.forEach((step, index) => {
@@ -441,17 +560,17 @@ const KycPage = (props) => {
             }
         };
 
-        const handleModalShown = () => {
-            handleModalShow();
+        const handleModalHidden = () => {
+            resetModalForm();
         };
 
         // Bootstrap 5 modal events
         modal.addEventListener('show.bs.modal', handleModalShow);
-        modal.addEventListener('shown.bs.modal', handleModalShown);
+        modal.addEventListener('hidden.bs.modal', handleModalHidden);
 
         return () => {
             modal.removeEventListener('show.bs.modal', handleModalShow);
-            modal.removeEventListener('shown.bs.modal', handleModalShown);
+            modal.removeEventListener('hidden.bs.modal', handleModalHidden);
         };
     }, []);
 
@@ -958,18 +1077,27 @@ const KycPage = (props) => {
                                                                     </div>
                                                                     <div className="brows-file-wrapper">
                                                                         <input name="file" id="file" type="file" className="inputfile"
-                                                                            data-multiple-caption="{count} files selected" multiple="" onChange={handleChangeSelfie} />{localSelfie === "" ?
-                                                                                <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
-                                                                                    className="text-center mb-2">Choose a File</span>
-                                                                                    <span className="file-type text-center mt--10">Drag or choose your file to
-                                                                                        upload</span></label>
-                                                                                :
-                                                                                <label htmlFor="file3" title="No File Choosen">
-                                                                                    <i className=" text-success ri-check-double-fill"></i>
-                                                                                    <span className="text-center mb-2">File Uploaded</span>
-                                                                                    <span className="file-type text-center mt--10" >{localSelfie?.name}</span>
-                                                                                </label>}
+                                                                            data-multiple-caption="{count} files selected" multiple="" onChange={handleChangeSelfie} accept="image/png,image/jpeg,image/jpg" />
+                                                                        {localSelfie === "" ?
+                                                                            <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
+                                                                                className="text-center mb-2">Choose a File</span>
+                                                                                <span className="file-type text-center mt--10">Drag or choose your file to
+                                                                                    upload</span></label>
+                                                                            :
+                                                                            <label htmlFor="file3" title="No File Choosen">
+                                                                                <i className=" text-success ri-check-double-fill"></i>
+                                                                                <span className="text-center mb-2">File Uploaded</span>
+                                                                                <span className="file-type text-center mt--10" >{localSelfie?.name}</span>
+                                                                            </label>}
                                                                     </div>
+                                                                    {(previewImages?.selfie && previewImages.selfie !== "") || localSelfie ? (
+                                                                        <div className="mt-3" style={{ padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '8px', marginTop: '15px', width: '100%', border: '2px solid #28a745', position: 'relative', zIndex: 10 }}>
+                                                                            <h6 className="mb-3 text-center" style={{ fontSize: '14px', fontWeight: '600', color: '#28a745' }}>✓ Image Preview:</h6>
+                                                                            <div className="text-center">
+                                                                                <img src={previewImages?.selfie || (localSelfie && typeof localSelfie === 'object' ? URL.createObjectURL(localSelfie) : '')} alt="Selfie preview" style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '2px solid #28a745', display: 'block', margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : null}
                                                                 </div>
                                                                 <div className="col-sm-6">
                                                                     <div className="inquery_fill">
@@ -1049,7 +1177,7 @@ const KycPage = (props) => {
                                                                     </div>
                                                                     <div className="brows-file-wrapper">
                                                                         <input name="file" type="file" required="" className="inputfile"
-                                                                            data-multiple-caption="{count} files selected" onChange={handleChangeIdentity} />
+                                                                            data-multiple-caption="{count} files selected" onChange={handleChangeIdentity} accept="image/png,image/jpeg,image/jpg" />
                                                                         {localFront === '' ?
                                                                             <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
                                                                                 className="text-center mb-2">Choose a File</span>
@@ -1062,6 +1190,14 @@ const KycPage = (props) => {
                                                                                 <span className="file-type text-center mt--10" >{localFront?.name}</span>
                                                                             </label>}
                                                                     </div>
+                                                                    {(previewImages?.doc_front && previewImages.doc_front !== "") || localFront ? (
+                                                                        <div className="mt-3" style={{ padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '8px', marginTop: '15px', width: '100%', border: '2px solid #28a745', position: 'relative', zIndex: 10 }}>
+                                                                            <h6 className="mb-3 text-center" style={{ fontSize: '14px', fontWeight: '600', color: '#28a745' }}>✓ Image Preview:</h6>
+                                                                            <div className="text-center">
+                                                                                <img src={previewImages?.doc_front || (localFront && typeof localFront === 'object' ? URL.createObjectURL(localFront) : '')} alt="Document front preview" style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '2px solid #28a745', display: 'block', margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : null}
                                                                 </div>
 
                                                                 <div className="col-md-6 upload-area">
@@ -1075,7 +1211,7 @@ const KycPage = (props) => {
                                                                     </div>
                                                                     <div className="brows-file-wrapper">
                                                                         <input name="file" type="file" required="" className="inputfile"
-                                                                            data-multiple-caption="{count} files selected" onChange={handleChangeIdentity2} />
+                                                                            data-multiple-caption="{count} files selected" onChange={handleChangeIdentity2} accept="image/png,image/jpeg,image/jpg" />
                                                                         {localBack === '' ? <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
                                                                             className="text-center mb-2">Choose a File</span>
                                                                             <span className="file-type text-center mt--10">Drag or choose your file to
@@ -1087,6 +1223,14 @@ const KycPage = (props) => {
                                                                                 <span className="file-type text-center mt--10" >{localBack?.name}</span>
                                                                             </label>}
                                                                     </div>
+                                                                    {(previewImages?.doc_back && previewImages.doc_back !== "") || localBack ? (
+                                                                        <div className="mt-3" style={{ padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '8px', marginTop: '15px', width: '100%', border: '2px solid #28a745', position: 'relative', zIndex: 10 }}>
+                                                                            <h6 className="mb-3 text-center" style={{ fontSize: '14px', fontWeight: '600', color: '#28a745' }}>✓ Image Preview:</h6>
+                                                                            <div className="text-center">
+                                                                                <img src={previewImages?.doc_back || (localBack && typeof localBack === 'object' ? URL.createObjectURL(localBack) : '')} alt="Document back preview" style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '2px solid #28a745', display: 'block', margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : null}
                                                                 </div>
                                                             </div>
                                                             <div className="row">
@@ -1107,19 +1251,28 @@ const KycPage = (props) => {
                                                                     </div>
                                                                     <div className="brows-file-wrapper">
                                                                         <input name="file" id="file" type="file" className="inputfile"
-                                                                            data-multiple-caption="{count} files selected" multiple="" onChange={handleChangePanCard} />{localPanCard === '' ?
-                                                                                <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
-                                                                                    className="text-center mb-2">Choose a File</span>
-                                                                                    <span className="file-type text-center mt--10">Drag or choose your file to
-                                                                                        upload</span></label>
+                                                                            data-multiple-caption="{count} files selected" multiple="" onChange={handleChangePanCard} accept="image/png,image/jpeg,image/jpg" />
+                                                                        {localPanCard === '' ?
+                                                                            <label for="file" title="No File Choosen"><i className="ri-upload-cloud-line"></i><span
+                                                                                className="text-center mb-2">Choose a File</span>
+                                                                                <span className="file-type text-center mt--10">Drag or choose your file to
+                                                                                    upload</span></label>
 
-                                                                                :
-                                                                                <label htmlFor="file3" title="No File Choosen">
-                                                                                    <i className=" text-success ri-check-double-fill"></i>
-                                                                                    <span className="text-center mb-2">File Uploaded</span>
-                                                                                    <span className="file-type text-center mt--10" >{localPanCard?.name}</span>
-                                                                                </label>}
+                                                                            :
+                                                                            <label htmlFor="file3" title="No File Choosen">
+                                                                                <i className=" text-success ri-check-double-fill"></i>
+                                                                                <span className="text-center mb-2">File Uploaded</span>
+                                                                                <span className="file-type text-center mt--10" >{localPanCard?.name}</span>
+                                                                            </label>}
                                                                     </div>
+                                                                    {(previewImages?.pan && previewImages.pan !== "") || localPanCard ? (
+                                                                        <div className="mt-3" style={{ padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '8px', marginTop: '15px', width: '100%', border: '2px solid #28a745', position: 'relative', zIndex: 10 }}>
+                                                                            <h6 className="mb-3 text-center" style={{ fontSize: '14px', fontWeight: '600', color: '#28a745' }}>✓ Image Preview:</h6>
+                                                                            <div className="text-center">
+                                                                                <img src={previewImages?.pan || (localPanCard && typeof localPanCard === 'object' ? URL.createObjectURL(localPanCard) : '')} alt="PAN card preview" style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '2px solid #28a745', display: 'block', margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : null}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1349,30 +1502,33 @@ const KycPage = (props) => {
                             <div className="kyc_step active" data-title="Select Country and ID Type">
                                 <label className="label">🌟 Country/Region (Please select the issuing country of the document) <span className="text-danger">*</span></label>
                                 <div className="select_box">
-                                    <select id="kycCountry" required>
+                                    <select id="kycCountry" value={modalCountry} onChange={(e) => setModalCountry(e.target.value)} required>
                                         <option value="">Select Country</option>
                                         <option value="India">🇮🇳 India</option>
-                                        <option value="USA">USA</option>
+                                        <option value="USA">🇺🇸 USA</option>
+                                        <option value="UK">🇬🇧 United Kingdom</option>
+                                        <option value="Canada">🇨🇦 Canada</option>
+                                        <option value="Australia">🇦🇺 Australia</option>
                                     </select>
                                 </div>
                                 <small className="text-danger d-none" id="countryError">Please select a country</small>
 
                                 <label className="label mt-4">ID Type <span className="text-danger">*</span></label>
                                 <div className="id_grid">
-                                    <label className="id_item">
-                                        <input type="radio" name="kycIdType" value="ID Card" required />
+                                    <label className={`id_item ${modalIdType === 'ID Card' ? 'selected' : ''}`}>
+                                        <input type="radio" name="kycIdType" value="ID Card" checked={modalIdType === 'ID Card'} onChange={(e) => setModalIdType(e.target.value)} required />
                                         ID Card
                                     </label>
-                                    <label className="id_item">
-                                        <input type="radio" name="kycIdType" value="Passport" />
+                                    <label className={`id_item ${modalIdType === 'Passport' ? 'selected' : ''}`}>
+                                        <input type="radio" name="kycIdType" value="Passport" checked={modalIdType === 'Passport'} onChange={(e) => setModalIdType(e.target.value)} />
                                         Passport
                                     </label>
-                                    <label className="id_item">
-                                        <input type="radio" name="kycIdType" value="Driving License" />
+                                    <label className={`id_item ${modalIdType === 'Driving License' ? 'selected' : ''}`}>
+                                        <input type="radio" name="kycIdType" value="Driving License" checked={modalIdType === 'Driving License'} onChange={(e) => setModalIdType(e.target.value)} />
                                         Driving license
                                     </label>
-                                    <label className="id_item">
-                                        <input type="radio" name="kycIdType" value="Residence Permit" />
+                                    <label className={`id_item ${modalIdType === 'Residence Permit' ? 'selected' : ''}`}>
+                                        <input type="radio" name="kycIdType" value="Residence Permit" checked={modalIdType === 'Residence Permit'} onChange={(e) => setModalIdType(e.target.value)} />
                                         Residence Permit
                                     </label>
                                 </div>
@@ -1389,50 +1545,65 @@ const KycPage = (props) => {
 
                             <div className="kyc_step" data-title="Take a Photo of Your ID Card">
                                 <div className="id_preview">
-                                    <img src="/images/photoid_vector.png" alt="photo" />
+                                    <img src="/images/photoid_vector.png" alt="ID card" />
                                 </div>
 
                                 <div className="tips photomini">
-                                    <p><img src="/images/photoidmini.png" alt="photo" /></p>
-                                    <p><img src="/images/photoidmini2.png" alt="photo" /></p>
-                                    <p><img src="/images/photoidmini3.png" alt="photo" /></p>
+                                    <p><img src="/images/photoidmini.png" alt="tip 1" /></p>
+                                    <p><img src="/images/photoidmini2.png" alt="tip 2" /></p>
+                                    <p><img src="/images/photoidmini3.png" alt="tip 3" /></p>
                                 </div>
 
                                 <h6>The selected country/region and ID type are as follows:</h6>
 
                                 <div className="info_text">
                                     <ul className="d-flex gap-3">
-                                        <li><img src="/images/indiaflag.png" alt="flag" /> 🇮🇳 India </li>
-                                        <li><img src="/images/idcard.png" alt="flag" />ID Card</li>
+                                        <li>
+                                            {modalCountry === 'India' && '🇮🇳'}
+                                            {modalCountry === 'USA' && '🇺🇸'}
+                                            {modalCountry === 'UK' && '🇬🇧'}
+                                            {modalCountry === 'Canada' && '🇨🇦'}
+                                            {modalCountry === 'Australia' && '🇦🇺'}
+                                            {' '}{modalCountry || 'Not Selected'}
+                                        </li>
+                                        <li><img src="/images/idcard.png" alt="ID Card" /> {modalIdType || 'Not Selected'}</li>
                                     </ul>
                                 </div>
                                 <p>Please upload a valid ID matching your selected country/region and ID type to avoid verification failure.</p>
 
-                                <input className="input" placeholder="ID Card Number" />
+                                <input className="input" placeholder="ID Card Number" value={aadhar} onChange={(e) => setAadhar(e.target.value)} />
 
                                 <div className="upload_grid">
 
-                                    <div class="upload-box">
-                                        <input type="file" id="fileUpload" hidden />
-                                        <label for="fileUpload" class="upload-label">
-                                            <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
-                                            <div class="icon">
+                                    <div className="upload-box">
+                                        <input type="file" id="modalDocFront" hidden accept="image/png,image/jpeg,image/jpg" onChange={handleChangeIdentity} />
+                                        <label htmlFor="modalDocFront" className="upload-label">
+                                            {previewImages?.doc_front ? (
+                                                <img src={previewImages.doc_front} alt="Document Front" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '8px', objectFit: 'cover' }} />
+                                            ) : (
+                                                <img className="upload_back_img" src="/images/fileback_vector.png" alt="upload background" />
+                                            )}
+                                            <div className="icon">
                                                 <img src="/images/uploadvector.svg" alt="upload" />
                                             </div>
-                                            <h3>Choose a File</h3>
-                                            <p>Drag or choose your file to upload</p>
+                                            <h3>{localFront ? '✓ Uploaded' : 'Front Side'}</h3>
+                                            <p>{localFront?.name || 'Drag or choose file'}</p>
                                         </label>
                                     </div>
 
-                                    <div class="upload-box">
-                                        <input type="file" id="fileUpload" hidden />
-                                        <label for="fileUpload" class="upload-label">
-                                            <img className="upload_back_img" src="/images/fileback_vector.png" alt="flag" />
-                                            <div class="icon">
+                                    <div className="upload-box">
+                                        <input type="file" id="modalDocBack" hidden accept="image/png,image/jpeg,image/jpg" onChange={handleChangeIdentity2} />
+                                        <label htmlFor="modalDocBack" className="upload-label">
+                                            {previewImages?.doc_back ? (
+                                                <img src={previewImages.doc_back} alt="Document Back" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '8px', objectFit: 'cover' }} />
+                                            ) : (
+                                                <img className="upload_back_img" src="/images/fileback_vector.png" alt="upload background" />
+                                            )}
+                                            <div className="icon">
                                                 <img src="/images/uploadvector.svg" alt="upload" />
                                             </div>
-                                            <h3>Choose a File</h3>
-                                            <p>Drag or choose your file to upload</p>
+                                            <h3>{localBack ? '✓ Uploaded' : 'Back Side'}</h3>
+                                            <p>{localBack?.name || 'Drag or choose file'}</p>
                                         </label>
                                     </div>
 
@@ -1445,66 +1616,107 @@ const KycPage = (props) => {
                                     }}>Back</button>
                                     <button className="primary_btn nextStep" onClick={(e) => {
                                         e.preventDefault();
+                                        if (!localFront || !localBack) {
+                                            alertErrorMessage('Please upload both front and back images of your ID card');
+                                            return;
+                                        }
                                         nextModalStep();
                                     }}>Next</button>
                                 </div>
                             </div>
 
 
-                            <div className="kyc_step" data-title="Take a Photo of Your">
+                            <div className="kyc_step" data-title="Income Tax & Selfie">
                                 <div className="d-flex gap-4 flex-column">
-                                    <input className="input" placeholder="Income Tax Identification Number" />
-
-                                    <div class="upload-box">
-                                        <input type="file" id="fileUpload" hidden />
-                                        <label for="fileUpload" class="upload-label">
-                                            <div class="icon">
-                                                <img src="/images/uploadvector.svg" alt="upload" />
-                                            </div>
-                                            <h3>Choose a File</h3>
-                                            <p>Drag or choose your file to upload</p>
-                                        </label>
-                                    </div>
                                     <div>
-                                        <h5 className="mb-0">Upload Selfie with ID*</h5>
-                                        <span className="small">(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
+                                        <label className="label mb-2">Income Tax Identification Number <span className="text-danger">*</span></label>
+                                        <input className="input" placeholder="Income Tax Identification Number" value={panCard} onChange={(e) => setPanCard(e.target.value)} />
+                                    </div>
 
-                                        <div className="upload-box mt-3">
-                                            <img className="successfull_img" src="/images/success_file.svg" alt="successfull" />
-                                            <input type="file" id="fileUpload" hidden />
-                                            <label for="fileUpload" class="upload-label">
-                                                <div class="icon">
-                                                    <img src="/images/uploadvector.svg" alt="upload" />
-                                                </div>
-                                                <h3>Choose a File</h3>
-                                                <p>Drag or choose your file to upload</p>
-                                                <div className="selfie_circle">
-                                                    <img src="/images/selefvector.png" alt="photo" />
-                                                </div>
+                                    <div>
+                                        <h5 className="mb-2">Upload Income Tax Document <span className="text-danger">*</span></h5>
+                                        <span className="small text-muted">(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
+                                        <div className="upload-box mt-2">
+                                            <input type="file" id="modalPanCard" hidden accept="image/png,image/jpeg,image/jpg" onChange={handleChangePanCard} />
+                                            <label htmlFor="modalPanCard" className="upload-label">
+                                                {previewImages?.pan ? (
+                                                    <img src={previewImages.pan} alt="PAN Card" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '8px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <>
+                                                        <div className="icon">
+                                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                                        </div>
+                                                    </>
+                                                )}
+                                                <h3>{localPanCard ? '✓ Uploaded' : 'Choose a File'}</h3>
+                                                <p>{localPanCard?.name || 'Drag or choose your file to upload'}</p>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h5 className="mb-2">Upload Selfie with ID <span className="text-danger">*</span></h5>
+                                        <span className="small text-muted">(Only JPEG, PNG & JPG formats and file size upto 5MB are supported)</span>
+
+                                        <div className="upload-box mt-2">
+                                            <input type="file" id="modalSelfie" hidden accept="image/png,image/jpeg,image/jpg" onChange={handleChangeSelfie} />
+                                            <label htmlFor="modalSelfie" className="upload-label">
+                                                {previewImages?.selfie ? (
+                                                    <img src={previewImages.selfie} alt="Selfie" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '8px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <>
+                                                        <div className="icon">
+                                                            <img src="/images/uploadvector.svg" alt="upload" />
+                                                        </div>
+                                                        <div className="selfie_circle">
+                                                            <img src="/images/selefvector.png" alt="selfie guide" />
+                                                        </div>
+                                                    </>
+                                                )}
+                                                <h3>{localSelfie ? '✓ Uploaded' : 'Choose a File'}</h3>
+                                                <p>{localSelfie?.name || 'Drag or choose your file to upload'}</p>
                                             </label>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between', marginTop: '20px' }}>
                                     <button className="primary_btn prevStep" onClick={(e) => {
                                         e.preventDefault();
                                         prevModalStep();
                                     }}>Back</button>
                                     <button className="primary_btn nextStep" onClick={(e) => {
                                         e.preventDefault();
+                                        if (!panCard) {
+                                            alertErrorMessage('Please enter Income Tax Identification Number');
+                                            return;
+                                        }
+                                        if (!localPanCard) {
+                                            alertErrorMessage('Please upload Income Tax document');
+                                            return;
+                                        }
+                                        if (!localSelfie) {
+                                            alertErrorMessage('Please upload selfie with ID');
+                                            return;
+                                        }
                                         nextModalStep();
                                     }}>Next</button>
                                 </div>
                             </div>
 
                             <div className="kyc_step text-center" data-title="Face Verification">
-                                <div className="face_circle">
-                                    <img src="/images/selefvector.png" alt="photo" />
+                                <div className="face_circle" style={{ width: '200px', height: '200px', borderRadius: '50%', overflow: 'hidden', margin: '0 auto 20px', border: '3px solid #28a745' }}>
+                                    {previewImages?.selfie ? (
+                                        <img src={previewImages.selfie} alt="Your Selfie" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <img src="/images/selefvector.png" alt="selfie placeholder" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    )}
                                 </div>
+                                <h5 className="text-success mb-3">✓ Face Captured Successfully</h5>
+                                <p className="text-muted">Your selfie has been uploaded. Click Next to review your information.</p>
 
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between', marginTop: '20px' }}>
                                     <button className="primary_btn prevStep" onClick={(e) => {
                                         e.preventDefault();
                                         prevModalStep();
@@ -1514,32 +1726,30 @@ const KycPage = (props) => {
                                         nextModalStep();
                                     }}>Next</button>
                                 </div>
-
-
                             </div>
 
 
-                            <div className="kyc_step" data-title="Review">
+                            <div className="kyc_step" data-title="Review Your Information">
                                 <div className="table-responsive pt-3">
                                     <div className="kyc_information_del">
                                         <div className="userinfolft">
-                                            <div className="face_circle">
-                                                <img src="/images/selefvector.png" alt="photo" />
+                                            <div className="face_circle" style={{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #28a745' }}>
+                                                {previewImages?.selfie ? (
+                                                    <img src={previewImages.selfie} alt="Your Selfie" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <img src="/images/selefvector.png" alt="selfie" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                )}
                                             </div>
-                                            <h5>Pallav Soni</h5>
+                                            <h5>{firstName} {lastName}</h5>
                                         </div>
 
                                         <div className="info_list">
                                             <ul>
-                                                <li>UserID <span>31353839</span></li>
-                                                <li>Full Name <span>Pallav Soni</span></li>
-                                                <li>Mobile Number <span>+919799080052</span></li>
-                                                <li>Address <span>qwertyuiop qwertyuiop</span></li>
-                                                <li>City <span>qwertyuiop</span></li>
-                                                <li>State <span>asdfghjkl</span></li>
-                                                <li>Zip Code <span>123456</span></li>
-                                                <li>Date of Birth <span>2002-02-28</span></li>
-                                                <li>Registration Date <span>2026-01-07</span></li>
+                                                <li>Full Name <span>{firstName} {lastName}</span></li>
+                                                <li>Email <span>{emailId}</span></li>
+                                                <li>Mobile Number <span>{mobileNumber}</span></li>
+                                                <li>Document No. <span>{aadhar}</span></li>
+                                                <li>Tax ID <span>{panCard}</span></li>
                                             </ul>
                                         </div>
 
@@ -1547,42 +1757,58 @@ const KycPage = (props) => {
 
                                     <div className="documentnumber_s">
                                         <ul>
-                                            <li><span>Document No.</span>123456789012</li>
+                                            <li><span>ID Card Number:</span>{aadhar || 'N/A'}</li>
                                         </ul>
                                     </div>
 
-                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between' }}>
-                                        <div className="document_front_bl">
-                                            <p>Document (Front)</p>
-                                            <div className="front_img">
-                                                <img src="/images/document_front.png" alt="photo" />
+                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                        <div className="document_front_bl" style={{ flex: '1', minWidth: '150px' }}>
+                                            <p>Document (Front)</p>
+                                            <div className="front_img" style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' }}>
+                                                {previewImages?.doc_front ? (
+                                                    <img src={previewImages.doc_front} alt="Document Front" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <img src="/images/document_front.png" alt="Document Front" style={{ width: '100%' }} />
+                                                )}
                                             </div>
                                         </div>
-                                        <div className="document_front_bl">
-                                            <p>Document (Front)</p>
-                                            <div className="front_img">
-                                                <img src="/images/document_front.png" alt="photo" />
+                                        <div className="document_front_bl" style={{ flex: '1', minWidth: '150px' }}>
+                                            <p>Document (Back)</p>
+                                            <div className="front_img" style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' }}>
+                                                {previewImages?.doc_back ? (
+                                                    <img src={previewImages.doc_back} alt="Document Back" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <img src="/images/document_front.png" alt="Document Back" style={{ width: '100%' }} />
+                                                )}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="documentnumber_s">
+                                    <div className="documentnumber_s mt-3">
                                         <ul>
-                                            <li><span>Document No.</span>123456789012</li>
+                                            <li><span>Tax ID:</span>{panCard || 'N/A'}</li>
                                         </ul>
                                     </div>
 
-                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between' }}>
-                                        <div className="document_front_bl">
-                                            <p>Income Tax Identification</p>
-                                            <div className="front_img">
-                                                <img src="/images/document_front.png" alt="photo" />
+                                    <div className="picture_front_bl" style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                        <div className="document_front_bl" style={{ flex: '1', minWidth: '150px' }}>
+                                            <p>Income Tax Document</p>
+                                            <div className="front_img" style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' }}>
+                                                {previewImages?.pan ? (
+                                                    <img src={previewImages.pan} alt="Tax Document" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <img src="/images/document_front.png" alt="Tax Document" style={{ width: '100%' }} />
+                                                )}
                                             </div>
                                         </div>
-                                        <div className="document_front_bl">
-                                            <p>Selfie</p>
-                                            <div className="front_img">
-                                                <img src="/images/document_front.png" alt="photo" />
+                                        <div className="document_front_bl" style={{ flex: '1', minWidth: '150px' }}>
+                                            <p>Selfie with ID</p>
+                                            <div className="front_img" style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' }}>
+                                                {previewImages?.selfie ? (
+                                                    <img src={previewImages.selfie} alt="Selfie" style={{ width: '100%', maxHeight: '120px', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <img src="/images/document_front.png" alt="Selfie" style={{ width: '100%' }} />
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -1596,26 +1822,9 @@ const KycPage = (props) => {
                                     <button
                                         type="button"
                                         className="primary_btn kyc-submit-btn"
-                                        onClick={() => {
-                                            const modalElement = document.getElementById('kycModal');
-                                            const submitModalElement = document.getElementById('kycSubmitModal');
-
-                                            if (modalElement && submitModalElement) {
-                                                // Close the multistep KYC modal using Bootstrap 5
-                                                const modal = window.bootstrap?.Modal?.getInstance(modalElement);
-                                                if (modal) {
-                                                    modal.hide();
-                                                }
-
-                                                // After the hide animation, show the verifying popup
-                                                setTimeout(() => {
-                                                    const submitModal = new window.bootstrap.Modal(submitModalElement);
-                                                    submitModal.show();
-                                                }, 300);
-                                            }
-                                        }}
+                                        onClick={handleModalKycSubmit}
                                     >
-                                        Submit
+                                        Submit KYC
                                     </button>
                                 </div>
                             </div>

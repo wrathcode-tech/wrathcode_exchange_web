@@ -28,7 +28,6 @@ const AssetOverview = () => {
   const [showBalance, setShowBalance] = useState("");
   const [activeTab, setActiveTab] = useState("assets");
   const [availableCurrency, setAvailableCurrency] = useState([]);
-  console.log(availableCurrency, "availableCurrency");
   const [selectedNetwork, setSelectedNetwork] = useState("");
   const [depositAddress, setDepositAddress] = useState("");
   const [allData, setAllData] = useState([]);
@@ -47,10 +46,16 @@ const AssetOverview = () => {
       handleUserFunds(type)
       if (result?.success) {
         setEstimatedportfolio(result?.data);
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching estimated portfolio:", result?.message);
+        }
       }
     } catch (error) {
-    }
-    finally { LoaderHelper.loaderStatus(false); }
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error in estimatedPortfolio:", error);
+      }
+    } finally { LoaderHelper.loaderStatus(false); }
   };
 
   const handleSelectDepositCoin = (item) => {
@@ -100,10 +105,16 @@ const AssetOverview = () => {
         setWalletType(result?.data);
         setFromWalletType(result?.data[0] || "")
         setToWalletType(result?.data[1] || "")
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching wallet types:", result?.message);
+        }
       }
     } catch (error) {
-    }
-    finally { LoaderHelper.loaderStatus(false); }
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error in getWalletType:", error);
+      }
+    } finally { LoaderHelper.loaderStatus(false); }
   };
 
   const handleUserFunds = async (type) => {
@@ -142,7 +153,9 @@ const AssetOverview = () => {
         setTopWallets(topWalletsList);
       }
     } catch (error) {
-      console.error("Error fetching user funds:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error fetching user funds:", error);
+      }
     }
   };
 
@@ -157,11 +170,18 @@ const AssetOverview = () => {
   const handleWalletHistory = async () => {
     try {
       LoaderHelper.loaderStatus(true);
-      await AuthService.walletTransferHistory(0, 10).then(async (result) => {
-        if (result?.success) {
-          setWalletHistory(result?.data);
+      const result = await AuthService.walletTransferHistory(0, 10);
+      if (result?.success) {
+        setWalletHistory(result?.data);
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching wallet history:", result?.message);
         }
-      })
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error in handleWalletHistory:", error);
+      }
     } finally {
       LoaderHelper.loaderStatus(false);
     }
@@ -275,19 +295,24 @@ const AssetOverview = () => {
 
 
   const getDepositActiveCoins = async () => {
-    LoaderHelper.loaderStatus(true);
-    await AuthService.depositActiveCoins().then(async (result) => {
+    try {
+      LoaderHelper.loaderStatus(true);
+      const result = await AuthService.depositActiveCoins();
       if (result?.success) {
-        try {
-          setAvailableCurrency(result?.data)
-          setAllData(result?.data)
-
-        } catch (error) {
-
+        setAvailableCurrency(result?.data);
+        setAllData(result?.data);
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching deposit active coins:", result?.message);
         }
       }
-    });
-    LoaderHelper.loaderStatus(false);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error in getDepositActiveCoins:", error);
+      }
+    } finally {
+      LoaderHelper.loaderStatus(false);
+    }
   };
 
   useEffect(() => {
