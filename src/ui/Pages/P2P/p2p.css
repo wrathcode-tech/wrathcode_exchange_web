@@ -5073,7 +5073,7 @@ button.p2p-mobile-view-btn i {
 
 /* Empty State Card */
 .p2p-empty-state-card {
-  background: rgb(18 18 26 / 19%);
+  background: none;
   border-radius: 12px;
   /* border: 1px solid rgba(255, 255, 255, 0.06); */
   padding: 48px 24px;

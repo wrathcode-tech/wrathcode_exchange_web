@@ -720,6 +720,7 @@ const KycPage = (props) => {
 
                             <div className="row">
                                 <div className="col-sm-4">
+                                    <h6>Level</h6>
                                     <ul className="kyclist">
                                         <li><img src="/images/staricon.png" alt="star" /> KYC Level</li>
                                         <li><img src="/images/staricon.png" alt="star" /> Crypto Deposit</li>
@@ -739,7 +740,6 @@ const KycPage = (props) => {
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>
-                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                     </ul>
                                 </div>
 
@@ -749,7 +749,6 @@ const KycPage = (props) => {
                                         <li>Unlimited</li>
                                         <li>100 BTC per day*</li>
                                         <li>30,000 USD per day*</li>
-                                        <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>
                                         <li><img src="/images/rightbtn2.svg" alt="star" /></li>

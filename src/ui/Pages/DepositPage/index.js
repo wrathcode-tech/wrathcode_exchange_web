@@ -238,7 +238,7 @@ const DepositPage = () => {
               </div>
               {/* <!-- Modal Search Coin Start --> */}
 
-              <div className="modal fade search_form search_coin" id="search_coin" tabIndex="-1" aria-labelledby="exampleModalLabel" >
+              <div className="modal fade search_form search_coin search_form_modal_2" id="search_coin" tabIndex="-1" aria-labelledby="exampleModalLabel" >
                 <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
                     <div className="modal-header">
@@ -634,7 +634,7 @@ const DepositPage = () => {
             </div>
           </div>
           {/* <!-- Modal table recent Pop Up Start --> */}
-          <div className="modal fade search_form table_pop_up" id="recent_table" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal fade search_form table_pop_up search_form_modal_2" id="recent_table" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
@@ -709,7 +709,7 @@ const DepositPage = () => {
       </div>
 
       {/* <!-- Modal  Deposit Confirmed--> */}
-      <div className="modal fade search_form table_pop_up" id="deposit_confirmed" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade search_form table_pop_up search_form_modal_2" id="deposit_confirmed" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">

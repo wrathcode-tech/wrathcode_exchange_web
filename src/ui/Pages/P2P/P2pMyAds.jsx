@@ -806,8 +806,10 @@ const P2pMyAds = () => {
                                     ) : (
                                         <tr>
                                             <td colSpan="7" className="p2p-empty-state">
-                                                <div className="p2p-empty-icon">📋</div>
-                                                <p>No ads found</p>
+                                            <div className="p2p-empty-state-card bg-none">
+                                            <i className="ri-file-list-3-line" style={{ fontSize: '48px', color: '#6b7280' }}></i>
+                                            <p>No orders found</p>
+                                        </div>
                                                 <button
                                                     className="p2p-create-ad-btn-small"
                                                     onClick={() => navigate('/p2p-create-post')}

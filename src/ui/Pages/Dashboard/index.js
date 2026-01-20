@@ -888,10 +888,9 @@ const Dashboard = (props) => {
               {/* <h4>Coming Soon</h4> */}
               <div className="features_block">
                 <div className="block_features">
-                  <img className='darkimg' src="/images/trading_bots.svg" alt="bots" />
-                  <img className='lightimg' src="/images/trading_bots_light.svg" alt="bots" />
+                  <img className='darkimg' src="/images/add.gif" alt="bots" />
                   <div className="features_cnt">
-                    <h5>Invite Friends for Rewards</h5>
+                    <h5>Invite Friends for Rewards <span><i class="ri-arrow-right-s-line"></i></span></h5>
                     <p>Invite your friends to join, expand your
                       community, and earn amazing rewards
                       for every successful referral.</p>
@@ -899,10 +898,9 @@ const Dashboard = (props) => {
                 </div>
 
                 <div className="block_features">
-                  <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
-                  <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
+                  <img className='darkimg' src="/images/user.gif" alt="Complete Identity Verification" />
                   <div className="features_cnt">
-                    <h5>Complete IdentityVerification</h5>
+                    <h5>Complete Identity Verification <span><i class="ri-arrow-right-s-line"></i></span></h5>
                     <p>Verify your identity to secure your
                       account, protect your data, and
                       unlock full access to all features
@@ -911,10 +909,9 @@ const Dashboard = (props) => {
                 </div>
 
                 <div className="block_features">
-                  <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
-                  <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
+                  <img className='darkimg' src="/images/key.gif" alt="factor authentication (2FA)" />
                   <div className="features_cnt">
-                    <h5>2.factor authentication (2FA)</h5>
+                    <h5>2.factor authentication (2FA) <span><i class="ri-arrow-right-s-line"></i></span></h5>
                     <p>Enable 2-Factor Authentication to
                       add an extra security layer and
                       prevent unauthorized access to
@@ -923,10 +920,9 @@ const Dashboard = (props) => {
                 </div>
 
                 <div className="block_features">
-                  <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
-                  <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
+                  <img className='darkimg' src="/images/increase.gif" alt="Buy crypto with one-click" />
                   <div className="features_cnt">
-                    <h5>Buy crypto with one-click</h5>
+                    <h5>Buy crypto with one-click <span><i class="ri-arrow-right-s-line"></i></span></h5>
                     <p>Buy crypto instantly with one-click
                       and get fast access to digital assets
                       without complex steps or delays.</p>

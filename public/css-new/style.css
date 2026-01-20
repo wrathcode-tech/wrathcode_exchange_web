@@ -7501,7 +7501,7 @@ span.subdel {
 
 .dashboard_right_side {
     width: 28%;
-    margin-top: 46px;
+    margin-top: 44px;
 }
 
 .position_order .desktop_view2 {
@@ -7645,6 +7645,7 @@ ul.user_social li {
 .block_features {
     display: flex;
     flex-direction: row;
+    position: relative;
     gap: 15px;
     border: 1px solid #454C59;
     border-radius: 10px;
@@ -7654,9 +7655,12 @@ ul.user_social li {
 }
 
 .block_features h5 {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
     font-size: 16px;
     color: #EAECEF;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
 
 .block_features p {
@@ -7667,7 +7671,11 @@ ul.user_social li {
 }
 
 .block_features img {
-    width: 40px;
+    width: 80px;
+    min-width: 80px;
+    position: absolute;
+    right: 10px;
+    bottom:0px;
 }
 
 .homebonuspop .modal-dialog {
@@ -7677,8 +7685,8 @@ ul.user_social li {
 .features_block {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin: 15px 0px 20px;
+    gap: 24px;
+    margin:0px 0px 20px;
 }
 
 .recommendations_block ul {
@@ -7964,7 +7972,7 @@ body .recommendations_block ul li a:hover {
 }
 
 .listing_left_outer {
-    width: 72%;
+    width: 86%;
 }
 
 .listing_left_outer h4 {
@@ -8089,7 +8097,7 @@ body .recommendations_block ul li a:hover {
     border-radius: 50px;
 }
 
-.modal.search_form .error {
+.modal.search_form .error_text {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -8097,7 +8105,7 @@ body .recommendations_block ul li a:hover {
     margin-bottom: 10px;
 }
 
-.modal.search_form .error span {
+.modal.search_form .error_text span {
     font-size: 12px;
     font-weight: 400;
     color: #E45561;
@@ -8105,7 +8113,7 @@ body .recommendations_block ul li a:hover {
     padding-left: 13px;
 }
 
-.modal.search_form .error span::before {
+.modal.search_form .error_text span::before {
     width: 5px;
     height: 5px;
     content: "";
@@ -8114,6 +8122,11 @@ body .recommendations_block ul li a:hover {
     top: 6px;
     background-color: #E45561;
     border-radius: 50px;
+}
+
+#security_verification .error {
+    font-size: 12px;
+    position: absolute;
 }
 
 .modal.search_form button.submit {
@@ -8195,7 +8208,7 @@ body .recommendations_block ul li a:hover {
 }
 
 .new_features_s {
-    padding: 0px 20px 0px;
+    padding: 0px 10px 0px;
     /* border: 1px solid #454C59;
     border-radius: 12px; */
 }
@@ -15404,7 +15417,7 @@ button.btn_claim:active {
 
 .kyc_step p {
     font-size: 12px;
-    color: #6F798C;
+    color: #9398a3 !important;
 }
 
 .info_text ul li li {
@@ -15438,6 +15451,7 @@ ul.kyclist li {
     display: flex;
     align-items: center;
     gap: 6px;
+    min-height: 26px;
 }
 
 ul.kyclist li img {
@@ -15611,7 +15625,7 @@ img.successfull_img {
 
 .kyc_step span.small {
     font-size: 11px;
-    color: #6F798C;
+    color: #7e8695 !important;
 }
 
 .kyc_modal .modal-header {
@@ -16458,10 +16472,21 @@ button.copy_code {
         padding-top: 34px;
     }
 
+    .listing_left_outer {
+        width: 76%;
+    }
+
 }
 
 
 @media screen and (max-width:1440px) {
+
+    .listing_left_outer {
+        width: 70%;
+    }
+
+    ul.kyclist {
+        font-size: 12px; }
 
     .navigation {
         padding-left: 0px;
@@ -16632,6 +16657,9 @@ button.copy_code {
         top: 25%;
         left: 90px;
     }
+
+    .block_features h5 {
+        font-size: 14px; }
 
     body .buy_transferbtn a {
         padding: 7px 12px;
@@ -19542,7 +19570,7 @@ button.copy_code {
         padding-right: 50px; }
 
     #twofaInfoModal .qr_code {
-        width: 110px;
+        width: 110px; margin: 0px auto;
     }
 
     .user_profile_cnt h3 {
@@ -19618,7 +19646,15 @@ button.copy_code {
     .kyc_verif_bnr_wrapper .account_benifits .row {
         margin-top: 10px;
         row-gap: 24px;
+        flex-direction: row;
     }
+
+    .kyc_verif_bnr_wrapper .account_benifits .row .col-sm-4{ width: 33.33%; }  
+    .account_benifits {
+        padding: 15px;
+    } 
+
+    .account_benifits h6{ font-size: 12px; }
 
     .mobile_view .swiper-pagination span {
         position: relative;
@@ -20165,11 +20201,11 @@ button.copy_code {
     }
 
     .navi_sidebar li a {
-        padding: 5px 5px 5px 5px;
+        padding:10px;
     }
 
     .navi_sidebar li button {
-        padding: 5px 5px 5px 5px;
+        padding:10px;
     }
 
     .login_section.forgot_password {
@@ -20442,7 +20478,15 @@ button.copy_code {
     }
 
     .dashboard_right_side .features_block {
-        max-height: 260px;
+        gap:20px;
+    }
+
+    .dashboard_right_side {
+        margin-top: 10px;
+    }
+
+    .new_features_s {
+        padding: 0px;
     }
 
     .refrefer_earn_outer .ref_body {
@@ -20804,13 +20848,11 @@ button.copy_code {
     }
 
     .navi_sidebar li a {
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
     }
 
     .navi_sidebar li button {
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
     }
 
     .login_profile_header ul.navi_sidebar {
@@ -25488,11 +25530,27 @@ button.copy_code {
         padding: 6px 12px;
     }
 
+    .account_benifits h6 {
+        font-size: 9px;
+    }
+
+    ul.kyclist li {
+        font-size: 10px;
+        min-height: 30px;
+    }
+
+    ul.kyclist {
+        gap: 5px;
+        font-size: 12px;
+        margin-top: 0px;
+    }
+
 
 }
 
 @media screen and (max-width:360px) {
 
+ 
 
     img.round_img {
         width: 22px !important;
@@ -25706,9 +25764,10 @@ button.copy_code {
         border: none;
         margin: 0;
         max-height: 90vh;
-        height: 70vh;
         overflow-y: auto;
     }
+
+    .search_form_modal_2.modal.fade .modal-content{ height: 70vh; } 
 
     .dashboard_summary .mobile_view span {
         position: relative;

@@ -793,11 +793,7 @@ const SettingsPage = (props) => {
               </div>
               <div className="modal-body">
 
-                {(userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone") && (
-                  <div className="alert alert-warning mb-3" role="alert">
-                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in phone number.
-                  </div>
-                )}
+               
 
                 <form className="profile_form">
 
@@ -807,6 +803,12 @@ const SettingsPage = (props) => {
                       <input type="text" value={mobile ? `${countryCode} ${mobile}` : "Not set"} disabled />
                     </div>
                   </div>
+
+                  {(userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone") && (
+                  <div className="alert alert-warning mb-3" role="alert">
+                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in phone number.
+                  </div>
+                )}
 
                   {!(userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone") && (
                     <>
@@ -1014,7 +1016,7 @@ const SettingsPage = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="error">
+                  <div className="error_text">
                     {password ? (
                       <>
                         <span className={password.length >= 8 && password.length <= 30 ? 'text-success' : 'text-danger'}>

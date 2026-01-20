@@ -514,7 +514,7 @@ const AuthHeader = (props) => {
             </div>
 
             {/* <!--Search Bar Modal --> */}
-            <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade search_form search_form_modal_2" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
               <div className="modal-dialog">
                 <div className="modal-content">

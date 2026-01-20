@@ -285,7 +285,7 @@ const UserHeader = () => {
           </div>
 
           {/* Modal Search */}
-          <div className="modal fade search_form" id="exampleModal" tabIndex="-1" aria-hidden="true">
+          <div className="modal fade search_form search_form_modal_2" id="exampleModal" tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-body">

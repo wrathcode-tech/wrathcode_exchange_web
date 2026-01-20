@@ -264,7 +264,7 @@ const SupportPage = () => {
                                                 <p style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
                                                     <div className="favouriteData">
                                                         <div className="no_data_s">
-                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" /><p>No Data Available</p>
+                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
                                                         </div>
                                                     </div>
                                                 </p>
