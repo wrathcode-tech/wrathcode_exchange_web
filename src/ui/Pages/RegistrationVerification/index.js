@@ -153,7 +153,7 @@ const RegistrationVerification = () => {
 
       <div className="login_section m-auto verifiedform">
 
-        <div className="login_form_right">
+        <div className="login_form_right account-verification">
 
           <div className="form_block_login">
 

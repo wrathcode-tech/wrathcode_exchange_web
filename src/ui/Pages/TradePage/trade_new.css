@@ -2630,7 +2630,7 @@ html[data-theme='light'] .bs_tab_row {
     }
 
     .bs_tab_row {
-        z-index: 999999;
+        z-index: 99999;
     }
 
     .mmn_btm_minus_spc button.btn.btn-danger {

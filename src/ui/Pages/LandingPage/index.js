@@ -796,7 +796,7 @@ const LandingPage = () => {
             </div>
 
             <div class="card borderlft border_btm">
-              <div className="trade_icon"><img src="images/new-images/receive_send.png" alt="Send & Receive Instantly" class="phone" /></div>
+              <div className="trade_icon"><img src="images/new-images/receive_send.svg" alt="Send & Receive Instantly" class="phone" /></div>
               <h4>Send & Receive Instantly</h4>
               <p>Transfer crypto effortlessly with fast confirmations, low fees, and seamless wallet-to-wallet transactions.</p>
             </div>

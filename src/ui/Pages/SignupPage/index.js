@@ -265,7 +265,7 @@ const SignupPage = () => {
 
                                 <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
 
-                                <h2>Welcome to Wrathcode</h2>
+                                <h2>Register to Wrathcode</h2>
 
                                 <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
                                     <li className="nav-item" role="presentation">

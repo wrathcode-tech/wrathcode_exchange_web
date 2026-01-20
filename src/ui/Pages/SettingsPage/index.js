@@ -503,7 +503,7 @@ const SettingsPage = (props) => {
               <div className="lftcnt">
                 <h6><img src="/images/lock_icon.svg" alt="Authenticator App" /> Name & Avatar</h6>
                 <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
-                {/* <button className="btn" data-bs-toggle="modal" data-bs-target="#editAvatarModal">Edit Avatar</button> */}
+                <button className="btn" data-bs-toggle="modal" data-bs-target="#editAvatarModal">Edit Avatar</button>
               </div>
 
               <div className="enable">

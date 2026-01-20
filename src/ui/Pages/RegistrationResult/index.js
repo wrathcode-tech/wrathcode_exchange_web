@@ -48,7 +48,7 @@ const RegistrationResult = () => {
 
       {(verification === "Active" || verification === "Blocked") && (
         <div className="container">
-          <div className="register_verified_form">
+          <div className="register_verified_form account_activate">
             <div className={verification === "Active" ? "register_verified_vector" : "register_verified_vector"}>
               <img
                 src={

@@ -408,471 +408,471 @@ const Dashboard = (props) => {
                 <div className="tab-content" id="myTabContent">
                   <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div className='desktop_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th>24H High</th>
-                            <th>24H Change</th>
-                            <th className="right_t">Trade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {coinData?.length > 0 ? coinData?.map((item) => {
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
-                                  <td>{formatNumber(item?.high, 5)}</td>
-                                  {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                  <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th>24H High</th>
+                              <th>24H Change</th>
+                              <th className="right_t">Trade</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {coinData?.length > 0 ? coinData?.map((item) => {
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
+                                    <td>{formatNumber(item?.high, 5)}</td>
+                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
+                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                    </div>
-                    
+
                     <div className='mobile_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th className="right_t">24 High/Change</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {coinData?.length > 0 ? coinData?.map((item) => {
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
-                                  <td className="right_t">{formatNumber(item?.high, 5)}
-                                  {item?.change_percentage > 0 ? <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
-                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}</td>
-                            
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th className="right_t">24 High/Change</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {coinData?.length > 0 ? coinData?.map((item) => {
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
+                                    <td className="right_t">{formatNumber(item?.high, 5)}
+                                      {item?.change_percentage > 0 ? <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
+                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}</td>
+
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                   </div>
                   <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div className='desktop_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th>24H High</th>
-                            <th>24H Change</th>
-                            <th className="right_t">Trade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td>{formatNumber(item?.high, 5)}</td>
-                                  {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                  <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th>24H High</th>
+                              <th>24H Change</th>
+                              <th className="right_t">Trade</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td>{formatNumber(item?.high, 5)}</td>
+                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
+                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
 
 
-                        </tbody>
-                      </table>
-                    </div>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                     <div className='mobile_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th className="right_t">24H High/Change</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td className="right_t">{formatNumber(item?.high, 5)}
-                                  {item?.change_percentage > 0 ? 
-                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
-                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                  </td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th className="right_t">24H High/Change</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td className="right_t">{formatNumber(item?.high, 5)}
+                                      {item?.change_percentage > 0 ?
+                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
+                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                    </td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
 
 
-                        </tbody>
-                      </table>
-                    </div>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
 
                   </div>
                   <div className="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                     <div className='desktop_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th>24H High</th>
-                            <th>24H Change</th>
-                            <th className="right_t">Trade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th>24H High</th>
+                              <th>24H Change</th>
+                              <th className="right_t">Trade</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
+                            {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
 
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td>{formatNumber(item?.high, 5)}</td>
-                                  {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                  <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td>{formatNumber(item?.high, 5)}</td>
+                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
+                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                     <div className='mobile_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th className="right_t">24H High/Change</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th className="right_t">24H High/Change</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
+                            {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
 
-                            return (
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td className="right_t">{formatNumber(item?.high, 5)}
-                                  {item?.change_percentage > 0 ? 
-                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
-                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                  </td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td className="right_t">{formatNumber(item?.high, 5)}
+                                      {item?.change_percentage > 0 ?
+                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
+                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                    </td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                   </div>
                   <div className="tab-pane fade" id="favorite" role="tabpanel" aria-labelledby="favorite-tab">
                     <div className='desktop_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th>24H High</th>
-                            <th>24H Change</th>
-                            <th className="right_t">Trade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th>24H High</th>
+                              <th>24H Change</th>
+                              <th className="right_t">Trade</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
-                            return (
-                              favCoins.includes(item?._id) &&
+                            {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
+                              return (
+                                favCoins.includes(item?._id) &&
 
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td>{formatNumber(item?.high, 5)}</td>
-                                  {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                  <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td>{formatNumber(item?.high, 5)}</td>
+                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
+                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                     <div className='mobile_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th className='right_t'>24H High/Change</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th className='right_t'>24H High/Change</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
-                            return (
-                              favCoins.includes(item?._id) &&
+                            {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
+                              return (
+                                favCoins.includes(item?._id) &&
 
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td className='right_t'>{formatNumber(item?.high, 5)}
-                                  {item?.change_percentage > 0 ? 
-                                  <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
-                                  <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                  </td>
-                              </tr>
-                              </>
-                            )
-                          }) :<tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td className='right_t'>{formatNumber(item?.high, 5)}
+                                      {item?.change_percentage > 0 ?
+                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
+                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                    </td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                   </div>
                   <div className="tab-pane fade" id="gainers" role="tabpanel" aria-labelledby="gainers-tab">
                     <div className='desktop_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th>24H High</th>
-                            <th>24H Change</th>
-                            <th className="right_t">Trade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th>24H High</th>
+                              <th>24H Change</th>
+                              <th className="right_t">Trade</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
-                            return (
-                              item?.change_percentage > 0 &&
+                            {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
+                              return (
+                                item?.change_percentage > 0 &&
 
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td>{formatNumber(item?.high, 5)}</td>
-                                  {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                  <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td>{formatNumber(item?.high, 5)}</td>
+                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
+                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                     <div className='mobile_view'>
-                    <div className='table-responsive'>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Coin</th>
-                            <th>Price</th>
-                            <th className="right_t">24H High/Change</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                      <div className='table-responsive'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Coin</th>
+                              <th>Price</th>
+                              <th className="right_t">24H High/Change</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                          {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
-                            return (
-                              item?.change_percentage > 0 &&
+                            {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
+                              return (
+                                item?.change_percentage > 0 &&
 
-                              <>
-                                <tr>
-                                  <td>
-                                    <div className="td_first">
-                                      <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                      <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                    </div>
-                                  </td>
-                                  <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                  <td className='right_t'>{formatNumber(item?.high, 5)}
-                                  {item?.change_percentage > 0 ?
-                                   <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> : 
-                                   <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                   </td>
-                              </tr>
-                              </>
-                            )
-                          }) : <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                    </div>
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div className="td_first">
+                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
+                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
+                                      </div>
+                                    </td>
+                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
+                                    <td className='right_t'>{formatNumber(item?.high, 5)}
+                                      {item?.change_percentage > 0 ?
+                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
+                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
+                                    </td>
+                                  </tr>
+                                </>
+                              )
+                            }) : <tr rowSpan="5" className="no-data-row">
+                              <td colSpan="12">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_s">
+                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
 
                   </div>
@@ -885,14 +885,16 @@ const Dashboard = (props) => {
 
           <div className="dashboard_right_side">
             <div className="new_features_s">
-              <h4>Coming Soon</h4>
+              {/* <h4>Coming Soon</h4> */}
               <div className="features_block">
                 <div className="block_features">
                   <img className='darkimg' src="/images/trading_bots.svg" alt="bots" />
                   <img className='lightimg' src="/images/trading_bots_light.svg" alt="bots" />
                   <div className="features_cnt">
-                    <h5>Forex Trading Bot</h5>
-                    <p>A Forex Trading Bot is an automated software that uses algorithms to execute buy and sell orders in the foreign exchange market without manual intervention.  </p>
+                    <h5>Invite Friends for Rewards</h5>
+                    <p>Invite your friends to join, expand your
+                      community, and earn amazing rewards
+                      for every successful referral.</p>
                   </div>
                 </div>
 
@@ -900,13 +902,42 @@ const Dashboard = (props) => {
                   <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
                   <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
                   <div className="features_cnt">
-                    <h5>NFT Market</h5>
-                    <p>An NFT Marketplace is an online platform where you can create (mint), buy, sell, or trade NFTs (Non-Fungible Tokens) — which are unique digital assets stored on a blockchain. </p>
+                    <h5>Complete IdentityVerification</h5>
+                    <p>Verify your identity to secure your
+                      account, protect your data, and
+                      unlock full access to all features
+                      and services without any limitations.</p>
                   </div>
                 </div>
+
+                <div className="block_features">
+                  <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
+                  <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
+                  <div className="features_cnt">
+                    <h5>2.factor authentication (2FA)</h5>
+                    <p>Enable 2-Factor Authentication to
+                      add an extra security layer and
+                      prevent unauthorized access to
+                      your account.</p>
+                  </div>
+                </div>
+
+                <div className="block_features">
+                  <img className='darkimg' src="/images/crypto_card.svg" alt="bots" />
+                  <img className='lightimg' src="/images/crypto_card_light.svg" alt="bots" />
+                  <div className="features_cnt">
+                    <h5>Buy crypto with one-click</h5>
+                    <p>Buy crypto instantly with one-click
+                      and get fast access to digital assets
+                      without complex steps or delays.</p>
+                  </div>
+                </div>
+
+
+
               </div>
 
-              <h4>Recommendations</h4>
+              {/* <h4>Recommendations</h4>
               <div className="recommendations_block">
                 <ul>
                   <li>
@@ -952,7 +983,7 @@ const Dashboard = (props) => {
                     </div>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
 
           </div>
