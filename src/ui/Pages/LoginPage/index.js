@@ -125,10 +125,10 @@ const LoginPage = () => {
 
     const token = recaptchaRef.current.getValue()
 
-    if (!token) {
-      alertErrorMessage("Please validate captcha to login");
-      return;
-    }
+    // if (!token) {
+    //   alertErrorMessage("Please validate captcha to login");
+    //   return;
+    // }
 
     await handleLogin(signId, password, token)
     recaptchaRef.current.reset();
@@ -160,10 +160,10 @@ const LoginPage = () => {
 
     const token = recaptchaRef2.current.getValue()
 
-    if (!token) {
-      alertErrorMessage("Please validate captcha to login");
-      return;
-    }
+    // if (!token) {
+    //   alertErrorMessage("Please validate captcha to login");
+    //   return;
+    // }
 
     await handleLogin(signId, password, token)
     recaptchaRef2.current.reset();

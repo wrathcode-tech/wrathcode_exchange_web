@@ -15,15 +15,12 @@ class Loading extends React.Component {
 
   render() {
     const { loaderState } = this.state;
-    const isDarkTheme = document.body.classList.contains('dark');
     return (
       loaderState && (
         <div className="centerbox">
-          {isDarkTheme ? (
-            <img className="lightlogo" src="/images/logo_dark.svg" alt="logo" />
-          ) : (
-            <img className="darklogo" src="/images/logo_light.svg" alt="logo" />
-          )}
+          <div className="favicon-loader">
+            <img src="/images/favicon_light.svg" alt="Loading..." />
+          </div>
         </div>
       )
     );

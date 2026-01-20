@@ -104,10 +104,10 @@ const SignupPage = () => {
 
         const token = recaptchaRef.current.getValue()
 
-        if (!token) {
-            alertErrorMessage("Please validate captcha");
-            return;
-        }
+        // if (!token) {
+        //     alertErrorMessage("Please validate captcha");
+        //     return;
+        // }
 
 
         LoaderHelper.loaderStatus(true);
@@ -152,10 +152,10 @@ const SignupPage = () => {
 
         const token = recaptchaRef2.current.getValue()
 
-        if (!token) {
-            alertErrorMessage("Please validate captcha");
-            return;
-        }
+        // if (!token) {
+        //     alertErrorMessage("Please validate captcha");
+        //     return;
+        // }
 
 
         LoaderHelper.loaderStatus(true);
