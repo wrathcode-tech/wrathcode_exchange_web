@@ -93,13 +93,35 @@ const SettingsPage = (props) => {
         const imgData = URL.createObjectURL(file);
         setLocalSelfy(imgData);
         setMyfile(file);
-        alertSuccessMessage("Profile picture selected: " + file?.name);
+
+        // First close any open modals (like profilepop)
+        const profileModal = document.getElementById('profilepop');
+        if (profileModal) {
+          const profileModalInstance = window.bootstrap?.Modal?.getInstance(profileModal);
+          if (profileModalInstance) {
+            profileModalInstance.hide();
+          }
+        }
+
+        // Remove any modal backdrops
+        modalBackdropRemove();
+
+        // Open the preview modal after a short delay
+        setTimeout(() => {
+          const modalElement = document.getElementById('editAvatarModal');
+          if (modalElement) {
+            const modal = new window.bootstrap.Modal(modalElement);
+            modal.show();
+          }
+        }, 300);
       } else {
         if (!allowedTypes.includes(file.type)) {
           alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
         } else {
           alertErrorMessage("Max image size is 5MB.");
         }
+        // Reset file input
+        event.target.value = "";
       }
     }
   };
@@ -503,7 +525,19 @@ const SettingsPage = (props) => {
               <div className="lftcnt">
                 <h6><img src="/images/lock_icon.svg" alt="Authenticator App" /> Name & Avatar</h6>
                 <p>Update your name and avatar to personalize your profile. Save changes to keep your account up to date.</p>
-                <button className="btn" data-bs-toggle="modal" data-bs-target="#editAvatarModal">Edit Avatar</button>
+                <input
+                  type="file"
+                  id="avatarFileInput"
+                  accept="image/png,image/jpeg,image/jpg"
+                  onChange={handleChangeSelfie}
+                  style={{ display: 'none' }}
+                />
+                {/* <button 
+                  className="btn" 
+                  onClick={() => document.getElementById('avatarFileInput').click()}
+                >
+                  Edit Avatar
+                </button> */}
               </div>
 
               <div className="enable">
@@ -639,8 +673,8 @@ const SettingsPage = (props) => {
                 <p>Change your account password. You will need to verify with OTP sent to your registered {(userDetails?.registeredBy || props?.userDetails?.registeredBy) === "phone" ? "mobile number" : "email"}.</p>
               </div>
 
-              <button 
-                className="btn" 
+              <button
+                className="btn"
                 onClick={async () => {
                   // Reset form fields
                   setPassword("");
@@ -671,54 +705,49 @@ const SettingsPage = (props) => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="editAvatarModalLabel">Edit Avatar</h5>
-                <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 className="modal-title" id="editAvatarModalLabel">Preview Avatar</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  onClick={() => {
+                    // Reset preview when modal is closed
+                    setLocalSelfy("");
+                    setMyfile(props?.userDetails?.profilepicture || userDetails?.profilepicture || "");
+                    const fileInput = document.getElementById('avatarFileInput');
+                    if (fileInput) fileInput.value = "";
+                  }}
+                ></button>
               </div>
               <div className="modal-body avatar-modal-body">
+                <p className="text-center mb-3">Review your new avatar before applying</p>
                 <div className="avatar-preview-wrapper">
                   <div className="avatar-preview-container">
                     <img
                       className="profileimg avatar-preview-img"
-                      src={
-                        localSelfy
-                          ? localSelfy
-                          : (myfile && typeof myfile !== 'string'
-                            ? URL.createObjectURL(myfile)
-                            : (myfile && typeof myfile === 'string'
-                              ? `${ApiConfig.baseImage}${myfile}`
-                              : (userDetails?.profilepicture
-                                ? `${ApiConfig.baseImage}${userDetails.profilepicture}`
-                                : (props?.userDetails?.profilepicture
-                                  ? `${ApiConfig.baseImage}${props?.userDetails?.profilepicture}`
-                                  : "/images/user.png"))))
-                      }
+                      src={localSelfy || "/images/user.png"}
                       alt="Avatar Preview"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/images/user.png";
                       }}
                     />
-                    <label
-                      htmlFor="avatarImageUploadModal"
-                      className="avatar-edit-label"
-                    >
-                      <img src="/images/edit_icon.svg" alt="edit" className="avatar-edit-icon" />
-                    </label>
-                    <input
-                      type="file"
-                      id="avatarImageUploadModal"
-                      accept="image/png,image/jpeg,image/jpg"
-                      onChange={handleChangeSelfie}
-                      className="avatar-file-input hidden-file-input"
-                    />
                   </div>
                 </div>
 
-                <div className="avatar-modal-actions">
+                <div className="avatar-modal-actions" style={{ marginTop: '20px' }}>
                   <button
                     type="button"
                     className="btn-cancel-avatar"
                     data-bs-dismiss="modal"
+                    onClick={() => {
+                      // Reset preview when cancelled
+                      setLocalSelfy("");
+                      setMyfile(props?.userDetails?.profilepicture || userDetails?.profilepicture || "");
+                      const fileInput = document.getElementById('avatarFileInput');
+                      if (fileInput) fileInput.value = "";
+                    }}
                   >
                     Cancel
                   </button>
@@ -735,13 +764,16 @@ const SettingsPage = (props) => {
                             if (modal) modal.hide();
                           }
                           modalBackdropRemove();
+                          setLocalSelfy("");
+                          const fileInput = document.getElementById('avatarFileInput');
+                          if (fileInput) fileInput.value = "";
                         }
                       } else {
                         alertErrorMessage("Please select an image first");
                       }
                     }}
                   >
-                    Apply
+                    Apply Changes
                   </button>
                 </div>
               </div>
