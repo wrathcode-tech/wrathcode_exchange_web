@@ -257,7 +257,7 @@ const LoginPage = () => {
         <div className="login_form_right">
           <div className="form_block_login">
              <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
-            <h2>Login</h2>
+            <h2>Welcome To Wrathcode</h2>
             <div className="login-header">
               <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">

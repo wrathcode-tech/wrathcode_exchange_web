@@ -196,6 +196,7 @@ header .row {
 
 .login_section.forgot_password .form_block_login {
     padding: 40px 35px;
+    text-align: left;
 }
 
 .login_section.forgot_password button {
@@ -205,6 +206,9 @@ header .row {
     border-radius: 50px;
     font-size: 15px;
 }
+
+.login_section.forgot_password button:hover {
+    background-color: #f3bb2b; }
 
 /* .herobanner2 .scan_block ul {
     display: flex;
@@ -3052,7 +3056,7 @@ ul.ac_wallet_info li a {
 
 .registration__info p a {
     font-weight: 600;
-    color: #F0B90B;
+    color: #fff;
 }
 
 .rewards_vector {
@@ -3516,26 +3520,26 @@ button.btn.btn-sm.otpinput {
 
 /* Placeholder text black karne ke liye */
 .input_filed::placeholder {
-    color: #707A8A !important;
+    color: #9ba2ad !important;
     opacity: 1;
     /* Some browsers reduce opacity by default */
 }
 
 /* For cross-browser compatibility */
 .input_filed::-webkit-input-placeholder {
-    color: #707A8A !important;
+    color: #9ba2ad !important;
 }
 
 .input_filed:-moz-placeholder {
-    color: #707A8A !important;
+    color: #9ba2ad !important;
 }
 
 .input_filed::-moz-placeholder {
-    color: #707A8A !important;
+    color: #9ba2ad !important;
 }
 
 .input_filed:-ms-input-placeholder {
-    color: #707A8A !important;
+    color: #9ba2ad !important;
 }
 
 .disclaimer {
@@ -3794,7 +3798,8 @@ body.light_theme .modal.search_form input:focus {
 .form_block_login label {
     font-size: 14px;
     font-weight: 500;
-    color: #818181;
+    color: #9ba2ad;
+    text-align: left;
 }
 
 .form_block_login .input_filed {
@@ -3824,14 +3829,14 @@ body.light_theme .modal.search_form input:focus {
 }
 
 .form_block_login .input_filed {
-    color: #707A8A;
+    color: #fff;
     font-size: 13px;
     border-radius: 8px;
     background-color: #ffffff00;
 }
 
 .forgot_password a {
-    color: #F0B90B;
+    color: #fff;
     font-weight: 500;
     font-size: 14px;
     margin-top: -12px;
@@ -3906,11 +3911,11 @@ button:disabled {
     color: #000;
     border: none;
     width: 100%;
-    background: #FCD535 !important;
+    background: #f3bb2b !important;
 }
 
 .login_section .btn-link {
-    color: #F0B90B;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -5087,6 +5092,9 @@ body .search_form.order_detail_pop.modelbg2 td.padding-0 i {
     padding: 0px 7px;
 }
 
+.css-1fqh72q-control{ background-color: transparent !important; border:1px solid #707A8A !important; color: #fff !important; }
+.css-1tp29pa-singleValue{ color: #fff !important; }
+
 .earining_calculator_form.convertorusd_outer {
     max-width: 710px;
     margin: 70px auto;
@@ -5261,7 +5269,7 @@ input[type="date"] {
     font-weight: 300;
     padding: 10px 18px;
     font-size: 14px;
-    color: #949AA4;
+    color: #fff;
     background-color: #2B313C;
 }
 
@@ -7641,18 +7649,21 @@ ul.user_social li {
     border: 1px solid #454C59;
     border-radius: 10px;
     padding: 15px;
+    background-color: #2B313C;
+    min-height: 134px;
 }
 
 .block_features h5 {
-    font-size: 14px;
+    font-size: 16px;
     color: #EAECEF;
     margin-bottom: 5px;
 }
 
 .block_features p {
-    font-size: 10px;
-    margin: 0px;
-    color: #6F798C;
+    width: 70%;
+    font-size: 12px;
+    margin: 5px 0px 0px;
+    color: #A3A8B3;
 }
 
 .block_features img {
@@ -8184,9 +8195,9 @@ body .recommendations_block ul li a:hover {
 }
 
 .new_features_s {
-    padding: 20px 20px 0px;
-    border: 1px solid #454C59;
-    border-radius: 12px;
+    padding: 0px 20px 0px;
+    /* border: 1px solid #454C59;
+    border-radius: 12px; */
 }
 
 
@@ -9110,23 +9121,11 @@ img.round_img {
     background-color: #111214;
 }
 
-.dashboard_right_side .features_block {
+/* .dashboard_right_side .features_block {
     min-height: 100px;
     max-height: 320px;
     overflow: auto;
-}
-
-
-
-
-
-
-
-
-
-
-
-
+} */
 
 
 .arbitrage_subscriptions_block {
@@ -16388,6 +16387,7 @@ button.copy_code {
 .buysell_card.buysell_two .custom-btn{ color:#fff !important; }
 
 
+
 @media screen and (max-width:1700px) {
 
     .refrefer_earn_outer {
@@ -19532,6 +19532,15 @@ button.copy_code {
         display: none;
     }
 
+.login_section .lightlogo{ display: none; }
+
+    .forgot_password a{ margin-top: 0px; }
+
+    .modal.search_form#exampleModal .modal-dialog{ margin-top: 0px; }
+
+    .form_block_login .email_code .input_filed {
+        padding-right: 50px; }
+
     #twofaInfoModal .qr_code {
         width: 110px;
     }
@@ -19790,9 +19799,13 @@ button.copy_code {
     }
 
     .exchange_future_s {
-        width: 80%;
+        width: 210px;
         text-align: center;
         margin-top: 15px;
+    }
+
+    .animation_effect {
+        width: 120px;
     }
 
     .row.cta_register_s {
@@ -19818,9 +19831,14 @@ button.copy_code {
     }
 
     .reverse_security .exchange_future_s {
-        width: 80%;
+        width: 220px;
         text-align: center;
     }
+
+    .gallery_crypto {
+        border-radius: 18px;
+        padding: 18px;
+        min-height: 260px; }
 
     .cryptofuture_s.reverse_security {
         margin-top: 40px;
@@ -20158,6 +20176,7 @@ button.copy_code {
         max-width: 100%;
         border-radius: 0px;
         margin-top: 0px !important;
+        justify-content: start;
     }
 
     .user_login.dashbtn a {
@@ -20962,7 +20981,12 @@ button.copy_code {
     }
 
     .search_form .modal-header {
-        padding: 18px 18px 0px !important;
+        padding: 18px 18px 10px !important;
+    }
+
+    .alert.alert-warning {
+        font-size: 12px;
+        padding: 10px;
     }
 
     .swaplist li {
@@ -22201,9 +22225,13 @@ button.copy_code {
         gap: 0px;
         flex-direction: column;
         padding-bottom: 0px;
-        width: 70%;
+        width: 100%;
+        border: none;
         margin: 0 auto;
     }
+
+    .login_fullhieght {
+        padding: 40px 0px 70px; }
 
     .sign_in_form_s {
         padding: 0px;
@@ -23257,7 +23285,7 @@ button.copy_code {
     }
 
     .login_fullhieght .form_block_login {
-        padding: 22px;
+        padding: 0px 22px 10px;
         margin: 0px !important;
     }
 
@@ -23389,7 +23417,6 @@ button.copy_code {
 
     .login_btn input[type="button"] {
         font-size: 13px;
-        padding: 5px 12px;
     }
 
     .factor_bl {
@@ -23457,7 +23484,8 @@ button.copy_code {
     }
 
     .login_section {
-        width: 85%;
+        width: 100%;
+        border: none;
     }
 
     .form_block_login h2 {
@@ -23548,8 +23576,8 @@ button.copy_code {
 
     .modal.search_form .hot_trading_t {
         padding: 10px 0px;
-        min-height: 100px;
-        max-height: 260px;
+        min-height: 100%;
+        max-height: 300px;
     }
 
     .search_form .modal-body {
@@ -24950,7 +24978,7 @@ button.copy_code {
 
     body .bs_dropbox .buysell_card .btn-mini {
         font-size: 11px !important;
-        padding: 7px 10px 7px !important;
+        padding: 11px 10px 11px !important;
     }
 
     .kyc_form_multistep .gender_radio .form-check-label {
@@ -25678,6 +25706,7 @@ button.copy_code {
         border: none;
         margin: 0;
         max-height: 90vh;
+        height: 70vh;
         overflow-y: auto;
     }
 
