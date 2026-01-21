@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import "swiper/css";
 import "swiper/css/pagination";
 import { ApiConfig } from '../../../api/apiConfig/apiConfig';
 import AuthService from '../../../api/services/AuthService';
 import { SocketContext } from "../../../customComponents/SocketContext";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../../customComponents/DashboardHeader';
-import { ProfileContext } from '../../../context/ProfileProvider';
 import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import { alertErrorMessage } from '../../../customComponents/CustomAlertMessage';
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,359 +14,306 @@ import { Pagination } from "swiper";
 
 const Dashboard = (props) => {
   const { socket } = useContext(SocketContext);
-  const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
+  const navigate = useNavigate();
   const [coinData, setCoinData] = useState([]);
   const [favCoins, setfavCoins] = useState([]);
   const [estimatedportfolio, setEstimatedportfolio] = useState();
   const [showBalance, setShowBalance] = useState(false);
   const [highlightCoins, setHighlightCoins] = useState({ new: {}, topGainer: {}, topLoser: {}, topVolumne: {} });
 
-  const formatNumber = (data, decimal = 5) => {
-    // Try to convert strings like "22" or "22.567" into numbers
+  const formatNumber = useCallback((data, decimal = 5) => {
     const num = typeof data === "string" ? Number(data) : data;
-
-    // Check if it's a valid number (not NaN, not undefined/null)
     if (typeof num === "number" && !isNaN(num)) {
-      return (parseFloat(num.toFixed(decimal)));
+      return parseFloat(num.toFixed(decimal));
     }
+    return "0.00";
+  }, []);
 
-    return "0.00"; // "0.00"
-  };
-  const favoriteList = async () => {
+  const favoriteList = useCallback(async () => {
     try {
-      const result = await AuthService.favoriteList()
+      const result = await AuthService.favoriteList();
       if (result?.success) {
-        setfavCoins(result?.data?.pairs ? result?.data?.pairs : []);
-
+        setfavCoins(result?.data?.pairs || []);
       }
-    } catch (error) {
+    } catch {
+      // Silent fail for favorite list
     }
-  };
+  }, []);
 
-  const estimatedPortfolio = async (type) => {
+  const estimatedPortfolio = useCallback(async (type) => {
     try {
-      const result = await AuthService.estimatedPortfolio(type)
+      const result = await AuthService.estimatedPortfolio(type);
       if (result?.success) {
         setEstimatedportfolio(result?.data);
       }
-    } catch (error) {
+    } catch {
+      // Silent fail for portfolio
     }
-  };
+  }, []);
 
   useEffect(() => {
     let interval;
     if (socket) {
-      let payload = {
-        'message': 'market',
-      }
+      const payload = { message: 'market' };
       socket.emit('message', payload);
+      
       interval = setInterval(() => {
-        let payload = {
-          'message': 'market',
-        }
         socket.emit('message', payload);
-      }, 2000)
+      }, 2000);
 
-      socket.on('message', (data) => {
-        setCoinData(data?.pairs);
+      const handleMessage = (data) => {
+        if (!data?.pairs || !Array.isArray(data.pairs) || data.pairs.length === 0) return;
+        
+        setCoinData(data.pairs);
 
-        let topGainer = data?.pairs?.reduce((max, item) => {
-          return parseFloat(item.change) > parseFloat(max.change) ? item : max;
+        const topGainer = data.pairs.reduce((max, item) => {
+          return parseFloat(item?.change || 0) > parseFloat(max?.change || 0) ? item : max;
         }, data.pairs[0]);
 
-        let topLoser = data?.pairs?.reduce((min, item) => {
-          return parseFloat(item.change) < parseFloat(min.change) ? item : min;
+        const topLoser = data.pairs.reduce((min, item) => {
+          return parseFloat(item?.change || 0) < parseFloat(min?.change || 0) ? item : min;
         }, data.pairs[0]);
 
-        let newest = data?.pairs?.reverse()[0];
+        const newest = [...data.pairs].reverse()[0];
 
-        const validVolumePairs = data?.pairs?.filter(item => item?.volume !== undefined && item?.volume !== null);
+        const validVolumePairs = data.pairs.filter(item => item?.volume !== undefined && item?.volume !== null);
+        const highestVolumePair = validVolumePairs.length > 0 
+          ? validVolumePairs.reduce((max, item) => {
+              return parseFloat(item?.volume || 0) > parseFloat(max?.volume || 0) ? item : max;
+            }, validVolumePairs[0])
+          : {};
 
-        const highestVolumePair = validVolumePairs?.reduce((max, item) => {
-          return parseFloat(item.volume) > parseFloat(max.volume) ? item : max;
-        }, validVolumePairs[0]);
+        setHighlightCoins({
+          new: newest || {},
+          topGainer: topGainer || {},
+          topLoser: topLoser || {},
+          topVolumne: highestVolumePair || {}
+        });
+      };
 
+      socket.on('message', handleMessage);
 
-        setHighlightCoins({ new: newest || {}, topGainer: topGainer || {}, topLoser: topLoser || {}, topVolumne: highestVolumePair || {} });
-
-      });
+      return () => {
+        clearInterval(interval);
+        socket.off('message', handleMessage);
+      };
     }
-    return (() => {
-      clearInterval(interval)
-    })
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [socket]);
+
+  const handleAddFav = useCallback(async (e, pairId) => {
+    e.stopPropagation();
+    if (!pairId) return;
+
+    LoaderHelper.loaderStatus(true);
+    try {
+      const result = await AuthService.favoriteCoin(pairId);
+      if (result?.success) {
+        favoriteList();
+      } else {
+        alertErrorMessage(result?.message || "Failed to update favorite");
+      }
+    } catch {
+      alertErrorMessage("Failed to update favorite");
+    }
+    LoaderHelper.loaderStatus(false);
+  }, [favoriteList]);
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    estimatedPortfolio("")
-    favoriteList()
-  }, []);
+    estimatedPortfolio("");
+    favoriteList();
+  }, [estimatedPortfolio, favoriteList]);
 
-  const handleCheckGiveaway = async () => {
-    LoaderHelper.loaderStatus(true);
+  // Helper to render coin row for desktop
+  const renderDesktopRow = useCallback((item, index) => {
+    if (!item) return null;
+    const changePercent = parseFloat(item?.change_percentage || 0);
+    return (
+      <tr key={item?._id || index}>
+        <td>
+          <div className="td_div">
+            <span className="star_btn btn_icon active">
+              <i
+                className={favCoins.includes(item?._id) ? "ri ri-star-fill text-warning me-2" : "ri ri-star-line me-2"}
+                onClick={(e) => handleAddFav(e, item?._id)}
+              />
+            </span>
+            <img
+              alt={item?.base_currency || "coin"}
+              src={ApiConfig.baseImage + item?.icon_path}
+              className="img-fluid icon_img coinimg me-2"
+              onError={(e) => { e.target.src = "/images/default_coin.png"; }}
+            />
+            {item?.base_currency}/{item?.quote_currency}
+          </div>
+        </td>
+        <td>
+          <div className="td_first">
+            <div className="icon">
+              <img 
+                src={ApiConfig?.baseImage + item?.icon_path} 
+                height="30px" 
+                alt={item?.base_currency || "icon"} 
+                onError={(e) => { e.target.src = "/images/default_coin.png"; }}
+              />
+            </div>
+            <div className="price_heading">
+              {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span>
+            </div>
+          </div>
+        </td>
+        <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
+        <td>{formatNumber(item?.high, 5)}</td>
+        <td className={changePercent >= 0 ? "green" : "red"}>
+          {changePercent >= 0 ? "+" : ""}{formatNumber(item?.change_percentage, 5)}%
+        </td>
+        <td className="right_t">
+          <Link to={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</Link>
+        </td>
+      </tr>
+    );
+  }, [favCoins, formatNumber, handleAddFav]);
 
-    const res = await AuthService.checkGiveawayStatus();
+  // Helper to render coin row for mobile
+  const renderMobileRow = useCallback((item, index) => {
+    if (!item) return null;
+    const changePercent = parseFloat(item?.change_percentage || 0);
+    return (
+      <tr key={item?._id || index}>
+        <td>
+          <div className="td_first">
+            <div className="icon">
+              <img 
+                src={ApiConfig?.baseImage + item?.icon_path} 
+                height="30px" 
+                alt={item?.base_currency || "icon"}
+                onError={(e) => { e.target.src = "/images/default_coin.png"; }}
+              />
+            </div>
+            <div className="price_heading">
+              {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span>
+            </div>
+          </div>
+        </td>
+        <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
+        <td className="right_t">
+          {formatNumber(item?.high, 5)}
+          <div className={changePercent >= 0 ? "green" : "red"}>
+            {changePercent >= 0 ? "+" : ""}{formatNumber(item?.change_percentage, 5)}%
+          </div>
+        </td>
+      </tr>
+    );
+  }, [formatNumber]);
 
-    LoaderHelper.loaderStatus(false);
+  // No data row component
+  const NoDataRow = () => (
+    <tr className="no-data-row">
+      <td colSpan="12">
+        <div className="no-data-wrapper">
+          <div className="no_data_s">
+            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data available" />
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
 
-    if (res.success) {
-      // setAllData(res.data);
-    }
-    // ❌ else me koi error message nahi
+  // Highlight card component
+  const HighlightCard = ({ title, data, linkTo }) => {
+    const change = parseFloat(data?.change || 0);
+    return (
+      <div className='div_tag'>
+        <div className="balance_chart_left">
+          <div className="d-flex justify-content-between">
+            <h4>{title}</h4>
+            <Link to={linkTo}><i className="ri-arrow-right-s-line"></i></Link>
+          </div>
+          <div className="select_price">
+            <ul className='wallet_price_list'>
+              <li>
+                <h3 className={change >= 0 ? "text-success" : "text-danger"}>
+                  {data?.buy_price || "0.00"} {data?.quote_currency || "---"} | {data?.change || "0.00"}%
+                </h3>
+              </li>
+              <li><span>≈ {data?.base_currency_fullname || "---"}</span></li>
+            </ul>
+            <div className="dashboardsummary_bottom">
+              <h4>{data?.base_currency || "---"}/{data?.quote_currency || "---"}</h4>
+              <Link 
+                className="btn" 
+                to={`/trade/${data?.base_currency || "BTC"}_${data?.quote_currency || "USDT"}`}
+              >
+                Make Trade
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
-
-
-  useEffect(() => {
-    handleCheckGiveaway();
-  }, []);
-
-
 
   return (
     <>
-
-
       <div className="dashboard_right">
-
         <DashboardHeader props={props} />
+        
+        {/* Desktop View - Highlight Cards */}
         <div className="estimated_balance dash_balance desktop_view">
-          <div className='div_tag'>
-            <div className="balance_chart_left">
-              <div className="d-flex justify-content-between">
-                <h4>Newest (Pair)</h4> <Link to="/market">  <i className="ri-arrow-right-s-line"></i></Link>
-              </div>
-              <div className="select_price">
-                <ul className='wallet_price_list'>
-                  <li><h3 className={`${highlightCoins?.new?.change > 0 ? "text-success" : "text-danger"}`}>{highlightCoins?.new?.buy_price || 0.00} {highlightCoins?.new?.quote_currency || "---"} | {highlightCoins?.new?.change || 0.00}%</h3></li>
-                  <li><span>≈ {highlightCoins?.new?.base_currency_fullname || "---"}</span></li>
-                </ul>
-                <div className="dashboardsummary_bottom">
-                  <h4>{highlightCoins?.new?.base_currency || "---"}/{highlightCoins?.new?.quote_currency || "---"}</h4>
-                  <Link className="btn" to={`/trade/${highlightCoins?.new?.base_currency || "base"}_${highlightCoins?.new?.quote_currency || "quote"}`}>Make Trade</Link>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <div className='div_tag'>
-            <div className="balance_chart_left">
-              <div className="d-flex justify-content-between">
-                <h4>Top gainer (24h)</h4> <Link to="/market">  <i className="ri-arrow-right-s-line"></i></Link>
-              </div>
-              <div className="select_price">
-
-                <ul className='wallet_price_list'>
-                  <li><h3 className={`${highlightCoins?.topGainer?.change > 0 ? "text-success" : "text-danger"}`}>{highlightCoins?.topGainer?.buy_price || 0.00} {highlightCoins?.topGainer?.quote_currency || "---"} | {highlightCoins?.topGainer?.change || 0.00}%</h3></li>
-                  <li><span>≈ {highlightCoins?.topGainer?.base_currency_fullname || "---"}</span></li>
-                </ul>
-
-                <div className="dashboardsummary_bottom">
-                  <h4>{highlightCoins?.topGainer?.base_currency || "---"}/{highlightCoins?.topGainer?.quote_currency || "---"}</h4>
-                  <Link className="btn" to={`/trade/${highlightCoins?.topGainer?.base_currency || "base"}_${highlightCoins?.topGainer?.quote_currency || "quote"}`}>Make Trade</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='div_tag'>
-            <div className="balance_chart_left">
-              <div className="d-flex justify-content-between">
-                <h4>Top Loser (24h)</h4><Link to="/market">  <i className="ri-arrow-right-s-line"></i></Link>
-              </div>
-              <div className="select_price">
-
-                <ul className='wallet_price_list'>
-                  <li><h3 className={`${highlightCoins?.topLoser?.change > 0 ? "text-success" : "text-danger"}`}>{highlightCoins?.topLoser?.buy_price || 0.00} {highlightCoins?.topLoser?.quote_currency || "---"} | {highlightCoins?.topLoser?.change || 0.00}%</h3></li>
-                  <li><span>≈ {highlightCoins?.topLoser?.base_currency_fullname || "---"}</span></li>
-                </ul>
-
-                <div className="dashboardsummary_bottom">
-                  <h4>{highlightCoins?.topLoser?.base_currency || "---"}/{highlightCoins?.topLoser?.quote_currency || "---"}</h4>
-                  <Link className="btn" to={`/trade/${highlightCoins?.topLoser?.base_currency || "base"}_${highlightCoins?.topLoser?.quote_currency || "quote"}`}>Make Trade</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='div_tag'>
-            <div className="balance_chart_left">
-              <div className="d-flex justify-content-between">
-                <h4>High Volume (24H)</h4> <Link to="/market">  <i className="ri-arrow-right-s-line"></i></Link>
-              </div>
-              <div className="select_price">
-
-                <ul className='wallet_price_list'>
-                  <li><h3 className={`${highlightCoins?.topVolumne?.change > 0 ? "text-success" : "text-danger"}`}>{highlightCoins?.topVolumne?.buy_price || 0.00} {highlightCoins?.topVolumne?.quote_currency || "---"} | {highlightCoins?.topVolumne?.change || 0.00}%</h3></li>
-                  <li><span>≈ {highlightCoins?.topVolumne?.base_currency_fullname || "---"}</span></li>
-                </ul>
-
-                <div className="dashboardsummary_bottom">
-                  <h4>{highlightCoins?.topVolumne?.base_currency || "---"}/{highlightCoins?.topVolumne?.quote_currency || "---"}</h4>
-                  <Link className="btn" to={`/trade/${highlightCoins?.topVolumne?.base_currency || "base"}_${highlightCoins?.topVolumne?.quote_currency || "quote"}`}>Make Trade</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <HighlightCard title="Newest (Pair)" data={highlightCoins?.new} linkTo="/market" />
+          <HighlightCard title="Top gainer (24h)" data={highlightCoins?.topGainer} linkTo="/market" />
+          <HighlightCard title="Top Loser (24h)" data={highlightCoins?.topLoser} linkTo="/market" />
+          <HighlightCard title="High Volume (24H)" data={highlightCoins?.topVolumne} linkTo="/market" />
         </div>
 
-
-
-
+        {/* Mobile View - Highlight Cards Swiper */}
         <div className="estimated_balance dash_balance mobile_view">
-
           <Swiper
             modules={[Pagination]}
             pagination={{ clickable: true }}
             spaceBetween={20}
             slidesPerView={1}
           >
-
-            {/* Newest Pair */}
             <SwiperSlide>
-              <div className='div_tag'>
-                <div className="balance_chart_left">
-                  <div className="d-flex justify-content-between">
-                    <h4>Newest (Pair)</h4>
-                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
-                  </div>
-
-                  <div className="select_price">
-                    <ul className='wallet_price_list'>
-                      <li>
-                        <h3 className={`${highlightCoins?.new?.change > 0 ? "text-success" : "text-danger"}`}>
-                          {highlightCoins?.new?.buy_price || 0.00} {highlightCoins?.new?.quote_currency || "---"} |
-                          {highlightCoins?.new?.change || 0.00}%
-                        </h3>
-                      </li>
-                      <li><span>≈ {highlightCoins?.new?.base_currency_fullname || "---"}</span></li>
-                    </ul>
-
-                    <div className="dashboardsummary_bottom">
-                      <h4>{highlightCoins?.new?.base_currency || "---"}/{highlightCoins?.new?.quote_currency || "---"}</h4>
-                      <Link className="btn" to={`/trade/${highlightCoins?.new?.base_currency || "base"}_${highlightCoins?.new?.quote_currency || "quote"}`}>
-                        Make Trade
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HighlightCard title="Newest (Pair)" data={highlightCoins?.new} linkTo="/market" />
             </SwiperSlide>
-
-            {/* Top Gainer */}
             <SwiperSlide>
-              <div className='div_tag'>
-                <div className="balance_chart_left">
-                  <div className="d-flex justify-content-between">
-                    <h4>Top gainer (24h)</h4>
-                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
-                  </div>
-
-                  <div className="select_price">
-                    <ul className='wallet_price_list'>
-                      <li>
-                        <h3 className={`${highlightCoins?.topGainer?.change > 0 ? "text-success" : "text-danger"}`}>
-                          {highlightCoins?.topGainer?.buy_price || 0.00} {highlightCoins?.topGainer?.quote_currency || "---"} |
-                          {highlightCoins?.topGainer?.change || 0.00}%
-                        </h3>
-                      </li>
-                      <li><span>≈ {highlightCoins?.topGainer?.base_currency_fullname || "---"}</span></li>
-                    </ul>
-
-                    <div className="dashboardsummary_bottom">
-                      <h4>{highlightCoins?.topGainer?.base_currency || "---"}/{highlightCoins?.topGainer?.quote_currency || "---"}</h4>
-                      <Link className="btn" to={`/trade/${highlightCoins?.topGainer?.base_currency || "base"}_${highlightCoins?.topGainer?.quote_currency || "quote"}`}>
-                        Make Trade
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HighlightCard title="Top gainer (24h)" data={highlightCoins?.topGainer} linkTo="/market" />
             </SwiperSlide>
-
-            {/* Top Loser */}
             <SwiperSlide>
-              <div className='div_tag'>
-                <div className="balance_chart_left">
-                  <div className="d-flex justify-content-between">
-                    <h4>Top Loser (24h)</h4>
-                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
-                  </div>
-
-                  <div className="select_price">
-                    <ul className='wallet_price_list'>
-                      <li>
-                        <h3 className={`${highlightCoins?.topLoser?.change > 0 ? "text-success" : "text-danger"}`}>
-                          {highlightCoins?.topLoser?.buy_price || 0.00} {highlightCoins?.topLoser?.quote_currency || "---"} |
-                          {highlightCoins?.topLoser?.change || 0.00}%
-                        </h3>
-                      </li>
-                      <li><span>≈ {highlightCoins?.topLoser?.base_currency_fullname || "---"}</span></li>
-                    </ul>
-
-                    <div className="dashboardsummary_bottom">
-                      <h4>{highlightCoins?.topLoser?.base_currency || "---"}/{highlightCoins?.topLoser?.quote_currency || "---"}</h4>
-                      <Link className="btn" to={`/trade/${highlightCoins?.topLoser?.base_currency || "base"}_${highlightCoins?.topLoser?.quote_currency || "quote"}`}>
-                        Make Trade
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HighlightCard title="Top Loser (24h)" data={highlightCoins?.topLoser} linkTo="/market" />
             </SwiperSlide>
-
-            {/* High Volume */}
             <SwiperSlide>
-              <div className='div_tag'>
-                <div className="balance_chart_left">
-                  <div className="d-flex justify-content-between">
-                    <h4>High Volume (24H)</h4>
-                    <Link to="/market"><i className="ri-arrow-right-s-line"></i></Link>
-                  </div>
-
-                  <div className="select_price">
-                    <ul className='wallet_price_list'>
-                      <li>
-                        <h3 className={`${highlightCoins?.topVolumne?.change > 0 ? "text-success" : "text-danger"}`}>
-                          {highlightCoins?.topVolumne?.buy_price || 0.00} {highlightCoins?.topVolumne?.quote_currency || "---"} |
-                          {highlightCoins?.topVolumne?.change || 0.00}%
-                        </h3>
-                      </li>
-                      <li><span>≈ {highlightCoins?.topVolumne?.base_currency_fullname || "---"}</span></li>
-                    </ul>
-
-                    <div className="dashboardsummary_bottom">
-                      <h4>{highlightCoins?.topVolumne?.base_currency || "---"}/{highlightCoins?.topVolumne?.quote_currency || "---"}</h4>
-                      <Link className="btn" to={`/trade/${highlightCoins?.topVolumne?.base_currency || "base"}_${highlightCoins?.topVolumne?.quote_currency || "quote"}`}>
-                        Make Trade
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HighlightCard title="High Volume (24H)" data={highlightCoins?.topVolumne} linkTo="/market" />
             </SwiperSlide>
-
           </Swiper>
-
         </div>
-
-
-
 
         <div className="dashboard_listing_section">
           <div className="listing_left_outer">
+            {/* Deposit Section */}
             <div className="crypto_deposit">
-              <h4>Stat by depositing some crypto</h4>
+              <h4>Start by depositing some crypto</h4>
               <ul>
                 <li>
-
                   <div className="estimate_cnt">
-                    <h5> Estimated Portfolio</h5>
-                    <h4>{showBalance ? formatNumber(estimatedportfolio?.dollarPrice, 8) || 0 : "*********"}  USD <span>{showBalance ? formatNumber(estimatedportfolio?.currencyPrice, 8) || 0 : "*********"}{" "}{estimatedportfolio?.Currency || "---"}</span>  {showBalance ?
-                      <i className="ri-eye-close-line mx-1" onClick={() => setShowBalance(false)}></i>
-                      :
-                      <i className="ri-eye-line mx-1" onClick={() => setShowBalance(true)}></i>}</h4>
+                    <h5>Estimated Portfolio</h5>
+                    <h4>
+                      {showBalance ? formatNumber(estimatedportfolio?.dollarPrice, 8) || 0 : "*********"} USD{" "}
+                      <span>
+                        {showBalance ? formatNumber(estimatedportfolio?.currencyPrice, 8) || 0 : "*********"}{" "}
+                        {estimatedportfolio?.Currency || "---"}
+                      </span>
+                      {showBalance ? (
+                        <i className="ri-eye-close-line mx-1" onClick={() => setShowBalance(false)} />
+                      ) : (
+                        <i className="ri-eye-line mx-1" onClick={() => setShowBalance(true)} />
+                      )}
+                    </h4>
                   </div>
                   <div className="estimated_portfolio">
                     <Link className="deposit_btn" to="/asset_managemnet/deposit">Deposit</Link>
@@ -377,35 +323,38 @@ const Dashboard = (props) => {
               </ul>
             </div>
 
+            {/* Market Section */}
             <div className="market_section maindashboard">
               <div className="top_heading">
-                <h4>Markets</h4>
-                <a className="more_btn" href="/market">More {">"}</a>
+                <h4>Spot Markets</h4>
+                <Link className="more_btn" to="/market">More {">"}</Link>
               </div>
               <div className="dashboard_summary">
                 <ul className="nav nav-tabs" id="myTab" role="tablist">
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="favorite-tab" data-bs-toggle="tab" data-bs-target="#favorite"
+                      type="button" role="tab" aria-controls="favorite" aria-selected="false">Favorite</button>
+                  </li>
                   <li className="nav-item" role="presentation">
                     <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                       type="button" role="tab" aria-controls="home" aria-selected="true">Trending</button>
                   </li>
                   <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
-                      role="tab" aria-controls="profile" aria-selected="false">Hot</button>
+                    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                      type="button" role="tab" aria-controls="profile" aria-selected="false">Hot</button>
                   </li>
                   <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button"
-                      role="tab" aria-controls="contact" aria-selected="false">New Listing</button>
+                    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
+                      type="button" role="tab" aria-controls="contact" aria-selected="false">New Listing</button>
                   </li>
                   <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#favorite"
-                      type="button" role="tab" aria-controls="favorite" aria-selected="false">Favorite</button>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#gainers" type="button"
-                      role="tab" aria-controls="gainers" aria-selected="false">Top Gainers</button>
+                    <button className="nav-link" id="gainers-tab" data-bs-toggle="tab" data-bs-target="#gainers"
+                      type="button" role="tab" aria-controls="gainers" aria-selected="false">Top Gainers</button>
                   </li>
                 </ul>
+
                 <div className="tab-content" id="myTabContent">
+                  {/* Trending Tab */}
                   <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div className='desktop_view'>
                       <div className='table-responsive'>
@@ -420,37 +369,14 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {coinData?.length > 0 ? coinData?.map((item) => {
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
-                                    <td>{formatNumber(item?.high, 5)}</td>
-                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 
+                              ? coinData.map((item, index) => renderDesktopRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                     <div className='mobile_view'>
                       <div className='table-responsive'>
                         <table>
@@ -462,39 +388,17 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {coinData?.length > 0 ? coinData?.map((item) => {
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> <span className='fontWeight'>{item?.quote_currency}</span></td>
-                                    <td className="right_t">{formatNumber(item?.high, 5)}
-                                      {item?.change_percentage > 0 ? <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
-                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}</td>
-
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 
+                              ? coinData.map((item, index) => renderMobileRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                   </div>
+
+                  {/* Hot Tab */}
                   <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div className='desktop_view'>
                       <div className='table-responsive'>
@@ -509,39 +413,14 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td>{formatNumber(item?.high, 5)}</td>
-                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
-
-
+                            {coinData?.length > 0 
+                              ? coinData.slice(0, 5).map((item, index) => renderDesktopRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                     <div className='mobile_view'>
                       <div className='table-responsive'>
                         <table>
@@ -553,43 +432,17 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {coinData?.length > 0 ? coinData?.slice(0, 5)?.map((item) => {
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td className="right_t">{formatNumber(item?.high, 5)}
-                                      {item?.change_percentage > 0 ?
-                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
-                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                    </td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
-
-
+                            {coinData?.length > 0 
+                              ? coinData.slice(0, 5).map((item, index) => renderMobileRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
-
                   </div>
+
+                  {/* New Listing Tab */}
                   <div className="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                     <div className='desktop_view'>
                       <div className='table-responsive'>
@@ -604,39 +457,14 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
-
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td>{formatNumber(item?.high, 5)}</td>
-                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 
+                              ? [...coinData].reverse().slice(0, 7).map((item, index) => renderDesktopRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                     <div className='mobile_view'>
                       <div className='table-responsive'>
                         <table>
@@ -648,42 +476,17 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {coinData?.length > 0 ? coinData?.reverse()?.slice(0, 7)?.map((item) => {
-
-                              return (
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td className="right_t">{formatNumber(item?.high, 5)}
-                                      {item?.change_percentage > 0 ?
-                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
-                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                    </td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 
+                              ? [...coinData].reverse().slice(0, 7).map((item, index) => renderMobileRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                   </div>
+
+                  {/* Favorite Tab */}
                   <div className="tab-pane fade" id="favorite" role="tabpanel" aria-labelledby="favorite-tab">
                     <div className='desktop_view'>
                       <div className='table-responsive'>
@@ -698,40 +501,16 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
-                              return (
-                                favCoins.includes(item?._id) &&
-
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td>{formatNumber(item?.high, 5)}</td>
-                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 && favCoins?.length > 0
+                              ? coinData
+                                  .filter(item => favCoins.includes(item?._id))
+                                  .map((item, index) => renderDesktopRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                     <div className='mobile_view'>
                       <div className='table-responsive'>
                         <table>
@@ -743,43 +522,19 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {(coinData?.length > 0 && favCoins?.length > 0) ? coinData?.map((item) => {
-                              return (
-                                favCoins.includes(item?._id) &&
-
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td className='right_t'>{formatNumber(item?.high, 5)}
-                                      {item?.change_percentage > 0 ?
-                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
-                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                    </td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0 && favCoins?.length > 0
+                              ? coinData
+                                  .filter(item => favCoins.includes(item?._id))
+                                  .map((item, index) => renderMobileRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                   </div>
+
+                  {/* Top Gainers Tab */}
                   <div className="tab-pane fade" id="gainers" role="tabpanel" aria-labelledby="gainers-tab">
                     <div className='desktop_view'>
                       <div className='table-responsive'>
@@ -794,40 +549,17 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
-                              return (
-                                item?.change_percentage > 0 &&
-
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td>{formatNumber(item?.high, 5)}</td>
-                                    {item?.change_percentage > 0 ? <td className="green">+{formatNumber(item?.change_percentage, 5)}%</td> : <td className="red">-{formatNumber(item?.change_percentage, 5)}%</td>}
-                                    <td className="right_t"><a href={`/trade/${item?.base_currency}_${item?.quote_currency}`}>Trade</a></td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0
+                              ? coinData
+                                  .filter(item => parseFloat(item?.change_percentage || 0) > 0)
+                                  .slice(0, 10)
+                                  .map((item, index) => renderDesktopRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                     <div className='mobile_view'>
                       <div className='table-responsive'>
                         <table>
@@ -839,153 +571,65 @@ const Dashboard = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-
-                            {coinData?.length > 0 ? coinData?.slice(0, 10)?.map((item) => {
-                              return (
-                                item?.change_percentage > 0 &&
-
-                                <>
-                                  <tr>
-                                    <td>
-                                      <div className="td_first">
-                                        <div className="icon"><img src={ApiConfig?.baseImage + item?.icon_path} height="30px" alt="icon" /></div>
-                                        <div className="price_heading"> {item?.base_currency} <br /> <span>{item?.base_currency_fullname}</span></div>
-                                      </div>
-                                    </td>
-                                    <td>{formatNumber(item?.buy_price, 5)} <br /> {item?.quote_currency}</td>
-                                    <td className='right_t'>{formatNumber(item?.high, 5)}
-                                      {item?.change_percentage > 0 ?
-                                        <div className="green">+{formatNumber(item?.change_percentage, 5)}%</div> :
-                                        <div className="red">-{formatNumber(item?.change_percentage, 5)}%</div>}
-                                    </td>
-                                  </tr>
-                                </>
-                              )
-                            }) : <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>}
+                            {coinData?.length > 0
+                              ? coinData
+                                  .filter(item => parseFloat(item?.change_percentage || 0) > 0)
+                                  .slice(0, 10)
+                                  .map((item, index) => renderMobileRow(item, index))
+                              : <NoDataRow />
+                            }
                           </tbody>
                         </table>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
 
-
+          {/* Right Sidebar - Features */}
           <div className="dashboard_right_side">
             <div className="new_features_s">
-              {/* <h4>Coming Soon</h4> */}
               <div className="features_block">
-                <div className="block_features">
-                  <img className='darkimg' src="/images/add.gif" alt="bots" />
+                {props?.userDetails?.kycVerified === 0 && (
+                  <div className="block_features" onClick={() => navigate("/user_profile/kyc")}>
+                    <img className='darkimg' src="/images/user.gif" alt="Complete Identity Verification" />
+                    <div className="features_cnt">
+                      <h5>Complete Identity Verification <span><i className="ri-arrow-right-s-line"></i></span></h5>
+                      <p>Verify your identity to secure your account, protect your data, and unlock full access to all features and services without any limitations.</p>
+                    </div>
+                  </div>
+                )}
+                <div className="block_features" onClick={() => navigate("/refer_earn")}>
+                  <img className='darkimg' src="/images/add.gif" alt="Invite Friends" />
                   <div className="features_cnt">
-                    <h5>Invite Friends for Rewards <span><i class="ri-arrow-right-s-line"></i></span></h5>
-                    <p>Invite your friends to join, expand your
-                      community, and earn amazing rewards
-                      for every successful referral.</p>
+                    <h5>Invite Friends for Rewards <span><i className="ri-arrow-right-s-line"></i></span></h5>
+                    <p>Invite your friends to join, expand your community, and earn amazing rewards for every successful referral.</p>
                   </div>
                 </div>
 
-                <div className="block_features">
-                  <img className='darkimg' src="/images/user.gif" alt="Complete Identity Verification" />
+                {props?.userDetails?.["2fa"] === 0 && (
+                  <div className="block_features" onClick={() => navigate("/user_profile/two_factor_autentication")}>
+                    <img className='darkimg' src="/images/key.gif" alt="2FA Authentication" />
+                    <div className="features_cnt">
+                      <h5>2-Factor Authentication (2FA) <span><i className="ri-arrow-right-s-line"></i></span></h5>
+                      <p>Enable 2-Factor Authentication to add an extra security layer and prevent unauthorized access to your account.</p>
+                    </div>
+                  </div>
+                )}
+                <div className="block_features" onClick={() => navigate("/asset_managemnet/deposit")}>
+                  <img className='darkimg' src="/images/increase.gif" alt="Deposit crypto" />
                   <div className="features_cnt">
-                    <h5>Complete Identity Verification <span><i class="ri-arrow-right-s-line"></i></span></h5>
-                    <p>Verify your identity to secure your
-                      account, protect your data, and
-                      unlock full access to all features
-                      and services without any limitations.</p>
+                    <h5>Deposit crypto with one-click <span><i className="ri-arrow-right-s-line"></i></span></h5>
+                    <p>Deposit crypto instantly with one-click and get fast access to digital assets without complex steps or delays.</p>
                   </div>
                 </div>
-
-                <div className="block_features">
-                  <img className='darkimg' src="/images/key.gif" alt="factor authentication (2FA)" />
-                  <div className="features_cnt">
-                    <h5>2.factor authentication (2FA) <span><i class="ri-arrow-right-s-line"></i></span></h5>
-                    <p>Enable 2-Factor Authentication to
-                      add an extra security layer and
-                      prevent unauthorized access to
-                      your account.</p>
-                  </div>
-                </div>
-
-                <div className="block_features">
-                  <img className='darkimg' src="/images/increase.gif" alt="Buy crypto with one-click" />
-                  <div className="features_cnt">
-                    <h5>Buy crypto with one-click <span><i class="ri-arrow-right-s-line"></i></span></h5>
-                    <p>Buy crypto instantly with one-click
-                      and get fast access to digital assets
-                      without complex steps or delays.</p>
-                  </div>
-                </div>
-
-
-
               </div>
-
-              {/* <h4>Recommendations</h4>
-              <div className="recommendations_block">
-                <ul>
-                  <li>
-                    <div className="cv_trade_img">
-                      <img src="/images/recommendations_vector.png" alt="recommendations" />
-                    </div>
-                    <div className="cnt_slider_f">
-                      <h6>Complete Identity Verification</h6>
-                      <p>Secure your account by completing identity verification.</p>
-                      {props?.userDetails?.kycVerified === 0 ? (
-                        <Link to="/user_profile/kyc">Verify</Link>
-                      ) : props?.userDetails?.kycVerified === 1 ? (
-                        <span className='kycpendingbtn'>KYC Pending</span>
-                      ) : props?.userDetails?.kycVerified === 2 ? (
-                        <span className='kycapprovedbtn'>KYC Approved</span>
-                      ) : props?.userDetails?.kycVerified === 3 ? (
-                        <span style={{ color: "red", fontWeight: "bold" }}>KYC Rejected</span>
-                      ) : null}
-                    </div>
-                  </li>
-                  <li>
-                    <div className="cv_trade_img">
-                      <img src="/images/recommendations_vector2.png" alt="recommendations" />
-                    </div>
-                    <div className="cnt_slider_f">
-                      <h6>2-Factor Authentication (2FA)</h6>
-                      <p>Enhance your security with 2FA — an extra layer of protection for your account.</p>
-                      {props?.userDetails?.["2fa"] === 0 ? (
-                        <Link to="/user_profile/two_factor_autentication">Bind</Link>
-                      ) : (
-                        <span style={{ color: "#fea903", fontWeight: "bold" }}>2FA Activated</span>
-                      )}
-                    </div>
-                  </li>
-                  <li>
-                    <div className="cv_trade_img">
-                      <img src="/images/recommendations_vector3.png" alt="recommendations" />
-                    </div>
-                    <div className="cnt_slider_f">
-                      <h6>Buy crypto with one-click</h6>
-                      <p>Easily purchase crypto in seconds with just a single click </p>
-                      <Link to="/asset_managemnet/deposit">Buy Crypto</Link>
-                    </div>
-                  </li>
-                </ul>
-              </div> */}
             </div>
-
           </div>
         </div>
       </div>
-
     </>
   )
 }

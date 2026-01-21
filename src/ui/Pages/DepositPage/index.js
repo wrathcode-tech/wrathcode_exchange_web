@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import { ProfileContext } from '../../../context/ProfileProvider';
 
 const DepositPage = () => {
-  const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
 
   const [availableCurrency, setAvailableCurrency] = useState([]);
   const [allData, setAllData] = useState([]);

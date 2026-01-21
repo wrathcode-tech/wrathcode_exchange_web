@@ -15,16 +15,23 @@ const SocketContextProvider = ({ children }) => {
       upgrade: false,
       rejectUnauthorized: false,
       reconnection: false, // we handle reconnection manually
+      timeout: 20000, // 20 second connection timeout
     });
 
     newSocket.on('connect', () => {
-      console.log('✅ Socket connected');
       reconnectAttempts.current = 0;
     });
 
-    newSocket.on('disconnect', (reason) => {
-      console.warn('🔌 Socket disconnected:', reason);
+    newSocket.on('disconnect', () => {
       attemptReconnect();
+    });
+
+    newSocket.on('connect_error', () => {
+      attemptReconnect();
+    });
+
+    newSocket.on('error', () => {
+      // Silent error handling
     });
 
     setSocket(newSocket);
@@ -33,14 +40,12 @@ const SocketContextProvider = ({ children }) => {
 
   const attemptReconnect = () => {
     if (reconnectAttempts.current >= maxReconnectAttempts) {
-      console.warn('❌ Max reconnection attempts reached.');
       return;
     }
 
     const delay = Math.min(2000 * reconnectAttempts.current, 10000); // exponential backoff
     reconnectAttempts.current += 1;
 
-    console.log(`🔁 Reconnecting in ${delay / 1000}s...`);
     setTimeout(() => {
       const reconnectedSocket = connectSocket();
       setSocket(reconnectedSocket);
@@ -53,7 +58,6 @@ const SocketContextProvider = ({ children }) => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         if (!activeSocket.connected) {
-          console.log("🧠 Tab resumed. Trying socket reconnect...");
           attemptReconnect();
         }
       }

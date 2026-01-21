@@ -9,7 +9,6 @@ import { ProfileContext } from "../../../context/ProfileProvider";
 
 const ReferalPage = () => {
 
-  const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
 
   const [refferlsData, setRefferalData] = useState({ user_code: "" });
   const [isCopied, setIsCopied] = useState(false);

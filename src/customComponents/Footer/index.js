@@ -26,7 +26,7 @@ const Footer = () => {
                                 <div className="footer_section">
                                     <div className="topheading_footer">
                                         <h3>About Us</h3>
-                                        <div className="icon_i"><i class="ri-add-fill"></i><i class="ri-subtract-fill"></i></div>
+                                        <div className="icon_i"><i className="ri-add-fill"></i><i className="ri-subtract-fill"></i></div>
                                     </div>
                                     <ul className="menu">
                                         <li ><Link to="/TermsofUse" onClick={handleupper}> Terms of Use </Link></li>
@@ -39,13 +39,12 @@ const Footer = () => {
                                 <div className="footer_section">
                                     <div className="topheading_footer">
                                         <h3>Services</h3>
-                                        <div className="icon_i"><i class="ri-add-fill"></i><i class="ri-subtract-fill"></i></div>
+                                        <div className="icon_i"><i className="ri-add-fill"></i><i className="ri-subtract-fill"></i></div>
                                     </div>
                                     <ul className="menu">
                                         {/* <li ><Link to="/token" onClick={handleupper}>CV Tokens </Link></li> */}
                                         <li ><Link to="/announcement" onClick={handleupper}>Announcements</Link></li>
-                                        <li ><Link to="/trade/BTC_USDT" onClick={handleupper}>Buy Crypto</Link></li>
-                                        {/* <li ><Link to="/trade/BTC_USDT" onClick={handleupper}>Buy Crypto</Link></li> */}
+                                        <li ><Link to="/trade/BTC_USDT" onClick={handleupper}>Trade Crypto</Link></li>
                                         <li ><Link to="/fees" onClick={handleupper}>Fees</Link></li>
                                         <li ><Link to="/refer_earn" onClick={handleupper}>Referral Program</Link></li>
                                         <li ><Link to="/coin_list" onClick={handleupper}>Listing Application</Link></li>
@@ -58,7 +57,7 @@ const Footer = () => {
                                 <div className="footer_section">
                                     <div className="topheading_footer">
                                         <h3>Support</h3>
-                                        <div className="icon_i"><i class="ri-add-fill"></i><i class="ri-subtract-fill"></i></div>
+                                        <div className="icon_i"><i className="ri-add-fill"></i><i className="ri-subtract-fill"></i></div>
                                     </div>
                                     <ul className="menu">
                                         <li ><Link to="/contact" onClick={handleupper}>Help Center</Link></li>
@@ -72,7 +71,7 @@ const Footer = () => {
                                 <div className="footer_section">
                                     <div className="topheading_footer">
                                         <h3>Legal</h3>
-                                        <div className="icon_i"><i class="ri-add-fill"></i><i class="ri-subtract-fill"></i></div>
+                                        <div className="icon_i"><i className="ri-add-fill"></i><i className="ri-subtract-fill"></i></div>
                                     </div>
                                     <ul className="menu">
                                         <li ><Link to="/aml-kyc-policy" onClick={handleupper}>AML/KYC Policy</Link></li>
@@ -105,7 +104,7 @@ const Footer = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-lg-12 col-12 mt-4 text-center">
-                                        <p className="copyright-text"> Copyright © 2026 <b className="Wrathcode" ><a href="#">Wrathcode</a> </b>. All rights reserved</p>
+                                        <p className="copyright-text"> Copyright © 2026 <b className="Wrathcode" ><a href="https://wrathcode.com/" target="_blank" rel="noopener noreferrer">Wrathcode</a> </b>. All rights reserved</p>
                                     </div>
                                 </div>
                             </div>
