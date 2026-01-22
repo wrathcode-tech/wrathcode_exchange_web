@@ -294,7 +294,7 @@ const FundPage = (props) => {
     await AuthService.getCvbotUserWallet(id).then(async (result) => {
       if (result?.success) {
         LoaderHelper.loaderStatus(false);
-        alertSuccessMessage("CV Bot connected successfully")
+        alertSuccessMessage("Wrathcode Bot connected successfully")
         if (!props?.userDetails?.cv_bot_id) {
           handleUserDetails()
         }
@@ -793,7 +793,7 @@ const FundPage = (props) => {
                         <button className={`btf`} data-bs-toggle="modal" data-bs-target="#cv_bot_detail_modal">
                           <div className="um_tab_link">
                             <img src="/images/bot.svg" className="img-fluid" alt="Wrathcode " />
-                            <span> {props?.userDetails?.cv_bot_id ? "CV Bot Connected" : "Connect CV BOT"} </span>
+                            <span> {props?.userDetails?.cv_bot_id ? "Wrathcode Bot Connected" : "Connect Wrathcode BOT"} </span>
                           </div>
                         </button>
                       </div>
@@ -1588,7 +1588,7 @@ const FundPage = (props) => {
                           }) : ''}
                           {/* {fundModelData?.short_name === "CVT" &&
                             <button type="button" className={`btn btn-outline-primary ${selectedChain?.chain === "bot" && "active"}`} onClick={() => { setSelectedchain({ chain: "bot" }) }} data-bs-toggle="modal" data-bs-target="#cv_bot_detail_modal">
-                              Connect CV Bot
+                              Connect Wrathcode Bot
                             </button>} */}
                         </div>
                         <div id="bnm">
@@ -1602,7 +1602,7 @@ const FundPage = (props) => {
                           {(fundModelData?.short_name === "USDT" && userDetails?.kycVerified !== 2) && <div className="text-center">  <small className="text-warning"><a href="/user_profile/user_kyc">Complete your  KYC </a> and get flat<strong>  2.5% KYC bonus </strong>on deposit of 100 USDT or more.</small></div>}
                           <ul className="disclaimer mt-3">
                             <label>Disclaimer</label>
-                            {fundModelData?.short_name === "CVT" && <li> • Deposit from CV Bot can only be done once in 12 hour.</li>}
+                            {fundModelData?.short_name === "CVT" && <li> • Deposit from Wrathcode Bot can only be done once in 12 hour.</li>}
                             <li> • Minimum deposit of {coinDetails?.min_deposit}, deposit below that cannot be recovered.</li>
                             <li> • Please deposit only {fundModelData?.currency} on this address. If you deposit any other coin, it will be lost forever. </li>
                             <li> • This is {selectedChain?.chain} deposit address type. Transferring to an unsupported network could result in loss of deposit.
@@ -1955,10 +1955,10 @@ const FundPage = (props) => {
                 </div>
                 <div className="tt_item ">
                   <span className="tt_disable">Total Transaction Fee </span>
-                  <span className="tt_normal">  {modelData?.description?.includes("CV Bot") ? modelData?.cvBotfee : modelData?.fee} </span>
+                  <span className="tt_normal">  {modelData?.description?.includes("Wrathcode Bot") ? modelData?.cvBotfee : modelData?.fee} </span>
                 </div>
-                {modelData?.description?.includes("CV Bot") && <div className="tt_item">
-                  <span className="tt_disable">CV Bot Id</span>
+                {modelData?.description?.includes("Wrathcode Bot") && <div className="tt_item">
+                  <span className="tt_disable">Wrathcode Bot Id</span>
                   <span className="tt_normal">{modelData?.cvBotID || "------"}</span>
                 </div>}
                 <div className="tt_item">
@@ -2059,7 +2059,7 @@ const FundPage = (props) => {
         </div>
       </div>
 
-      {/* Cv Bot Wallet details  */}
+      {/* Wrathcode Bot Wallet details  */}
       <div className="modal fade cnbt_modal" id="cv_bot_detail_modal" tabIndex="-1" aria-labelledby="cv_bot_detail_modalLaebl" aria-hidden="true" >
         <div className="modal-dialog modal-dialog-centered modal-md modal-lg">
           <div className="modal-content">
@@ -2069,11 +2069,11 @@ const FundPage = (props) => {
             <div className="modal-body px-8 py-4">
               <div className="bt_row" >
                 <div className="bt_left" >
-                  <h4> Connect CV BOT </h4>
-                  <p>A fee of 2 USDT will be deducted to connect the CV Bot and enable fund transfers</p>
+                  <h4> Connect Wrathcode BOT </h4>
+                  <p>A fee of 2 USDT will be deducted to connect the Wrathcode Bot and enable fund transfers</p>
                   <div className="bt_card" >
                     <div className="form-group mb-3">
-                      <input className="form-control" type="text" placeholder="Enter CV Bot Id" disabled={props?.userDetails?.cv_bot_id} value={cvBotId} onChange={(e) => setCvBotId(e.target.value)} />
+                      <input className="form-control" type="text" placeholder="Enter Wrathcode Bot Id" disabled={props?.userDetails?.cv_bot_id} value={cvBotId} onChange={(e) => setCvBotId(e.target.value)} />
 
                     </div>
                     <div className="form-group mb-2">
@@ -2086,7 +2086,7 @@ const FundPage = (props) => {
                         </button>}
                     </div>
                   </div>
-                  <small className="text-danger">Note: Please note that CV Bot ID can be connected only once, after which it will be permanently locked.</small>
+                  <small className="text-danger">Note: Please note that Wrathcode Bot ID can be connected only once, after which it will be permanently locked.</small>
                 </div>
                 <div className="bt_right" >
                   <img src="/images/bot_modal.svg" alt="" className="img-fluid" />
@@ -2098,13 +2098,13 @@ const FundPage = (props) => {
         </div>
       </div>
 
-      {/* Cv Bot Wallet Transfer details  */}
+      {/* Wrathcode Bot Wallet Transfer details  */}
       <div className="modal fade" id="cv_bot_transfer_modal" tabIndex="-1" aria-labelledby="cv_bot_transfer_modalLaebl" aria-hidden="true" >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header flex-column px-8">
               <h3 className="modal-title" id="placeBitLaebl">
-                Transfer CV Bot Funds
+                Transfer Wrathcode Bot Funds
               </h3>
               <button type="button" className="btn-custom-closer" data-bs-dismiss="modal" aria-label="Close">
                 <i className="ri-close-fill"></i>
@@ -2124,7 +2124,7 @@ const FundPage = (props) => {
                     <span>Transfer funds</span>
                   </button>
                 </div>
-                <small className="text-danger">Note: A fee of 2 USDT will be deducted to connect the CV Bot and enable fund transfers.<br /> Please note that CV Bot ID can be connected only once, after which it will be permanently locked.</small>
+                <small className="text-danger">Note: A fee of 2 USDT will be deducted to connect the Wrathcode Bot and enable fund transfers.<br /> Please note that Wrathcode Bot ID can be connected only once, after which it will be permanently locked.</small>
               </>
 
             </div>

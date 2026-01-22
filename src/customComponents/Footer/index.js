@@ -42,7 +42,6 @@ const Footer = () => {
                                         <div className="icon_i"><i className="ri-add-fill"></i><i className="ri-subtract-fill"></i></div>
                                     </div>
                                     <ul className="menu">
-                                        {/* <li ><Link to="/token" onClick={handleupper}>CV Tokens </Link></li> */}
                                         <li ><Link to="/announcement" onClick={handleupper}>Announcements</Link></li>
                                         <li ><Link to="/trade/BTC_USDT" onClick={handleupper}>Trade Crypto</Link></li>
                                         <li ><Link to="/fees" onClick={handleupper}>Fees</Link></li>

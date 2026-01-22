@@ -1,7 +1,8 @@
-import React, { useEffect, createContext, useState } from 'react';
+import React, { useEffect, createContext, useState, useCallback, useRef } from 'react';
 import AuthService from '../../api/services/AuthService';
 import LoaderHelper from '../../customComponents/Loading/LoaderHelper';
 import { alertErrorMessage } from '../../customComponents/CustomAlertMessage';
+
 export const ProfileContext = createContext();
 
 export function ProfileProvider(props) {
@@ -13,78 +14,174 @@ export function ProfileProvider(props) {
   const [themeUpdated, setThemeUpdated] = useState(true);
   const [refreshModal, setRefreshModal] = useState(true);
   const [refreshNotification, setRefreshNotification] = useState(false);
+  const [activeTab, setActiveTab] = useState("");
+
+  // Shared state for APIs that should only run once after login
+  const [estimatedPortfolio, setEstimatedPortfolio] = useState({});
+  const [notifications, setNotifications] = useState([]);
+  const [notificationCounts, setNotificationCounts] = useState({ unseen: 0 });
+  const [pairs, setPairs] = useState([]);
+  const [walletTypes, setWalletTypes] = useState([]);
+
+  // Refs to track if APIs have been called
+  const isInitialized = useRef(false);
+
+  const token = sessionStorage.getItem('token');
 
   const updateModelHideStatus = (value) => {
     sessionStorage.setItem(value, true);
-    setRefreshModal(!refreshModal)
-  }
+    setRefreshModal(!refreshModal);
+  };
 
-
-
-
-  const [activeTab, setActiveTab] = useState("");
-  const token = sessionStorage.getItem('token');
-
-
-  const handleUserDetails = async () => {
+  const handleUserDetails = useCallback(async () => {
     LoaderHelper.loaderStatus(true);
-    await AuthService.getDetails().then(async (result) => {
+    try {
+      const result = await AuthService.getDetails();
       if (result?.success) {
-        LoaderHelper.loaderStatus(false);
-        try {
-          setUserDetails(result?.data);
-        } catch (error) {
-          alertErrorMessage(error);
-        }
+        setUserDetails(result?.data);
       } else {
-        LoaderHelper.loaderStatus(false);
         alertErrorMessage(result?.message);
       }
-    });
-  };
-
-  function generateSocketUniqueId(length = 15) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let uniqueId = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      uniqueId += characters.charAt(randomIndex);
+    } catch (error) {
+      // Silent fail
+    } finally {
+      LoaderHelper.loaderStatus(false);
     }
-    sessionStorage.setItem("socketId", uniqueId)
-  }
-  function generateFutureSocketUniqueId(length = 15) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let uniqueId = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      uniqueId += characters.charAt(randomIndex);
-    }
-    sessionStorage.setItem("socketIdFuture", uniqueId)
-  }
+  }, []);
 
-
-  const activityLogs = async (skip) => {
-    LoaderHelper.loaderStatus(true)
-    await AuthService.getActivityLogs(0, 1).then(async result => {
-      LoaderHelper.loaderStatus(false)
+  const activityLogs = useCallback(async () => {
+    LoaderHelper.loaderStatus(true);
+    try {
+      const result = await AuthService.getActivityLogs(0, 1);
       if (result?.success) {
-        setLastLogin(result?.data[0]?.createdAt)
+        setLastLogin(result?.data[0]?.createdAt);
       }
-    });
-  };
+    } catch {
+      // Silent fail
+    } finally {
+      LoaderHelper.loaderStatus(false);
+    }
+  }, []);
 
+  // Fetch estimated portfolio - shared across components
+  const fetchEstimatedPortfolio = useCallback(async (type = "") => {
+    try {
+      const result = await AuthService.estimatedPortfolio(type);
+      if (result?.success) {
+        setEstimatedPortfolio(result?.data || {});
+        return result?.data;
+      }
+    } catch {
+      // Silent fail
+    }
+    return null;
+  }, []);
 
+  // Refresh portfolio (for manual refresh from components)
+  const refreshEstimatedPortfolio = useCallback(async (type = "") => {
+    return await fetchEstimatedPortfolio(type);
+  }, [fetchEstimatedPortfolio]);
+
+  // Fetch notifications - shared across components
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const result = await AuthService.notifications();
+      if (result?.success) {
+        setNotifications(result?.data?.reverse() || []);
+        setNotificationCounts(result?.counts || { unseen: 0 });
+        return result;
+      }
+    } catch {
+      // Silent fail
+    }
+    return null;
+  }, []);
+
+  // Fetch pairs - shared across components
+  const fetchPairs = useCallback(async () => {
+    try {
+      const result = await AuthService.getPairs();
+      if (result?.success) {
+        setPairs(result?.data || []);
+        return result?.data;
+      }
+    } catch {
+      // Silent fail
+    }
+    return null;
+  }, []);
+
+  // Fetch wallet types - shared across components
+  const fetchWalletTypes = useCallback(async () => {
+    try {
+      const result = await AuthService.availableWalletTypes();
+      if (result?.success) {
+        setWalletTypes(result?.data || []);
+        return result?.data;
+      }
+    } catch {
+      // Silent fail
+    }
+    return null;
+  }, []);
+
+  // Generate socket IDs
+  const generateSocketUniqueId = useCallback((length = 15) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let uniqueId = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      uniqueId += characters.charAt(randomIndex);
+    }
+    sessionStorage.setItem("socketId", uniqueId);
+  }, []);
+
+  const generateFutureSocketUniqueId = useCallback((length = 15) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let uniqueId = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      uniqueId += characters.charAt(randomIndex);
+    }
+    sessionStorage.setItem("socketIdFuture", uniqueId);
+  }, []);
+
+  // Initialize all APIs once after login
   useEffect(() => {
-    if (token) {
+    // Always generate socket IDs
+    generateSocketUniqueId();
+    generateFutureSocketUniqueId();
+
+    // Only fetch user-specific data if logged in and not already initialized
+    if (token && !isInitialized.current) {
+      isInitialized.current = true;
+      
+      // Run all initial API calls
       handleUserDetails();
       activityLogs();
+      fetchEstimatedPortfolio("");
+      fetchNotifications();
+      fetchPairs();
+      fetchWalletTypes();
     }
-    generateSocketUniqueId()
-    generateFutureSocketUniqueId()
-  }, [token]);
 
+    // Reset initialization flag when token is cleared (logout)
+    if (!token) {
+      isInitialized.current = false;
+      setEstimatedPortfolio({});
+      setNotifications([]);
+      setNotificationCounts({ unseen: 0 });
+      setPairs([]);
+      setWalletTypes([]);
+    }
+  }, [token, handleUserDetails, activityLogs, fetchEstimatedPortfolio, fetchNotifications, fetchPairs, fetchWalletTypes, generateSocketUniqueId, generateFutureSocketUniqueId]);
 
-
+  // Refresh notifications when refreshNotification flag changes
+  useEffect(() => {
+    if (token && refreshNotification) {
+      fetchNotifications();
+    }
+  }, [refreshNotification, token, fetchNotifications]);
 
   const handleTheme = () => {
     const htmlTag = document.documentElement;
@@ -95,7 +192,7 @@ export function ProfileProvider(props) {
     setNewStoredTheme(newTheme);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const storedTheme = sessionStorage.getItem('theme');
     const htmlTag = document.documentElement;
     if (storedTheme) {
@@ -107,13 +204,39 @@ export function ProfileProvider(props) {
     }
   }, []);
 
-
   return (
-    <>
-
-      <ProfileContext.Provider value={{ refreshNotification, setRefreshNotification, updateModelHideStatus, currentPage, setCurrentPage, lastLogin, userDetails, setUserDetails, handleUserDetails, setLoginDetails, loginDetails, handleTheme, newStoredTheme, activeTab, setActiveTab, themeUpdated, setThemeUpdated }}>
-        {props.children}
-      </ProfileContext.Provider>
-    </>
+    <ProfileContext.Provider value={{
+      // Existing values
+      refreshNotification,
+      setRefreshNotification,
+      updateModelHideStatus,
+      currentPage,
+      setCurrentPage,
+      lastLogin,
+      userDetails,
+      setUserDetails,
+      handleUserDetails,
+      setLoginDetails,
+      loginDetails,
+      handleTheme,
+      newStoredTheme,
+      activeTab,
+      setActiveTab,
+      themeUpdated,
+      setThemeUpdated,
+      
+      // New shared state
+      estimatedPortfolio,
+      refreshEstimatedPortfolio,
+      notifications,
+      notificationCounts,
+      fetchNotifications,
+      pairs,
+      fetchPairs,
+      walletTypes,
+      fetchWalletTypes,
+    }}>
+      {props.children}
+    </ProfileContext.Provider>
   );
 }

@@ -71,7 +71,7 @@ const NotificationPage = (props) => {
   return (
     <>
       <Helmet>
-        <title> CV Trade | The world class new generation crypto asset exchange</title>
+        <title> Wrathcode Trade | The world class new generation crypto asset exchange</title>
       </Helmet>
       {/* <section className="">
         <div className="container">

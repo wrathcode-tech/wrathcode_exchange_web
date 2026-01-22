@@ -85,7 +85,7 @@ const BlogList = () => {
             <div className="inner">
 
               <div className="top_heading_cnt">
-                <h2>CV Trade Blog</h2>
+                <h2>WrathcodeTrade Blog</h2>
                 <h1 className="title">Learn About Crypto Casually</h1>
               </div>
 
@@ -286,7 +286,7 @@ const BlogList = () => {
               <div className="row">
 
                 <div className="col-sm-9">
-                  <h3>Register On CV Trade Now To Begin Trading</h3>
+                  <h3>Register On Wrathcode Trade Now To Begin Trading</h3>
                   <Link to="/signup" className="startbtn mt-2">Register Now</Link>
                 </div>
 
@@ -362,7 +362,7 @@ const BlogList = () => {
                 </div>
 
                 <div className="col-sm-10">
-                  <h4>Get The Latest News And Updates From CV Trade </h4>
+                  <h4>Get The Latest News And Updates From Wrathcode Trade </h4>
 
                   {/* <form>
                     <input type="text" placeholder="Enter your Email address"></input>

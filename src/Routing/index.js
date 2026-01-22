@@ -36,6 +36,7 @@ import ActivitylogPage from "../ui/Pages/ActivitylogPage";
 import CurrencyPrefrence from "../ui/Pages/CurrencyPrefrence";
 import Dashboard from "../ui/Pages/Dashboard";
 import AssetOverview from "../ui/Pages/AssetOverview";
+import WalletPage from "../ui/Pages/WalletPage";
 import SpotOrders from "../ui/Pages/SpotOrders";
 import TransactionHistory from "../ui/Pages/TransactionHistory";
 import OpenOrders from "../ui/Pages/OpenOrders";
@@ -100,6 +101,7 @@ function Routing() {
           <Route element={token ? (<SettingsPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route index path="dashboard" element={token ? (<Dashboard userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="asset_overview" element={token ? (<AssetOverview userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
+          <Route path="wallet/:walletType" element={token ? (<WalletPage />) : (<Navigate to="/login" replace />)} />
           <Route path="swap_history" element={token ? (<QuickBuySellHistory userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="spot_orders" element={token ? (<SpotOrders userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="transaction_history" element={token ? (<TransactionHistory userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />

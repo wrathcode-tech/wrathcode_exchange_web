@@ -3851,8 +3851,9 @@ body.light_theme .modal.search_form input:focus {
 }
 
 button:disabled {
-    background-color: #a49570 !important;
+    background-color: #737373 !important;
     /* light gray */
+    color: #bebbbb;
     cursor: not-allowed !important;
     opacity: 0.7 !important;
     pointer-events: none !important;
@@ -26004,4 +26005,7 @@ button.copy_code {
         width: 24px;
         border-radius: 4px;
     }
+}
+.getotp_mobile:hover{
+background-color: #e3e3e3 !important;
 }

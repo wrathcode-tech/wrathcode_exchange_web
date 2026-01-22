@@ -85,11 +85,9 @@ const DashboardHeader = ({ props }) => {
           <img 
             src={profileImage} 
             alt="User profile" 
-            onError={(e) => { e.target.src = "/images/profile_user.png"; }}
+            onError={(e) => { e.target.src = "/images/user.png"; }}
           />
-          <div className='edit_user'>
-            <img src="/images/edit_icon.svg" alt="Edit profile" />
-          </div>
+        
         </div>
 
         <div className="user_profile_cnt">
@@ -101,7 +99,8 @@ const DashboardHeader = ({ props }) => {
                 {isInfoHidden ? " Show Info" : " Hide Info"}
               </button>
             </span>
-          </h3>
+            
+          </h3> 
           <span className='subdel'>
             Last Login: {formatDate(userDetails?.lastLoginTime)}, {formatTime(userDetails?.lastLoginTime)}
           </span>

@@ -1,23 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ProfileContext } from "../../../context/ProfileProvider";
 import { Helmet } from "react-helmet-async";
 
+// Helper to capitalize wallet name
+const capitalizeWallet = (str) => {
+  if (!str) return 'Wallet';
+  return str.charAt(0).toUpperCase() + str.slice(1) + ' Wallet';
+};
+
 const ProfilePage = (props) => {
 
   const location = useLocation();
+  const { currentPage, setCurrentPage, walletTypes } = useContext(ProfileContext);
 
+  // Dynamic wallet page detection
   useEffect(() => {
     const path = location.pathname;
 
     if (path.includes("/user_profile/dashboard")) setCurrentPage("Dashboard");
     else if (path.includes("asset_overview")) setCurrentPage("Overview");
+    else if (path.includes("wallet/")) {
+      // Extract wallet type from path and set dynamic page name
+      const walletMatch = path.match(/wallet\/([^/]+)/);
+      if (walletMatch && walletMatch[1]) {
+        setCurrentPage(capitalizeWallet(walletMatch[1]));
+      }
+    }
     else if (path.includes("spot_orders")) setCurrentPage("Spot Order");
     else if (path.includes("transaction_history")) setCurrentPage("Transaction History");
     else if (path.includes("open_orders")) setCurrentPage("Open Order");
     else if (path.includes("swap_history")) setCurrentPage("Swap History");
     else if (path.includes("profile_setting")) setCurrentPage("Settings");
-    else if (path.includes("kyc")) setCurrentPage("kyc");
+    else if (path.includes("kyc")) setCurrentPage("Verification");
     else if (path.includes("bank")) setCurrentPage("Bank Details");
     else if (path.includes("currency_preference")) setCurrentPage("Currency Preference");
     else if (path.includes("support")) setCurrentPage("Support");
@@ -30,10 +45,13 @@ const ProfilePage = (props) => {
     else if (path.includes("activity_logs")) setCurrentPage("Activity logs");
     else if (path.includes("earning_plan_history")) setCurrentPage("Earning Plan History");
     else if (path.includes("bonus_history")) setCurrentPage("Bonus History");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-
-  const { currentPage, setCurrentPage } = useContext(ProfileContext)
+  // Check if current page is a wallet page
+  const isWalletPage = useMemo(() => {
+    return currentPage?.includes('Wallet') && currentPage !== 'Wallet Transfer History';
+  }, [currentPage]);
 
   const [isActive, setIsActive] = useState(false);
 
@@ -91,7 +109,7 @@ const ProfilePage = (props) => {
               >
                 <img className='darkicon' src="/images/dashboard_assets.svg" alt="assets" />
                 <img className='lighticon' src="/images/dashboard_assets_light.svg" alt="assets" />
-                <div className={`dashboard_menu_hd ${currentPage === "Overview" && "active_ul"}`}>
+                <div className={`dashboard_menu_hd ${(currentPage === "Overview" || isWalletPage) && "active_ul"}`}>
                   Assets
                   {/* <p>Manage your crypto holdings, track values, and monitor your asset portfolio.</p> */}
                 </div>
@@ -106,6 +124,21 @@ const ProfilePage = (props) => {
                       Overview
                     </Link>
                   </li>
+                  {/* Dynamic wallet links from backend */}
+                  {walletTypes?.length > 0 && walletTypes.map((wallet) => {
+                    const walletLabel = capitalizeWallet(wallet);
+                    return (
+                      <li 
+                        key={wallet} 
+                        onClick={() => toggleContent(walletLabel)} 
+                        className={`${(currentPage === walletLabel) && "active"} `}
+                      >
+                        <Link to={`wallet/${wallet}`} className="rounded">
+                          {walletLabel}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </li>

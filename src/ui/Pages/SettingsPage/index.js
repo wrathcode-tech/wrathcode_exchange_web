@@ -1,14 +1,105 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import { validateEmail, matchPassword } from "../../../utils/Validation";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { ApiConfig } from "../../../api/apiConfig/apiConfig";
 import { ProfileContext } from "../../../context/ProfileProvider";
-import { $ } from "react-jquery-plugin";
 import DashboardHeader from "../../../customComponents/DashboardHeader";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import Select from "react-select";
+import { countriesList } from "../../../utils/CountriesList";
 import "./SettingsPage.css";
+
+// Custom styles for react-select in dark theme modal
+const selectStyles = {
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: '#2d2d2d00',
+    borderRadius: '8px',
+    border: "none",
+    boxShadow: 'none',
+    minHeight: '48px',
+    padding: '0 4px',
+    fontSize: '14px',
+    fontWeight: 500,
+    '&:hover': {
+      borderColor: '#f3bb2c',
+    },
+  }),
+  valueContainer: (base) => ({
+    ...base,
+    padding: '0 8px',
+  }),
+  input: (base) => ({
+    ...base,
+    margin: 0,
+    padding: 0,
+    boxShadow: 'none !important',
+    border: 'none !important',
+    outline: 'none !important',
+    color: '#fff !important',
+  }),
+  indicatorsContainer: (base) => ({
+    ...base,
+    paddingRight: '8px',
+  }),
+  dropdownIndicator: (base) => ({
+    ...base,
+    color: '#999',
+    '&:hover': {
+      color: '#fff',
+    },
+  }),
+  indicatorSeparator: () => ({
+    display: 'none',
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#999999',
+    fontSize: '14px',
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: '#ffffff',
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? '#636f83' : state.isSelected ? '#636f83' : '#373e4b',
+    color: state.isSelected ? '#ffffff' : '#ffffff',
+    cursor: 'pointer',
+    padding: '10px 15px',
+    fontSize: '13px',
+    '&:active': {
+      backgroundColor: '#f3bb2c',
+    },
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: '#373e4b',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    fontSize: '13px',
+    zIndex: 9999,
+    border: '1px solid #444',
+  }),
+  menuList: (base) => ({
+    ...base,
+    maxHeight: '200px',
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: '#2d2d2d',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#555',
+      borderRadius: '3px',
+    },
+  }),
+};
 
 const SettingsPage = (props) => {
 
@@ -17,7 +108,7 @@ const SettingsPage = (props) => {
   const [emailId, setEmailId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [mobile, setMobile] = useState();
+  const [mobile, setMobile] = useState('');
   const [countryCode, setCountryCode] = useState("+91");
   const [myfile, setMyfile] = useState('');
   const [localSelfy, setLocalSelfy] = useState("");
@@ -28,11 +119,10 @@ const SettingsPage = (props) => {
   const [timer, setTimer] = useState(0);
   const [timer2, setTimer2] = useState(0);
 
-
   const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState();
+  const [newPhone, setNewPhone] = useState('');
   const [newCountryCode, setNewCountryCode] = useState("+91");
-  const [currencyType, setCurrencyType] = useState();
+  const [currencyType, setCurrencyType] = useState('USDT');
   const [password, setPassword] = useState('');
   const [conPassword, setConPassword] = useState('');
   const [passwordOtp, setPasswordOtp] = useState('');
@@ -41,115 +131,153 @@ const SettingsPage = (props) => {
   const [registeredSignId, setRegisteredSignId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConPassword, setShowConPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Ref to track object URLs for cleanup
+  const objectUrlRef = useRef(null);
 
+  // Initialize state from props/context
   useEffect(() => {
-    setEmailId(props?.userDetails?.emailId);
-    setMobile(props?.userDetails?.mobileNumber);
-    setFirstName(props?.userDetails?.firstName);
-    setLastName(props?.userDetails?.lastName);
-    setMyfile(props?.userDetails?.profilepicture);
-    setCountryCode(props?.userDetails?.country_code);
-    setCurrencyType(userDetails?.currency_prefrence || props?.userDetails?.currency_prefrence || "USDT");
-  }, [props, userDetails]);
+    const details = userDetails || props?.userDetails;
+    if (details) {
+      setEmailId(details.emailId || '');
+      setMobile(details.mobileNumber || '');
+      setFirstName(details.firstName || '');
+      setLastName(details.lastName || '');
+      setMyfile(details.profilepicture || '');
+      setCountryCode(details.country_code || '+91');
+      setCurrencyType(details.currency_prefrence || 'USDT');
+    }
+  }, [props?.userDetails, userDetails]);
 
+  // Set registered sign ID for password change
   useEffect(() => {
-    // Set registered sign ID for password change
     const currentUserDetails = userDetails || props?.userDetails;
     if (currentUserDetails?.registeredBy === "phone") {
-      const countryCode = currentUserDetails?.country_code || "+91";
+      const code = currentUserDetails?.country_code || "+91";
       const mobileNumber = currentUserDetails?.mobileNumber || mobile;
-      setRegisteredSignId(mobileNumber ? `${countryCode} ${mobileNumber}` : "");
+      setRegisteredSignId(mobileNumber ? `${code} ${mobileNumber}` : "");
     } else {
       const email = currentUserDetails?.emailId || emailId;
       setRegisteredSignId(email || "");
     }
   }, [userDetails, props?.userDetails, mobile, emailId]);
 
-  const modalBackdropRemove = () => {
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+    };
+  }, []);
+
+  const modalBackdropRemove = useCallback(() => {
     try {
-      if (typeof $ !== 'undefined') {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-      } else if (document && document.body) {
-        document.body.classList.remove('modal-open');
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(backdrop => backdrop.remove());
+      document.body.classList.remove('modal-open');
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(backdrop => backdrop.remove());
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    } catch (error) {
+      // Silently handle error
+    }
+  }, []);
+
+  const closeModal = useCallback((modalId) => {
+    try {
+      const modalElement = document.getElementById(modalId);
+      if (modalElement) {
+        const modal = window.bootstrap?.Modal?.getInstance(modalElement);
+        if (modal) {
+          modal.hide();
+        }
+      }
+      modalBackdropRemove();
+    } catch (error) {
+      // Silently handle error
+    }
+  }, [modalBackdropRemove]);
+
+  const openModal = useCallback((modalId) => {
+    try {
+      const modalElement = document.getElementById(modalId);
+      if (modalElement && window.bootstrap) {
+        const modal = new window.bootstrap.Modal(modalElement);
+        modal.show();
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error removing modal backdrop:', error);
-      }
+      // Silently handle error
     }
-  }
+  }, []);
 
-  const handleChangeSelfie = async (event) => {
+  const handleChangeSelfie = useCallback((event) => {
     event.preventDefault();
-    const file = event.target.files[0];
-    if (file) {
-      const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (allowedTypes.includes(file.type) && file.size <= maxSize) {
-        const imgData = URL.createObjectURL(file);
-        setLocalSelfy(imgData);
-        setMyfile(file);
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-        // First close any open modals (like profilepop)
-        const profileModal = document.getElementById('profilepop');
-        if (profileModal) {
-          const profileModalInstance = window.bootstrap?.Modal?.getInstance(profileModal);
-          if (profileModalInstance) {
-            profileModalInstance.hide();
-          }
-        }
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
 
-        // Remove any modal backdrops
-        modalBackdropRemove();
-
-        // Open the preview modal after a short delay
-        setTimeout(() => {
-          const modalElement = document.getElementById('editAvatarModal');
-          if (modalElement) {
-            const modal = new window.bootstrap.Modal(modalElement);
-            modal.show();
-          }
-        }, 300);
-      } else {
-        if (!allowedTypes.includes(file.type)) {
-          alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
-        } else {
-          alertErrorMessage("Max image size is 5MB.");
-        }
-        // Reset file input
-        event.target.value = "";
-      }
+    if (!allowedTypes.includes(file.type)) {
+      alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
+      event.target.value = "";
+      return;
     }
-  };
 
+    if (file.size > maxSize) {
+      alertErrorMessage("Max image size is 5MB.");
+      event.target.value = "";
+      return;
+    }
 
-  const handleGetOtp = async (emailorMobile, type, inputType) => {
+    // Cleanup previous object URL
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+    }
+
+    const imgData = URL.createObjectURL(file);
+    objectUrlRef.current = imgData;
+    setLocalSelfy(imgData);
+    setMyfile(file);
+
+    // Close profile modal and open preview modal
+    closeModal('profilepop');
+
+    setTimeout(() => {
+      openModal('editAvatarModal');
+    }, 300);
+  }, [closeModal, openModal]);
+
+  const handleGetOtp = useCallback(async (type, inputType) => {
+    if (isSubmitting) return;
+
     try {
       let signId;
       if (inputType === "email") {
-        if (validateEmail(newEmail) !== undefined) {
+        if (!newEmail || validateEmail(newEmail) !== undefined) {
           alertErrorMessage("Please enter valid email address");
           return;
         }
         signId = newEmail;
       } else {
+        if (!newPhone) {
+          alertErrorMessage("Please enter a phone number");
+          return;
+        }
         const fullPhone = `${newCountryCode}${newPhone}`;
-
         if (!isValidPhoneNumber(fullPhone)) {
           alertErrorMessage("Please enter a valid phone number for the selected country");
           return;
         }
-        const fullPhonePayload = `${newCountryCode} ${newPhone}`;
-        signId = fullPhonePayload;
+        signId = `${newCountryCode} ${newPhone}`;
       }
 
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.getOtp(signId, type);
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "OTP sent successfully");
@@ -165,20 +293,17 @@ const SettingsPage = (props) => {
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in handleGetOtp:", error);
-      }
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP.");
     }
-  };
+  }, [isSubmitting, newEmail, newPhone, newCountryCode]);
 
+  const editavatar = useCallback(async () => {
+    if (!myfile || typeof myfile === 'string') {
+      return false;
+    }
 
-  const editavatar = async () => {
     try {
-      if (!myfile || typeof myfile === 'string') {
-        return Promise.resolve(false); // No file to upload
-      }
-
       const formData = new FormData();
       formData.append("profilepicture", myfile);
 
@@ -188,153 +313,150 @@ const SettingsPage = (props) => {
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "Profile picture updated successfully");
-        // Update local state immediately
         if (result?.data?.profilepicture) {
           setMyfile(result.data.profilepicture);
         }
-        // Refresh user details from API
         await handleUserDetails();
         return true;
       } else {
-        alertErrorMessage(result?.message || "Failed to update profile picture. Please try again.");
+        alertErrorMessage(result?.message || "Failed to update profile picture.");
         return false;
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in editavatar:", error);
-      }
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating profile picture. Please try again.");
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating profile picture.");
       return false;
     }
-  };
+  }, [myfile, handleUserDetails]);
 
-  const editusername = async () => {
+  const editusername = useCallback(async () => {
+    const trimmedFirst = firstName?.trim() || '';
+    const trimmedLast = lastName?.trim() || '';
+
+    if (!trimmedFirst && !trimmedLast) {
+      return false;
+    }
+
+    // Basic validation for names
+    const nameRegex = /^[a-zA-Z\s'-]*$/;
+    if (trimmedFirst && !nameRegex.test(trimmedFirst)) {
+      alertErrorMessage("First name contains invalid characters");
+      return false;
+    }
+    if (trimmedLast && !nameRegex.test(trimmedLast)) {
+      alertErrorMessage("Last name contains invalid characters");
+      return false;
+    }
+
     try {
-      if (!firstName?.trim() && !lastName?.trim()) {
-        return Promise.resolve(false);
-      }
-
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.editusername(firstName, lastName);
+      const result = await AuthService.editusername(trimmedFirst, trimmedLast);
       LoaderHelper.loaderStatus(false);
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "Name updated successfully");
-        // Update local state immediately if API returns updated data
         if (result?.data) {
           if (result.data.firstName) setFirstName(result.data.firstName);
           if (result.data.lastName) setLastName(result.data.lastName);
         }
-        // Refresh user details from API
         await handleUserDetails();
         return true;
       } else {
-        alertErrorMessage(result?.message || "Failed to update name. Please try again.");
+        alertErrorMessage(result?.message || "Failed to update name.");
         return false;
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in editusername:", error);
-      }
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating name. Please try again.");
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating name.");
       return false;
     }
-  };
+  }, [firstName, lastName, handleUserDetails]);
 
-  const editEmail = async () => {
+  const editEmail = useCallback(async () => {
+    if (isSubmitting) return;
+
+    if (!newEmail || validateEmail(newEmail) !== undefined) {
+      alertErrorMessage("Please enter valid email address");
+      return;
+    }
+    if (!emailOtp || emailOtp.length < 5) {
+      alertErrorMessage("Invalid OTP");
+      return;
+    }
+
     try {
-      if (validateEmail(newEmail) !== undefined) {
-        alertErrorMessage("Please enter valid email address");
-        return;
-      }
-      if (!emailOtp || emailOtp?.length < 5) {
-        alertErrorMessage("Invalid OTP");
-        return;
-      }
-
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.editemail(newEmail, emailOtp);
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
         setEmailOtp("");
         setNewEmail("");
         setTimer(0);
         setDisbaleBtn(false);
-        modalBackdropRemove();
+        closeModal('emailpop');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         alertSuccessMessage(result?.message || "Email updated successfully");
         handleUserDetails();
       } else {
-        $("#email_light").modal('show');
-        alertErrorMessage(result?.message || "Failed to update email. Please try again.");
+        alertErrorMessage(result?.message || "Failed to update email.");
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in editEmail:", error);
-      }
-      $("#email_light").modal('show');
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating email. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating email.");
     }
-  };
+  }, [isSubmitting, newEmail, emailOtp, closeModal, handleUserDetails]);
 
-  const handleGetPasswordOtp = async () => {
+  const handleGetPasswordOtp = useCallback(async () => {
+    if (isSubmitting) return;
+
+    if (!registeredSignId) {
+      alertErrorMessage("Please update your email or phone number first");
+      return;
+    }
+
     try {
-      if (!registeredSignId) {
-        alertErrorMessage("Please update your email or phone number first");
-        return;
-      }
-
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.getOtp(registeredSignId, "forgot_password");
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "OTP sent successfully");
         setPasswordDisableBtn(true);
         setPasswordTimer(30);
       } else {
-        alertErrorMessage(result?.message || "Failed to send OTP. Please try again.");
+        alertErrorMessage(result?.message || "Failed to send OTP.");
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in handleGetPasswordOtp:", error);
-      }
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP.");
     }
-  };
+  }, [isSubmitting, registeredSignId]);
 
-  // Custom password validation function for SettingsPage
-  const validatePasswordSettings = (value) => {
+  // Custom password validation function
+  const validatePasswordSettings = useCallback((value) => {
     if (!value) return { isValid: false, errors: [] };
 
     const errors = [];
 
-    // Check length (8-30 characters)
     if (value.length < 8 || value.length > 30) {
       errors.push('8-30 characters');
     }
-
-    // Check for uppercase
     if (!/[A-Z]/.test(value)) {
       errors.push('At least one uppercase');
     }
-
-    // Check for lowercase
     if (!/[a-z]/.test(value)) {
       errors.push('At least one lowercase');
     }
-
-    // Check for number
     if (!/[0-9]/.test(value)) {
       errors.push('At least one number');
     }
-
-    // Check for spaces
     if (/\s/.test(value)) {
       errors.push('Does not contain any spaces');
     }
@@ -343,34 +465,38 @@ const SettingsPage = (props) => {
       isValid: errors.length === 0,
       errors: errors
     };
-  };
+  }, []);
 
-  const handleChangePassword = async () => {
+  const handleChangePassword = useCallback(async () => {
+    if (isSubmitting) return;
+
+    const passwordValidation = validatePasswordSettings(password);
+    if (!passwordValidation.isValid || !password) {
+      alertErrorMessage("Please ensure your password meets all requirements");
+      return;
+    }
+
+    if (matchPassword(password, conPassword) !== undefined) {
+      alertErrorMessage("New password and confirm password must match");
+      return;
+    }
+
+    if (!passwordOtp || passwordOtp.length < 5) {
+      alertErrorMessage("Invalid verification code");
+      return;
+    }
+
+    if (!registeredSignId) {
+      alertErrorMessage("Please update your email or phone number first");
+      return;
+    }
+
     try {
-      const passwordValidation = validatePasswordSettings(password);
-      if (!passwordValidation.isValid || !password) {
-        alertErrorMessage("Please ensure your password meets all requirements");
-        return;
-      }
-
-      if (matchPassword(password, conPassword) !== undefined) {
-        alertErrorMessage("New password and confirm password must match");
-        return;
-      }
-
-      if (!passwordOtp || passwordOtp?.length < 5) {
-        alertErrorMessage("Invalid verification code");
-        return;
-      }
-
-      if (!registeredSignId) {
-        alertErrorMessage("Please update your email or phone number first");
-        return;
-      }
-
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.setSecurity(password, conPassword, passwordOtp, registeredSignId);
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
         setPassword("");
@@ -378,103 +504,169 @@ const SettingsPage = (props) => {
         setPasswordOtp("");
         setPasswordTimer(0);
         setPasswordDisableBtn(false);
-        const modalElement = document.getElementById('security_verification');
-        if (modalElement) {
-          const modal = window.bootstrap?.Modal?.getInstance(modalElement);
-          if (modal) modal.hide();
-        }
-        modalBackdropRemove();
+        closeModal('security_verification');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         alertSuccessMessage(result?.message || "Password changed successfully");
       } else {
-        $("#security_verification").modal('show');
-        alertErrorMessage(result?.message || "Failed to change password. Please try again.");
+        alertErrorMessage(result?.message || "Failed to change password.");
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in handleChangePassword:", error);
-      }
-      $("#security_verification").modal('show');
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while changing password. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while changing password.");
     }
-  };
+  }, [isSubmitting, password, conPassword, passwordOtp, registeredSignId, validatePasswordSettings, closeModal]);
 
-  const handleCurrency = async (currencyType) => {
+  const handleCurrency = useCallback(async (selectedCurrency) => {
+    if (isSubmitting) return;
+
+    if (!selectedCurrency) {
+      alertErrorMessage("Please select a currency");
+      return;
+    }
+
     try {
-      if (!currencyType) {
-        alertErrorMessage("Please select a currency");
-        return;
-      }
-
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.setCurrency(currencyType);
+      const result = await AuthService.setCurrency(selectedCurrency);
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "Currency preference updated successfully");
         await handleUserDetails();
       } else {
-        alertErrorMessage(result?.message || "Failed to update currency preference. Please try again.");
+        alertErrorMessage(result?.message || "Failed to update currency preference.");
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in handleCurrency:", error);
-      }
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating currency preference. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating currency preference.");
     }
-  };
+  }, [isSubmitting, handleUserDetails]);
 
-  const editPhone = async () => {
+  const editPhone = useCallback(async () => {
+    if (isSubmitting) return;
+
+    if (!newPhone) {
+      alertErrorMessage("Please enter a phone number");
+      return;
+    }
+
+    const fullPhone = `${newCountryCode}${newPhone}`;
+    if (!isValidPhoneNumber(fullPhone)) {
+      alertErrorMessage("Please enter a valid phone number for the selected country");
+      return;
+    }
+
+    if (!mobileOtp || mobileOtp.length < 5) {
+      alertErrorMessage("Invalid OTP");
+      return;
+    }
+
     try {
-      const fullPhone = `${newCountryCode}${newPhone}`;
-      if (!isValidPhoneNumber(fullPhone)) {
-        alertErrorMessage("Please enter a valid phone number for the selected country");
-        return;
-      }
-      if (!newPhone || mobileOtp?.length < 5) {
-        alertErrorMessage("Invalid OTP");
-        $("#mobilepop").modal('show');
-        return;
-      }
-
+      setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.editPhone(`${newCountryCode} ${newPhone}`, mobileOtp);
       LoaderHelper.loaderStatus(false);
+      setIsSubmitting(false);
 
       if (result?.success) {
-        setCountryCode("+91");
+        setNewCountryCode("+91");
         setMobileOtp("");
         setNewPhone("");
         setTimer2(0);
         setDisbaleBtn2(false);
-        // Close modal
-        const modalElement = document.getElementById('mobilepop');
-        if (modalElement) {
-          const modal = window.bootstrap?.Modal?.getInstance(modalElement);
-          if (modal) modal.hide();
-        }
-        modalBackdropRemove();
+        closeModal('mobilepop');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         alertSuccessMessage(result?.message || "Phone number updated successfully");
         handleUserDetails();
       } else {
-        $("#mobilepop").modal('show');
-        alertErrorMessage(result?.message || "Failed to update phone number. Please try again.");
+        alertErrorMessage(result?.message || "Failed to update phone number.");
       }
     } catch (error) {
       LoaderHelper.loaderStatus(false);
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error in editPhone:", error);
-      }
-      $("#mobilepop").modal('show');
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating phone number. Please try again.");
+      setIsSubmitting(false);
+      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating phone number.");
     }
-  };
+  }, [isSubmitting, newPhone, newCountryCode, mobileOtp, closeModal, handleUserDetails]);
 
+  const handleProfileSubmit = useCallback(async () => {
+    if (isSubmitting) return;
 
+    setIsSubmitting(true);
+    let avatarUpdated = false;
+    let nameUpdated = false;
 
+    try {
+      // Upload profile picture if changed
+      if (myfile && typeof myfile !== 'string') {
+        avatarUpdated = await editavatar();
+      }
+
+      // Update name if provided
+      const trimmedFirst = firstName?.trim();
+      const trimmedLast = lastName?.trim();
+      if (trimmedFirst || trimmedLast) {
+        nameUpdated = await editusername();
+      }
+
+      // Close modal if at least one update was successful
+      if (avatarUpdated || nameUpdated) {
+        closeModal('profilepop');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (avatarUpdated && objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = null;
+          setLocalSelfy("");
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [isSubmitting, myfile, firstName, lastName, editavatar, editusername, closeModal]);
+
+  const resetAvatarPreview = useCallback(() => {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
+    setLocalSelfy("");
+    const details = userDetails || props?.userDetails;
+    setMyfile(details?.profilepicture || "");
+    const fileInput = document.getElementById('avatarFileInput');
+    if (fileInput) fileInput.value = "";
+    const fileInput2 = document.getElementById('profileImageUpload');
+    if (fileInput2) fileInput2.value = "";
+  }, [userDetails, props?.userDetails]);
+
+  const handleAvatarApply = useCallback(async () => {
+    if (isSubmitting) return;
+
+    if (!myfile || typeof myfile === 'string') {
+      alertErrorMessage("Please select an image first");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const result = await editavatar();
+    setIsSubmitting(false);
+
+    if (result) {
+      closeModal('editAvatarModal');
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
+      setLocalSelfy("");
+      const fileInput = document.getElementById('avatarFileInput');
+      if (fileInput) fileInput.value = "";
+      const fileInput2 = document.getElementById('profileImageUpload');
+      if (fileInput2) fileInput2.value = "";
+    }
+  }, [isSubmitting, myfile, editavatar, closeModal]);
+
+  // Timer effects
   useEffect(() => {
     let interval;
     if (timer > 0) {
@@ -486,6 +678,7 @@ const SettingsPage = (props) => {
     }
     return () => clearInterval(interval);
   }, [timer]);
+
   useEffect(() => {
     let interval;
     if (timer2 > 0) {
@@ -510,12 +703,72 @@ const SettingsPage = (props) => {
     return () => clearInterval(interval);
   }, [passwordTimer]);
 
+  // Helper functions for display
+  const hasEmail = () => {
+    const email = userDetails?.emailId || props?.userDetails?.emailId || emailId;
+    return !!email;
+  };
+
+  const hasPhone = () => {
+    const phone = userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile;
+    return !!phone;
+  };
+
+  const getDisplayEmail = () => {
+    const email = userDetails?.emailId || props?.userDetails?.emailId || emailId;
+    if (email && email.length > 7) {
+      return `${email.substring(0, 3)}***${email.substring(email.length - 4)}`;
+    }
+    return email || 'Not set';
+  };
+
+  const getDisplayPhone = () => {
+    const phone = userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile;
+    const code = userDetails?.country_code || props?.userDetails?.country_code || countryCode || '+91';
+    return phone ? `${code}-${phone}` : 'Not set';
+  };
+
+  const getDisplayName = () => {
+    const first = userDetails?.firstName || props?.userDetails?.firstName || firstName;
+    const last = userDetails?.lastName || props?.userDetails?.lastName || lastName;
+    const name = `${first || ''} ${last || ''}`.trim();
+    return name || 'User Name';
+  };
+
+  const getProfileImage = () => {
+    const pic = userDetails?.profilepicture || props?.userDetails?.profilepicture || (typeof myfile === 'string' ? myfile : '');
+    return pic ? `${ApiConfig.baseImage}${pic}` : "/images/user.png";
+  };
+
+  const getProfileModalImage = () => {
+    if (localSelfy) return localSelfy;
+    if (myfile && typeof myfile !== 'string') return URL.createObjectURL(myfile);
+    const pic = userDetails?.profilepicture || props?.userDetails?.profilepicture || (typeof myfile === 'string' ? myfile : '');
+    return pic ? `${ApiConfig.baseImage}${pic}` : "/images/user.png";
+  };
+
+  const getMaskedSignId = () => {
+    if (registeredSignId && registeredSignId.length > 7) {
+      return `${registeredSignId.substring(0, 3)}***${registeredSignId.substring(registeredSignId.length - 4)}`;
+    }
+    return registeredSignId || 'your registered email/phone';
+  };
+
+  const isRegisteredByEmail = userDetails?.registeredBy === "email" || userDetails?.registeredBy === "google" || 
+                              props?.userDetails?.registeredBy === "email" || props?.userDetails?.registeredBy === "google";
+  
+  const isRegisteredByPhone = userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone";
+
+  const canSubmitProfile = (firstName?.trim() || lastName?.trim() || (myfile && typeof myfile !== 'string')) && !isSubmitting;
+  const canSubmitEmail = !isSubmitting && newEmail && validateEmail(newEmail) === undefined && emailOtp && emailOtp.length >= 5;
+  const canSubmitPhone = !isSubmitting && newPhone && mobileOtp && mobileOtp.length >= 5 && isValidPhoneNumber(`${newCountryCode}${newPhone}`);
+  const canSubmitPassword = !isSubmitting && validatePasswordSettings(password).isValid && password && 
+                           matchPassword(password, conPassword) === undefined && passwordOtp && passwordOtp.length >= 5;
 
   return (
     <>
       <div className="dashboard_right">
         <DashboardHeader props={props} />
-
 
         <div className="twofactor_outer_s">
           <h5>Profile</h5>
@@ -532,65 +785,33 @@ const SettingsPage = (props) => {
                   onChange={handleChangeSelfie}
                   style={{ display: 'none' }}
                 />
-                {/* <button 
-                  className="btn" 
-                  onClick={() => document.getElementById('avatarFileInput').click()}
-                >
-                  Edit Avatar
-                </button> */}
               </div>
 
               <div className="enable">
                 <img
-                  src={
-                    userDetails?.profilepicture
-                      ? `${ApiConfig.baseImage}${userDetails.profilepicture}`
-                      : props?.userDetails?.profilepicture
-                        ? `${ApiConfig.baseImage}${props.userDetails.profilepicture}`
-                        : myfile && typeof myfile === 'string'
-                          ? `${ApiConfig.baseImage}${myfile}`
-                          : "/images/user.png"
-                  }
+                  src={getProfileImage()}
                   alt="user"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "/images/user.png";
                   }}
                 />
-                {userDetails?.firstName || userDetails?.lastName
-                  ? `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim()
-                  : props?.userDetails?.firstName || props?.userDetails?.lastName
-                    ? `${props.userDetails.firstName || ''} ${props.userDetails.lastName || ''}`.trim()
-                    : firstName || lastName
-                      ? `${firstName || ''} ${lastName || ''}`.trim()
-                      : 'User Name'
-                }
+                {getDisplayName()}
               </div>
               <button className="btn" data-bs-toggle="modal" data-bs-target="#profilepop">Change</button>
-
             </div>
 
             <div className="factor_bl">
               <div className="lftcnt">
                 <h6><img src="/images/email_icon2.svg" alt="Email Verification" /> Email Verification</h6>
-                <p>SeLink your email address to your account for login, password recovery and withdrawal confirmation.cure your account and withdrawals with a passkey</p>
+                <p>Link your email address to your account for login, password recovery, and withdrawal confirmation. Secure your account and withdrawals with a passkey.</p>
               </div>
 
               <div className="enable">
-                <img src="/images/verified_icon.svg" alt="Email Verification" />
-                {userDetails?.emailId || props?.userDetails?.emailId || emailId
-                  ? (() => {
-                    const email = userDetails?.emailId || props?.userDetails?.emailId || emailId;
-                    if (email && email.length > 7) {
-                      return `${email.substring(0, 3)}***${email.substring(email.length - 4)}`;
-                    }
-                    return email || 'Not set';
-                  })()
-                  : 'Not set'
-                }
+                <img src={hasEmail() ? "/images/verified_icon.svg" : "/images/closebtn2.svg"} alt="Email Verification" />
+                {getDisplayEmail()}
               </div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#emailpop">Change</button>
-
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#emailpop">{hasEmail() ? 'Change' : 'Add'}</button>
             </div>
 
             <div className="factor_bl">
@@ -600,18 +821,12 @@ const SettingsPage = (props) => {
               </div>
 
               <div className="enable">
-                <img src="/images/verified_icon.svg" alt="mobile" />
-                {userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile
-                  ? `${userDetails?.country_code || props?.userDetails?.country_code || countryCode || '+91'}-${userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile}`
-                  : 'Not set'
-                }
+                <img src={hasPhone() ? "/images/verified_icon.svg" : "/images/closebtn2.svg"} alt="mobile" />
+                {getDisplayPhone()}
               </div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#mobilepop">Change</button>
-
+              <button className="btn" data-bs-toggle="modal" data-bs-target="#mobilepop">{hasPhone() ? 'Change' : 'Add'}</button>
             </div>
-
           </div>
-
         </div>
 
         <div className="twofactor_outer_s">
@@ -619,7 +834,6 @@ const SettingsPage = (props) => {
           <p>Select your preferred display currency for all markets</p>
 
           <div className="two_factor_list">
-
             <div className="currency_list_b">
               <ul>
                 <li className={currencyType === "USDT" ? "active" : ""} onClick={() => setCurrencyType("USDT")}>
@@ -651,56 +865,42 @@ const SettingsPage = (props) => {
                 </li>
               </ul>
               <div className="savebtn">
-                <button onClick={() => handleCurrency(currencyType)}>Save Currency Preference</button>
+                <button onClick={() => handleCurrency(currencyType)} disabled={isSubmitting}>
+                  {isSubmitting ? 'Saving...' : 'Save Currency Preference'}
+                </button>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
 
         <div className="twofactor_outer_s">
           <h5>Security Settings</h5>
           <p>Manage your account security and password settings</p>
 
           <div className="two_factor_list">
-
             <div className="factor_bl active">
               <div className="lftcnt">
                 <h6><img src="/images/lock_icon.svg" alt="Login Password" /> Login Password</h6>
-                <p>Change your account password. You will need to verify with OTP sent to your registered {(userDetails?.registeredBy || props?.userDetails?.registeredBy) === "phone" ? "mobile number" : "email"}.</p>
+                <p>Change your account password. You will need to verify with OTP sent to your registered {isRegisteredByPhone ? "mobile number" : "email"}.</p>
               </div>
 
               <button
                 className="btn"
+                disabled={isSubmitting}
                 onClick={async () => {
-                  // Reset form fields
                   setPassword("");
                   setConPassword("");
                   setPasswordOtp("");
-                  // Send OTP
-                  await handleGetPasswordOtp();
-                  // Open modal
-                  const modalElement = document.getElementById('security_verification');
-                  if (modalElement) {
-                    const modal = new window.bootstrap.Modal(modalElement);
-                    modal.show();
-                  }
+                  openModal('security_verification');
                 }}
               >
                 Change Password
               </button>
-
             </div>
-
           </div>
-
         </div>
 
-
-
+        {/* Edit Avatar Modal */}
         <div className="modal fade search_form" id="editAvatarModal" tabIndex="-1" aria-labelledby="editAvatarModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -711,13 +911,7 @@ const SettingsPage = (props) => {
                   className="btn-close btn-close-white"
                   data-bs-dismiss="modal"
                   aria-label="Close"
-                  onClick={() => {
-                    // Reset preview when modal is closed
-                    setLocalSelfy("");
-                    setMyfile(props?.userDetails?.profilepicture || userDetails?.profilepicture || "");
-                    const fileInput = document.getElementById('avatarFileInput');
-                    if (fileInput) fileInput.value = "";
-                  }}
+                  onClick={resetAvatarPreview}
                 ></button>
               </div>
               <div className="modal-body avatar-modal-body">
@@ -741,39 +935,17 @@ const SettingsPage = (props) => {
                     type="button"
                     className="btn-cancel-avatar"
                     data-bs-dismiss="modal"
-                    onClick={() => {
-                      // Reset preview when cancelled
-                      setLocalSelfy("");
-                      setMyfile(props?.userDetails?.profilepicture || userDetails?.profilepicture || "");
-                      const fileInput = document.getElementById('avatarFileInput');
-                      if (fileInput) fileInput.value = "";
-                    }}
+                    onClick={resetAvatarPreview}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     className="btn-apply-avatar"
-                    onClick={async () => {
-                      if (myfile && typeof myfile !== 'string') {
-                        const result = await editavatar();
-                        if (result) {
-                          const modalElement = document.getElementById('editAvatarModal');
-                          if (modalElement) {
-                            const modal = window.bootstrap?.Modal?.getInstance(modalElement);
-                            if (modal) modal.hide();
-                          }
-                          modalBackdropRemove();
-                          setLocalSelfy("");
-                          const fileInput = document.getElementById('avatarFileInput');
-                          if (fileInput) fileInput.value = "";
-                        }
-                      } else {
-                        alertErrorMessage("Please select an image first");
-                      }
-                    }}
+                    onClick={handleAvatarApply}
+                    disabled={isSubmitting}
                   >
-                    Apply Changes
+                    {isSubmitting ? 'Applying...' : 'Apply Changes'}
                   </button>
                 </div>
               </div>
@@ -781,21 +953,18 @@ const SettingsPage = (props) => {
           </div>
         </div>
 
-
+        {/* Edit Phone Modal */}
         <div className="modal fade search_form" id="mobilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
-
                 <h5 className="modal-title" id="exampleModalLabel">Edit Phone</h5>
                 <p>Update your phone number. You will receive an OTP for verification.</p>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
-
-               
-
-                <form className="profile_form">
+                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+              
 
                   <div className="emailinput">
                     <label>Registered Phone</label>
@@ -804,45 +973,54 @@ const SettingsPage = (props) => {
                     </div>
                   </div>
 
-                  {(userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone") && (
-                  <div className="alert alert-warning mb-3" role="alert">
-                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in phone number.
-                  </div>
-                )}
+                  {isRegisteredByPhone && (
+                    <div className="alert alert-warning mb-3" role="alert">
+                      <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in phone number.
+                    </div>
+                  )}
 
-                  {!(userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone") && (
+                  {!isRegisteredByPhone && (
                     <>
                       <div className="emailinput">
-                        <label>New Phone</label>
-                        <div className="d-flex">
-                          <div className="d-flex mobilenumber">
-                            <div className="phonecode">
-                              <select
-                                className="country_code"
-                                value={newCountryCode}
-                                onChange={(e) => setNewCountryCode(e.target.value)}
-                              >
-                                <option value="+91">+91</option>
-                                <option value="+1">+1</option>
-                                <option value="+44">+44</option>
-                              </select>
-                            </div>
-                            <input
-                              type="text"
-                              placeholder="New Phone"
-                              value={newPhone || ""}
-                              onChange={(e) => setNewPhone(e.target.value)}
-                            />
-                          </div>
-                          <div
-                            className={`getotp ${disableBtn2 ? 'otp-button-disabled' : 'otp-button-enabled'}`}
-                            onClick={() => handleGetOtp(`${newCountryCode} ${newPhone}`, "registration", "phone")}
-                          >
-                            {disableBtn2 ? `Resend OTP (${timer2}s)` : "GET OTP"}
-                          </div>
+                        <label>Country Code</label>
+                        <div className="country-select-wrapper">
+                          <Select
+                            styles={selectStyles}
+                            inputId="newCountryCode"
+                            name="country_code_select"
+                            options={countriesList}
+                            onChange={(selected) => setNewCountryCode(selected?.value || '+91')}
+                            value={countriesList.find(option => option.value === newCountryCode)}
+                            placeholder="Select country code"
+                            isSearchable={true}
+                            menuPlacement="auto"
+                          />
                         </div>
                       </div>
 
+                      <div className="emailinput">
+                        <label>New Phone Number</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="Enter phone number"
+                            value={newPhone || ""}
+                            onChange={(e) => setNewPhone(e.target.value.replace(/\D/g, ''))}
+                            maxLength={15}
+                          />
+                          {!disableBtn2 ?  <button
+                            type="button"
+                            className={`getotp ${disableBtn2 ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
+                            onClick={() => !disableBtn2 && !isSubmitting && handleGetOtp("registration", "phone")}
+                            disabled={disableBtn2 || isSubmitting  }
+                          >
+                            {disableBtn2 ? `Resend OTP (${timer2}s)` : "GET OTP"}
+                          </button>: <div className="resend otp-button-disabled">Resend ({timer2}s)</div>}
+                         
+                        </div>
+                       
+                      </div>
+                    
                       <div className="emailinput">
                         <label>OTP</label>
                         <div className="d-flex">
@@ -850,7 +1028,7 @@ const SettingsPage = (props) => {
                             type="text"
                             placeholder="Enter OTP here..."
                             value={mobileOtp}
-                            onChange={(e) => setMobileOtp(e.target.value)}
+                            onChange={(e) => setMobileOtp(e.target.value.replace(/\D/g, ''))}
                             maxLength={6}
                           />
                         </div>
@@ -860,50 +1038,44 @@ const SettingsPage = (props) => {
                         className="submit"
                         type="button"
                         onClick={editPhone}
-                        disabled={!newPhone || !mobileOtp || mobileOtp?.length < 5}
+                        disabled={!canSubmitPhone}
                       >
-                        Submit
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
                       </button>
                     </>
                   )}
-
                 </form>
-
-
               </div>
-
             </div>
           </div>
         </div>
 
-
+        {/* Edit Email Modal */}
         <div className="modal fade search_form" id="emailpop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
-
                 <h5 className="modal-title" id="exampleModalLabel">Edit Email</h5>
                 <p>Update your email address. You will receive an OTP for verification.</p>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
+              
 
-                {(userDetails?.registeredBy === "email" || userDetails?.registeredBy === "google" || props?.userDetails?.registeredBy === "email" || props?.userDetails?.registeredBy === "google") && (
-                  <div className="alert alert-warning mb-3" role="alert">
-                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in email.
-                  </div>
-                )}
-
-                <form className="profile_form">
-
+                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                   <div className="emailinput">
                     <label>Registered Email</label>
                     <div className="d-flex">
                       <input type="email" value={emailId || ""} disabled />
                     </div>
                   </div>
+                  {isRegisteredByEmail && (
+                  <div className="alert alert-warning mb-3" role="alert">
+                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in email.
+                  </div>
+                )}
 
-                  {!(userDetails?.registeredBy === "email" || userDetails?.registeredBy === "google" || props?.userDetails?.registeredBy === "email" || props?.userDetails?.registeredBy === "google") && (
+                  {!isRegisteredByEmail && (
                     <>
                       <div className="emailinput">
                         <label>New Email</label>
@@ -914,12 +1086,16 @@ const SettingsPage = (props) => {
                             value={newEmail}
                             onChange={(e) => setNewEmail(e.target.value)}
                           />
-                          <div
-                            className={`getotp ${disableBtn ? 'otp-button-disabled' : 'otp-button-enabled'}`}
-                            onClick={() => handleGetOtp(newEmail, "registration", "email")}
+                           {!disableBtn ?  <button
+                            type="button"
+                            className={`getotp ${disableBtn ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
+                            onClick={() => !disableBtn && !isSubmitting && handleGetOtp("registration", "email")}
+                            disabled={disableBtn || isSubmitting  }
                           >
                             {disableBtn ? `Resend OTP (${timer}s)` : "GET OTP"}
-                          </div>
+                          </button>: <div className="resend otp-button-disabled">Resend ({timer}s)</div>}
+
+                   
                         </div>
                       </div>
 
@@ -930,7 +1106,7 @@ const SettingsPage = (props) => {
                             type="text"
                             placeholder="Enter OTP here..."
                             value={emailOtp}
-                            onChange={(e) => setEmailOtp(e.target.value)}
+                            onChange={(e) => setEmailOtp(e.target.value.replace(/\D/g, ''))}
                             maxLength={6}
                           />
                         </div>
@@ -940,58 +1116,50 @@ const SettingsPage = (props) => {
                         className="submit"
                         type="button"
                         onClick={editEmail}
-                        disabled={validateEmail(newEmail) !== undefined || !newEmail || !emailOtp || emailOtp?.length < 5}
+                        disabled={!canSubmitEmail}
                       >
-                        Submit
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
                       </button>
                     </>
                   )}
-
                 </form>
-
-
               </div>
-
             </div>
           </div>
         </div>
 
-
+        {/* Security Verification Modal */}
         <div className="modal fade search_form" id="security_verification" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
-
                 <h5 className="modal-title" id="exampleModalLabel">Security Verification</h5>
-                <p>Enter the code sent to <span>
-                  {registeredSignId && registeredSignId.length > 7
-                    ? (registeredSignId.includes('@')
-                      ? `${registeredSignId.substring(0, 3)}***${registeredSignId.substring(registeredSignId.length - 4)}`
-                      : `${registeredSignId.substring(0, 3)}***${registeredSignId.substring(registeredSignId.length - 4)}`)
-                    : registeredSignId || 'your registered email/phone'}
-                </span></p>
+                <p>Enter the code sent to <span>{getMaskedSignId()}</span></p>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
-
-                <form className="profile_form">
-
+                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                   <div className="emailinput">
                     <label>Verification Code</label>
+                    
+
                     <div className="d-flex">
                       <input
                         type="text"
                         placeholder="Enter OTP here..."
                         value={passwordOtp}
-                        onChange={(e) => setPasswordOtp(e.target.value)}
+                        onChange={(e) => setPasswordOtp(e.target.value.replace(/\D/g, ''))}
                         maxLength={6}
                       />
-                      <div
-                        className={`resend ${passwordDisableBtn ? 'otp-button-disabled' : 'otp-button-enabled'}`}
-                        onClick={handleGetPasswordOtp}
+                     {!passwordDisableBtn ?   <button
+                        type="button"
+                        className={`getotp ${passwordDisableBtn ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
+                        onClick={() => !passwordDisableBtn && !isSubmitting && handleGetPasswordOtp()}
+                        disabled={passwordDisableBtn || isSubmitting}
                       >
-                        {passwordDisableBtn ? `Resend (${passwordTimer}s)` : "Resend"}
-                      </div>
+                        {passwordDisableBtn ? `Resend (${passwordTimer}s)` : "Send OTP"}
+                      </button>: <div className="resend otp-button-disabled">Resend ({passwordTimer}s)</div>}
+
                     </div>
                   </div>
 
@@ -1003,17 +1171,14 @@ const SettingsPage = (props) => {
                         placeholder="Enter new password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="new-password"
                       />
-                      <div
-                        className="password-eye-btn"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
+                      <div className="password-eye-btn" onClick={() => setShowPassword(!showPassword)}>{showPassword ? (
                           <i className="ri-eye-line"></i>
                         ) : (
                           <i className="ri-eye-close-line"></i>
-                        )}
-                      </div>
+                        )}</div>
+                     
                     </div>
                   </div>
                   <div className="error_text">
@@ -1045,17 +1210,14 @@ const SettingsPage = (props) => {
                         placeholder="Confirm new password"
                         value={conPassword}
                         onChange={(e) => setConPassword(e.target.value)}
+                        autoComplete="new-password"
                       />
-                      <div
-                        className="password-eye-btn"
-                        onClick={() => setShowConPassword(!showConPassword)}
-                      >
-                        {showConPassword ? (
+                        <div className="password-eye-btn" onClick={() => setShowConPassword(!showConPassword)}>{showConPassword ? (
                           <i className="ri-eye-line"></i>
                         ) : (
                           <i className="ri-eye-close-line"></i>
-                        )}
-                      </div>
+                        )}</div>
+                     
                     </div>
                     {conPassword && (
                       <div className="error" style={{ marginTop: '5px' }}>
@@ -1072,42 +1234,30 @@ const SettingsPage = (props) => {
                     className="submit"
                     type="button"
                     onClick={handleChangePassword}
-                    disabled={
-                      !validatePasswordSettings(password).isValid ||
-                      !password ||
-                      matchPassword(password, conPassword) !== undefined ||
-                      !passwordOtp ||
-                      passwordOtp?.length < 5
-                    }
+                    disabled={!canSubmitPassword}
                   >
-                    Submit
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </button>
-
                 </form>
               </div>
-
             </div>
           </div>
         </div>
 
-
-
+        {/* Edit Profile Modal */}
         <div className="modal fade search_form" id="profilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
-
                 <h5 className="modal-title" id="exampleModalLabel">Edit Profile</h5>
-                <p>Avatar and nickname will also be applied to dummy text.Abusing them might lead to community penalties.</p>
+                <p>Avatar and nickname will also be applied to your profile. Abusing them might lead to community penalties.</p>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
-
-                <form className="profile_form">
-
+                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                   <div className="user_img">
                     <img
-                      src={localSelfy || (myfile ? (typeof myfile === 'string' ? `${ApiConfig.baseImage}${myfile}` : URL.createObjectURL(myfile)) : (userDetails?.profilepicture ? `${ApiConfig.baseImage}${userDetails.profilepicture}` : props?.userDetails?.profilepicture ? `${ApiConfig.baseImage}${props?.userDetails?.profilepicture}` : "/images/user.png"))}
+                      src={getProfileModalImage()}
                       alt="user"
                       onError={(e) => {
                         e.target.onerror = null;
@@ -1129,7 +1279,6 @@ const SettingsPage = (props) => {
                     />
                   </div>
 
-
                   <div className="emailinput">
                     <label>First Name</label>
                     <div className="d-flex">
@@ -1138,6 +1287,7 @@ const SettingsPage = (props) => {
                         placeholder="Enter first name"
                         value={firstName === "undefined" || !firstName ? "" : firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        maxLength={50}
                       />
                     </div>
                   </div>
@@ -1150,6 +1300,7 @@ const SettingsPage = (props) => {
                         placeholder="Enter last name"
                         value={lastName === "undefined" || !lastName ? "" : lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        maxLength={50}
                       />
                     </div>
                   </div>
@@ -1157,49 +1308,13 @@ const SettingsPage = (props) => {
                   <button
                     className="submit"
                     type="button"
-                    onClick={async () => {
-                      let avatarUpdated = false;
-                      let nameUpdated = false;
-
-                      // First upload profile picture if changed
-                      if (myfile && typeof myfile !== 'string') {
-                        avatarUpdated = await editavatar();
-                      }
-
-                      // Then update name
-                      if (firstName?.trim() || lastName?.trim()) {
-                        nameUpdated = await editusername();
-                      }
-
-                      // Close modal if at least one update was attempted
-                      if (avatarUpdated !== undefined || nameUpdated !== undefined) {
-                        const modalElement = document.getElementById('profilepop');
-                        if (modalElement) {
-                          const modal = window.bootstrap?.Modal?.getInstance(modalElement);
-                          if (modal) modal.hide();
-                        }
-                        modalBackdropRemove();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        // Reset local preview after successful upload
-                        if (avatarUpdated) {
-                          setLocalSelfy("");
-                        }
-                        // Force re-render by updating state
-                        if (avatarUpdated || nameUpdated) {
-                          // State will be updated via handleUserDetails which is called in editavatar and editusername
-                        }
-                      }
-                    }}
-                    disabled={(!firstName?.trim() && !lastName?.trim() && (!myfile || typeof myfile === 'string'))}
+                    onClick={handleProfileSubmit}
+                    disabled={!canSubmitProfile}
                   >
-                    Submit
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </button>
-
                 </form>
-
-
               </div>
-
             </div>
           </div>
         </div>

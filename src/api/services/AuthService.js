@@ -420,6 +420,17 @@ const AuthService = {
     return ApiCallGet(url, headers);
   },
 
+  allWalletsPortfolio: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseWallet, allWalletsPortfolio } = ApiConfig;
+    const url = baseWallet + allWalletsPortfolio;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallGet(url, headers);
+  },
+
   nexbAmount: async (baseCurrencyId, quoteCurrencyId, userId, usdtCoin) => {
     console.log("apiii")
     const token = sessionStorage.getItem("token");

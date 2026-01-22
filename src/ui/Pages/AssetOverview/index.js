@@ -1,15 +1,18 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { ApiConfig } from '../../../api/apiConfig/apiConfig';
 import AuthService from '../../../api/services/AuthService';
 import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import { Link, useNavigate } from 'react-router-dom';
 import { alertErrorMessage, alertSuccessMessage } from '../../../customComponents/CustomAlertMessage';
+import { ProfileContext } from '../../../context/ProfileProvider';
 
 const AssetOverview = () => {
   const navigate = useNavigate();
+  
+  // Use estimatedPortfolio from context (already fetched once on login)
+  const { estimatedPortfolio: contextEstimatedPortfolio } = useContext(ProfileContext);
 
   // State declarations
-  const [estimatedportfolio, setEstimatedportfolio] = useState({});
   const [fundData, setfundData] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState({});
   const [currencyData, setCurrencyData] = useState([]);
@@ -18,7 +21,6 @@ const AssetOverview = () => {
   const [toWalletType, setToWalletType] = useState("");
   const [selectedCurrBalance, setSelectedCurrBalance] = useState({});
   const [transferAmount, setTransferAmount] = useState("");
-  const [currenctTab, setCurrenctTab] = useState("");
   const [showBalance, setShowBalance] = useState(true);
   const [activeTab, setActiveTab] = useState("assets");
   const [hideAssets, setHideAssets] = useState(true);
@@ -52,7 +54,7 @@ const AssetOverview = () => {
         setfundData(wallets);
         setCurrencyData(prev => {
           if (!prev || prev.length === 0) {
-            setSelectedCurrency(wallets[0] || {});
+            // setSelectedCurrency(wallets[0] || {});
             return wallets;
           }
           return prev;
@@ -63,26 +65,9 @@ const AssetOverview = () => {
     }
   }, []);
 
-  const estimatedPortfolio = useCallback(async (type) => {
-    try {
-      setCurrenctTab(type);
-      LoaderHelper.loaderStatus(true);
-      setEstimatedportfolio({});
-      const result = await AuthService.estimatedPortfolio(type);
-      handleUserFunds(type);
-      if (result?.success) {
-        setEstimatedportfolio(result?.data || {});
-      }
-    } catch {
-      // Silent fail
-    } finally {
-      LoaderHelper.loaderStatus(false);
-    }
-  }, [handleUserFunds]);
 
   const getWalletType = useCallback(async () => {
     try {
-      LoaderHelper.loaderStatus(true);
       const result = await AuthService.availableWalletTypes();
       if (result?.success) {
         setWalletType(result?.data || []);
@@ -91,35 +76,16 @@ const AssetOverview = () => {
       }
     } catch {
       // Silent fail
-    } finally {
-      LoaderHelper.loaderStatus(false);
     }
   }, []);
 
   const fetchAccountBalances = useCallback(async () => {
     LoaderHelper.loaderStatus(true);
     try {
-      const walletTypes = ['main', 'spot', 'swap', 'earning', 'futures'];
-      const balances = {};
-
-      for (const type of walletTypes) {
-        try {
-          const result = await AuthService.estimatedPortfolio(type);
-          if (result?.success) {
-            balances[type] = {
-              dollarPrice: result?.data?.dollarPrice || 0,
-              currencyPrice: result?.data?.currencyPrice || 0,
-              Currency: result?.data?.Currency || 'USD'
-            };
-          } else {
-            balances[type] = { dollarPrice: 0, currencyPrice: 0, Currency: 'USD' };
-          }
-        } catch {
-          balances[type] = { dollarPrice: 0, currencyPrice: 0, Currency: 'USD' };
-        }
+      const result = await AuthService.allWalletsPortfolio();
+      if (result?.success) {
+        setAccountBalances(result?.data?.wallets || {});
       }
-
-      setAccountBalances(balances);
     } catch {
       // Silent fail
     } finally {
@@ -154,9 +120,8 @@ const AssetOverview = () => {
       const result = await AuthService.walletTransfer(fromWalletType, toWalletType, selectedCurrency?.currency_id, +transferAmount);
       if (result?.success) {
         alertSuccessMessage(result?.message || "Transfer successful");
-        getWalletBalance();
-        estimatedPortfolio(currenctTab);
         setTransferAmount("");
+        fetchAccountBalances();
       } else {
         alertErrorMessage(result?.message || "Transfer failed");
       }
@@ -165,7 +130,7 @@ const AssetOverview = () => {
     } finally {
       LoaderHelper.loaderStatus(false);
     }
-  }, [fromWalletType, toWalletType, selectedCurrency?.currency_id, transferAmount, getWalletBalance, estimatedPortfolio, currenctTab]);
+  }, [fromWalletType, toWalletType, selectedCurrency?.currency_id, transferAmount]);
 
   const handleInterchangeWallet = useCallback(() => {
     setFromWalletType(toWalletType);
@@ -174,8 +139,8 @@ const AssetOverview = () => {
 
   // Filter logic
   const finalFundData = (fundData || []).filter((item) =>
-    (item?.short_name?.toLowerCase()?.includes(search?.toLowerCase()) || 
-     item?.currency?.toLowerCase()?.includes(search?.toLowerCase()))
+  (item?.short_name?.toLowerCase()?.includes(search?.toLowerCase()) ||
+    item?.currency?.toLowerCase()?.includes(search?.toLowerCase()))
   );
 
   const filteredCoinList = hideAssets
@@ -184,10 +149,16 @@ const AssetOverview = () => {
 
   // Effects
   useEffect(() => {
-    estimatedPortfolio("");
-    getWalletType();
+    funcInSequence();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const funcInSequence = async () => {
+    LoaderHelper.loaderStatus(true);
+    await getWalletType();
+    await handleUserFunds("");
+    LoaderHelper.loaderStatus(false);
+  };
 
   useEffect(() => {
     if (Object.keys(selectedCurrency || {}).length > 0 && fromWalletType && toWalletType) {
@@ -210,7 +181,7 @@ const AssetOverview = () => {
             <div className='overview_section'>
               <div className='estimated_balance'>
                 <h6>
-                  Estimated Balance 
+                  Estimated Balance
                   <button type="button" onClick={() => setShowBalance(prev => !prev)}>
                     <i className={showBalance ? "ri-eye-line" : "ri-eye-off-line"}></i>
                   </button>
@@ -218,10 +189,10 @@ const AssetOverview = () => {
                 <div className="wallet-header d-flex flex-wrap align-items-center justify-content-between">
                   <div>
                     <div className="wallet-title">
-                      {showBalance ? safeRound(estimatedportfolio?.dollarPrice) : "****"} USDT
+                      {showBalance ? safeRound(contextEstimatedPortfolio?.dollarPrice) : "****"} USDT
                     </div>
                     <div className="wallet-sub mt-1">
-                      ≈ {showBalance ? safeRound(estimatedportfolio?.currencyPrice) : "****"} {estimatedportfolio?.Currency || "USD"}
+                      ≈ {showBalance ? safeRound(contextEstimatedPortfolio?.currencyPrice) : "****"} {contextEstimatedPortfolio?.Currency || "USD"}
                       <span onClick={() => navigate("/asset_managemnet/deposit")} className='cursor-pointer'>
                         Deposit crypto instantly with one-click <i className="ri-arrow-right-s-line"></i>
                       </span>
@@ -231,7 +202,12 @@ const AssetOverview = () => {
                   <div className="d-flex gap-2 mt-3 mt-md-0">
                     <button className="btn btn-deposit px-4" onClick={() => navigate("/asset_managemnet/deposit")}>Deposit</button>
                     <button className="btn btn-outline-custom px-4" onClick={() => navigate("/asset_managemnet/withdraw")}>Withdraw</button>
-                    <button className="btn btn-outline-custom px-4" data-bs-toggle="modal" data-bs-target="#kycModal">Transfer</button>
+                    <button className="btn btn-outline-custom px-4" data-bs-toggle="modal" data-bs-target="#kycModal" onClick={(e) => {
+                      e.preventDefault();
+                      Object.keys(selectedCurrency || {})?.length > 0 ? setSelectedCurrency(selectedCurrency) : setSelectedCurrency(fundData[0] || {});
+                      setFromWalletType('spot');
+                      setToWalletType('main');
+                    }}>Transfer</button>
                   </div>
                 </div>
               </div>
@@ -270,12 +246,12 @@ const AssetOverview = () => {
                       <div className="coin_right">
                         <div className="searchBar custom-tabs">
                           <i className="ri-search-2-line"></i>
-                          <input 
-                            type="search" 
-                            className="custom_search" 
-                            placeholder="Search Crypto" 
-                            value={search} 
-                            onChange={(e) => setSearch(e.target.value)} 
+                          <input
+                            type="search"
+                            className="custom_search"
+                            placeholder="Search Crypto"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                           />
                         </div>
 
@@ -441,7 +417,7 @@ const AssetOverview = () => {
                                   { key: 'main', label: 'Main', className: '' },
                                   { key: 'spot', label: 'Spot', className: 'spot' },
                                   { key: 'swap', label: 'Swap', className: 'swap' },
-                                  { key: 'earning', label: 'Staking', className: 'staking' },
+                                  { key: 'earning', label: 'Earning', className: 'staking' },
                                   { key: 'futures', label: 'Futures', className: 'futures' }
                                 ];
 
@@ -576,18 +552,18 @@ const AssetOverview = () => {
                       type="button"
                       onClick={() => {
                         window.$("#kycModal").modal("hide");
-                        window.$("#kycModal").one("hidden.bs.modal", function() {
+                        window.$("#kycModal").one("hidden.bs.modal", function () {
                           window.$("#assets_crypto_modal").modal("show");
                         });
                       }}
                     >
                       {Object.keys(selectedCurrency || {}).length > 0 ? (
                         <span>
-                          <img 
-                            src={ApiConfig?.baseImage + selectedCurrency?.icon_path} 
-                            alt={selectedCurrency?.short_name || "crypto"} 
-                            width="20px" 
-                            onError={(e) => { e.target.src = "/images/default_coin.png"; }} 
+                          <img
+                            src={ApiConfig?.baseImage + selectedCurrency?.icon_path}
+                            alt={selectedCurrency?.short_name || "crypto"}
+                            width="20px"
+                            onError={(e) => { e.target.src = "/images/default_coin.png"; }}
                           />
                           {selectedCurrency?.short_name || selectedCurrency?.currency || 'Crypto'}
                         </span>
@@ -602,12 +578,12 @@ const AssetOverview = () => {
                 <div className='crypto_selectcoin'>
                   <h6>Quantity</h6>
                   <div className="price_max_total">
-                    <input 
-                      type="number" 
-                      placeholder="Amount" 
-                      value={transferAmount} 
-                      onChange={(e) => setTransferAmount(e.target.value)} 
-                      onWheel={(e) => e.target.blur()} 
+                    <input
+                      type="number"
+                      placeholder="Amount"
+                      value={transferAmount}
+                      onChange={(e) => setTransferAmount(e.target.value)}
+                      onWheel={(e) => e.target.blur()}
                     />
                     <div className='d-flex gap-0'>
                       {selectedCurrency?.short_name || "USDT"}
@@ -644,7 +620,7 @@ const AssetOverview = () => {
                 aria-label="Close"
                 onClick={() => {
                   window.$("#assets_crypto_modal").modal("hide");
-                  window.$("#assets_crypto_modal").one("hidden.bs.modal", function() {
+                  window.$("#assets_crypto_modal").one("hidden.bs.modal", function () {
                     window.$("#kycModal").modal("show");
                   });
                 }}
@@ -652,11 +628,11 @@ const AssetOverview = () => {
             </div>
             <div className="modal-body">
               <form onSubmit={(e) => e.preventDefault()}>
-                <input 
-                  type="text" 
-                  placeholder="Search coin name" 
-                  value={transferCoinSearch} 
-                  onChange={(e) => setTransferCoinSearch(e.target.value)} 
+                <input
+                  type="text"
+                  placeholder="Search coin name"
+                  value={transferCoinSearch}
+                  onChange={(e) => setTransferCoinSearch(e.target.value)}
                 />
               </form>
 
@@ -677,7 +653,7 @@ const AssetOverview = () => {
                             setSelectedCurrency(item);
                             setTransferCoinSearch("");
                             window.$("#assets_crypto_modal").modal("hide");
-                            window.$("#assets_crypto_modal").one("hidden.bs.modal", function() {
+                            window.$("#assets_crypto_modal").one("hidden.bs.modal", function () {
                               window.$("#kycModal").modal("show");
                             });
                           }}
@@ -686,11 +662,11 @@ const AssetOverview = () => {
                           <td>
                             <div className="td_first">
                               <div className="icon">
-                                <img 
-                                  src={ApiConfig?.baseImage + item?.icon_path} 
-                                  alt={item?.short_name || "icon"} 
-                                  width="30px" 
-                                  onError={(e) => { e.target.src = "/images/default_coin.png"; }} 
+                                <img
+                                  src={ApiConfig?.baseImage + item?.icon_path}
+                                  alt={item?.short_name || "icon"}
+                                  width="30px"
+                                  onError={(e) => { e.target.src = "/images/default_coin.png"; }}
                                 />
                               </div>
                               <div className="price_heading">{item?.short_name}<br /></div>

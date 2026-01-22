@@ -134,25 +134,15 @@ const Dashboard = (props) => {
     const changePercent = parseFloat(item?.change_percentage || 0);
     return (
       <tr key={item?._id || index}>
+    
         <td>
-          <div className="td_div">
-            <span className="star_btn btn_icon active">
+          <div className="td_first">
+          <span className="star_btn btn_icon active">
               <i
                 className={favCoins.includes(item?._id) ? "ri ri-star-fill text-warning me-2" : "ri ri-star-line me-2"}
                 onClick={(e) => handleAddFav(e, item?._id)}
               />
             </span>
-            <img
-              alt={item?.base_currency || "coin"}
-              src={ApiConfig.baseImage + item?.icon_path}
-              className="img-fluid icon_img coinimg me-2"
-              onError={(e) => { e.target.src = "/images/default_coin.png"; }}
-            />
-            {item?.base_currency}/{item?.quote_currency}
-          </div>
-        </td>
-        <td>
-          <div className="td_first">
             <div className="icon">
               <img 
                 src={ApiConfig?.baseImage + item?.icon_path} 

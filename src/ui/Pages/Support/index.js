@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useCallback, useMemo } from "react";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
@@ -7,161 +7,222 @@ import copy from "copy-to-clipboard";
 
 const SupportPage = () => {
 
-    const messagesEndRef = useRef(null)
+    const messagesEndRef = useRef(null);
+    const fileInputRef = useRef(null);
     const { userDetails } = useContext(ProfileContext);
 
     const [subject, setSubject] = useState("");
-    const [message, setmessage] = useState("");
-    const [myfile, setMyfile] = useState("");
-    const [email, setEmail] = useState(userDetails?.emailId);
-    const [issueList, setIssueList] = useState([{ emailId: 'parul@appinop.com', subject: 'Testing Subject', status: 'Active', seen: 1 }]);
+    const [message, setMessage] = useState("");
+    const [myfile, setMyfile] = useState(null);
+    const [issueList, setIssueList] = useState([]);
     const [messageQuery, setMessageQuery] = useState([]);
-    const [ticketId, setTIcketId] = useState([]);
-    const [id, setID] = useState('');
-    const [messagerply, setMessageRply] = useState('');
-    const [orderId, setOrderId] = useState('')
-    const [isShow, setIsShow] = useState(2);
-    const [isRotating, setRotating] = useState(false);
-    const [status, setStatus] = useState('');
+    const [ticketId, setTicketId] = useState("");
+    const [selectedTicketId, setSelectedTicketId] = useState("");
+    const [messageReply, setMessageReply] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const [status, setStatus] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleInputChange = (event) => {
-        switch (event.target.name) {
-            case "subject":
-                setSubject(event.target.value);
-                break;
-            case "orderId":
-                setOrderId(event.target.value);
-                break;
-            case "message":
-                setmessage(event.target.value);
-                break;
-            case "messagerply":
-                setMessageRply(event.target.value);
-                break;
-            default:
-        }
-    }
-
-    const resetInputChange = () => {
+    const resetInputChange = useCallback(() => {
         setSubject("");
-        setOrderId("");
-        setmessage("");
-        setMyfile();
-        // setEmail("");
-    }
-
-    const handleChangeImage = async (event) => {
-        event.preventDefault();
-        const file = event.target.files[0];
-        if (file) {
-            const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (allowedTypes.includes(file.type) && file.size <= maxSize) {
-                setMyfile(file);
-                alertSuccessMessage(file?.name)
-            } else {
-                if (!allowedTypes.includes(file.type)) {
-                    alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
-                } else {
-                    alertErrorMessage("Max image size is 2MB.");
-                }
-            }
+        setMessage("");
+        setMyfile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
         }
-    }
+    }, []);
 
-    const handleSupport = async (email, subject, message, orderId, myfile) => {
+    const handleChangeImage = useCallback((event) => {
+        event.preventDefault();
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (!allowedTypes.includes(file.type)) {
+            alertErrorMessage("Only PNG, JPEG, and JPG file types are allowed.");
+            event.target.value = "";
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alertErrorMessage("Max image size is 5MB.");
+            event.target.value = "";
+            return;
+        }
+
+        setMyfile(file);
+        alertSuccessMessage(`File selected: ${file.name}`);
+    }, []);
+
+    const getIssueList = useCallback(async (ticketIdToSelect) => {
         try {
-            var formData = new FormData();
-            formData.append('emailId', email);
-            formData.append('subject', subject);
-            formData.append('description', message);
-            formData.append('order_id', orderId);
-            formData.append('issue-image', myfile);
             LoaderHelper.loaderStatus(true);
-            const result = await AuthService.submitTicket(formData)
+            setMessageQuery([]);
+
+            const result = await AuthService.getUserTickets();
+
             if (result?.success) {
-                alertSuccessMessage(result.message);
-                resetInputChange();
-                getIssueList();
+                const data = Array.isArray(result?.data) ? [...result.data].reverse() : [];
+                setIssueList(data);
+
+                if (ticketIdToSelect) {
+                    const filteredData = data.find((item) => item?._id === ticketIdToSelect);
+                    if (filteredData) {
+                        setMessageQuery(Array.isArray(filteredData?.ticket) ? filteredData.ticket : []);
+                        setStatus(filteredData?.status || "");
+                    }
+                }
             } else {
-                alertErrorMessage(result.message);
+                alertErrorMessage(result?.message || "Failed to fetch tickets");
             }
-        } finally { LoaderHelper.loaderStatus(false); }
-    }
+        } catch (error) {
+            alertErrorMessage(error?.message || "An error occurred while fetching tickets");
+        } finally {
+            LoaderHelper.loaderStatus(false);
+        }
+    }, []);
 
     useEffect(() => {
         getIssueList();
-    }, [])
+    }, [getIssueList]);
 
+    const handleSupport = useCallback(async (e) => {
+        e?.preventDefault();
 
-    const getIssueList = async (id) => {
-        LoaderHelper.loaderStatus(true);
-        setMessageQuery([])
-        await AuthService.getUserTickets().then(async result => {
-            if (result?.success) {
-                try {
-                    LoaderHelper.loaderStatus(false);
-                    setIssueList(result?.data?.reverse());
-                    if (id) {
-                        let filteredData = result?.data?.filter((item) => item?._id === id);
-                        let tickets = filteredData?.map((item) => item?.ticket);
-                        let status = filteredData?.map((item) => item?.status);
-                        setMessageQuery(tickets[0]);
-                        setStatus(status[0])
-                    }
-                    setRotating(false);
-                } catch (error) {
-                    LoaderHelper.loaderStatus(false);
-                    alertErrorMessage(error);
-                }
-            } else {
-                setRotating(false);
-                LoaderHelper.loaderStatus(false);
-                alertErrorMessage(result?.message);
+        if (isSubmitting) return;
+
+        // Validation
+        if (!subject?.trim()) {
+            alertErrorMessage("Please enter a subject");
+            return;
+        }
+
+        if (!message?.trim()) {
+            alertErrorMessage("Please enter a description");
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            LoaderHelper.loaderStatus(true);
+
+            const formData = new FormData();
+            formData.append("subject", subject.trim());
+            formData.append("description", message.trim());
+            if (myfile) {
+                formData.append("issue-image", myfile);
             }
-        });
-    };
 
+            const result = await AuthService.submitTicket(formData);
 
-
-    const handleHidettMain = (row) => {
-        setIsShow(1);
-        setTIcketId(row?.ticketId);
-        setID(row?._id);
-        getIssueList(row?._id)
-        setStatus(row?.status)
-    };
-
-
-    const handleMessageQuery = async (messagerply, id) => {
-        LoaderHelper.loaderStatus(true);
-        await AuthService.replyTicket(messagerply, id).then(async result => {
             if (result?.success) {
-                try {
-                    LoaderHelper.loaderStatus(false);
-                    setMessageRply("");
-                    getIssueList(id);
-                } catch (error) {
-                    LoaderHelper.loaderStatus(false);
-                    alertErrorMessage(error);
-                }
+                alertSuccessMessage(result?.message || "Ticket submitted successfully");
+                resetInputChange();
+                getIssueList();
             } else {
-                LoaderHelper.loaderStatus(false);
-                alertErrorMessage(result.msg);
+                alertErrorMessage(result?.message || "Failed to submit ticket");
             }
-        });
-    }
+        } catch (error) {
+            alertErrorMessage(error?.message || "An error occurred while submitting ticket");
+        } finally {
+            setIsSubmitting(false);
+            LoaderHelper.loaderStatus(false);
+        }
+    }, [subject, message, myfile, isSubmitting, resetInputChange, getIssueList]);
+
+    const handleViewTicket = useCallback((row) => {
+        if (!row) return;
+
+        setTicketId(row?.ticketId || "");
+        setSelectedTicketId(row?._id || "");
+        setStatus(row?.status || "");
+        setMessageQuery(Array.isArray(row?.ticket) ? row.ticket : []);
+        setMessageReply("");
+    }, []);
+
+    const handleMessageQuery = useCallback(async () => {
+        if (isSubmitting) return;
+
+        if (!messageReply?.trim()) {
+            alertErrorMessage("Please enter a message");
+            return;
+        }
+
+        if (!selectedTicketId) {
+            alertErrorMessage("Invalid ticket");
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            LoaderHelper.loaderStatus(true);
+
+            const result = await AuthService.replyTicket(messageReply.trim(), selectedTicketId);
+
+            if (result?.success) {
+                setMessageReply("");
+                getIssueList(selectedTicketId);
+                alertSuccessMessage("Message sent successfully");
+            } else {
+                alertErrorMessage(result?.message || result?.msg || "Failed to send message");
+            }
+        } catch (error) {
+            alertErrorMessage(error?.message || "An error occurred while sending message");
+        } finally {
+            setIsSubmitting(false);
+            LoaderHelper.loaderStatus(false);
+        }
+    }, [messageReply, selectedTicketId, isSubmitting, getIssueList]);
+
+    const handleCopyTicketId = useCallback((id) => {
+        if (!id) return;
+        copy(id);
+        alertSuccessMessage("Ticket ID copied!");
+    }, []);
 
     useEffect(() => {
-        scrollToBottom()
+        if (messageQuery?.length > 0) {
+            messagesEndRef?.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
     }, [messageQuery]);
 
+    // Filter issue list based on search query
+    const filteredIssueList = useMemo(() => {
+        if (!searchQuery?.trim()) {
+            return issueList;
+        }
+        const query = searchQuery.toLowerCase().trim();
+        return issueList.filter((item) =>
+            item?.ticketId?.toLowerCase()?.includes(query) ||
+            item?.subject?.toLowerCase()?.includes(query) ||
+            item?.status?.toLowerCase()?.includes(query)
+        );
+    }, [issueList, searchQuery]);
 
-    const scrollToBottom = () => {
-        messagesEndRef?.current?.scrollIntoView(false)
-    }
+    // Get user initial for avatar
+    const getUserInitial = useCallback(() => {
+        if (userDetails?.firstName) {
+            return userDetails.firstName.charAt(0).toUpperCase();
+        }
+        if (userDetails?.emailId) {
+            return userDetails.emailId.charAt(0).toUpperCase();
+        }
+        return "U";
+    }, [userDetails]);
 
-
+    // Sanitize HTML for safe rendering
+    const sanitizeMessage = useCallback((text) => {
+        if (!text) return "";
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")
+            .replace(/\n/g, "<br>");
+    }, []);
 
     return (
         <>
@@ -173,37 +234,33 @@ const SupportPage = () => {
                     </h4>
                     <div className="supportinquery">
 
-                        <form className="profile_form">
+                        <form className="profile_form" onSubmit={handleSupport}>
                             <div className="row">
-                                <div className="col-sm-6">
-                                    <div className="emailinput">
-                                        <label>Email ID</label>
-                                        <div className="d-flex">
-                                            <input type="email" placeholder="" />
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="col-sm-6">
                                     <div className="emailinput">
                                         <label>Subject</label>
                                         <div className="d-flex">
-                                            <input type="text" placeholder="" />
+                                            <input
+                                                type="text"
+                                                placeholder="Enter subject"
+                                                value={subject}
+                                                onChange={(e) => setSubject(e.target.value)}
+                                                maxLength={200}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="emailinput">
-                                        <label>Order ID</label>
+                                        <label>Supporting documents (Optional)</label>
                                         <div className="d-flex">
-                                            <input type="text" placeholder="" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-6">
-                                    <div className="emailinput">
-                                        <label>Supporting documents (Attach)</label>
-                                        <div className="d-flex">
-                                            <input type="file" placeholder="" />
+                                            <input
+                                                type="file"
+                                                placeholder=""
+                                                ref={fileInputRef}
+                                                onChange={handleChangeImage}
+                                                accept=".png,.jpg,.jpeg"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -211,33 +268,49 @@ const SupportPage = () => {
                                     <div className="emailinput">
                                         <label>Description</label>
                                         <div className="d-flex">
-                                            <textarea></textarea>
+                                            <textarea
+                                                placeholder="Describe your issue in detail"
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                                maxLength={2000}
+                                            ></textarea>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="col-sm-12">
-                                <button className="submit">Submit</button>
-</div>
+                                    <button
+                                        type="submit"
+                                        className="submit"
+                                        disabled={isSubmitting || !subject?.trim() || !message?.trim()}
+                                    >
+                                        {isSubmitting ? "Submitting..." : "Submit"}
+                                    </button>
+                                </div>
                             </div>
 
                         </form>
 
                     </div>
-                    <div className={`tt_main issuelist_data ${isShow === 1 && "d-none"}`}>
+                    <div className="tt_main issuelist_data">
 
                         <div className="coin_view_top">
-                        <h4>Issue List</h4>
+                            <h4>Issue List</h4>
 
-                        <div class="searchBar custom-tabs">
-                            <i class="ri-search-2-line"></i>
-                            <input type="search" class="custom_search" placeholder="Search Crypto"/>
+                            <div className="searchBar custom-tabs">
+                                <i className="ri-search-2-line"></i>
+                                <input
+                                    type="search"
+                                    className="custom_search"
+                                    placeholder="Search tickets..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
 
-                            </div>
+                        </div>
 
                         <div className="inngerbox cng-pass overflow_unset">
-                            {/* <div className={`cursor-pointer refresh ${isRotating ? 'rotating' : ''}`} onClick={() => { getIssueList(); setRotating(true); }}><i className="ri-refresh-line "></i></div> */}
                             <div className='table-responsive'>
                                 <table className="table table_home ">
                                     <thead>
@@ -250,24 +323,24 @@ const SupportPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {issueList?.length > 0 ? issueList.map((item, index) =>
-                                            <tr key={index} className={` ${(item?.seen === 0 && item?.status === 'Open') ? " font-weight-bold issue_text" : "issue_text"}`} >
+                                        {filteredIssueList?.length > 0 ? filteredIssueList.map((item, index) =>
+                                            <tr key={item?._id || index} className={` ${(item?.seen === 0 && item?.status === 'Open') ? " font-weight-bold issue_text" : "issue_text"}`} >
                                                 <td >{index + 1}</td>
-                                                <td>{item?.ticketId} <span className="btn btn-link p-0" onClick={() => { copy(item?.ticketId); alertSuccessMessage("Ticket ID copied..!!") }}>< i className="ri-file-copy-line"></i>
-                                                </span></td>
-                                                <td > {item?.subject}</td>
-                                                <td >{item?.status} <small>{(item?.seen === 0 && item?.status === 'Open') && <i className="ri-circle-fill" style={{ color: 'green' }}></i>}</small></td>
-                                                <td > <button type="button" className="btn btn-xs  btn-success" data-bs-toggle="modal" data-bs-target="#security_verification" ><span>View</span></button></td>
+                                                <td>{item?.ticketId || "N/A"} <button type="button" className="btn btn-link p-0" onClick={() => handleCopyTicketId(item?.ticketId)}><i className="ri-file-copy-line"></i>
+                                                </button></td>
+                                                <td > {item?.subject || "N/A"}</td>
+                                                <td >{item?.status || "N/A"} <small>{(item?.seen === 0 && item?.status === 'Open') && <i className="ri-circle-fill" style={{ color: 'green' }}></i>}</small></td>
+                                                <td > <button type="button" className="btn btn-xs  btn-success" data-bs-toggle="modal" data-bs-target="#security_verification" onClick={() => handleViewTicket(item)}><span>View</span></button></td>
                                             </tr>
-                                        ) : <tr rowSpan="5">
-                                            <td colSpan="12">
-                                                <p style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
+                                        ) : <tr>
+                                            <td colSpan="5">
+                                                <div style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
                                                     <div className="favouriteData">
                                                         <div className="no_data_s">
-                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
                                                         </div>
                                                     </div>
-                                                </p>
+                                                </div>
                                             </td>
                                         </tr>
                                         }
@@ -276,130 +349,7 @@ const SupportPage = () => {
                             </div>
                         </div>
 
-
-                        {/* <div className="d-flex-between mb-3 custom_dlflex">
-                        <ul className="nav nav-pills mb-2 overflowx_scroll funds_tab  market_tabs">
-                            <li className="nav-item">
-                                <a className="nav-link active" data-bs-toggle="tab" href="#profile" role="tab" >
-                                    <i className="ri-file-list-2-fill me-2 ri-xl"></i> Issue List
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link " data-bs-toggle="tab" href="#home1" role="tab">
-                                    <i className="ri-ticket-fill me-2 ri-xl"></i>Submit Ticket
-                                </a>
-                            </li>
-                        </ul>
-
-                    </div> */}
-                        {/* <div className="tab-content text-left card">
-                        <div className="tab-pane card-body " id="home1" role="tabpanel">
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3">
-                                        <label className="\mb-1" >Email Id*</label>
-                                        <input className="form-control" type="email" name="email" value={email} onChange={handleInputChange} />
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3">
-                                        <label className=" mb-1" >Subject*</label>
-                                        <input className="form-control" type="text" name="subject" value={subject} onChange={handleInputChange} />
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3">
-                                        <label className=" mb-1" >Order Id</label>
-                                        <input className="form-control" type="text" name="orderId" value={orderId} onChange={handleInputChange} />
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3">
-                                        <label className=" mb-1" >Description*</label>
-                                        <textarea className="form-control" rows="6" placeholder="" name="message" value={message} onChange={handleInputChange}></textarea>
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3 ">
-                                        <label className="mb-1" >   <i className="ri-upload-cloud-2-line me-2"></i> Supporting documents (Attach) </label>
-                                        <input className="form-control" type="file" onChange={handleChangeImage} />
-                                    </div>
-                                    <div className="col-lg-12 col-md-12 col-12 mb-3 d-flex ">
-                                        <button className="btn custom-btn btn-block supportbtn" type="button" onClick={() => handleSupport(email, subject, message, orderId, myfile)} disabled={!email || !message || !subject}>SUBMIT</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="tab-pane active card-body " id="profile" role="tabpanel">
-                        
-                        </div>
-                    </div> */}
                     </div>
-                    {/* <div className={`tt_chat ${isShow === 2 && "d-none"}`}>
-                    <div className="tt_header mb-4 d-flex justify-content-between" >
-                        <div>
-                            <span style={{ cursor: "pointer" }} onClick={() => { setIsShow(2); getIssueList() }}>
-                                <i className="ri-arrow-left-line mx-2 p-2" ></i></span> {ticketId} <span className="btn btn-link p-0" onClick={() => { copy(ticketId); alertSuccessMessage("Ticket ID copied..!!") }}>< i className="ri-file-copy-line"></i>
-                            </span></div>
-                        <div className={`cursor-pointer refresh ${isRotating ? 'rotating' : ''}`} title="Refresh Messages" onClick={() => { getIssueList(id); setRotating(true); }}><i className="ri-refresh-line "></i></div>
-                    </div>
-                    <div className="inngerbox cng-pass overflow_unset" >
-                        <div className="right">
-
-                            {messageQuery?.length <= 0 ? (
-                                <div className="issue_text text-center mt-5">No message found</div>
-                            ) : (
-                                <div className="middle">
-                                    <div className="tumbler">
-                                        <div className="messages" id="message">
-                                            {messageQuery.map((item, index) => (
-                                                <div ref={messagesEndRef} key={index}>
-                                                    {item?.replyBy === 0 ? (
-                                                        // Support Team Message
-                                                        <div className="clip sent mb-1 mt-2">
-                                                            <div
-                                                                className="text text-start px-3 support_team_message"
-                                                                dangerouslySetInnerHTML={{
-                                                                    __html: `<strong>Support Team:</strong> ${item?.query.replace(
-                                                                        /\n/g,
-                                                                        "<br>"
-                                                                    )}`,
-                                                                }}
-                                                            ></div>
-                                                        </div>
-                                                    ) : (
-                                                        // User Message
-                                                        <div className="clip received mb-1 d-flex justify-content-end mt-2">
-                                                            <div
-                                                                className="text text-end px-3 self_message"
-                                                                dangerouslySetInnerHTML={{
-                                                                    __html: `<strong>You:</strong> ${item?.query.replace(
-                                                                        /\n/g,
-                                                                        "<br>"
-                                                                    )}`,
-                                                                }}
-                                                            ></div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className="row mt-4 d-flex justify-content-center">
-                                <div className=" col-6 mt-5 ">
-                                    {status === 'Open' ?
-                                        <div className=" field-otp-box" >
-                                            <input className="form-control" type="text" id="message" cols="30" rows="1" placeholder="Message..." name="messagerply" value={messagerply} onChange={handleInputChange} />
-
-                                            <button type="button" className="btn btn-xs  custom-btn " onClick={() => handleMessageQuery(messagerply, id)} disabled={!messagerply} ><span>Send</span></button>
-                                        </div>
-                                        :
-                                        <div className=" field-otp-box" >
-                                            <input disabled className="form-control" type="text" id="message" cols="30" rows="1" value="This ticket has been resolved" name="messagerply" />
-                                            <button type="button" className="btn btn-xs  custom-btn " disabled><span>Closed</span></button>
-                                        </div>}
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div> */}
                 </div>
             </div>
 
@@ -420,48 +370,82 @@ const SupportPage = () => {
                         <div className="chat-container">
                             <div className="chat-header">
                                 <h3>Help/Support</h3>
-                                <div className="ticket">← TICK:67RTEAV</div>
+                                <div className="ticket">
+                                <div className="ticket cursor-pointer" onClick={() => handleCopyTicketId(ticketId)}><i class="ri-file-copy-line"></i>{ticketId || "N/A"}</div>
+                                    {/* <button
+                                        type="button"
+                                        className="btn btn-link p-0 text-white"
+                                        onClick={() => handleCopyTicketId(ticketId)}
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        ← TICK:{ticketId || "N/A"}
+                                    </button> */}
+                                </div>
                             </div>
                             <div className="chat-body">
-                                <div className="message left">
-                                    <div className="avatar">T</div>
-                                    <div className="bubble">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry. Lorem Ipsum has been the industry's
-                                        standard.
+                                {messageQuery?.length > 0 ? (
+                                    messageQuery.map((item, index) => (
+                                        <div key={item?._id || index}>
+                                            {item?.replyBy === 0 ? (
+                                                <div className="message left">
+                                                    <div className="avatar">T</div>
+                                                    <div
+                                                        className="bubble"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: sanitizeMessage(item?.query || "")
+                                                        }}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="message right">
+                                                    <div
+                                                        className="bubble"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: sanitizeMessage(item?.query || "")
+                                                        }}
+                                                    />
+                                                    <div className="avatar">{getUserInitial()}</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="message left">
+                                        <div className="avatar">T</div>
+                                        <div className="bubble">
+                                            No messages yet. Our support team will respond shortly.
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="message left">
-                                    <div className="avatar">T</div>
-                                    <div className="bubble">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry. Lorem Ipsum has been the industry's
-                                        standard.
-                                    </div>
-                                </div>
-                                <div className="message right">
-                                    <div className="bubble">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry.
-                                    </div>
-                                    <div className="avatar">H</div>
-                                </div>
-                                <div className="message right">
-                                    <div className="bubble">
-                                        Lorem Ipsum is simply dummy text of the printing and
-                                        typesetting industry.
-                                    </div>
-                                    <div className="avatar">H</div>
-                                </div>
-
+                                )}
+                                <div ref={messagesEndRef} />
                             </div>
                             <div className="chat-footer">
-                                <input
-                                    type="text"
-                                    placeholder="Write your message here..."
-                                />
-                                <div className="icon-btn">+</div>
-                                <div className="icon-btn send-btn">➤</div>
+                                {status === 'Open' || status === 'Pending' ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            placeholder="Write your message here..."
+                                            value={messageReply}
+                                            onChange={(e) => setMessageReply(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    handleMessageQuery();
+                                                }
+                                            }}
+                                            maxLength={1000}
+                                            disabled={isSubmitting}
+                                        />
+                                        <div className="icon-btn send-btn cursor-pointer"  onClick={handleMessageQuery} >  {isSubmitting ? "..." : "➤"}</div>
+                                        
+                                    </>
+                                ) : (
+                                    <input
+                                        type="text"
+                                        placeholder="This ticket has been resolved"
+                                        disabled
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
