@@ -667,10 +667,11 @@ const Market = () => {
                             </tbody>
                           </table>
                         ) : (
-                          <div className="favouriteData">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
-                            <p>No Data Available</p>
-                          </div>
+                          <div className="table_responsive_2">
+                        <div className="favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
+                        </div>
                         )
                       ) : (
                         <div className="py-5 favouriteData">
@@ -739,9 +740,10 @@ const Market = () => {
                             </tbody>
                           </table>
                         ) : (
+                          <div className="table_responsive_2">
                           <div className="favouriteData">
                             <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
-                            <p>No Data Available</p>
+                          </div>
                           </div>
                         )
                       ) : (
@@ -850,8 +852,10 @@ const Market = () => {
                           </tbody>
                         </table>
                       ) : (
+                        <div className="table_responsive_2">
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
                         </div>
                       )}
                     </div>
@@ -910,8 +914,10 @@ const Market = () => {
                           </tbody>
                         </table>
                       ) : (
+                        <div className="table_responsive_2">
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
                         </div>
                       )}
                     </div>
@@ -1003,9 +1009,10 @@ const Market = () => {
                           </tbody>
                         </table>
                       ) : (
+                        <div className="table_responsive_2">
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
-                          <p>No Data Available</p>
+                        </div>
                         </div>
                       )}
                     </div>
@@ -1056,8 +1063,10 @@ const Market = () => {
                           </tbody>
                         </table>
                       ) : (
+                        <div className="table_responsive_2">
                         <div className="favouriteData">
                           <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
                         </div>
                       )}
                     </div>

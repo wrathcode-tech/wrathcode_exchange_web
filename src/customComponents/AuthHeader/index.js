@@ -337,10 +337,24 @@ const AuthHeader = () => {
                             Blogs & News
                           </Link>
                         </li>
-                        <li className="nav-item mbl">
-                          <Link className="nav-link" to="/#" onClick={closeNavbar}>
-                            Download <img src="/images/download_icon2.svg" alt="scan" />
-                          </Link>
+                        <li className={`nav-item dropdown mbl ${isActive("/earning") || isActive("/refer_earn") ? "active" : ""}`}>
+                          <span
+                            className={`nav-link dropdown-toggle ${isActive("/earning") || isActive("/refer_earn") ? "active" : ""}`}
+                            role="button"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => toggleDropdown("download")}
+                          >
+                            <img src="/images/download_icon2.svg" alt="scan" width={12} /> Download
+                          </span>
+                          <ul className={`dropdown-menu ${openDropdown === "download" ? "show" : ""}`}>
+                            <li>
+                            <div className='qrcode'>
+                          <div className="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                          <p>Scan to Download App iOS & Android</p>
+                          <button className='btn'>Download</button>
+                        </div>
+                            </li>
+                          </ul>
                         </li>
                         <li className="nav-item mbl">
                           <Link className="nav-link" to="/#" onClick={closeNavbar}>

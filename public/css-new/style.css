@@ -5403,7 +5403,7 @@ section.blog_list {
 .deposit_crypto_block_coin .modal .modal-header {
     padding: 16px 20px 5px !important;
     border-bottom: none !important;
-    height: 60px;
+    height: 55px;
 }
 
 .modal.search_coin .modal-dialog {
@@ -9126,7 +9126,8 @@ p.user_info a {
     }
 
     button.btn.btn-success {
-        padding: 7px 16px; }
+        padding: 7px 16px;
+    }
 
     .crypto_section .hot_spot_outer .top_heading {
         display: none;
@@ -12545,7 +12546,7 @@ section.st_sec .card-body {
 
 .card-header.ref_header h2 {
     letter-spacing: 0px;
-    font-weight: 600;
+    font-weight: 500;
     color: #f3bb2b;
     margin-bottom: 15px;
 }
@@ -12553,14 +12554,15 @@ section.st_sec .card-body {
 .card-header.ref_header h4 {
     font-size: 40px;
     letter-spacing: 0px;
-    font-weight: 600;
+    font-weight: 500;
     color: #fff;
     margin-bottom: 15px;
 }
 
 .card-header.ref_header h6 {
-    font-weight: 500;
-    font-size: 26px;
+    font-weight: 400;
+    font-size: 20px;
+    color: #7f848d;
 }
 
 .ref_body .form-control {
@@ -16457,7 +16459,15 @@ button.copy_code {
 }
 
 .process_step label.btn.active:before {
-    background-color: #ffffffed; }
+    background-color: #ffffffed;
+}
+
+.market_update_table .table_responsive_2 {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media screen and (max-width:1700px) {
 
@@ -16628,12 +16638,6 @@ button.copy_code {
         font-size: 13px;
     }
 
-    html,
-    body {
-        overflow-x: hidden;
-        /* Prevent horizontal scroll */
-    }
-
     .refrefer_earn_outer {
 
         min-height: 620px;
@@ -16642,8 +16646,6 @@ button.copy_code {
     .navigation {
         width: 95%;
     }
-
-
 
     .header_right {
         gap: 12px;
@@ -18271,6 +18273,10 @@ button.copy_code {
         padding: 0px;
     }
 
+    .all_product_data {
+        margin-top: 50px;
+    }
+
     .custom-tab-content table.table td {
         font-size: 11px;
     }
@@ -19621,7 +19627,61 @@ button.copy_code {
         display: none;
     }
 
-  .scroll_y_reverse .orderbook-table td.text-danger {
+    .qrcode p {
+        font-size: 12px; }
+
+    .label {
+        font-size: 12px;
+    }
+
+    .market_update_table .table_responsive_2 {
+        min-height: 280px; }
+
+    .id_item {
+        padding: 10px 12px 10px 40px;
+        font-size: 12px;
+    }
+
+    .kyc_step h6 {
+        font-size: 12px;
+        margin: 12px 0px;
+    }
+
+    .kyc_step h5 {
+        font-size: 12px;
+    }
+
+    .select_box select {
+        font-size: 12px;
+    }
+
+    .kyc_information_del {
+        gap: 20px;
+        padding: 18px;
+    }
+
+    .kyc_information_del .userinfolft {
+        width: 130px;
+    }
+
+    .info_list ul {
+        gap: 12px;
+    }
+
+    .documentnumber_s {
+        padding: 12px 15px;
+    }
+
+    .upload-label h3 {
+        font-size: 12px;
+    }
+
+    .primary_btn {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .scroll_y_reverse .orderbook-table td.text-danger {
         width: auto;
     }
 
@@ -20840,7 +20900,7 @@ button.copy_code {
     }
 
     .navbar-toggler {
-        top: 0px;
+        top: 5px;
         padding: 0px;
     }
 
@@ -22983,8 +23043,8 @@ button.copy_code {
     }
 
     .sidebar_deposit h2 {
-        font-size: 16px;
-        margin-top: 12px !important;
+        font-size: 13px;
+        margin-top: 18px !important;
     }
 
     .sidebar_deposit .deposit_list a {
@@ -23408,6 +23468,10 @@ button.copy_code {
         float: none;
     }
 
+    .all_product_data {
+        margin-top: 30px;
+    }
+
     .losser_stock {
         display: none;
     }
@@ -23689,7 +23753,7 @@ button.copy_code {
     }
 
     body .search_form .modal-body {
-        padding: 0px 17px 13px 12px  !important;
+        padding: 0px 17px 13px 12px !important;
     }
 
     .user_login.dashbtn a {
@@ -24927,7 +24991,13 @@ button.copy_code {
         max-width: 210px;
     }
 
-.recent_deposit_list .top_heading h4 small{ font-size: 10px; }    
+    .modal-dialog h4 {
+        font-size: 16px;
+    }
+
+    .recent_deposit_list .top_heading h4 small {
+        font-size: 10px;
+    }
 
     .all_product_data table tr td {
         font-size: 10px;
@@ -24968,6 +25038,12 @@ button.copy_code {
 
     .ant-card {
         margin-bottom: 10px;
+    }
+
+    .slider_group_wrapper .currency_list_b ul li.pricevalue{ font-size: 18px; }
+
+    .earning_list_block .slider_group_wrapper .currency_list_b ul {
+        flex-direction: row;
     }
 
     .giveaway_top_list .cnt {
@@ -25046,7 +25122,7 @@ button.copy_code {
     }
 
     .navbar-toggler {
-        top: 0px;
+        top: 3px;
         right: 7px;
     }
 
@@ -25857,6 +25933,7 @@ button.copy_code {
 
     .search_form_modal_2.modal.fade .modal-content {
         height: 70vh;
+        overflow: inherit;
     }
 
     .dashboard_summary .mobile_view span {
@@ -25867,6 +25944,9 @@ button.copy_code {
     .modal-backdrop {
         background-color: rgba(0, 0, 0, 0.5);
     }
+
+    .form_block_login .input_filed {
+        font-size: 12px; }
 
     .modal.fade.show .modal-dialog {
         transform: translateY(0);
@@ -25888,6 +25968,13 @@ button.copy_code {
         max-width: 100%;
         padding: 0px;
     }
+
+    form.profile_form {
+        margin-top: 8px;
+    }
+
+    .modal.search_form .resend {
+        font-size: 12px; }
 
     .market_trade_crypto_slider .swiper-slide {
         height: auto;

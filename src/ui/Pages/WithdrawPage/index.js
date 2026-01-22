@@ -314,6 +314,7 @@ const WithdrawPage = (props) => {
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
+                      <h5>Select Crypto</h5>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
@@ -569,24 +570,13 @@ const WithdrawPage = (props) => {
                 <div className="net_fee_t">
                   Network Fee {selectedCurrency?.withdrawal_fee} {selectedCurrency?.short_name}
                 </div>
-
               </div>
-
 
               <div className="withdraw_btn">
                 <button type='button' onClick={handleWithdrawCurrency} >Withdraw</button>
               </div>
 
-
             </div>
-
-
-
-
-
-
-
-
 
           </div>
 
@@ -642,41 +632,6 @@ const WithdrawPage = (props) => {
               </div>
             </div>
 
-            {/* <div className="news_announcement">
-
-              <div className="announcements_top">
-                <h2>Announcements</h2>
-
-                <a href="#">More &gt;</a>
-
-              </div>
-
-              {announcments?.length > 0 &&
-
-                <marquee behavior="scroll" direction="down" scrollamount="3">
-
-                  <div className="announcement_block">
-                    {announcments?.map((item) => {
-                      return (
-                        <div>
-                          <p>{item?.title}</p>
-
-                          <span>{moment(item.updatedAt).format("DD-MM-YYYY  hh:ss A")}</span>
-
-                        </div>
-
-
-                      )
-                    })}
-
-
-                  </div>
-
-
-                </marquee>
-              }
-
-            </div> */}
 
           </div>
 

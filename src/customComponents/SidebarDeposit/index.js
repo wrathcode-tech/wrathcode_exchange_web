@@ -22,7 +22,7 @@ const SidebarDeposit = () => {
   return (
     <>
  
-      <div className="mobile_view" id="toggleBtn">Dashboard<span><img src="/images/dashboard_arrow.svg" alt="arrow" /></span></div>
+      {/* <div className="mobile_view" id="toggleBtn">Dashboard<span><img src="/images/dashboard_arrow.svg" alt="arrow" /></span></div> */}
       <div className="dashboard">
  
  
