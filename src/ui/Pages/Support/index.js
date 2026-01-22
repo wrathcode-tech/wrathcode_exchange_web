@@ -18,6 +18,8 @@ const SupportPage = () => {
     const [messageQuery, setMessageQuery] = useState([]);
     const [ticketId, setTicketId] = useState("");
     const [selectedTicketId, setSelectedTicketId] = useState("");
+    const [selectedSubject, setSelectedSubject] = useState("");
+    const [selectedDescription, setSelectedDescription] = useState("");
     const [messageReply, setMessageReply] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [status, setStatus] = useState("");
@@ -137,9 +139,16 @@ const SupportPage = () => {
 
         setTicketId(row?.ticketId || "");
         setSelectedTicketId(row?._id || "");
+        setSelectedSubject(row?.subject || "");
+        setSelectedDescription(row?.description || "");
         setStatus(row?.status || "");
         setMessageQuery(Array.isArray(row?.ticket) ? row.ticket : []);
         setMessageReply("");
+
+        // Scroll to bottom after modal content is rendered
+        setTimeout(() => {
+            messagesEndRef?.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 300);
     }, []);
 
     const handleMessageQuery = useCallback(async () => {
@@ -310,48 +319,93 @@ const SupportPage = () => {
 
                         </div>
 
-                        <div className="inngerbox cng-pass overflow_unset">
-                            <div className='table-responsive'>
-                                <table className="table table_home ">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr No.</th>
-                                            <th>Ticket ID</th>
-                                            <th>Subject</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {filteredIssueList?.length > 0 ? filteredIssueList.map((item, index) =>
-                                            <tr key={item?._id || index} className={` ${(item?.seen === 0 && item?.status === 'Open') ? " font-weight-bold issue_text" : "issue_text"}`} >
-                                                <td >{index + 1}</td>
-                                                <td>{item?.ticketId || "N/A"} <button type="button" className="btn btn-link p-0" onClick={() => handleCopyTicketId(item?.ticketId)}><i className="ri-file-copy-line"></i>
-                                                </button></td>
-                                                <td > {item?.subject || "N/A"}</td>
-                                                <td >{item?.status || "N/A"} <small>{(item?.seen === 0 && item?.status === 'Open') && <i className="ri-circle-fill" style={{ color: 'green' }}></i>}</small></td>
-                                                <td > <button type="button" className="btn btn-xs  btn-success" data-bs-toggle="modal" data-bs-target="#security_verification" onClick={() => handleViewTicket(item)}><span>View</span></button></td>
+                        <div className="inngerbox cng-pass overflow_unset ">
+                            {/* Desktop View */}
+                            <div className='desktop_view'>
+                                <div className='table-responsive'>
+                                    <table className="table table_home ">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr No.</th>
+                                                <th>Ticket ID</th>
+                                                <th>Subject</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
-                                        ) : <tr>
-                                            <td colSpan="5">
-                                                <div style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
-                                                    <div className="favouriteData">
-                                                        <div className="no_data_s">
-                                                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                                        </thead>
+                                        <tbody>
+                                            {filteredIssueList?.length > 0 ? filteredIssueList.map((item, index) =>
+                                                <tr key={item?._id || index} className={` ${(item?.seen === 0 && item?.status === 'Open') ? " font-weight-bold issue_text" : "issue_text"}`} >
+                                                    <td>{index + 1}</td>
+                                                    <td>{item?.ticketId || "N/A"} <button type="button" className="btn btn-link p-0" onClick={() => handleCopyTicketId(item?.ticketId)}><i className="ri-file-copy-line"></i></button></td>
+                                                    <td>{item?.subject || "N/A"}</td>
+                                                    <td>{item?.status || "N/A"} <small>{(item?.seen === 0 && item?.status === 'Open') && <i className="ri-circle-fill" style={{ color: 'green' }}></i>}</small></td>
+                                                    <td><button type="button" className="btn btn-xs btn-success" data-bs-toggle="modal" data-bs-target="#security_verification" onClick={() => handleViewTicket(item)}><span>View</span></button></td>
+                                                </tr>
+                                            ) : <tr>
+                                                <td colSpan="5">
+                                                    <div style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
+                                                        <div className="favouriteData">
+                                                            <div className="no_data_s">
+                                                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {/* Mobile View */}
+                            <div className='mobile_view mt-2'>
+                                <div className='table-responsive'>
+                                    <table className=" ">
+                                        <thead>
+                                            <tr>
+                                                <th>Ticket ID</th>
+                                                <th>Status</th>
+                                                <th className="right_t">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filteredIssueList?.length > 0 ? filteredIssueList.map((item, index) =>
+
+                                                <tr key={item?._id || index}>
+
+                                                    <td>
+                                                        <div className="td_first">
+                                                            {item?.ticketId || "N/A"}
+                                                        </div>
+                                                    </td>
+                                                    <td>{item?.status || "N/A"} <small>{(item?.seen === 0 && item?.status === 'Open') && <i className="ri-circle-fill" style={{ color: 'green' }}></i>}</small></td>
+
+
+                                                    <td className="right_t"><button type="button" className="btn btn-xs btn-success" data-bs-toggle="modal" data-bs-target="#security_verification" onClick={() => handleViewTicket(item)}><small>View</small></button></td>
+                                                </tr>
+
+                                            ) : <tr>
+                                                <td colSpan="3">
+                                                    <div style={{ textAlign: "center" }} className="no-data justify-content-center h-100 d-flex align-items-center">
+                                                        <div className="favouriteData">
+                                                            <div className="no_data_s">
+                                                                <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-            </div>
+            </div >
 
             <div className="modal fade search_form chatmessages"
                 id="security_verification"
@@ -371,18 +425,23 @@ const SupportPage = () => {
                             <div className="chat-header">
                                 <h3>Help/Support</h3>
                                 <div className="ticket">
-                                <div className="ticket cursor-pointer" onClick={() => handleCopyTicketId(ticketId)}><i className="ri-file-copy-line"></i>{ticketId || "N/A"}</div>
-                                    {/* <button
-                                        type="button"
-                                        className="btn btn-link p-0 text-white"
-                                        onClick={() => handleCopyTicketId(ticketId)}
-                                        style={{ textDecoration: 'none' }}
-                                    >
-                                        ← TICK:{ticketId || "N/A"}
-                                    </button> */}
+                                    <div className="ticket cursor-pointer" onClick={() => handleCopyTicketId(ticketId)}><i className="ri-file-copy-line"></i>{ticketId || "N/A"}</div>
+
                                 </div>
                             </div>
+                            {/* Ticket Details - Subject & Description */}
+                           
                             <div className="chat-body">
+                            <div className="ticket-details mb-4" style={{ padding: '12px 16px', borderBottom: '1px solid #444', backgroundColor: 'rgb(47 53 66)' }}>
+                                <div style={{ marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '12px', color: '#888', marginRight: '8px' }}>Subject:</span>
+                                    <span style={{ fontSize: '14px', color: '#fff' }}>{selectedSubject || "N/A"}</span>
+                                </div>
+                                <div>
+                                    <span style={{ fontSize: '12px', color: '#888', marginRight: '8px' }}>Description:</span>
+                                    <span style={{ fontSize: '13px', color: '#ccc' }}>{selectedDescription || "N/A"}</span>
+                                </div>
+                            </div>
                                 {messageQuery?.length > 0 ? (
                                     messageQuery.map((item, index) => (
                                         <div key={item?._id || index}>
@@ -436,8 +495,8 @@ const SupportPage = () => {
                                             maxLength={1000}
                                             disabled={isSubmitting}
                                         />
-                                        <div className="icon-btn send-btn cursor-pointer"  onClick={handleMessageQuery} >  {isSubmitting ? "..." : "➤"}</div>
-                                        
+                                        <div className="icon-btn send-btn cursor-pointer" onClick={handleMessageQuery} >  {isSubmitting ? "..." : "➤"}</div>
+
                                     </>
                                 ) : (
                                     <input

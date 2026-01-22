@@ -207,7 +207,7 @@ const LoginPage = () => {
   };
 
   const handleRecaptchaError = () => {
-    alertErrorMessage("Captcha error. Please try again.");
+   // alertErrorMessage("Captcha error. Please try again.");
   };
 
   const tabChange = () => {

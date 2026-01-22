@@ -26013,3 +26013,10 @@ button.copy_code {
 .getotp_mobile:hover{
 background-color: #e3e3e3 !important;
 }
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+  }
