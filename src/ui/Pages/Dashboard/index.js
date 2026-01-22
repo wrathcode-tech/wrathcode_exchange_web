@@ -14,7 +14,6 @@ import { Pagination } from "swiper";
 
 const Dashboard = (props) => {
   const { socket } = useContext(SocketContext);
-  console.log(socket);
   const navigate = useNavigate();
   const [coinData, setCoinData] = useState([]);
   const [favCoins, setfavCoins] = useState([]);
