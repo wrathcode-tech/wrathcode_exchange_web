@@ -16456,7 +16456,8 @@ button.copy_code {
     color: #fff !important;
 }
 
-
+.process_step label.btn.active:before {
+    background-color: #ffffffed; }
 
 @media screen and (max-width:1700px) {
 
@@ -24925,6 +24926,8 @@ button.copy_code {
     footer .row .footer_logo {
         max-width: 210px;
     }
+
+.recent_deposit_list .top_heading h4 small{ font-size: 10px; }    
 
     .all_product_data table tr td {
         font-size: 10px;
