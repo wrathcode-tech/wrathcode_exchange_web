@@ -8794,6 +8794,10 @@ td.tradebtn a {
     padding: 0;
 }
 
+.hot_spot_outer .no-data-row td {
+    height: 300px;
+}
+
 .position_order .no-data-row td {
     height: 300px;
 }
@@ -9889,7 +9893,7 @@ body.light_theme button.transfer_btn {
 }
 
 .maindashboard .table-responsive {
-    max-height: 800px;
+    max-height: 440px;
 }
 
 .searchBar button {
@@ -9904,6 +9908,17 @@ body.light_theme button.transfer_btn {
     font-size: 16px;
     color: #fff !important;
     opacity: 1;
+}
+
+
+.navbar-expand-lg .navbar-nav .dropdown-menu li .qrcode {
+    background-color: transparent;
+    border: none;
+    border-radius: 0px;
+    padding: 15px;
+    width: 100%;
+    color: #fff;
+    text-align: left;
 }
 
 body.light_theme .searchBar button i {

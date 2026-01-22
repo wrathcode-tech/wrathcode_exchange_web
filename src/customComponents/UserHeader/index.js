@@ -222,6 +222,27 @@ const UserHeader = () => {
                         Blogs & News
                       </Link>
                     </li>
+                          {/* Trade Dropdown */}
+      <li className="nav-item dropdown mbl">
+                          <span
+                            className="nav-link dropdown-toggle"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => toggleDropdown("download")}
+                          >
+                               Download 
+                          </span>
+                          <ul className={`dropdown-menu ${openDropdown === "download" ? "show" : ""}`}>
+                            <li>
+                        
+                        <div className='qrcode'>
+                          <div className="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                          <p>Scan to Download App iOS & Android</p>
+                          <button className='btn'>Download</button>
+                        </div>
+                            </li>
+                           
+                          </ul>
+                        </li>
 
                     {/* <li className="nav-item dropdown">
                       <span

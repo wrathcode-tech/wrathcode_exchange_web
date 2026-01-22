@@ -234,33 +234,6 @@ const AuthHeader = (props) => {
                             </li> */}
                           </ul>
                         </li>
-                        {/* <li className="nav-item dropdown">
-                          <span
-                            className="nav-link dropdown-toggle"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleDropdown("Futures")}
-                          >
-                            Futures
-                          </span>
-                          <ul className={`dropdown-menu ${openDropdown === "trade" ? "show" : ""}`}>
-                            <li>
-                              <a className="dropdown-item" href="*" onClick={toggleNavbar}>
-                                USDⓈ-M Futures
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="*" onClick={toggleNavbar}>
-                                COIN-M Futures
-                              </a>
-
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="*" onClick={toggleNavbar}>
-                                Options
-                              </a>
-                            </li>
-                          </ul>
-                        </li> */}
 
                         <li className="nav-item dropdown">
                           <span
@@ -352,39 +325,35 @@ const AuthHeader = (props) => {
                             Blogs & News
                           </NavLink>
                         </li>
-                        <li className="nav-item mbl">
-                          <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
-                            Download <img src="/images/download_icon2.svg" alt="scan" />
-                          </NavLink>
+
+      {/* Trade Dropdown */}
+      <li className="nav-item dropdown mbl">
+                          <span
+                            className="nav-link dropdown-toggle"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => toggleDropdown("download")}
+                          >
+                               Download
+                          </span>
+                          <ul className={`dropdown-menu ${openDropdown === "download" ? "show" : ""}`}>
+                            <li>
+                        
+                        <div className='qrcode'>
+                          <div className="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                          <p>Scan to Download App iOS & Android</p>
+                          <button className='btn'>Download</button>
+                        </div>
+                            </li>
+                           
+                          </ul>
                         </li>
+
                         <li className="nav-item mbl">
                           <NavLink className="nav-link" to="/#" onClick={closeNavbar}>
                             Theme <span><img src="/images/themeicon.svg" alt="theme" /></span>
                           </NavLink>
                         </li>
 
-                        {/* Calculator Dropdown */}
-                        {/* <li className="nav-item dropdown">
-                          <span
-                            className="nav-link dropdown-toggle"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleDropdown("calculator")}
-                          >
-                            Calculator
-                          </span>
-                          <ul className={`dropdown-menu ${openDropdown === "calculator" ? "show" : ""}`}>
-                            <li>
-                              <a className="dropdown-item" href="/earning_calculator" onClick={closeNavbar}>
-                                Earning Calculator
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="/crypto_calculator" onClick={closeNavbar}>
-                                Crypto Calculator
-                              </a>
-                            </li>
-                          </ul>
-                        </li> */}
                       </ul>
                     </div>
                   </div>

@@ -524,20 +524,15 @@ const LandingPage = () => {
                           </tr>
                         ))
                       ) : (
-                        <tr>
-                          <td colSpan="3" className="p-0">
-                            <div className="favouriteData text-center">
-                              <img
-                                src="/images/no_data_vector.svg"
-                                className="img-fluid"
-                                width="96"
-                                height="96"
-                                alt=""
-                              />
-                              <p>No Data Available</p>
-                            </div>
-                          </td>
-                        </tr>
+                        <tr rowSpan="5" className="no-data-row">
+                      <td colSpan="12">
+                        <div className="no-data-wrapper">
+                          <div className="no_data_s">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                       )}
                     </tbody>
 
@@ -598,18 +593,15 @@ const LandingPage = () => {
                           </tr>
                         ))
                       ) : (
-                        <tr>
-                          <td colSpan="3">
-                            <div className="no_data_s text-center">
-                              <img
-                                src="/images/no_data_vector.svg"
-                                width="52"
-                                alt="no data"
-                              />
-                              <small>No data</small>
-                            </div>
-                          </td>
-                        </tr>
+                        <tr rowSpan="5" className="no-data-row">
+                      <td colSpan="12">
+                        <div className="no-data-wrapper">
+                          <div className="no_data_s">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                       )}
                     </tbody>
                   </table>
@@ -675,18 +667,15 @@ const LandingPage = () => {
                             </tr>
                           ))
                       ) : (
-                        <tr>
-                          <td colSpan="3">
-                            <div className="no_data_s text-center">
-                              <img
-                                src="/images/no_data_vector.svg"
-                                width="52"
-                                alt="no data"
-                              />
-                              <small>No data</small>
-                            </div>
-                          </td>
-                        </tr>
+                        <tr rowSpan="5" className="no-data-row">
+                      <td colSpan="12">
+                        <div className="no-data-wrapper">
+                          <div className="no_data_s">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                       )}
                     </tbody>
                   </table>
