@@ -3851,9 +3851,8 @@ body.light_theme .modal.search_form input:focus {
 }
 
 button:disabled {
-    background-color: #737373 !important;
-    /* light gray */
-    color: #bebbbb;
+    /* background-color: #737373 !important;
+   light gray */
     cursor: not-allowed !important;
     opacity: 0.7 !important;
     pointer-events: none !important;
@@ -10809,6 +10808,7 @@ body.light_theme .withdrawal_rightside button {
     background-color: #F3BB2B;
     width: 100%;
     border-radius: 50px;
+    border: none;
     color: #000;
 }
 
@@ -19626,6 +19626,10 @@ button.copy_code {
 
     .desktop_view {
         display: none;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #ffffff !important;
     }
 
     .qrcode p {

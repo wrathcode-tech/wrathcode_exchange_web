@@ -1042,7 +1042,7 @@ function UsdMFutures() {
                                             </ul>
                                         </div>
                                         {/* Inner Tab Content */}
-                                        <div className="tab-content mt-2 buy_sell_row_price">
+                                        <div className="tab-content mt-2 buy_sell_row_price futurestbllft">
                                             <div className='table_info_data'>
 
 

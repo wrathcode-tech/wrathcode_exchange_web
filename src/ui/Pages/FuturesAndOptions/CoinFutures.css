@@ -33,6 +33,9 @@ body {
     align-items: center;
 }
 
+
+.dashboard_mid_s .order_trade_s .futurestbllft .table_info_data table tr td{ min-width: 100px; }
+
 .usd_left_pr {
     display: flex;
     align-items: center;
