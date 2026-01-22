@@ -22,10 +22,10 @@ const RegistrationVerification = () => {
 
   const handleLogin = async () => {
     const token = googlecaptchaRef.current.getValue()
-    if (!token) {
-      alertErrorMessage("Please validate captcha");
-      return;
-    }
+    // if (!token) {
+    //   alertErrorMessage("Please validate captcha");
+    //   return;
+    // }
     if (otp?.length < 5) {
       alertErrorMessage("Invalid OTP");
       return

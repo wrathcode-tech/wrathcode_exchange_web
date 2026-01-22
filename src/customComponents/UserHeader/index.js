@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import AuthService from "../../api/services/AuthService";
 import { ApiConfig } from "../../api/apiConfig/apiConfig";
 import { ProfileContext } from "../../context/ProfileProvider";
 
 const UserHeader = () => {
+  // eslint-disable-next-line no-unused-vars
   const { themeUpdated, setThemeUpdated } = useContext(ProfileContext)
 
   const [searchPair, setSearchPair] = useState("");
@@ -14,7 +15,19 @@ const UserHeader = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
+
+  // Check if current page is an auth page (no nav should be active)
+  const isAuthPage = ['/login', '/signup', '/forgot_password', '/account-verification'].some(
+    path => location.pathname.startsWith(path)
+  );
+
+  // Helper to check if a path is active (returns false on auth pages)
+  const isActive = (path, exact = true) => {
+    if (isAuthPage) return false;
+    return exact ? location.pathname === path : location.pathname.includes(path);
+  };
 
   const getPairs = async () => {
     const result = await AuthService.getPairs();
@@ -23,8 +36,6 @@ const UserHeader = () => {
       setAllData(result?.data);
     }
   };
-
-
 
   useEffect(() => {
     getPairs();
@@ -39,9 +50,9 @@ const UserHeader = () => {
     } else {
       setPairs(allData);
     }
-  }, [searchPair]);
+  }, [searchPair, allData]);
 
-  // 👇 outside click closes dropdown and mobile nav
+  // Outside click closes dropdown and mobile nav
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -60,6 +71,12 @@ const UserHeader = () => {
   }, []);
 
   const toggleNavbar = () => setIsOpen(!isOpen);
+  
+  const closeNavbar = () => {
+    setIsOpen(false);
+    setOpenDropdown(null);
+  };
+  
   const toggleDropdown = (key) =>
     setOpenDropdown(openDropdown === key ? null : key);
 
@@ -96,19 +113,29 @@ const UserHeader = () => {
                 <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="mainNavbar">
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
-                      <Link className="nav-link" to="/" onClick={toggleNavbar}>
+                      <Link 
+                        className={`nav-link ${isActive("/") ? "active" : ""}`} 
+                        to="/" 
+                        onClick={closeNavbar}
+                      >
                         Home
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/market" onClick={toggleNavbar}>
+                      <Link 
+                        className={`nav-link ${isActive("/market") ? "active" : ""}`} 
+                        to="/market" 
+                        onClick={closeNavbar}
+                      >
                         Market
                       </Link>
                     </li>
 
-                    <li className="nav-item dropdown">
+                    {/* Trade Dropdown */}
+                    <li className={`nav-item dropdown ${isActive('/trade', false) || isActive('/p2p', false) ? "active" : ""}`}>
                       <span
-                        className="nav-link dropdown-toggle"
+                        className={`nav-link dropdown-toggle ${isActive('/trade', false) || isActive('/p2p', false) ? "active" : ""}`}
+                        role="button"
                         style={{ cursor: "pointer" }}
                         onClick={() => toggleDropdown("trade")}
                       >
@@ -116,26 +143,23 @@ const UserHeader = () => {
                       </span>
                       <ul className={`dropdown-menu ${openDropdown === "trade" ? "show" : ""}`}>
                         <li>
-                          <a className="dropdown-item" href="/trade/Header" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/trade/Header" onClick={closeNavbar}>
                             Spot Trading
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <Link className="dropdown-item" to="/p2p-dashboard" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/p2p-dashboard" onClick={closeNavbar}>
                             P2P
                           </Link>
                         </li>
-                        {/* <li>
-                            <a className="dropdown-item" href="/user_profile/arbitrage_bot" onClick={toggleNavbar}>
-                              Arbitrage Trading Bot
-                            </a>
-                          </li> */}
                       </ul>
                     </li>
 
-                    <li className="nav-item dropdown">
+                    {/* Futures Dropdown */}
+                    <li className={`nav-item dropdown ${isActive('/usd_futures', false) || isActive('/coin_futures', false) || isActive('/options', false) ? "active" : ""}`}>
                       <span
-                        className="nav-link dropdown-toggle"
+                        className={`nav-link dropdown-toggle ${isActive('/usd_futures', false) || isActive('/coin_futures', false) || isActive('/options', false) ? "active" : ""}`}
+                        role="button"
                         style={{ cursor: "pointer" }}
                         onClick={() => toggleDropdown("futures")}
                       >
@@ -143,31 +167,23 @@ const UserHeader = () => {
                       </span>
                       <ul className={`dropdown-menu ${openDropdown === "futures" ? "show" : ""}`}>
                         <li>
-                          <a className="dropdown-item" href="/usd_futures/header" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/usd_futures/header" onClick={closeNavbar}>
                             USDⓈ-M Futures
-                          </a>
-                        </li>
-                        {/* <li>
-                          <a className="dropdown-item" href="/coin_futures" onClick={toggleNavbar}>
-                            COIN-M Futures
-                          </a>
-                        </li> */}
-                        {/* <li>
-                          <Link className="dropdown-item" to="/OptionHome" onClick={toggleNavbar}>
-                            Options Home
                           </Link>
-                        </li> */}
+                        </li>
                         <li>
-                          <a className="dropdown-item" href="/options/contract" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/options/contract" onClick={closeNavbar}>
                             Classic Options
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </li>
 
-                    <li className="nav-item dropdown">
+                    {/* Earning Dropdown */}
+                    <li className={`nav-item dropdown ${isActive("/earning") || isActive("/refer_earn") ? "active" : ""}`}>
                       <span
-                        className="nav-link dropdown-toggle"
+                        className={`nav-link dropdown-toggle ${isActive("/earning") || isActive("/refer_earn") ? "active" : ""}`}
+                        role="button"
                         style={{ cursor: "pointer" }}
                         onClick={() => toggleDropdown("earning")}
                       >
@@ -175,96 +191,56 @@ const UserHeader = () => {
                       </span>
                       <ul className={`dropdown-menu ${openDropdown === "earning" ? "show" : ""}`}>
                         <li>
-                          <a className="dropdown-item" href="/earning" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/earning" onClick={closeNavbar}>
                             Earning
-                          </a>
+                          </Link>
                         </li>
-
                         <li>
-                          <a className="dropdown-item" href="/refer_earn" onClick={toggleNavbar}>
+                          <Link className="dropdown-item" to="/refer_earn" onClick={closeNavbar}>
                             Refer & Earn
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </li>
 
-                    {/* <li className="nav-item">
-                      <Link className="nav-link" to="/earning" onClick={toggleNavbar}>
-                        Earning
-                      </Link>
-                    </li> */}
-
                     <li className="nav-item">
-                      <Link className="nav-link" to="/user_profile/swap" onClick={toggleNavbar}>
+                      <Link 
+                        className={`nav-link ${isActive("/user_profile/swap") ? "active" : ""}`} 
+                        to="/user_profile/swap" 
+                        onClick={closeNavbar}
+                      >
                         Quick Swap
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/launchpad" onClick={toggleNavbar}>
-                        Launchpad<i class="ri-rocket-fill" style={{ color: "#f3bb2c" }}></i>
+                      <Link 
+                        className={`nav-link ${isActive("/launchpad") ? "active" : ""}`} 
+                        to="/launchpad" 
+                        onClick={closeNavbar}
+                      >
+                        Launchpad<i className="ri-rocket-fill" style={{ color: "#f3bb2c" }}></i>
                       </Link>
                     </li>
 
-                    {/* <li className="nav-item">
-                      <Link className="nav-link" to="/refer_earn" onClick={toggleNavbar}>
-                        Refer & Earn
-                      </Link>
-                    </li> */}
-
                     <li className="nav-item mememenu">
-                      <Link className="nav-link" to="/meme" onClick={toggleNavbar}>
+                      <Link 
+                        className={`nav-link ${isActive("/meme") ? "active" : ""}`} 
+                        to="/meme" 
+                        onClick={closeNavbar}
+                      >
                         Meme+
                       </Link>
                     </li>
 
                     <li className="nav-item">
-                      <Link className="nav-link" to="/blogs" onClick={toggleNavbar}>
+                      <Link 
+                        className={`nav-link ${isActive("/blogs") ? "active" : ""}`} 
+                        to="/blogs" 
+                        onClick={closeNavbar}
+                      >
                         Blogs & News
                       </Link>
                     </li>
-                          {/* Trade Dropdown */}
-      <li className="nav-item dropdown mbl">
-                          <span
-                            className="nav-link dropdown-toggle"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleDropdown("download")}
-                          >
-                               Download 
-                          </span>
-                          <ul className={`dropdown-menu ${openDropdown === "download" ? "show" : ""}`}>
-                            <li>
-                        
-                        <div className='qrcode'>
-                          <div className="scan_img"><img src="/images/scan.png" alt="scan" /></div>
-                          <p>Scan to Download App iOS & Android</p>
-                          <button className='btn'>Download</button>
-                        </div>
-                            </li>
-                           
-                          </ul>
-                        </li>
-
-                    {/* <li className="nav-item dropdown">
-                      <span
-                        className="nav-link dropdown-toggle"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => toggleDropdown("calculator")}
-                      >
-                        Calculator
-                      </span>
-                      <ul className={`dropdown-menu ${openDropdown === "calculator" ? "show" : ""}`}>
-                        <li>
-                          <a className="dropdown-item" href="/earning_calculator" onClick={toggleNavbar}>
-                            Earning Calculator
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="/crypto_calculator" onClick={toggleNavbar}>
-                            Crypto Calculator
-                          </a>
-                        </li>
-                      </ul>
-                    </li> */}
                   </ul>
                 </div>
               </nav>
@@ -285,8 +261,8 @@ const UserHeader = () => {
                   <Link to="/signup">Sign Up</Link>
                 </button>
                 {/* <div className="themecolor_icon" onClick={() => (setThemeUpdated(!themeUpdated))}>
-                  <i class="ri-moon-line dark-text"></i>
-                  <i class="ri-sun-line light-text"></i>
+                  <i className="ri-moon-line dark-text"></i>
+                  <i className="ri-sun-line light-text"></i>
                 </div> */}
 
 
@@ -294,7 +270,7 @@ const UserHeader = () => {
                   <img src="/images/download_icon2.svg" alt="download" />
                   <div className='scantophdr'>
                     <div className='qrcode'>
-                      <div class="scan_img"><img src="/images/scan.png" alt="scan" /></div>
+                      <div className="scan_img"><img src="/images/scan.png" alt="scan" /></div>
                       <p>Scan to Download App iOS & Android</p>
                       <button className='btn'>Download</button>
                     </div>
@@ -364,4 +340,3 @@ const UserHeader = () => {
 };
 
 export default UserHeader;
-

@@ -14,22 +14,11 @@ export function ProfileProvider(props) {
   const [refreshModal, setRefreshModal] = useState(true);
   const [refreshNotification, setRefreshNotification] = useState(false);
 
-  const [modalStatus, setModalStatus] = useState({ deposit: true, withdrawal: true, referral: true, kyc: true, isDepositClosed: true, isWithdrawalClosed: true, isReferralClosed: true, isKycClosed: true });
-
   const updateModelHideStatus = (value) => {
     sessionStorage.setItem(value, true);
     setRefreshModal(!refreshModal)
   }
 
-  useEffect(() => {
-    const depositModalStatus = sessionStorage.getItem("depositModalStatus") || false;
-    const withdrawalModalStatus = sessionStorage.getItem("withdrawalModalStatus") || false;
-    const referralModalStatus = sessionStorage.getItem("referralModalStatus") || false;
-    const kycModalStatus = sessionStorage.getItem("kycModalStatus") || false;
-
-    setModalStatus({ deposit: userDetails?.depositStatus, withdrawal: userDetails?.WithdrawalStatus, referral: userDetails?.referralStatus, kyc: userDetails?.kycVerified === 2 || userDetails?.kycVerified === 1, isDepositClosed: depositModalStatus, isWithdrawalClosed: withdrawalModalStatus, isReferralClosed: referralModalStatus, isKycClosed: kycModalStatus })
-
-  }, [userDetails, refreshModal]);
 
 
 
@@ -122,7 +111,7 @@ export function ProfileProvider(props) {
   return (
     <>
 
-      <ProfileContext.Provider value={{ refreshNotification, setRefreshNotification, modalStatus, updateModelHideStatus, currentPage, setCurrentPage, lastLogin, userDetails, setUserDetails, handleUserDetails, setLoginDetails, loginDetails, handleTheme, newStoredTheme, activeTab, setActiveTab, themeUpdated, setThemeUpdated }}>
+      <ProfileContext.Provider value={{ refreshNotification, setRefreshNotification, updateModelHideStatus, currentPage, setCurrentPage, lastLogin, userDetails, setUserDetails, handleUserDetails, setLoginDetails, loginDetails, handleTheme, newStoredTheme, activeTab, setActiveTab, themeUpdated, setThemeUpdated }}>
         {props.children}
       </ProfileContext.Provider>
     </>

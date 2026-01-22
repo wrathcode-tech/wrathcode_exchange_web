@@ -1,109 +1,164 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { ApiConfig } from '../../api/apiConfig/apiConfig'
 import { Link } from 'react-router-dom';
 import { alertSuccessMessage } from '../CustomAlertMessage';
+import moment from 'moment';
 
 const DashboardHeader = ({ props }) => {
+  const [isInfoHidden, setIsInfoHidden] = useState(true);
 
-  function shortenAddress(address, length = 4) {
-    if (!address || address.length < 10) return address; // Ensure it's a valid address
+  const shortenAddress = useCallback((address, length = 4) => {
+    if (!address || typeof address !== 'string' || address.length < 10) return address || "----";
     return `${address.slice(0, length + 2)}...${address.slice(-length)}`;
-  }
+  }, []);
 
-  const copytext = (data) => {
-    navigator.clipboard.writeText(data);
-    alertSuccessMessage(" Copied!!");
-  };
+  const maskEmail = useCallback((email) => {
+    if (!email || typeof email !== 'string') return "----";
+    const atIndex = email.indexOf('@');
+    if (atIndex === -1) return email;
+    const localPart = email.slice(0, atIndex);
+    const domain = email.slice(atIndex + 1);
+    const visibleChars = Math.min(3, localPart.length);
+    return `${localPart.slice(0, visibleChars)}***@${domain}`;
+  }, []);
+
+  const maskUID = useCallback((uid) => {
+    if (!uid || typeof uid !== 'string' || uid.length < 8) return uid || "----";
+    return `${uid.slice(0, 2)}****${uid.slice(-2)}`;
+  }, []);
+
+  const maskIP = useCallback((ip) => {
+    if (!ip || typeof ip !== 'string') return "----";
+    const parts = ip.split('.');
+    if (parts.length !== 4) return ip;
+    const lastDigit = parts[3]?.slice(-1) || '';
+    return `${parts[0]}.***.***.*${lastDigit}`;
+  }, []);
+
+  const copytext = useCallback((data) => {
+    if (!data) return;
+    navigator.clipboard.writeText(data).then(() => {
+      alertSuccessMessage("Copied!");
+    }).catch(() => {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = data;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        alertSuccessMessage("Copied!");
+      } catch {
+        // Silent fail
+      }
+      document.body.removeChild(textArea);
+    });
+  }, []);
+
+  const toggleInfoVisibility = useCallback(() => {
+    setIsInfoHidden(prev => !prev);
+  }, []);
+
+  const userDetails = props?.userDetails;
+  const displayEmail = isInfoHidden ? maskEmail(userDetails?.emailId) : (userDetails?.emailId || "----");
+  const displayUID = isInfoHidden ? maskUID(userDetails?.uuid) : shortenAddress(userDetails?.uuid);
+  const displayIP = isInfoHidden ? maskIP(userDetails?.lastLoginIP) : (userDetails?.lastLoginIP || "----");
+
+  const formatDate = useCallback((date) => {
+    if (!date) return "----";
+    return moment(date).format("DD/MM/YYYY");
+  }, []);
+
+  const formatTime = useCallback((date) => {
+    if (!date) return "";
+    return moment(date).format("hh:mm A");
+  }, []);
+
+  const profileImage = userDetails?.profilepicture 
+    ? ApiConfig?.baseImage + userDetails.profilepicture 
+    : "/images/user.png";
 
   return (
-    <>
-
-      <div className="top_header_dash">
-
-        <div className="user_profile">
-          <div className="user_img">
-            <img src="/images/user.png" alt="user" />
-            {/* <img src={props?.userDetails?.profilepicture ? ApiConfig?.baseImage + props?.userDetails?.profilepicture : "/images/profile_user.png"} alt="user" height="54px" width="54px" className='round_img' /> */}
-
-            <div className='edit_user'>
-              <img src="/images/edit_icon.svg" alt="edit" />
-            </div>
+    <div className="top_header_dash">
+      <div className="user_profile">
+        <div className="user_img">
+          <img 
+            src={profileImage} 
+            alt="User profile" 
+            onError={(e) => { e.target.src = "/images/profile_user.png"; }}
+          />
+          <div className='edit_user'>
+            <img src="/images/edit_icon.svg" alt="Edit profile" />
           </div>
-
-          <div className="user_profile_cnt">
-            <h3>{props?.userDetails?.emailId || "----"} <span className='hide'><button><i class="ri-eye-line"></i> Hide Info</button></span></h3>
-            <span className='subdel'>Last Login: 12/31/2025, 10:22:33 India Jaipur(2401:**:a620)</span>
-
-            {/* <ul className="user_social">
-              <li><a href="#" target='_blank'><img src="/images/user_social.svg" alt="social" /></a></li>
-              <li><a href="https://x.com/WrathcodeExchange" target='_blank'><img src="/images/user_social2.svg" alt="social" /></a></li>
-            </ul> */}
-
-          </div>
-
         </div>
 
-
-        <div className='profile_id_s'>
-
-          <div className="profile_id">
-            <span>UID :</span>
-            {shortenAddress(props?.userDetails?.uuid) || "----"}
-            <img src="/images/uid_icon.svg" className='m-1' alt="icon" onClick={() => copytext(props?.userDetails?.uuid)} />
-          </div>
-
-          <div className="profile_id">
-            <span>Referral ID :</span>
-            {props?.userDetails?.referral_code || "----"}
-            <img src="/images/uid_icon.svg" className='m-1' alt="icon" onClick={() => copytext(props?.userDetails?.referral_code)} />
-          </div>
-
-               <div className="profile_id kycstatus">
-            <span>Safeguard</span>
-           <Link to='#' className='text'><img src="/images/check_icon.svg" className='m-1' alt="Check Now" /> Check Now </Link>
-            </div>
-            
-
-          <div className="profile_id kycstatus">
-            <span>KYC Status</span>
-            {props?.userDetails?.kycVerified === 2 ? <Link to='#/' className='text-success'>KYC Verified</Link> : <Link to='/user_profile/kyc' className='text-warning'>KYC Pending
-              <img src="/images/arrowdashboard.svg" className='m-1' alt="icon" />
-            </Link>
-            }
-
-          </div>
-
-
-             <div className="profile_id kycstatus">
-            <span>Third-Party Accounts</span>
-           <Link to='#' className='text'><img src="/images/google_icon.svg" className='m-1' alt="Check Now" /></Link>
-            </div>
-
-
-            <div className="profile_id">
-            <span>Time Zone</span>
-           <span className='textprofile'>(UTC+8) Asia/Singapore  <img src="/images/edit_icon.svg" width={12} alt="edit" /></span>
-            </div>
-
-          {/* <div className="profile_id kycstatus giveway_bl">
-           
-            <Link to='/user_profile/giveaway' className='text-warning'> 🎁 Giveaway
-              <img src="/images/arrowdashboard.svg" className='m-1' alt="icon" />
-            </Link>
-          </div> */}
-
-
-          {/* <div className="profile_id">
-            <span>Last Login Time</span>
-            <div className='time_pro'> <span>{moment(lastLogin).format("DD/MM/YYYY  ")}
-              <small>{moment(lastLogin).format("hh:mm A")}</small>
-            </span></div>
-          </div> */}
-
+        <div className="user_profile_cnt">
+          <h3>
+            {displayEmail}
+            <span className='hide'>
+              <button type="button" onClick={toggleInfoVisibility}>
+                <i className={isInfoHidden ? "ri-eye-off-line" : "ri-eye-line"} />
+                {isInfoHidden ? " Show Info" : " Hide Info"}
+              </button>
+            </span>
+          </h3>
+          <span className='subdel'>
+            Last Login: {formatDate(userDetails?.lastLoginTime)}, {formatTime(userDetails?.lastLoginTime)}
+          </span>
         </div>
-
       </div>
-    </>
+
+      <div className='profile_id_s'>
+        <div className="profile_id">
+          <span>UID :</span>
+          {displayUID}
+          <img 
+            src="/images/uid_icon.svg" 
+            className='m-1' 
+            alt="Copy UID" 
+            onClick={() => copytext(userDetails?.uuid)}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
+
+        <div className="profile_id">
+          <span>Referral Code :</span>
+          {userDetails?.referral_code || "----"}
+          <img 
+            src="/images/uid_icon.svg" 
+            className='m-1' 
+            alt="Copy referral code" 
+            onClick={() => copytext(userDetails?.referral_code)}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
+
+        <div className="profile_id kycstatus">
+          <span>KYC Status</span>
+          {userDetails?.kycVerified === 2 ? (
+            <Link to='#/' className='text-success'>KYC Verified</Link>
+          ) : (
+            <Link className='text' to='/user_profile/kyc'>
+              <img src="/images/check_icon.svg" alt="Verify KYC" />
+              KYC Pending
+            </Link>
+          )}
+        </div>
+
+        <div className="profile_id">
+          <span>Sign-up Time</span>
+          <span className='textprofile'>
+            {formatDate(userDetails?.createdAt)}{" "}
+            <small>{formatTime(userDetails?.createdAt)}</small>
+          </span>
+        </div>
+
+        <div className="profile_id">
+          <span>Last Login IP</span>
+          <span className='textprofile'>{displayIP}</span>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -1,302 +1,154 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef, useCallback } from "react";
 import { ApiConfig } from "../../../api/apiConfig/apiConfig";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import "../LandingPage/home.css";
-import "swiper/css";
-import "swiper/css/pagination";
-import Slider from "react-slick";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { SocketContext } from "../../../customComponents/SocketContext";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
-import "./home.css";
-import TVChartContainer from "../../../customComponents/Libraries/TVChartContainer";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import { useGoogleLogin } from "@react-oauth/google";
 import { ProfileContext } from "../../../context/ProfileProvider";
-import { $ } from "react-jquery-plugin";
-import QRCode from "qrcode.react";
 import { Helmet } from "react-helmet-async";
-
+import "./home.css";
 
 const LandingPage = () => {
   const location = useLocation();
-
-  const socketId = sessionStorage.getItem('socketId');
-  const userId = sessionStorage.getItem('userId');
-  const [coinsPair, setCoinsPair] = useState([]);
-  const [AllData, setAllData] = useState([]);
-  const [socketData, setSocketData] = useState([]);
-  const [bannerList, setBannerList] = useState([]);
-  const [hoveredItem, setHoveredItem] = useState({});
-  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
-  const [SelectedCoin, setSelectedCoin] = useState();
-  const [googleToken, setGoogleToken] = useState();
   const { setLoginDetails } = useContext(ProfileContext);
   const googlecaptchaRef = useRef(null);
-  const [coinData, setCoinData] = useState([]);
+  const videoRef = useRef(null);
+
+  // State declarations
   const [topGainers, setTopGainers] = useState([]);
-  const [topLosers, setTopLosers] = useState([]);
+  const [newListings, setNewListings] = useState([]);
+  const [memePairs, setMemePairs] = useState([]);
+  const [activeMobileTab, setActiveMobileTab] = useState(0);
 
 
-  const [email, setEmail] = useState("");
-
-
-  const nextPage = (data) => {
-    sessionStorage.setItem('RecentPair', JSON.stringify(data))
-    navigate(`/trade/${data?.base_currency}_${data?.quote_currency}`);
-  };
-
-  const signupPage = () => {
-    navigate(`/signup?emailId=${email}`);
-  };
-
-  useEffect(() => {
-    if (socketData?.length > 0 && Object.keys(hoveredItem)?.length === 0) {
-      setHoveredItem(socketData[0])
+  // Navigate to trade page
+  const nextPage = useCallback((data) => {
+    if (!data?.base_currency || !data?.quote_currency) return;
+    try {
+      sessionStorage.setItem('RecentPair', JSON.stringify(data));
+      navigate(`/trade/${data.base_currency}_${data.quote_currency}`);
+    } catch {
+      // Silent fail for sessionStorage errors
     }
-  }, [socketData])
+  }, [navigate]);
 
-
-
-
-
-  useEffect(() => {
-    let interval;
-    if (socket) {
-      let payload = {
-        'message': 'market',
+  // Format number safely
+  const formatNumber = useCallback((data, decimal = 5) => {
+    try {
+      const num = typeof data === "string" ? Number(data) : data;
+      if (typeof num === "number" && !isNaN(num) && isFinite(num)) {
+        return parseFloat(num.toFixed(decimal));
       }
-      socket.emit('message', payload);
-      interval = setInterval(() => {
-        let payload = {
-          'message': 'market',
-        }
-        socket.emit('message', payload);
-      }, 2000)
-      socket.on('message', (data) => {
-        setSocketData(data?.pairs);
-        // let filteredData = data?.pairs
-        //   ?.filter((item) => item?.change_percentage > 0)
-        //   ?.sort((a, b) => b.change_percentage - a.change_percentage);
-
-      });
-    }
-    return (() => {
-      clearInterval(interval)
-    })
-  }, [socket]);
-
-  const [announcments, setAnnouncments] = useState([]);
-  const handleNotifications = async () => {
-    LoaderHelper.loaderStatus(true);
-    await AuthService.notifications().then(async (result) => {
-      if (result?.data?.length > 0) {
-        try {
-          let announcement = result?.data?.map((item) => item?.title)
-          setAnnouncments(announcement);
-        } catch (error) {
-
-        }
-      }
-    });
-    LoaderHelper.loaderStatus(false);
-  };
-
-  const handleBannerList = async () => {
-    await AuthService.getbannerdata().then(async (result) => {
-      if (result?.success) {
-        setBannerList(result?.data);
-      } else {
-        LoaderHelper.loaderStatus(false);
-      }
-    })
-  };
-
-  const [apkLink, setApkLink] = useState("")
-
-  const getApkLink = async () => {
-    const result = await AuthService.getApk()
-    if (result?.success) {
-      setApkLink(result?.data?.apk || "");
-      const apkDownloaded = localStorage.getItem("appDownloaded")
-      if (apkDownloaded !== "true") {
-        $("#bonusPopup").modal('show');
-      }
-
-
-    } else {
-      LoaderHelper.loaderStatus(false);
-    }
-  };
-
-
-  useEffect(() => {
-    handleBannerList();
-    handleNotifications();
-    getApkLink();
-  }, [])
-
-
-
-  useEffect(() => {
-    if (socket) {
-      let payload = {
-        message: 'exchange',
-        userId: userId,
-        socketId: socketId,
-      };
-      socket.emit('message', payload);
-      socket.on('message', (data) => {
-        setCoinsPair(data?.pairs || []);
-        setAllData(data);
-
-      });
-    }
-  }, [socket]);
-
-  // ********* Auto Select Coin Pair after Socket Connection ********** //
-  useEffect(() => {
-    if (!SelectedCoin && coinsPair) {
-      var Pair;
-      Pair = coinsPair[0]
-      navigate(`/`);
-      setSelectedCoin(Pair);
-    }
-  }, [coinsPair]);
-
-
-  const videoRef = useRef();
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.6; // 0.5x = half speed
+      return "0.00";
+    } catch {
+      return "0.00";
     }
   }, []);
 
-
-  const [activeTab, setActiveTab] = useState("hotspot");
-
-  const tabOptions = [
-    { id: "hotspot", label: "Hot Spot" },
-    // { id: "gainers", label: "Gainers" },
-    // { id: "newest", label: "Newest" },
-    // { id: "meme", label: "Meme" },
-  ];
-
-  // Dummy filters (replace with real logic)
-  const getFilteredData = () => {
-    if (activeTab === "gainers") {
-      return socketData?.filter(item => item.change_percentage > 0);
-    } else if (activeTab === "meme") {
-      return socketData?.filter(item => item.pairType === "meme");
-    } else if (activeTab === "newest") {
-      return socketData?.reverse();
-    }
-    return socketData;
-  };
-
-  const formatNumber = (data, decimal = 5) => {
-    // Try to convert strings like "22" or "22.567" into numbers
-    const num = typeof data === "string" ? Number(data) : data;
-
-    // Check if it's a valid number (not NaN, not undefined/null)
-    if (typeof num === "number" && !isNaN(num)) {
-      return (parseFloat(num.toFixed(decimal)));
-    }
-
-    return "0.00"; // "0.00"
-  };
-
-  const authToken = sessionStorage.getItem("token")
-
-
-
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: tokenResponse => {
-      if (tokenResponse.access_token) {
-        setGoogleToken(tokenResponse)
-        if (googlecaptchaRef.current) {
-          googlecaptchaRef.current.showCaptcha();
-        }
-        handleLoginGoogle(tokenResponse)
-      }
-    }
-  });
-
-  const handleLoginGoogle = async (tokenResponse, captchaData) => {
+  // Google login handler
+  const handleLoginGoogle = useCallback(async (tokenResponse) => {
+    if (!tokenResponse) return;
     LoaderHelper.loaderStatus(true);
     try {
-      const result = await AuthService.googleLogin(tokenResponse, captchaData);
+      const result = await AuthService.googleLogin(tokenResponse);
       if (result?.success) {
         alertSuccessMessage(result?.message);
-        sessionStorage.setItem("token", result.data.token);
-        sessionStorage.setItem("userId", result.data.userId);
+        sessionStorage.setItem("token", result.data?.token || "");
+        sessionStorage.setItem("userId", result.data?.userId || "");
         setLoginDetails(result?.data);
         const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
         navigate(redirectPath, { replace: true });
-        window.location.reload()
-
-        LoaderHelper.loaderStatus(false);
+        window.location.reload();
       } else {
-        alertErrorMessage(result?.message);
-        LoaderHelper.loaderStatus(false);
+        alertErrorMessage(result?.message || "Login failed");
       }
-    } catch (error) {
-      alertErrorMessage(error?.message);
+    } catch {
+      alertErrorMessage("Login failed. Please try again.");
+    } finally {
       LoaderHelper.loaderStatus(false);
     }
-  };
+  }, [location?.state?.redirectTo, navigate, setLoginDetails]);
 
-  const handleApkDonwload = () => {
-    $("#bonusPopup").modal('hide');
-    sessionStorage.setItem("appDownloaded", true)
-  };
-
-  const DownloadApkButton = () => {
-    if (apkLink) {
-      window.location.href = `${ApiConfig?.baseUrl}${apkLink}`;
-    }
-
-  }
-  const gainerElementRef = useRef(null);
-  const handleTabClick = (itemName) => {
-    setActiveTab(itemName);
-    if (gainerElementRef.current) {
-      gainerElementRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-
-  useEffect(() => {
-    let interval;
-    if (socket) {
-      let payload = {
-        'message': 'market',
-      }
-      socket.emit('message', payload);
-      interval = setInterval(() => {
-        let payload = {
-          'message': 'market',
+  // Google login hook
+  useGoogleLogin({
+    onSuccess: tokenResponse => {
+      if (tokenResponse?.access_token) {
+        if (googlecaptchaRef.current) {
+          googlecaptchaRef.current.showCaptcha?.();
         }
-        socket.emit('message', payload);
-      }, 2000)
-
-      socket.on('message', (data) => {
-        setCoinData(data?.pairs);
-        const topGainers = [...data?.pairs || []]
-          .sort((a, b) => b.change_percentage - a.change_percentage)
-        const topLosers = [...data?.pairs || []]
-          .sort((a, b) => a.change_percentage - b.change_percentage)
-          .slice(0, 4); setTopGainers(topGainers);
-        setTopLosers(topLosers);
-      });
+        handleLoginGoogle(tokenResponse);
+      }
+    },
+    onError: () => {
+      // Silent fail for Google login errors
     }
-    return (() => {
-      clearInterval(interval)
-    })
+  });
+
+  // Video playback speed
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.6;
+    }
+  }, []);
+
+  // Socket data fetching
+  useEffect(() => {
+    if (!socket) return;
+
+    let interval;
+    const payload = { message: 'market' };
+
+    const handleMessage = (data) => {
+      try {
+        const pairs = data?.pairs || [];
+
+        // Meme Pairs - filter by pairType "meme"
+        const memes = pairs
+          .filter((item) => item?.pairType === "meme")
+          .slice(0, 5);
+        setMemePairs(memes);
+
+        // Top Gainers - sorted from highest to lowest change percentage
+        const gainers = [...pairs]
+          .sort((a, b) => (b?.change_percentage || 0) - (a?.change_percentage || 0))
+          .slice(0, 5);
+        setTopGainers(gainers);
+
+        // New Listings - sorted by creation date (newest first)
+        const listings = [...pairs]
+          .sort((a, b) => {
+            const dateA = new Date(a?.createdAt || a?.created_at || 0);
+            const dateB = new Date(b?.createdAt || b?.created_at || 0);
+            return dateB - dateA;
+          })
+          .slice(0, 5);
+        setNewListings(listings);
+      } catch {
+        // Silent fail for data processing errors
+      }
+    };
+
+    socket.emit('message', payload);
+    socket.on('message', handleMessage);
+
+    interval = setInterval(() => {
+      socket.emit('message', payload);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      socket.off('message', handleMessage);
+    };
   }, [socket]);
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
 
     <>
@@ -320,8 +172,9 @@ const LandingPage = () => {
 
 
 
-      <div class="hero_section_main">
+      <div className="hero_section_main">
         <video
+          ref={videoRef}
           className="bg-video"
           autoPlay
           loop
@@ -335,30 +188,27 @@ const LandingPage = () => {
           />
         </video>
 
-        <div class="container">
-          <div class="row">
-            <div class="banner_content">
-              <h1>The Smarter Way to Buy, <span className="sub_heading">Trade & Invest</span> in Crypto</h1>
+        <div className="container">
+          <div className="row">
+            <div className="banner_content">
+              <h1>The Smarter Way to Buy, <span className="sub_heading">Trade &amp; Invest</span> in Crypto</h1>
               <p>A powerful crypto platform designed for speed, security, and smarter investing — all in one place.</p>
 
               <div className="d-flex download_button">
-                <button className="btn">Download App</button>
-                <button className="btn platform">Explore Platform</button>
+                <button className="btn" onClick={() => navigate("/signup")}>Get Started</button>
+                <button className="btn platform" onClick={() => navigate("/trade/BTC_USDT")}>Explore Platform</button>
               </div>
 
             </div>
-            <div class="banner_img">
-              <img className="bitcoin_right animation" src="images/new-images/banner_vectror_ani.svg" />
-              <img className="crypto_cntr animation" src="images/new-images/banner_vectror_ani3.svg" />
+            <div className="banner_img">
+              <img className="bitcoin_right animation" src="images/new-images/banner_vectror_ani.svg" alt="decoration" />
+              <img className="crypto_cntr animation" src="images/new-images/banner_vectror_ani3.svg" alt="decoration" />
               <div className="banner_img_main">
                 <img src="images/new-images/banner_img.svg" alt="banner" />
               </div>
-              <img className="bitcoin_left animation" src="images/new-images/banner_vectror_ani2.svg" />
-
+              <img className="bitcoin_left animation" src="images/new-images/banner_vectror_ani2.svg" alt="decoration" />
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -457,48 +307,38 @@ const LandingPage = () => {
 
           <div className="crypto_tabs_mbl">
             <ul>
-              <li className="active"><button>Trending</button></li>
-              <li><button>Top Gainers</button></li>
-              <li><button>New Listings</button></li>
+              <li className={activeMobileTab === 0 ? "active" : ""}><button onClick={() => setActiveMobileTab(0)}>Meme Coins</button></li>
+              <li className={activeMobileTab === 1 ? "active" : ""}><button onClick={() => setActiveMobileTab(1)}>Top Gainers</button></li>
+              <li className={activeMobileTab === 2 ? "active" : ""}><button onClick={() => setActiveMobileTab(2)}>New Listings</button></li>
             </ul>
           </div>
 
           <div className="crypto_dashboard">
-            {/* Trending */}
-            <div className="hot_spot_outer active">
+            {/* Meme Pairs */}
+            <div className={`hot_spot_outer ${activeMobileTab === 0 ? 'active' : ''}`}>
               <div className="top_heading">
-                <h4>Trending</h4>
+                <h4>Meme Coins</h4>
               </div>
               <div className="hot_trading_s">
-
                 <div className="table-responsive">
                   <table>
-                    <thead>
-                      <tr>
-                        {/* <th>#</th> */}
-                        <th>Name</th>
-                        <th className="text-end" >Price</th>
-                        {/* <th className="text-end" >24h</th> */}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {coinData && coinData.length <= 0 ? (
+                    {memePairs?.length > 0 ? (
+                      <thead>
                         <tr>
-                          <td colSpan="3" className="p-0">
-                            <div className="d-flex justify-content-center align-items-center">
-                              <div className="spinner-border text-primary" role="status" />
-                            </div>
-                          </td>
+                          <th>Name</th>
+                          <th className="text-end">Price</th>
                         </tr>
-                      ) : coinData && coinData.length > 0 ? (
-                        coinData.slice(0, 5).map((item, index) => (
-                          <tr key={index} onClick={() => nextPage(item)}>
-                            {/* NAME */}
+                      </thead>
+                    ) : ""}
+                    <tbody>
+                      {memePairs?.length > 0 ? (
+                        memePairs.map((item, index) => (
+                          <tr key={item?._id || index} onClick={() => nextPage(item)}>
                             <td className="first_coloum">
                               <div className="td_first">
                                 <div className="icon">
                                   <img
-                                    alt=""
+                                    alt={item?.base_currency}
                                     src={ApiConfig.baseImage + item?.icon_path}
                                     width="28"
                                     className="img-fluid icon_img coinimg me-2"
@@ -509,64 +349,60 @@ const LandingPage = () => {
                                 </div>
                               </div>
                             </td>
-
-                            {/* PRICE + % (Top Gainers Style) */}
                             <td className="price_right_top text-end">
                               {formatNumber(item?.buy_price, 5)}
-                              <span
-                                className={item?.change_percentage >= 0 ? "green" : "red"}
-                              >
-                                {" "}
-                                {item?.change_percentage >= 0 ? "▲" : "▼"}{" "}
-                                {formatNumber(item?.change_percentage, 3)}%
+                              <span className={item?.change_percentage >= 0 ? "green" : "red"}>
+                                {" "}{item?.change_percentage >= 0 ? "▲" : "▼"} {formatNumber(item?.change_percentage, 3)}%
                               </span>
                             </td>
                           </tr>
                         ))
                       ) : (
-                        <tr rowSpan="5" className="no-data-row">
-                      <td colSpan="12">
-                        <div className="no-data-wrapper">
-                          <div className="no_data_s">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                        <tr>
+                          <td colSpan="3" className="p-0">
+                            <div className="favouriteData text-center">
+                              <img
+                                src="/images/no_data_vector.svg"
+                                className="img-fluid"
+                                width="96"
+                                height="96"
+                                alt="no data"
+                              />
+                            </div>
+                          </td>
+                        </tr>
                       )}
                     </tbody>
-
                   </table>
                 </div>
               </div>
             </div>
             {/* TOP GAINERS */}
-            <div className="hot_spot_outer">
+            <div className={`hot_spot_outer ${activeMobileTab === 1 ? 'active' : ''}`}>
               <div className="top_heading">
                 <h4>Top Gainers</h4>
-
               </div>
 
               <div className="hot_trading_s">
                 <div className="table-responsive">
                   <table>
-                    <thead>
+                    {topGainers?.length > 0 ? (
+                      <thead>
                       <tr>
-                        {/* <th>#</th> */}
                         <th>Name</th>
-                        <th className="text-end" >Price</th>
-                        {/* <th className="text-end" >24h</th> */}
+                        <th className="text-end">Price</th>
                       </tr>
                     </thead>
+                    ) : ""}
                     <tbody>
-                      {socketData?.length > 0 ? (
-                        [...socketData].reverse().map((item, index) => (
+                      {topGainers?.length > 0 ? (
+                        topGainers.map((item, index) => (
                           <tr key={item?._id || index} onClick={() => nextPage(item)}>
                             <td className="first_coloum">
                               <div className="td_first">
                                 <div className="icon">
                                   <img
-                                    alt=""
+                                    alt={item?.base_currency}
                                     src={ApiConfig.baseImage + item?.icon_path}
                                     width="30"
                                     className="img-fluid icon_img coinimg me-2"
@@ -577,31 +413,28 @@ const LandingPage = () => {
                                 </div>
                               </div>
                             </td>
-
-                            <td className="price_right_top">
-                              {item?.buy_price?.toFixed(4)}
-                              <span
-                                className={
-                                  item?.change_percentage > 0 ? "green" : "red"
-                                }
-                              >
-                                {" "}
-                                {Number(item?.change_percentage) >= 0 ? "▲" : "▼"}{" "}
-                                {Number(item?.change_percentage).toFixed(3)}%
+                            <td className="price_right_top text-end">
+                              {formatNumber(item?.buy_price, 5)}
+                              <span className={item?.change_percentage >= 0 ? "green" : "red"}>
+                                {" "}{item?.change_percentage >= 0 ? "▲" : "▼"} {formatNumber(item?.change_percentage, 3)}%
                               </span>
                             </td>
                           </tr>
                         ))
                       ) : (
-                        <tr rowSpan="5" className="no-data-row">
-                      <td colSpan="12">
-                        <div className="no-data-wrapper">
-                          <div className="no_data_s">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                        <tr>
+                        <td colSpan="3" className="p-0">
+                          <div className="favouriteData text-center">
+                            <img
+                              src="/images/no_data_vector.svg"
+                              className="img-fluid"
+                              width="96"
+                              height="96"
+                              alt="no data"
+                            />
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
                       )}
                     </tbody>
                   </table>
@@ -609,73 +442,63 @@ const LandingPage = () => {
               </div>
             </div>
             {/* NEW LISTINGS */}
-            <div className="hot_spot_outer">
+            <div className={`hot_spot_outer ${activeMobileTab === 2 ? 'active' : ''}`}>
               <div className="top_heading">
                 <h4>New Listings</h4>
-
               </div>
 
               <div className="hot_trading_s">
                 <div className="table-responsive">
                   <table>
-                    <thead>
+                    {newListings?.length > 0 ? (
+                      <thead>
                       <tr>
-                        {/* <th>#</th> */}
                         <th>Name</th>
-                        <th className="text-end" >Price</th>
-                        {/* <th className="text-end" >24h</th> */}
+                        <th className="text-end">Price</th>
                       </tr>
                     </thead>
+                    ) : ""}
                     <tbody>
-                      {socketData?.length > 0 ? (
-                        [...socketData]
-                          .reverse()
-                          .slice(0, 5)
-                          .map((item, index) => (
-                            <tr
-                              key={item?._id || index}
-                              onClick={() => nextPage(item)}
-                            >
-                              <td className="first_coloum">
-                                <div className="td_first">
-                                  <div className="icon">
-                                    <img
-                                      alt=""
-                                      src={ApiConfig.baseImage + item?.icon_path}
-                                      width="30"
-                                      className="img-fluid icon_img coinimg me-2"
-                                    />
-                                  </div>
-                                  <div className="price_heading">
-                                    {item?.base_currency} / {item?.quote_currency}
-                                  </div>
+                      {newListings?.length > 0 ? (
+                        newListings.map((item, index) => (
+                          <tr key={item?._id || index} onClick={() => nextPage(item)}>
+                            <td className="first_coloum">
+                              <div className="td_first">
+                                <div className="icon">
+                                  <img
+                                    alt={item?.base_currency}
+                                    src={ApiConfig.baseImage + item?.icon_path}
+                                    width="30"
+                                    className="img-fluid icon_img coinimg me-2"
+                                  />
                                 </div>
-                              </td>
-
-                              <td className="price_right_top">
-                                {item?.buy_price?.toFixed(4)}
-                                <span
-                                  className={
-                                    item?.change_percentage > 0 ? "green" : "red"
-                                  }
-                                >
-                                  {" "}
-                                  {Number(item?.change_percentage ?? 0) >= 0 ? "▲" : "▼"}{" "}
-                                  {Number(item?.change_percentage ?? 0).toFixed(3)}%
-                                </span>
-                              </td>
-                            </tr>
-                          ))
+                                <div className="price_heading">
+                                  {item?.base_currency} / {item?.quote_currency}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="price_right_top text-end">
+                              {formatNumber(item?.buy_price, 5)}
+                              <span className={item?.change_percentage >= 0 ? "green" : "red"}>
+                                {" "}{item?.change_percentage >= 0 ? "▲" : "▼"} {formatNumber(item?.change_percentage, 3)}%
+                              </span>
+                            </td>
+                          </tr>
+                        ))
                       ) : (
-                        <tr rowSpan="5" className="no-data-row">
-                      <td colSpan="12">
-                        <div className="no-data-wrapper">
-                          <div className="no_data_s">
-                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="" />
+                        <tr>
+                        <td colSpan="3" className="p-0">
+                          <div className="favouriteData text-center">
+                            <img
+                              src="/images/no_data_vector.svg"
+                              className="img-fluid"
+                              width="96"
+                              height="96"
+                              alt="no data"
+                            />
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
                       )}
                     </tbody>
                   </table>
@@ -685,7 +508,7 @@ const LandingPage = () => {
           </div>
 
           <div className="viewmorebtn">
-            <a href="/market">View More <i class="ri-arrow-right-line"></i></a>
+            <NavLink to="/market">View More <i className="ri-arrow-right-line"></i></NavLink>
           </div>
 
         </div>
@@ -701,19 +524,19 @@ const LandingPage = () => {
               <p>Securely store, manage, and grow your digital assets with next-generation wallet technology
                 designed for speed, privacy, and total control.</p>
               <ul className="listcrypto">
-                <li><i class="ri-checkbox-circle-fill"></i> Lowest transaction fees in the market</li>
-                <li><i class="ri-checkbox-circle-fill"></i> Instant deposits and withdrawals</li>
-                <li><i class="ri-checkbox-circle-fill"></i> Advanced 256-bit encryption security</li>
-                <li><i class="ri-checkbox-circle-fill"></i> Real-time portfolio tracking</li>
-                <li><i class="ri-checkbox-circle-fill"></i> Multi-asset wallet support</li>
+                <li><i className="ri-checkbox-circle-fill"></i> Lowest transaction fees in the market</li>
+                <li><i className="ri-checkbox-circle-fill"></i> Instant deposits and withdrawals</li>
+                <li><i className="ri-checkbox-circle-fill"></i> Advanced 256-bit encryption security</li>
+                <li><i className="ri-checkbox-circle-fill"></i> Real-time portfolio tracking</li>
+                <li><i className="ri-checkbox-circle-fill"></i> Multi-asset wallet support</li>
               </ul>
               <button className="downloadbtn">Download App</button>
             </div>
 
             <div className="exchange_future_s">
-              <img className="animation_effect summary_data" src="images/new-images/crypto_summry.svg" />
+              <img className="animation_effect summary_data" src="images/new-images/crypto_summry.svg" alt="" />
               <img src="images/new-images/crypto_mobile.svg" alt="crypto exchange" />
-              <img className="animation_effect bitcoin2" src="images/new-images/crypto_bitcoin.svg" />
+              <img className="animation_effect bitcoin2" src="images/new-images/crypto_bitcoin.svg" alt="" />
             </div>
 
           </div>
@@ -722,7 +545,7 @@ const LandingPage = () => {
 
             <div className="exchange_future_s">
               <img src="images/new-images/verification_mobile.svg" alt="Bulletproof" />
-              <img className="animation_effect bitcoin" src="images/new-images/lock_vector.svg" />
+              <img className="animation_effect bitcoin" src="images/new-images/lock_vector.svg" alt="" />
             </div>
 
             <div className="crypto_future_cnt">
@@ -762,43 +585,43 @@ const LandingPage = () => {
 
           <div className="d-flex invest_tradetop">
             <h2>Fully Equipped to Buy, <span>Trade & Invest</span> in Crypto.</h2>
-            <div class="d-flex download_button">
-              <button class="btn">Download App</button>
-              <button class="btn platform">Browse All Features</button>
+            <div className="d-flex download_button">
+              <button className="btn">Download App</button>
+              <button className="btn platform" onClick={() => navigate("/login")}>Browse All Features</button>
             </div>
           </div>
 
-          <section class="crypto_features">
-            <div class="card borderlft assetstrade">
-              <div class="content">
+          <section className="crypto_features">
+            <div className="card borderlft assetstrade">
+              <div className="content">
                 <h4>Buy 100+ Crypto Assets</h4>
                 <p>Trade top cryptocurrencies and emerging tokens with deep liquidity and real-time pricing across global markets.</p>
-                <a className="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a>
+                <NavLink className="learnbtn" to="/market">Learn more <i className="ri-arrow-right-line"></i></NavLink>
               </div>
-              <div className="crypto_app_mbl"><img src="images/new-images/crypto_assets.png" alt="Crypto App" class="phone" /></div>
+              <div className="crypto_app_mbl"><img src="images/new-images/crypto_assets.png" alt="Crypto App" className="phone" /></div>
             </div>
 
-            <div class="card">
-              <div className="trade_icon"><img src="images/new-images/secure_wallet.png" alt="Secure & Encrypted Wallet" class="phone" /></div>
-              <h4>Secure & Encrypted Wallet</h4>
+            <div className="card">
+              <div className="trade_icon"><img src="images/new-images/secure_wallet.png" alt="Secure and Encrypted Wallet" className="phone" /></div>
+              <h4>Secure &amp; Encrypted Wallet</h4>
               <p>Protect your assets with enterprise-grade security, multi-layer encryption, and full ownership of your funds.</p>
             </div>
 
-            <div class="card borderlft border_btm">
-              <div className="trade_icon"><img src="images/new-images/receive_send.svg" alt="Send & Receive Instantly" class="phone" /></div>
-              <h4>Send & Receive Instantly</h4>
+            <div className="card borderlft border_btm">
+              <div className="trade_icon"><img src="images/new-images/receive_send.svg" alt="Send and Receive Instantly" className="phone" /></div>
+              <h4>Send &amp; Receive Instantly</h4>
               <p>Transfer crypto effortlessly with fast confirmations, low fees, and seamless wallet-to-wallet transactions.</p>
             </div>
 
-            <div class="card borderlft border_btm">
-              <div className="trade_icon"><img src="images/new-images/invest_icon.png" alt="Invest in Real Time" class="phone" /></div>
+            <div className="card borderlft border_btm">
+              <div className="trade_icon"><img src="images/new-images/invest_icon.png" alt="Invest in Real Time" className="phone" /></div>
               <h4>Invest in Real Time</h4>
               <p>Track market movements, execute trades instantly, and manage your investments as the market evolves.</p>
             </div>
 
-            <div class="card border_btm">
-              <div className="trade_icon"><img src="images/new-images/analyze_charts.png" alt="Watch & Analyze Charts" class="phone" /></div>
-              <h4>Watch & Analyze Charts</h4>
+            <div className="card border_btm">
+              <div className="trade_icon"><img src="images/new-images/analyze_charts.png" alt="Watch and Analyze Charts" className="phone" /></div>
+              <h4>Watch &amp; Analyze Charts</h4>
               <p>Make informed decisions using advanced charts, live indicators, and professional-grade analytics tools.</p>
             </div>
 
@@ -811,27 +634,19 @@ const LandingPage = () => {
                 <h2>Built to Support the Most Trusted <span>Cryptocurrencies</span></h2>
                 <p>Seamlessly buy, store, and trade leading digital assets through native blockchain integrations designed for speed, reliability, and performance.</p>
 
-                <div class="d-flex download_button">
-                  <button class="btn">Download App</button>
-                  <button class="btn platform">Browse All Cryptos</button>
+                <div className="d-flex download_button">
+                  <button className="btn">Download App</button>
+                  <button className="btn platform" onClick={() => navigate("/market")}>Browse All Cryptos</button>
                 </div>
-
-                {/* <ul className="social_media">
-                  <li><a href="https://www.linkedin.com/company/Wrathcode/" target="_blank" rel="noreferrer"><i class="ri-linkedin-fill"></i></a></li>
-                  <li><a href="https://x.com/Wrathcode" target="_blank" rel="noreferrer"><i class="ri-twitter-x-line"></i></a></li>
-                  <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                  <li><a href="https://t.me/Wrathcode" target="_blank" rel="noreferrer"><i class="ri-telegram-2-fill"></i></a></li>
-                  <li><a href="#"><i class="ri-youtube-line"></i></a></li>
-                </ul> */}
 
               </div>
             </div>
             <div className="col-sm-7">
               <div className="supportvector">
-                <img className="animation_effect bitcoin1" src="images/new-images/bitcoin_crypto2.png" />
-                <img className="bitcoin" src="images/new-images/support_crypto_vector.png" />
-                <img className="animation_effect bitcoin2" src="images/new-images/bitcoin_crypto3.png" />
-                <img className="animation_effect bitcoin3" src="images/new-images/bitcoin_crypto4.png" />
+                <img className="animation_effect bitcoin1" src="images/new-images/bitcoin_crypto2.png" alt="" />
+                <img className="bitcoin" src="images/new-images/support_crypto_vector.png" alt="Supported Cryptocurrencies" />
+                <img className="animation_effect bitcoin2" src="images/new-images/bitcoin_crypto3.png" alt="" />
+                <img className="animation_effect bitcoin3" src="images/new-images/bitcoin_crypto4.png" alt="" />
               </div>
             </div>
 
@@ -848,7 +663,6 @@ const LandingPage = () => {
               <h2>Latest <span>Resources.</span></h2>
               <p>Stay informed with expert insights, product updates, and deep-dive guides designed to help you trade smarter and stay ahead in the crypto market.</p>
             </div>
-            {/* <div class="d-flex download_button"><button class="btn platform">Find out more <i class="ri-arrow-right-line"></i></button></div> */}
 
           </div>
 
@@ -856,46 +670,35 @@ const LandingPage = () => {
             <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
-                  <img className="blogimg" src="images/new-images/platform_trade.png" />
+                  <img className="blogimg" src="images/new-images/platform_trade.png" alt="Trade Bitcoin" />
                 </div>
                 <div className="resources_cnt">
-                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
                   <h3>The Best Platform to Trade Bitcoin</h3>
-                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                   industry's standard dummy text ever since the 1500s,</p>
+                  <p>Experience lightning-fast trades with our advanced matching engine. Trade BTC, ETH, and 200+ cryptocurrencies with deep liquidity and minimal slippage.</p>
                 </div>
               </div>
             </div>
-
 
             <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
-                  <img className="blogimg" src="images/new-images/secure_crypto.png" />
+                  <img className="blogimg" src="images/new-images/secure_crypto.png" alt="Bank-Grade Security" />
                 </div>
                 <div className="resources_cnt">
-                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
-                  <h3>Most Secure Crypto Wallet in 2026</h3>
-                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                   industry's standard dummy text ever since the 1500s,</p>
-                
-                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
-                  
+                  <h3>Bank-Grade Security for Your Assets</h3>
+                  <p>Your funds are protected with multi-signature cold storage, 2FA authentication, and real-time threat monitoring. We've never been compromised.</p>
                 </div>
               </div>
             </div>
 
-                 <div className="col-sm-4">
+            <div className="col-sm-4">
               <div className="resources_news">
                 <div className="news_img">
-                  <img className="blogimg" src="images/new-images/secure_crypto2.png" />
+                  <img className="blogimg" src="images/new-images/secure_crypto2.png" alt="Earn Passive Income" />
                 </div>
                 <div className="resources_cnt">
-                  {/* <div className="date"><span>Apps</span> - Jan 1, 2026 </div> */}
-                  <h3>Most Secure Crypto Wallet in 2026</h3>
-                  {/* <a class="learnbtn" href="#">Learn more <i class="ri-arrow-right-line"></i></a> */}
-                   <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                   industry's standard dummy text ever since the 1500s,</p>
+                  <h3>Earn Passive Income on Your Crypto</h3>
+                  <p>Put your idle assets to work with competitive staking rewards and flexible earning plans. Earn up to 12% APY on your holdings.</p>
                 </div>
               </div>
             </div>
@@ -910,103 +713,80 @@ const LandingPage = () => {
           <div className="logos_slide">
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery.png" alt="P2P" />
               <h4>P2P</h4>
-              <p>Maximize your capital
-                efficiency</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Maximize your capital efficiency</p>
+              <Link className="learnbtn" to="/p2p">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery2.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery2.png" alt="Launchpad" />
               <h4>Launchpad</h4>
-              <p>Lowest prices across the
-                network</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Lowest prices across the network</p>
+              <Link className="learnbtn" to="/launchpad">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery3.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery3.png" alt="Earning" />
               <h4>Earning</h4>
-              <p>One-click trading for all
-                memes</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>One-click trading for all memes</p>
+              <Link className="learnbtn" to="/earning">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" alt="Staking" />
               <h4>Staking</h4>
-              <p>Trade US stock tokens with
-                USDT</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Trade US stock tokens with USDT</p>
+              <Link className="learnbtn" to="/earning">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" alt="Futures Trading" />
               <h4>Futures Trading</h4>
-              <p>Ultra-low latency, seamless
-                execution</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Ultra-low latency, seamless execution</p>
+              <Link className="learnbtn" to="/usd_futures/BTC_USDT">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" alt="Spot Trading" />
               <h4>Spot Trading</h4>
-              <p>Over 100+ tokens at your
-                fingertips</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Over 100+ tokens at your fingertips</p>
+              <Link className="learnbtn" to="/trade/BTC_USDT">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" alt="Earn" />
               <h4>Earn</h4>
-              <p>Up to 36% APY in USDT with
-                zero risk</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Up to 36% APY in USDT with zero risk</p>
+              <Link className="learnbtn" to="/earning">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
-
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery4.png" alt="Staking" />
               <h4>Staking</h4>
-              <p>Trade US stock tokens with
-                USDT</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Trade US stock tokens with USDT</p>
+              <Link className="learnbtn" to="/earning">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery5.png" alt="Futures Trading" />
               <h4>Futures Trading</h4>
-              <p>Ultra-low latency, seamless
-                execution</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Ultra-low latency, seamless execution</p>
+              <Link className="learnbtn" to="/usd_futures/BTC_USDT">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery6.png" alt="Spot Trading" />
               <h4>Spot Trading</h4>
-              <p>Over 100+ tokens at your
-                fingertips</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Over 100+ tokens at your fingertips</p>
+              <Link className="learnbtn" to="/trade/BTC_USDT">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
             <div className="gallery_crypto">
-              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" />
+              <img className="cryptoicon" src="images/new-images/cryptogallery7.png" alt="Earn" />
               <h4>Earn</h4>
-              <p>Up to 36% APY in USDT with
-                zero risk</p>
-              <a class="learnbtn" href="#">Find out more <i class="ri-arrow-right-line"></i></a>
-
+              <p>Up to 36% APY in USDT with zero risk</p>
+              <Link className="learnbtn" to="/earning">Find out more <i className="ri-arrow-right-line"></i></Link>
             </div>
 
           </div>
@@ -1014,52 +794,52 @@ const LandingPage = () => {
       </div>
 
 
-<footer>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-5 col-md-5 col-lg-5">
-                            <div className="footer_logo">
-                                <img className='darklogo' src="/images/logo_light.svg" alt="logo" />
-                            </div>
-                            <p>Wrathcode is a blockchain-based banking platform for crypto traders and investors, and aims to connect the world of traditional finance and cryptocurrencies.</p>
-                            <ul className="social_media">
-                                <li><a href="#"><i className="ri-facebook-circle-line"></i></a></li>
-                                <li><a href="#"><i className="ri-twitter-x-line"></i></a></li>
-                                <li><a href="#"><i className="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i className="ri-telegram-2-fill"></i></a></li>
-                                <li><a href="#"><i className="ri-youtube-line"></i></a></li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-7 col-md-7 col-lg-7">
-                            <div className="row">
+      <footer>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-5 col-md-5 col-lg-5">
+              <div className="footer_logo">
+                <img className='darklogo' src="/images/logo_light.svg" alt="logo" />
+              </div>
+              <p>Wrathcode is a blockchain-based banking platform for crypto traders and investors, and aims to connect the world of traditional finance and cryptocurrencies.</p>
+              <ul className="social_media">
+                <li><a href="#"><i className="ri-facebook-circle-line"></i></a></li>
+                <li><a href="#"><i className="ri-twitter-x-line"></i></a></li>
+                <li><a href="#"><i className="ri-instagram-line"></i></a></li>
+                <li><a href="#"><i className="ri-telegram-2-fill"></i></a></li>
+                <li><a href="#"><i className="ri-youtube-line"></i></a></li>
+              </ul>
+            </div>
+            <div className="col-sm-7 col-md-7 col-lg-7">
+              <div className="row">
 
-                                <div className="col-sm-6">
-                                    <div className="address_footer">
-                                        <h5><span>Head Office</span></h5>
-                                        <div className="address_cnt">
-                                            <p>1st floor, JDA Complex, Plot no. 11, Sector 4, Vidyadhar Nagar, Jaipur, Rajasthan 302039</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="address_footer">
-                                        <h5>Contact Us</h5>
-                                        <div className="address_cnt">
-                                            <address><img src="/images/email-icon.png" alt="email" /> support@wrathcode.com</address>
-                                            <address><img src="/images/email-icon.png" alt="email" /> admin@wrathcode.com</address>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                <div className="col-sm-6">
+                  <div className="address_footer">
+                    <h5><span>Head Office</span></h5>
+                    <div className="address_cnt">
+                      <p>1st floor, JDA Complex, Plot no. 11, Sector 4, Vidyadhar Nagar, Jaipur, Rajasthan 302039</p>
                     </div>
+                  </div>
 
                 </div>
 
-            </footer>
+                <div className="col-sm-6">
+                  <div className="address_footer">
+                    <h5>Contact Us</h5>
+                    <div className="address_cnt">
+                      <address><img src="/images/email-icon.png" alt="email" /> support@wrathcode.com</address>
+                      <address><img src="/images/email-icon.png" alt="email" /> admin@wrathcode.com</address>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </footer>
 
     </>
   );

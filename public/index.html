@@ -16,9 +16,6 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Bootstrap Bundle JS (includes Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 
   <!-- Font -->
   <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"> -->
@@ -49,11 +46,7 @@
   <link rel="stylesheet" href="/css-new/slick.css">
 
   <!-- Javascript -->
-  <script type="text/javascript" src="/js-new/jquery.min.js"></script>
-  <script type="text/javascript" src="/js-new/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/js-new/bootstrap.bundle.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js"></script>
 
   <script>
     $(document).ready(function () {
@@ -380,9 +373,6 @@
   $(document).ready(function () {
     $(".bitcoin_cate_list ul").on("scroll", function () {
       let scrollTop = $(this).scrollTop();
-
-      console.log("Scroll position:", scrollTop);
-
       if (scrollTop > 50) {
         $("body").addClass("scrolled");
       } else {
@@ -395,40 +385,38 @@
 
 
 <script>
-  const select = document.querySelector('.custom-select');
-  const selected = select.querySelector('.selected-option');
-  const options = select.querySelectorAll('.option');
+  $(document).ready(function() {
+    const select = document.querySelector('.custom-select');
+    if (select) {
+      const selected = select.querySelector('.selected-option');
+      const options = select.querySelectorAll('.option');
 
-  selected.addEventListener('click', () => {
-    select.classList.toggle('open');
-  });
+      if (selected) {
+        selected.addEventListener('click', () => {
+          select.classList.toggle('open');
+        });
+      }
 
-  options.forEach(option => {
-    option.addEventListener('click', () => {
-      selected.innerHTML = option.innerHTML;
-      select.classList.remove('open');
-    });
-  });
-
-</script>
-
-<script>
-  $(document).ready(function () {
-    $('.nav-link').on('click', function () {
-      $('.nav-link').removeClass('active');
-      $(this).addClass('active');
-      localStorage.setItem('activeMenu', $(this).attr('href'));
-    });
-
-    var activeHref = localStorage.getItem('activeMenu');
-    if (activeHref) {
-      $('.nav-link').each(function () {
-        if ($(this).attr('href') === activeHref) {
-          $(this).addClass('active');
-        }
-      });
+      if (options) {
+        options.forEach(option => {
+          option.addEventListener('click', () => {
+            if (selected) {
+              selected.innerHTML = option.innerHTML;
+            }
+            select.classList.remove('open');
+          });
+        });
+      }
     }
   });
+</script>
+
+<!-- Removed: This script was interfering with React Router's navigation active states -->
+<script>
+  // Cleanup old localStorage item from removed nav-link script
+  if (localStorage.getItem('activeMenu')) {
+    localStorage.removeItem('activeMenu');
+  }
 </script>
 
 <!-- <script>

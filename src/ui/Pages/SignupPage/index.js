@@ -220,11 +220,7 @@ const SignupPage = () => {
     }
 
     useEffect(() => {
-
-        return () => {
-            //  window.location.reload()
-
-        };
+window.scrollTo(0, 0)
     }, []);
 
 

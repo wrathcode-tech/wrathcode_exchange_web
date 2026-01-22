@@ -7667,6 +7667,7 @@ ul.user_social li {
     padding: 15px;
     background-color: #2B313C;
     min-height: 134px;
+    cursor: pointer;
 }
 
 .block_features h5 {
@@ -23687,7 +23688,7 @@ button.copy_code {
     }
 
     body .search_form .modal-body {
-        padding: 18px !important;
+        padding: 0px 17px 13px 12px  !important;
     }
 
     .user_login.dashbtn a {

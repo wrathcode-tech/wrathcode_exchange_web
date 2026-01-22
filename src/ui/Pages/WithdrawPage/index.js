@@ -8,7 +8,6 @@ import moment from 'moment';
 import { ProfileContext } from '../../../context/ProfileProvider';
 
 const WithdrawPage = (props) => {
-      const { modalStatus, updateModelHideStatus } = useContext(ProfileContext);
   
   const [availableCurrency, setAvailableCurrency] = useState([]);
   const [allData, setAllData] = useState([]);

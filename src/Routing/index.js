@@ -90,20 +90,10 @@ function Routing() {
   const token = sessionStorage.getItem("token");
   const { userDetails } = useContext(ProfileContext);
   const isChartPage = location?.pathname?.includes('/chart');
-  const isLoginPage = location?.pathname?.includes('/login');
-  const isSignupPage = location?.pathname?.includes('/signup');
-  const isOptionPage = location?.pathname?.includes('/options');
-  const isFuturesPage = location?.pathname?.includes('/usd_futures');
-  const isDashboardPages = location?.pathname?.includes('/user_profile');
-  const isAssetPages = location?.pathname?.includes('/asset_managemnet');
-  const isForgotPass = location?.pathname?.includes('/forgot_password');
-  const accountVerification = location?.pathname?.includes('/account-verification');
-  const accountActivate = location?.pathname?.includes('/account-activate');
-  const isComingSoonPage = location?.pathname === '/*';
 
   return (
     <>
-      {isChartPage ? null : token ? <AuthHeader userDetails={userDetails} /> : <UserHeader />}
+      {isChartPage ? null : token ? <AuthHeader key={location.pathname} userDetails={userDetails} /> : <UserHeader key={location.pathname} />}
       <Routes>
         <Route exact path="/" element={<LandingPage />} />
         <Route path="/user_profile" element={token ? (<ProfilePage userDetails={userDetails} />) : (<Navigate to="/login" replace state={{ redirectTo: location.pathname }} />)} >
