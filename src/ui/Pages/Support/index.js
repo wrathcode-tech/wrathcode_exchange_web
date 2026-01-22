@@ -371,7 +371,7 @@ const SupportPage = () => {
                             <div className="chat-header">
                                 <h3>Help/Support</h3>
                                 <div className="ticket">
-                                <div className="ticket cursor-pointer" onClick={() => handleCopyTicketId(ticketId)}><i class="ri-file-copy-line"></i>{ticketId || "N/A"}</div>
+                                <div className="ticket cursor-pointer" onClick={() => handleCopyTicketId(ticketId)}><i className="ri-file-copy-line"></i>{ticketId || "N/A"}</div>
                                     {/* <button
                                         type="button"
                                         className="btn btn-link p-0 text-white"
