@@ -2541,8 +2541,8 @@ const AuthService = {
    */
   security2faSetup: async () => {
     const token = sessionStorage.getItem("token");
-    const { baseSecurity, security2faSetup } = ApiConfig;
-    const url = baseSecurity + security2faSetup;
+    const { baseSecurity, security2faSetup: setupEndpoint } = ApiConfig;
+    const url = baseSecurity + setupEndpoint;
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -2556,8 +2556,8 @@ const AuthService = {
    */
   security2faConfirm: async (code) => {
     const token = sessionStorage.getItem("token");
-    const { baseSecurity, security2faConfirm } = ApiConfig;
-    const url = baseSecurity + security2faConfirm;
+    const { baseSecurity, security2faConfirm: confirmEndpoint } = ApiConfig;
+    const url = baseSecurity + confirmEndpoint;
     const params = { code };
     const headers = {
       "Content-Type": "application/json",
@@ -2572,8 +2572,8 @@ const AuthService = {
    */
   security2faDisable: async (authenticatorCode) => {
     const token = sessionStorage.getItem("token");
-    const { baseSecurity, security2faDisable } = ApiConfig;
-    const url = baseSecurity + security2faDisable;
+    const { baseSecurity, security2faDisable: disableEndpoint } = ApiConfig;
+    const url = baseSecurity + disableEndpoint;
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -2587,8 +2587,8 @@ const AuthService = {
    */
   securityMobileAdd: async (data) => {
     const token = sessionStorage.getItem("token");
-    const { baseSecurity, securityMobileAdd } = ApiConfig;
-    const url = baseSecurity + securityMobileAdd;
+    const { baseSecurity, securityMobileAdd: mobileAddEndpoint } = ApiConfig;
+    const url = baseSecurity + mobileAddEndpoint;
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
