@@ -221,12 +221,24 @@ export const ApiConfig = {
   updateAdStatus: "updateAdStatus",
   getP2pProfile: "profile",
 
+  // Security & 2FA endpoints
+  securitySendOtp: "send-otp",
+  securityVerifyOtp: "verify-otp",
+  securityGenerateGoogleQr: "generate-google-qr",
+  securityUpdate2fa: "update-2fa",
+  securityChangeEmail: "change-email",
+  securityAddMobile: "add-mobile",
+  securityChangeMobile: "change-mobile",
+  securitySettings: "settings",
+  securityLogin2fa: "login-2fa",
+  securityChangePassword: "change-password",
 
   // ============URLs================
 
   baseUrl: `${appUrl}/`,
   baseImage: `${appUrl2}/`,
   baseAuth: `${appUrl}/v1/user/`,
+  baseSecurity: `${appUrl}/v1/security/`,
   baseUserBot: `${appUrl}/v1/bot/`,
   baseEarning: `${appUrl}/v1/earning/`,
   basePartner: `${appUrl}/v1/partnerShip/`,

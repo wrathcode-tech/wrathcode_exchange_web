@@ -23,7 +23,7 @@ const AssetOverview = () => {
   const [transferAmount, setTransferAmount] = useState("");
   const [showBalance, setShowBalance] = useState(true);
   const [activeTab, setActiveTab] = useState("assets");
-  const [hideAssets, setHideAssets] = useState(true);
+  const [hideAssets, setHideAssets] = useState(false);
   const [search, setSearch] = useState("");
   const [transferCoinSearch, setTransferCoinSearch] = useState("");
   const [accountBalances, setAccountBalances] = useState({});

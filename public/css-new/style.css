@@ -6576,7 +6576,8 @@ select#royality {
 
 .market_section.spotorderhist {
     padding: 20px;
-    background-color: #373E4B;
+    border: 1.5px solid #2B313C;
+    /* background-color: #373E4B; */
     border-radius: 12px;
 }
 
@@ -7953,7 +7954,8 @@ body .recommendations_block ul li a:hover {
     padding: 24px;
     flex-direction: column;
     display: flex;
-    background-color: #373E4B;
+    border: 1.5px solid #2B313C;
+    /* background-color: #373E4B; */
     gap: 18px;
 }
 
@@ -8071,7 +8073,8 @@ body .recommendations_block ul li a:hover {
 
 .assets_wallets_section .market_section {
     margin-top: 0px;
-    background-color: #373E4B;
+    border: 1.5px solid #2B313C;
+    /* background-color: #373E4B; */
     padding: 24px;
     border-radius: 10px;
     width: 100%;
@@ -14947,8 +14950,9 @@ button.btn_claim:active {
 }
 
 .twofactor_outer_s {
+    border: 1.5px solid #2B313C;
     width: 100%;
-    background-color: #2B313C;
+    /* background-color: #2B313C; */
     border-radius: 12px;
     padding: 24px;
     margin-top: 24px;

@@ -2475,7 +2475,130 @@ const AuthService = {
   // P2P ends here
 
 
+  // ============================================================================
+  // SECURITY & 2FA METHODS
+  // ============================================================================
 
+  /**
+   * Send OTP for security verification (2FA setup, email change, phone change, etc.)
+   * @param {string} target - Target type: 'email', 'mobile', 'new_email', 'new_mobile'
+   * @param {string} purpose - Purpose of OTP (login, 2fa_setup, email_change, phone_change, etc.)
+   * @param {string} value - Optional: New email/phone value when target is 'new_email' or 'new_mobile'
+   */
+  securitySendOtp: async (target, purpose, value = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securitySendOtp } = ApiConfig;
+    const url = baseSecurity + securitySendOtp;
+    const params = { target, purpose };
+    if (value) {
+      params.value = value;
+    }
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, params, headers);
+  },
+
+  /**
+   * Verify OTP for security actions
+   * @param {string} target - Target type: 'email', 'mobile', 'new_email', 'new_mobile'
+   * @param {string} otp - 6-digit OTP code
+   * @param {string} purpose - Purpose of OTP (e.g., '2fa_verification', 'change_email')
+   * @param {string} identifier - Optional: New email/phone value when target is 'new_email' or 'new_mobile'
+   */
+  securityVerifyOtp: async (target, otp, purpose, identifier = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityVerifyOtp } = ApiConfig;
+    const url = baseSecurity + securityVerifyOtp;
+    const params = { target, otp, purpose };
+    if (identifier) {
+      params.identifier = identifier;
+    }
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, params, headers);
+  },
+
+  /**
+   * Get user's security status
+   */
+  securityGetStatus: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityStatus } = ApiConfig;
+    const url = baseSecurity + securityStatus;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  /**
+   * Initiate 2FA setup - generates QR code and secret
+   */
+  security2faSetup: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, security2faSetup } = ApiConfig;
+    const url = baseSecurity + security2faSetup;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, {}, headers);
+  },
+
+  /**
+   * Confirm 2FA setup - verifies TOTP code and activates 2FA
+   * @param {string} code - 6-digit TOTP code from authenticator app
+   */
+  security2faConfirm: async (code) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, security2faConfirm } = ApiConfig;
+    const url = baseSecurity + security2faConfirm;
+    const params = { code };
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, params, headers);
+  },
+
+  /**
+   * Disable 2FA
+   * @param {string} authenticatorCode - The 6-digit code from Google Authenticator
+   */
+  security2faDisable: async (authenticatorCode) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, security2faDisable } = ApiConfig;
+    const url = baseSecurity + security2faDisable;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, { code: authenticatorCode }, headers);
+  },
+
+  /**
+   * Add mobile number to account
+   * @param {object} data - { mobileNumber, countryCode, mobileOtp }
+   */
+  securityMobileAdd: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityMobileAdd } = ApiConfig;
+    const url = baseSecurity + securityMobileAdd;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  // ============================================================================
+  // END OF SECURITY METHODS
+  // ============================================================================
 
 };
 

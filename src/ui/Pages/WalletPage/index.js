@@ -28,7 +28,7 @@ const WalletPage = () => {
   const [selectedCurrBalance, setSelectedCurrBalance] = useState({});
   const [transferAmount, setTransferAmount] = useState("");
   const [showBalance, setShowBalance] = useState(true);
-  const [hideAssets, setHideAssets] = useState(true);
+  const [hideAssets, setHideAssets] = useState(false);
   const [search, setSearch] = useState("");
   const [transferCoinSearch, setTransferCoinSearch] = useState("");
   const [isValidWallet, setIsValidWallet] = useState(null); // null = loading, true/false = validated

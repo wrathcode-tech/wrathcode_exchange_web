@@ -801,7 +801,7 @@ const SettingsPage = (props) => {
               <button className="btn" data-bs-toggle="modal" data-bs-target="#profilepop">Change</button>
             </div>
 
-            <div className="factor_bl">
+            {/* <div className="factor_bl">
               <div className="lftcnt">
                 <h6><img src="/images/email_icon2.svg" alt="Email Verification" /> Email Verification</h6>
                 <p>Link your email address to your account for login, password recovery, and withdrawal confirmation. Secure your account and withdrawals with a passkey.</p>
@@ -825,7 +825,7 @@ const SettingsPage = (props) => {
                 {getDisplayPhone()}
               </div>
               <button className="btn" data-bs-toggle="modal" data-bs-target="#mobilepop">{hasPhone() ? 'Change' : 'Add'}</button>
-            </div>
+            </div> */}
           </div>
         </div>
 
