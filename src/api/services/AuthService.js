@@ -76,14 +76,18 @@ const AuthService = {
     return ApiCallGetVerifyRegistration(url, headers);
   },
 
-  getOtp: async (signid, type) => {
-    const { baseAuth, getOtp } = ApiConfig;
-    const url = baseAuth + getOtp;
+  getOtp: async (signid, type, sendTo = null) => {
+    const { baseAuth, getOtp: otpEndpoint } = ApiConfig;
+    const url = baseAuth + otpEndpoint;
     const params = {
       email_or_phone: signid,
       type: type,
       "resend": true
     };
+    // For login flow, specify which method to send OTP to (email or mobile)
+    if (sendTo) {
+      params.sendTo = sendTo;
+    }
     const headers = {
       "Content-Type": "application/json",
     };
@@ -2589,6 +2593,66 @@ const AuthService = {
     const token = sessionStorage.getItem("token");
     const { baseSecurity, securityMobileAdd: mobileAddEndpoint } = ApiConfig;
     const url = baseSecurity + mobileAddEndpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  /**
+   * Initiate Email Change - stores pending change and sends OTP to new email
+   * @param {object} data - { newEmail, tofaCode (optional), currentEmailOtp }
+   */
+  securityEmailChangeInitiate: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityEmailChangeInitiate: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  /**
+   * Complete Email Change - verifies new email OTP and updates email
+   * @param {object} data - { newEmailOtp }
+   */
+  securityEmailChangeComplete: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityEmailChangeComplete: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  /**
+   * Initiate Mobile Change - stores pending change and sends OTP to new mobile
+   * @param {object} data - { newMobileNumber, newCountryCode, tofaCode (optional), currentMobileOtp }
+   */
+  securityMobileChangeInitiate: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityMobileChangeInitiate: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  /**
+   * Complete Mobile Change - verifies new mobile OTP and updates mobile
+   * @param {object} data - { newMobileOtp }
+   */
+  securityMobileChangeComplete: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityMobileChangeComplete: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,

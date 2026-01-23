@@ -479,7 +479,7 @@ const TwofactorPage = (props) => {
   // Step 4: Verify new email OTP
   const handleChangeEmailNextStep = async () => {
     if (currentStep === 1 && hasGoogleAuth) {
-      // Verify Google Auth
+      // Verify Google Auth code format
       if (!googleAuthCode || googleAuthCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit code');
         return;
@@ -498,25 +498,45 @@ const TwofactorPage = (props) => {
         setCurrentStep(2);
       }
     } else if (currentStep === 2) {
-      // Verify current email OTP
+      // Verify current email OTP format
       if (!emailOtpCode || emailOtpCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit OTP');
         return;
       }
-      const verified = await handleVerifyOtp('email', emailOtpCode, 'change_email');
-      if (verified) {
-        setCurrentStep(3); // Move to enter new email
-      }
+      // Move to enter new email (we'll verify OTPs when initiating change)
+      setCurrentStep(3);
     } else if (currentStep === 3) {
-      // Validate and send OTP to new email
+      // Validate new email and call initiate endpoint
       if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
         alertErrorMessage('Please enter a valid email address');
         return;
       }
-      const sent = await handleSendOtp('new_email', 'change_email', newEmail);
-      if (sent) {
-        setResendTimer2(60);
-        setCurrentStep(4);
+      
+      try {
+        setIsLoading(true);
+        LoaderHelper.loaderStatus(true);
+        
+        // Call backend to initiate email change (verifies 2FA + current email OTP)
+        const result = await AuthService.securityEmailChangeInitiate({
+          newEmail: newEmail,
+          tofaCode: hasGoogleAuth ? googleAuthCode : undefined,
+          currentEmailOtp: emailOtpCode
+        });
+        
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Please verify the OTP sent to your new email');
+          // Now send OTP to new email
+          await handleSendOtp('new_email', 'change_email', newEmail);
+          setResendTimer2(60);
+          setCurrentStep(4);
+        } else {
+          alertErrorMessage(result?.message || 'Failed to initiate email change');
+        }
+      } catch (error) {
+        alertErrorMessage(error?.message || 'Something went wrong');
+      } finally {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
       }
     } else if (currentStep === 4) {
       // Verify new email OTP and complete
@@ -530,10 +550,17 @@ const TwofactorPage = (props) => {
         LoaderHelper.loaderStatus(true);
         
         // Call backend to complete email change
-        // This would need a backend endpoint like securityEmailChangeComplete
-        alertSuccessMessage('Email change feature will be implemented with backend endpoint');
-        closeAllModals();
-        // handleUserDetails();
+        const result = await AuthService.securityEmailChangeComplete({
+          newEmailOtp: newEmailOtpCode
+        });
+        
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Email changed successfully!');
+          closeAllModals();
+          handleUserDetails();
+        } else {
+          alertErrorMessage(result?.message || 'Failed to change email');
+        }
       } catch (error) {
         alertErrorMessage(error?.message || 'Something went wrong');
       } finally {
@@ -556,7 +583,7 @@ const TwofactorPage = (props) => {
 
   const handleChangeMobileNextStep = async () => {
     if (currentStep === 1 && hasGoogleAuth) {
-      // Verify Google Auth
+      // Verify Google Auth code format
       if (!googleAuthCode || googleAuthCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit code');
         return;
@@ -575,26 +602,47 @@ const TwofactorPage = (props) => {
         setCurrentStep(2);
       }
     } else if (currentStep === 2) {
-      // Verify current mobile OTP
+      // Verify current mobile OTP format
       if (!mobileOtpCode || mobileOtpCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit OTP');
         return;
       }
-      const verified = await handleVerifyOtp('mobile', mobileOtpCode, 'change_mobile');
-      if (verified) {
-        setCurrentStep(3); // Move to enter new mobile
-      }
+      // Move to enter new mobile (we'll verify OTPs when initiating change)
+      setCurrentStep(3);
     } else if (currentStep === 3) {
-      // Send OTP to new mobile
+      // Validate new mobile and call initiate endpoint
       if (!newMobileNumber || newMobileNumber.length < 6) {
         alertErrorMessage('Please enter a valid mobile number');
         return;
       }
-      const fullNumber = `${newCountryCode} ${newMobileNumber}`;
-      const sent = await handleSendOtp('new_mobile', 'change_mobile', fullNumber);
-      if (sent) {
-        setResendTimer2(60);
-        setCurrentStep(4);
+      
+      try {
+        setIsLoading(true);
+        LoaderHelper.loaderStatus(true);
+        
+        // Call backend to initiate mobile change (verifies 2FA + current mobile OTP)
+        const result = await AuthService.securityMobileChangeInitiate({
+          newMobileNumber: newMobileNumber,
+          newCountryCode: newCountryCode,
+          tofaCode: hasGoogleAuth ? googleAuthCode : undefined,
+          currentMobileOtp: mobileOtpCode
+        });
+        
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Please verify the OTP sent to your new mobile');
+          // Now send OTP to new mobile
+          const fullNumber = `${newCountryCode} ${newMobileNumber}`;
+          await handleSendOtp('new_mobile', 'change_mobile', fullNumber);
+          setResendTimer2(60);
+          setCurrentStep(4);
+        } else {
+          alertErrorMessage(result?.message || 'Failed to initiate mobile change');
+        }
+      } catch (error) {
+        alertErrorMessage(error?.message || 'Something went wrong');
+      } finally {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
       }
     } else if (currentStep === 4) {
       // Verify new mobile OTP and complete
@@ -608,9 +656,17 @@ const TwofactorPage = (props) => {
         LoaderHelper.loaderStatus(true);
         
         // Call backend to complete mobile change
-        alertSuccessMessage('Mobile change feature will be implemented with backend endpoint');
-        closeAllModals();
-        // handleUserDetails();
+        const result = await AuthService.securityMobileChangeComplete({
+          newMobileOtp: newMobileOtpCode
+        });
+        
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Mobile number changed successfully!');
+          closeAllModals();
+          handleUserDetails();
+        } else {
+          alertErrorMessage(result?.message || 'Failed to change mobile number');
+        }
       } catch (error) {
         alertErrorMessage(error?.message || 'Something went wrong');
       } finally {
@@ -776,7 +832,7 @@ const TwofactorPage = (props) => {
                       {resendTimer > 0 ? (
                         <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                       ) : (
-                        <div className="getotp" onClick={() => handleSendOtp('email', '2fa_setup').then(() => setResendTimer(60))}>
+                        <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', '2fa_setup').then(() => setResendTimer(60))}>
                           Resend
                         </div>
                       )}
@@ -942,7 +998,7 @@ const TwofactorPage = (props) => {
                         {resendTimer > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => handleSendOtp('email', 'add_mobile').then(() => setResendTimer(60))}>
+                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', 'add_mobile').then(() => setResendTimer(60))}>
                             Resend
                           </div>
                         )}
@@ -997,7 +1053,7 @@ const TwofactorPage = (props) => {
                         {resendTimer2 > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => {
+                          <div className="getotp cursor-pointer" onClick={() => {
                             const fullNumber = `${newCountryCode} ${newMobileNumber}`;
                             handleSendOtp('new_mobile', 'add_mobile', fullNumber).then(() => setResendTimer2(60));
                           }}>
@@ -1065,8 +1121,10 @@ const TwofactorPage = (props) => {
 
                   {/* Step 2: Current Email OTP */}
                   {currentStep === 2 && (
-                    <div className="emailinput">
+                    <>
                       <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskEmail(emailID)}</strong></p>
+                    <div className="emailinput">
+                    
                       <label>Current Email Verification Code</label>
                       <div className="d-flex">
                         <input
@@ -1079,12 +1137,13 @@ const TwofactorPage = (props) => {
                         {resendTimer > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => handleSendOtp('email', 'change_email').then(() => setResendTimer(60))}>
+                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', 'change_email').then(() => setResendTimer(60))}>
                             Resend
                           </div>
                         )}
+                        </div>
                       </div>
-                    </div>
+                    </>
                   )}
 
                   {/* Step 3: Enter new email */}
@@ -1102,8 +1161,9 @@ const TwofactorPage = (props) => {
 
                   {/* Step 4: Verify new email */}
                   {currentStep === 4 && (
+                    <>                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{newEmail}</strong></p>
+
                     <div className="emailinput">
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{newEmail}</strong></p>
                       <label>New Email Verification Code</label>
                       <div className="d-flex">
                         <input
@@ -1116,12 +1176,13 @@ const TwofactorPage = (props) => {
                         {resendTimer2 > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => handleSendOtp('new_email', 'change_email', newEmail).then(() => setResendTimer2(60))}>
+                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('new_email', 'change_email', newEmail).then(() => setResendTimer2(60))}>
                             Resend
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div></>
+
                   )}
 
                   <button
@@ -1176,8 +1237,10 @@ const TwofactorPage = (props) => {
 
                   {/* Step 2: Current Mobile OTP */}
                   {currentStep === 2 && (
-                    <div className="emailinput">
+                    <>
                       <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskPhone(mobileNumber)}</strong></p>
+
+                    <div className="emailinput">
                       <label>Current Mobile Verification Code</label>
                       <div className="d-flex">
                         <input
@@ -1190,12 +1253,13 @@ const TwofactorPage = (props) => {
                         {resendTimer > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => handleSendOtp('mobile', 'change_mobile').then(() => setResendTimer(60))}>
+                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('mobile', 'change_mobile').then(() => setResendTimer(60))}>
                             Resend
                           </div>
                         )}
                       </div>
                     </div>
+                    </>
                   )}
 
                   {/* Step 3: Enter new mobile */}
@@ -1244,7 +1308,7 @@ const TwofactorPage = (props) => {
                         {resendTimer2 > 0 ? (
                           <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
                         ) : (
-                          <div className="getotp" onClick={() => {
+                          <div className="getotp cursor-pointer" onClick={() => {
                             const fullNumber = `${newCountryCode} ${newMobileNumber}`;
                             handleSendOtp('new_mobile', 'change_mobile', fullNumber).then(() => setResendTimer2(60));
                           }}>
@@ -1337,7 +1401,7 @@ const TwofactorPage = (props) => {
                               {resendTimer > 0 ? (
                                 <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                               ) : (
-                                <div className="getotp" onClick={() => handleSendOtp('email', '2fa_disable').then(() => setResendTimer(60))}>
+                                <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', '2fa_disable').then(() => setResendTimer(60))}>
                                   Resend
                                 </div>
                               )}
@@ -1360,7 +1424,7 @@ const TwofactorPage = (props) => {
                               {resendTimer > 0 ? (
                                 <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                               ) : (
-                                <div className="getotp" onClick={() => handleSendOtp('mobile', '2fa_disable').then(() => setResendTimer(60))}>
+                                <div className="getotp cursor-pointer" onClick={() => handleSendOtp('mobile', '2fa_disable').then(() => setResendTimer(60))}>
                                   Resend
                                 </div>
                               )}

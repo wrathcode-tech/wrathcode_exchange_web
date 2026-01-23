@@ -83,7 +83,11 @@ const LoginPage = () => {
       
       LoaderHelper.loaderStatus(true);
       
-      const result = await AuthService.getOtp(loginSignId, 'login');
+      // Determine sendTo based on verification method
+      // method 1 = email, method 3 = mobile
+      const sendTo = method === 3 ? 'mobile' : 'email';
+      
+      const result = await AuthService.getOtp(loginSignId, 'login', sendTo);
       if (result?.success) {
         alertSuccessMessage(result?.message || 'OTP sent successfully');
         setResendTimer(60);
