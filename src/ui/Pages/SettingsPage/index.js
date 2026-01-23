@@ -9,6 +9,7 @@ import DashboardHeader from "../../../customComponents/DashboardHeader";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import Select from "react-select";
 import { countriesList } from "../../../utils/CountriesList";
+import "./SettingsPage.css";
 
 // Custom styles for react-select in dark theme modal
 const selectStyles = {
