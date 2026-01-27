@@ -3,7 +3,6 @@ import moment from "moment";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import { Helmet } from "react-helmet-async";
-import DashboardHeader from "../../../customComponents/DashboardHeader";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { ProfileContext } from "../../../context/ProfileProvider";
 
@@ -73,56 +72,9 @@ const NotificationPage = (props) => {
       <Helmet>
         <title> Wrathcode Trade | The world class new generation crypto asset exchange</title>
       </Helmet>
-      {/* <section className="">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12 mx-auto">
-            <div className="upload-formate mb-6 d-flex justify-content-center align-items-center">
-                <div>
-                    <h3 className="mb-1 text-center">
-                         Notifications
-                    </h3>
-                    <p className="formate mb-0 text-center">
-                        Your latest updates and notifications list.
-                    </p>
-                </div>
-            </div>
-              <div className="card twofa_card mt-4">
-                <div className="card-body" >
-                  <div className="card-body_inner" >
-                    <div className="notifications__list">
-                      {notifications?.length > 0 ? (
-                        notifications?.map((value, index) => (
-                          <div className="notifications__item" key={index}>
-                            <div className="notifications__details">
-                              <div className="notifications__line">
-                                <div className="notifications__subtitle">{value?.title}</div>
-                                <div className="notifications__date">
-                                  {moment(value?.createdAt).format(
-                                    "MMMM Do YYYY, h:mm:ss A"
-                                  )}
-                                </div>
-                              </div>
-                              <div className="notifications__content"> {value?.message}  </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="py-5 py-5 text-center" >
-                          <p className="mb-0 text-center" >No Notifications Available</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
+ 
 
       <div className="dashboard_right">
-        <DashboardHeader props={props} />
         <div className="dashboard_listing_section Overview_mid">
           <div className="kyc_approval_s activity_logs">
             <div className="cnt">

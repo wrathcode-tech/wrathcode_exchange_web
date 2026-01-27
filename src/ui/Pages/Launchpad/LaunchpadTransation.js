@@ -3,8 +3,6 @@ import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
 import { alertErrorMessage } from '../../../customComponents/CustomAlertMessage';
 import moment from 'moment';
-import DashboardHeader from '../../../customComponents/DashboardHeader';
-import { ApiConfig } from '../../../api/apiConfig/apiConfig';
 
 const LaunchpadTransation = (props) => {
     const [transactionHistory, setTransactionHistory] = useState([]);
@@ -66,7 +64,6 @@ const LaunchpadTransation = (props) => {
 
     return (
         <div className="dashboard_right">
-            <DashboardHeader props={props} />
             <div className="dashboard_listing_section Overview_mid">
                 <div className="listing_left_outer full_width transaction_history_t">
                     <div className="market_section spotorderhist" style={{ color: "#fff" }}>

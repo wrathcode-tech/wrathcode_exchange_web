@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { Helmet } from "react-helmet-async";
-import ReCAPTCHA from "react-google-recaptcha";
 import { $ } from "react-jquery-plugin";
 
 const RegistrationVerification = () => {
   const { authenticationToken } = useParams()
   const navigate = useNavigate()
-
-  const googlecaptchaRef = useRef(null);
 
   const [otp, setOtp] = useState("");
   const [disableBtn, setDisbaleBtn] = useState(false);
@@ -29,23 +26,7 @@ const RegistrationVerification = () => {
     };
   }, []);
 
-  const handleRecaptchaError = () => {
-    // Handle recaptcha error silently
-  };
-
   const handleLogin = async () => {
-    let token = '';
-    try {
-      token = googlecaptchaRef.current?.getValue() || '';
-    } catch (captchaError) {
-      // reCAPTCHA timeout or error - continue without token
-    }
-
-    // if (!token) {
-    //   alertErrorMessage("Please validate captcha");
-    //   return;
-    // }
-
     if (otp?.length < 5) {
       alertErrorMessage("Invalid OTP");
       return
@@ -53,7 +34,7 @@ const RegistrationVerification = () => {
 
     LoaderHelper.loaderStatus(true);
     try {
-      const result = await AuthService.verifyRegistrationOtp(signId, +otp, registeredBy, token);
+      const result = await AuthService.verifyRegistrationOtp(signId, +otp, registeredBy, '');
       if (result?.success) {
         alertSuccessMessage(result?.message);
         navigate(`/account-activate/${authenticationToken}`);
@@ -74,11 +55,7 @@ const RegistrationVerification = () => {
         LoaderHelper.loaderStatus(false);
       }
     } finally {
-      try {
-        googlecaptchaRef.current?.reset();
-      } catch (e) {
-        // Ignore reCAPTCHA reset errors
-      }
+      LoaderHelper.loaderStatus(false);
     }
   };
 
@@ -198,15 +175,6 @@ const RegistrationVerification = () => {
                         Verification attempts left: {attemptLeft - 1}
                       </small>
                     )}
-                  </div>
-
-                  <div className="col-sm-12 input_block">
-                    <ReCAPTCHA
-                      theme="dark"
-                      ref={googlecaptchaRef}
-                      sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                      onErrored={handleRecaptchaError}
-                    />
                   </div>
 
                   <div className="col-sm-12 login_btn">

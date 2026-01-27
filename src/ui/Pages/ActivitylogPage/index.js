@@ -4,9 +4,6 @@ import moment from "moment";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage } from "../../../customComponents/CustomAlertMessage";
-import Slider from "react-slick";
-import { ApiConfig } from "../../../api/apiConfig/apiConfig";
-import DashboardHeader from "../../../customComponents/DashboardHeader";
 
 const ActivitylogPage = (props) => {
 
@@ -148,7 +145,6 @@ const ActivitylogPage = (props) => {
 
 
 
-            <DashboardHeader props={props} />
 
 
             <div className="dashboard_listing_section Overview_mid">
@@ -243,79 +239,6 @@ const ActivitylogPage = (props) => {
                 </div>
 
 
-
-
-                <div className="dashboard_right_side profileslider">
-
-                    <div className="slider dashboard_slider">
-                        <Slider {...bannerSettings}>
-                            <div className="banner_img_add">
-
-                                <div className="cnt_slider_f">
-                                    <h6>Wrathcode Landing Protocol</h6>
-                                    <p>Borrow Low, Earn High</p>
-                                </div>
-
-                                <div className="cv_trade_img">
-                                    <img src="/images/cvtrade_bitcoin.svg" alt="bitcoin" />
-                                </div>
-
-                            </div>
-                            <div className="banner_img_add">
-
-                                <div className="cnt_slider_f">
-                                    <h6>Wrathcode Landing Protocol</h6>
-                                    <p>Borrow Low, Earn High</p>
-                                </div>
-
-                                <div className="cv_trade_img">
-                                    <img src="/images/cvtrade_bitcoin.svg" alt="bitcoin" />
-                                </div>
-
-                            </div>
-
-                            <div className="banner_img_add">
-
-                                <div className="cnt_slider_f">
-                                    <h6>Wrathcode Landing Protocol</h6>
-                                    <p>Borrow Low, Earn High</p>
-                                </div>
-
-                                <div className="cv_trade_img">
-                                    <img src="/images/crypto_trade_icon.png" alt="bitcoin" />
-                                </div>
-
-                            </div>
-
-                            <div className="banner_img_add">
-
-                                <div className="cnt_slider_f">
-                                    <h6>Wrathcode Landing Protocol</h6>
-                                    <p>Borrow Low, Earn High</p>
-                                </div>
-
-                                <div className="cv_trade_img">
-                                    <img src="/images/crypto_trade_icon.png" alt="bitcoin" />
-                                </div>
-
-                            </div>
-
-                            <div className="banner_img_add">
-
-                                <div className="cnt_slider_f">
-                                    <h6>Wrathcode Landing Protocol</h6>
-                                    <p>Borrow Low, Earn High</p>
-                                </div>
-
-                                <div className="cv_trade_img">
-                                    <img src="/images/crypto_trade_icon.png" alt="bitcoin" />
-                                </div>
-
-                            </div>
-                        </Slider>
-                    </div>
-
-                </div>
 
 
 

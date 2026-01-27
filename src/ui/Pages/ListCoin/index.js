@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import AuthService from "../../../api/services/AuthService";
-import codes from 'country-calling-code';
 import { Helmet } from "react-helmet-async";
 
 const ListCoin = () => {
@@ -231,11 +230,11 @@ const ListCoin = () => {
                           <div className="col-12 mb-3"><label>Phone number</label><span className="text-danger">*</span></div>
                           <div className="col-md-3 mb-3" >
                             <select name="countryCode" className="form-control form-select" value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
-                              {codes.map((country, index) => (
+                              {/* {codes.map((country, index) => (
                                 <option key={index} value={country.countryCodes[0]}>
                                   {"+" + country.countryCodes[0]}
                                 </option>
-                              ))}
+                              ))} */}
                             </select>
                           </div>
 

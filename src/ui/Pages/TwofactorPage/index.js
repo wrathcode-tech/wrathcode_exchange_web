@@ -3,7 +3,6 @@ import { alertErrorMessage, alertSuccessMessage } from "../../../customComponent
 import AuthService from "../../../api/services/AuthService";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { ProfileContext } from "../../../context/ProfileProvider";
-import DashboardHeader from "../../../customComponents/DashboardHeader";
 import Select from "react-select";
 import { countriesList, customStyles } from "../../../utils/CountriesList";
 import { isValidPhoneNumber } from "libphonenumber-js";
@@ -1954,7 +1953,6 @@ const TwofactorPage = (props) => {
   return (
     <>
       <div className="dashboard_right">
-        <DashboardHeader props={props} />
 
         <div className="twofactor_outer_s">
           <h5>Security Settings</h5>

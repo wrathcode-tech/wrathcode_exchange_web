@@ -3,7 +3,6 @@ import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
 import { alertWarningMessage } from '../../../customComponents/CustomAlertMessage';
 import moment from 'moment';
-import DashboardHeader from '../../../customComponents/DashboardHeader';
 
 const BonusHistory = (props) => {
   const [skipQbsHistory, setSkipQbsHistory] = useState(0);
@@ -72,7 +71,6 @@ const BonusHistory = (props) => {
 
 
       <div className="dashboard_right">
-        <DashboardHeader props={props} />
 
         <div className="dashboard_listing_section Overview_mid">
 

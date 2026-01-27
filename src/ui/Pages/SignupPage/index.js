@@ -5,7 +5,6 @@ import { alertErrorMessage, alertSuccessMessage } from "../../../customComponent
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import Select from "react-select";
 import { Helmet } from "react-helmet-async";
-import ReCAPTCHA from "react-google-recaptcha";
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useGoogleLogin } from "@react-oauth/google";
 import { countriesList, customStyles } from "../../../utils/CountriesList";
@@ -16,9 +15,6 @@ const SignupPage = () => {
     const navigate = useNavigate();
     const ref1 = window.location.href.split("=")[0];
     const ref = window.location.href.split("=")[1];
-    const googlecaptchaRef = useRef()
-    const recaptchaRef = useRef()
-    const recaptchaRef2 = useRef()
     const [invitation, setInvitation] = useState(ref1?.includes("reffcode") ? ref : "");
     const [password, setPassword] = useState("");
     const [countryCode, setCountryCode] = useState("+91");
@@ -99,21 +95,9 @@ const SignupPage = () => {
             return;
         }
 
-        let token = '';
-        try {
-            token = recaptchaRef.current?.getValue() || '';
-        } catch (captchaError) {
-            // reCAPTCHA timeout or error - continue without token
-        }
-
-        // if (!token) {
-        //     alertErrorMessage("Please validate captcha");
-        //     return;
-        // }
-
         LoaderHelper.loaderStatus(true);
         try {
-            const result = await AuthService.registerEmail(signId, password, invitation, token)
+            const result = await AuthService.registerEmail(signId, password, invitation, "")
             if (result?.success) {
                 LoaderHelper.loaderStatus(false);
                 alertSuccessMessage(result?.message)
@@ -126,11 +110,6 @@ const SignupPage = () => {
             alertErrorMessage(error?.message || "Registration failed. Please try again.");
         } finally { 
             LoaderHelper.loaderStatus(false); 
-            try {
-                recaptchaRef.current?.reset();
-            } catch (e) {
-                // Ignore reCAPTCHA reset errors
-            }
         }
     };
 
@@ -158,17 +137,9 @@ const SignupPage = () => {
             return;
         };
 
-        const token = recaptchaRef2.current.getValue()
-
-        // if (!token) {
-        //     alertErrorMessage("Please validate captcha");
-        //     return;
-        // }
-
-
         LoaderHelper.loaderStatus(true);
         try {
-            const result = await AuthService.registerPhone(+signId, password, invitation, countryCode, token)
+            const result = await AuthService.registerPhone(+signId, password, invitation, countryCode, "")
             if (result?.success) {
                 LoaderHelper.loaderStatus(false);
                 alertSuccessMessage(result?.message)
@@ -180,25 +151,24 @@ const SignupPage = () => {
             }
         } catch (error) {
             alertErrorMessage(error?.message);
-        } finally { LoaderHelper.loaderStatus(false); recaptchaRef2.current.reset(); }
+        } finally { 
+            LoaderHelper.loaderStatus(false); 
+        }
     };
 
     const SignupwithGoogle = useGoogleLogin({
         onSuccess: tokenResponse => {
             if (tokenResponse.access_token) {
                 setGoogleToken(tokenResponse)
-                if (googlecaptchaRef.current) {
-                    googlecaptchaRef.current.showCaptcha();
-                }
                 handleSignupGoogle(tokenResponse)
             }
         }
     });
 
-    const handleSignupGoogle = async (tokenResponse, captchaData) => {
+    const handleSignupGoogle = async (tokenResponse) => {
         LoaderHelper.loaderStatus(true);
         try {
-            const result = await AuthService.signupwithGoogle(tokenResponse, captchaData, invitation);
+            const result = await AuthService.signupwithGoogle(tokenResponse, "", invitation);
             if (result?.success) {
                 alertSuccessMessage(result?.message)
                 handleReset("");
@@ -344,14 +314,6 @@ window.scrollTo(0, 0)
                                                     </label>
                                                 </div>
 
-                                                <div className="col-sm-12 input_block">
-                                                    <ReCAPTCHA
-                                                        theme="light"
-                                                        ref={recaptchaRef}
-                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                                                    />
-                                                </div>
-
                                                 <div className="col-sm-12 login_btn">
                                                     {/* <input type="button" value=" Signup – Coming Soon" /> */}
                                                     <input type="button" value="Register" onClick={() => { handleEmailRegister() }} />
@@ -440,14 +402,6 @@ window.scrollTo(0, 0)
                                                     <label className="termsbox"><input type="checkbox" checked={checkButton2} onClick={() => setCheckButton2((checkButton2) => !checkButton2)} /> I agree to Wrathcode <a target="_blank" rel="noreferrer" href="/TermsofUse" className="btn-link"> Terms and Use </a>
 
                                                     </label>
-                                                </div>
-
-                                                <div className="col-sm-12 input_block">
-                                                    <ReCAPTCHA
-                                                        theme="light"
-                                                        ref={recaptchaRef2}
-                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                                                    />
                                                 </div>
 
                                                 <div className="col-sm-12 login_btn">

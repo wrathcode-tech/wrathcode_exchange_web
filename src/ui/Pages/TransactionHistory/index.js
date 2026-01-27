@@ -3,7 +3,6 @@ import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
 import { alertErrorMessage } from '../../../customComponents/CustomAlertMessage';
 import moment from 'moment';
-import DashboardHeader from '../../../customComponents/DashboardHeader';
 
 const TransactionHistory = (props) => {
   const [skipWalletHistory, setSkipWalletHistory] = useState(0);
@@ -61,7 +60,6 @@ const TransactionHistory = (props) => {
 
       <div className="dashboard_right">
 
-        <DashboardHeader props={props} />
         <div className="dashboard_listing_section Overview_mid">
 
           {/* <div className="transaction_top_select">

@@ -11,7 +11,6 @@ import ComingSoonPage from "../ui/Pages/ComingSoonPage";
 import AuthHeader from "../customComponents/AuthHeader";
 import Trade from "../ui/Pages/TradePage";
 import Market from "../ui/Pages/Market";
-import Funds from "../ui/Pages/Funds";
 import NotificationPage from "../ui/Pages/NotificationPage";
 import { ProfileContext } from "../context/ProfileProvider";
 import Termsofuse from "../ui/Pages/Termsofuse";
@@ -20,9 +19,7 @@ import Contactus from "../ui/Pages/Contactus";
 import FeesPage from "../ui/Pages/FeesPage";
 import ListCoin from "../ui/Pages/ListCoin";
 import ReferalPage from "../ui/Pages/ReferalPage";
-// import Launchpad from "../ui/Pages/Launchpad";
 import TokenPage from "../ui/Pages/TokenPage";
-import PartnershipPage from "../ui/Pages/PartnershipPage";
 import SecuritySystem from "../ui/Pages/SecuritySystem";
 import RefrealList from "../ui/Pages/RefrealList";
 import BlogList from "../ui/Pages/Blog/BlogList";
@@ -33,14 +30,12 @@ import SupportPage from "../ui/Pages/Support";
 import TwofactorPage from "../ui/Pages/TwofactorPage";
 import SecurityPage from "../ui/Pages/SecurityPage";
 import ActivitylogPage from "../ui/Pages/ActivitylogPage";
-import CurrencyPrefrence from "../ui/Pages/CurrencyPrefrence";
 import Dashboard from "../ui/Pages/Dashboard";
 import AssetOverview from "../ui/Pages/AssetOverview";
 import WalletPage from "../ui/Pages/WalletPage";
 import SpotOrders from "../ui/Pages/SpotOrders";
 import TransactionHistory from "../ui/Pages/TransactionHistory";
 import OpenOrders from "../ui/Pages/OpenOrders";
-import KYCVerification from "../ui/Pages/KYCVerification";
 import SidebarDeposit from "../customComponents/SidebarDeposit";
 import DepositPage from "../ui/Pages/DepositPage";
 import WithdrawPage from "../ui/Pages/WithdrawPage";
@@ -48,11 +43,6 @@ import MemePage from "../ui/Pages/MemePage";
 import KycPage from "../ui/Pages/KycPage";
 import Earning from "../ui/Pages/Earning";
 import Swap from "../ui/Pages/Swap";
-import CryptoCalculator from "../ui/Pages/Calculator/CryptoCalculator";
-import EarningCalculator from "../ui/Pages/Calculator/EarningCalculator";
-import DepositFiat from "../ui/Pages/FiatAmount/DepositFiat";
-import WithdrawalFiat from "../ui/Pages/FiatAmount/WithdrawalFiat";
-import BankDetails from "../ui/Pages/BankDetails/BankDetails";
 import RiskDisclosure from "../ui/Pages/RiskDisclosure";
 import PrivacyDataProtectionPolicy from "../ui/Pages/PrivacyDataProtectionPolicy";
 import ComplaintsHandlingProcedure from "../ui/Pages/ComplaintsHandlingProcedure";
@@ -75,7 +65,6 @@ import Announcement from "../ui/Pages/AnnouncmentManagement/Announcement";
 import LaunchpadHome from "../ui/Pages/Launchpad/LaunchpadHome";
 import LaunchpadCoinPage from "../ui/Pages/Launchpad/LaunchpadCoinPage";
 import LaunchpadTransation from "../ui/Pages/Launchpad/LaunchpadTransation";
-import Giveaway from "../ui/Pages/Giveaway/Giveaway";
 
 // P2p Routes
 import P2pDashboard from "../ui/Pages/P2P/P2pDashboard";
@@ -110,33 +99,21 @@ function Routing() {
           <Route path="bonus_history" element={token ? (<BonusHistory userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="open_orders" element={token ? (<OpenOrders userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="profile_setting" element={token ? (<SettingsPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="kyc_verification" element={token ? (<KYCVerification userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="kyc" element={token ? (<KycPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="notification" element={token ? (<NotificationPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="launchpad_transactions" element={token ? (<LaunchpadTransation userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="two_factor_autentication" element={token ? (<TwofactorPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="password_security" element={token ? (<SecurityPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="activity_logs" element={token ? (<ActivitylogPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="giveaway" element={token ? (<Giveaway userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          {/* <Route path="arbitrage_bot" element={token ? (<ArbitrageBot userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="arbitrage_dashboard" element={token ? (<ArbitrageDashboard userDetails={userDetails} />) : (<Navigate to="/login" replace />)} /> */}
+      
           <Route path="swap" element={token ? (<Swap userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="support" element={token ? (<SupportPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="bank" element={token ? (<BankDetails userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="support" element={token ? (<SupportPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="currency_preference" element={token ? (<CurrencyPrefrence userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          {/* <Route path="user_kyc" element={token ? (<AutomatedKyc userDetails={userDetails} />) : (<Navigate to="/login" replace />)} /> */}
         </Route>
 
         <Route path="/asset_managemnet" element={token ? (<SidebarDeposit userDetails={userDetails} />) : (<Navigate to="/login" replace />)} >
           <Route index path="deposit" element={token ? (<DepositPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="withdraw" element={token ? (<WithdrawPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="deposit_fiat" element={token ? (<DepositFiat userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="withdraw_fiat" element={token ? (<WithdrawalFiat userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
         </Route>
-        {/* <Route path="/kyc" element={token ? (<KycPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} /> */}
-        <Route path="/funds_details" element={token ? (<Funds userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-        {/* <Route path="/launchpad" element={token ? <Launchpad /> : <Navigate to="/login" replace />} /> */}
         <Route path="/referal_list" element={token ? <RefrealList /> : <Navigate to="/login" replace />} />
 
 
@@ -148,8 +125,6 @@ function Routing() {
         <Route exact path="/login" element={!token ? <LoginPage /> : <Navigate to="/user_profile/dashboard" replace />} />
         <Route exact path="/market" element={<Market />} />
         <Route exact path="/earning" element={<Earning />} />
-        <Route exact path="/earning_calculator" element={<EarningCalculator />} />
-        <Route exact path="/crypto_calculator" element={<CryptoCalculator />} />
         <Route exact path="/coin_futures" element={<CoinFutures />} />
         <Route exact path="/usd_futures/:pairs" element={<UsdMFutures />} />
         <Route exact path="/options/:contractSymbol" element={<ClassicOptions />} />
@@ -168,14 +143,12 @@ function Routing() {
         <Route exact path="/fees" element={<FeesPage />} />
         <Route exact path="/coin_list" element={<ListCoin />} />
         <Route exact path="/token" element={<TokenPage />} />
-        <Route exact path="/partnership" element={<PartnershipPage />} />
         <Route exact path="/refer_earn" element={<ReferalPage />} />
         <Route exact path="/security_system" element={<SecuritySystem />} />
         <Route exact path="/blogs" element={<BlogList />} />
         <Route exact path="/FAQ" element={<FAQ />}></Route>
         <Route exact path="/FAQSidebar" element={<FAQSidebar />}></Route>
         <Route exact path="/" element={<LandingPage />} />
-        {/* <Route exact path="/comingsoon" element={<ComingSoonPage />} /> */}
         <Route path="/chart/:theme/:pairs" element={<MobileChart />} />
         <Route path="/announcement" element={<Announcement />} />
         <Route path="/launchpad" element={<LaunchpadHome />} />

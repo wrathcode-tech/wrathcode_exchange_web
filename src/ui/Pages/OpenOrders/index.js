@@ -3,7 +3,6 @@ import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
 import { alertErrorMessage, alertSuccessMessage } from '../../../customComponents/CustomAlertMessage';
 import moment from 'moment';
-import DashboardHeader from '../../../customComponents/DashboardHeader';
 
 const OpenOrders = (props) => {
   const [allOpenOrders, setAllOpenOrders] = useState([]);
@@ -84,7 +83,6 @@ const OpenOrders = (props) => {
 
 
       <div className="dashboard_right">
-        <DashboardHeader props={props} />
 
         <div className="dashboard_listing_section Overview_mid">
 

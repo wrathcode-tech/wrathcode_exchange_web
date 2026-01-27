@@ -4,7 +4,6 @@ import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import { Link } from "react-router-dom";
-import DashboardHeader from "../../../customComponents/DashboardHeader";
 
 const SecurityPage = (props) => {
     const [password, setPassword] = useState('');
@@ -133,7 +132,6 @@ const SecurityPage = (props) => {
 
 
 
-            <DashboardHeader props={props} />
 
             <div className="dashboard_listing_section Overview_mid">
 

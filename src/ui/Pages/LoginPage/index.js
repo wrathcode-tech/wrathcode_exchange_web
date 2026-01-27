@@ -7,7 +7,6 @@ import { $ } from "react-jquery-plugin";
 import Select from "react-select";
 import { ProfileContext } from "../../../context/ProfileProvider";
 import { useGoogleLogin } from '@react-oauth/google';
-import ReCAPTCHA from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { countriesList, customStyles } from "../../../utils/CountriesList";
@@ -16,7 +15,6 @@ import { startAuthentication } from "@simplewebauthn/browser";
 
 const LoginPage = () => {
   const location = useLocation();
-  const googlecaptchaRef = useRef(null);
 
   const [signId, setSignId] = useState("");
   const [password, setPassword] = useState("");
@@ -32,8 +30,6 @@ const LoginPage = () => {
   const [passkeySupported, setPasskeySupported] = useState(false);
   const [isPasskeyLoading, setIsPasskeyLoading] = useState(false);
 
-  const recaptchaRef = useRef(null);
-  const recaptchaRef2 = useRef(null);
 
   const navigate = useNavigate();
 
@@ -335,8 +331,6 @@ const LoginPage = () => {
           navigate(`/account-verification/${result?.data}`);
           return;
         }
-        if (recaptchaRef.current) recaptchaRef.current.reset();
-        if (recaptchaRef2.current) recaptchaRef2.current.reset();
         alertErrorMessage(result?.message);
       }
     } catch (error) {
@@ -454,15 +448,7 @@ const LoginPage = () => {
       return;
     }
 
-    const token = recaptchaRef.current ? recaptchaRef.current.getValue() : "";
-
-    // if (!token) {
-    //   alertErrorMessage("Please validate captcha to login");
-    //   return;
-    // }
-
-    await handleLogin(signId, password, token);
-    if (recaptchaRef.current) recaptchaRef.current.reset();
+    await handleLogin(signId, password, "");
   };
 
   // Phone login handler
@@ -488,33 +474,22 @@ const LoginPage = () => {
       return;
     }
 
-    const token = recaptchaRef2.current ? recaptchaRef2.current.getValue() : "";
-
-    // if (!token) {
-    //   alertErrorMessage("Please validate captcha to login");
-    //   return;
-    // }
-
-    await handleLogin(signId, password, token);
-    if (recaptchaRef2.current) recaptchaRef2.current.reset();
+    await handleLogin(signId, password, "");
   };
 
   // Google login
   const loginWithGoogle = useGoogleLogin({
     onSuccess: tokenResponse => {
       if (tokenResponse.access_token) {
-        if (googlecaptchaRef.current) {
-          googlecaptchaRef.current.showCaptcha();
-        }
         handleLoginGoogle(tokenResponse);
       }
     }
   });
 
-  const handleLoginGoogle = async (tokenResponse, captchaData) => {
+  const handleLoginGoogle = async (tokenResponse) => {
     LoaderHelper.loaderStatus(true);
     try {
-      const result = await AuthService.googleLogin(tokenResponse, captchaData);
+      const result = await AuthService.googleLogin(tokenResponse, "");
       if (result?.success) {
         const responseData = result?.data;
 
@@ -584,9 +559,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleRecaptchaError = () => {
-    // Handle recaptcha error silently
-  };
 
   const tabChange = () => {
     setSignId("");
@@ -692,15 +664,6 @@ const LoginPage = () => {
                         <Link to="/forgot_password">Forgot Password?</Link>
                       </div>
 
-                      <div className="col-sm-12 input_block">
-                        <ReCAPTCHA
-                          theme="dark"
-                          ref={recaptchaRef}
-                          sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                          onErrored={handleRecaptchaError}
-                        />
-                      </div>
-
                       <div className="col-sm-12 login_btn">
                         <input
                           type="button"
@@ -778,14 +741,6 @@ const LoginPage = () => {
                         <Link to="/forgot_password">Forgot Password?</Link>
                       </div>
 
-                      <div className="col-sm-12 input_block">
-                        <ReCAPTCHA
-                          theme="light"
-                          ref={recaptchaRef2}
-                          sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                          onErrored={handleRecaptchaError}
-                        />
-                      </div>
                       <div className="col-sm-12 login_btn">
                         <input type="button" value="Login" onClick={handlePhoneLogin} />
                       </div>

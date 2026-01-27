@@ -5,7 +5,6 @@ import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { ApiConfig } from "../../../api/apiConfig/apiConfig";
 import { ProfileContext } from "../../../context/ProfileProvider";
-import DashboardHeader from "../../../customComponents/DashboardHeader";
 import "./SettingsPage.css";
 
 
@@ -567,7 +566,6 @@ const SettingsPage = (props) => {
   return (
     <>
       <div className="dashboard_right">
-        <DashboardHeader props={props} />
 
         <div className="twofactor_outer_s">
           <h5>Profile</h5>
