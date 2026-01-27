@@ -1,6 +1,12 @@
-const appUrl = "http://159.195.23.93:5001";
+// const appUrl = "http://159.195.23.93:5001";
 // const appUrl = "http://localhost:5001";
-const appUrl2 = appUrl//"http://159.195.23.93:5001";
+// const appUrl2 = appUrl//"http://159.195.23.93:5001";
+const appUrl = "https://backend.demoexchange.wrathcode.com";
+const appUrl2 = https://backend.demoexchange.wrathcode.com";
+
+
+
+https://backend.demoexchange.wrathcode.com
 
 export const deployedUrl = `${window.origin}/`
 
