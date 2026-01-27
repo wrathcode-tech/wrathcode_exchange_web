@@ -11,6 +11,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { countriesList, customStyles } from "../../../utils/CountriesList";
+import { startAuthentication } from "@simplewebauthn/browser";
 
 
 const LoginPage = () => {
@@ -23,11 +24,13 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Enhanced 2FA Login states
-  const [selectedAuthMethod, setSelectedAuthMethod] = useState(1); // 1=email, 2=google, 3=mobile
+  const [selectedAuthMethod, setSelectedAuthMethod] = useState(1); // 1=email, 2=google, 3=mobile, 4=passkey
   const [availableMethods, setAvailableMethods] = useState([]);
   const [resendTimer, setResendTimer] = useState(0);
   const [loginSignId, setLoginSignId] = useState(""); // Store the signId used for login
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
+  const [passkeySupported, setPasskeySupported] = useState(false);
+  const [isPasskeyLoading, setIsPasskeyLoading] = useState(false);
 
   const recaptchaRef = useRef(null);
   const recaptchaRef2 = useRef(null);
@@ -36,9 +39,14 @@ const LoginPage = () => {
 
   const { setLoginDetails } = useContext(ProfileContext);
 
+
   // Add loginbg class on mount
   useEffect(() => {
     $("body").addClass("loginbg");
+    // Check if WebAuthn/Passkey is supported
+    const supported = window.PublicKeyCredential !== undefined &&
+      typeof window.PublicKeyCredential === 'function';
+    setPasskeySupported(supported);
     return () => {
       $("body").removeClass("loginbg");
     };
@@ -60,33 +68,56 @@ const LoginPage = () => {
   const getOtpCode = () => otpDigits.join('');
 
   // Determine available verification methods based on backend response
+  // Priority: Passkey (4) > Google Auth (2) > Email (1) > Mobile (3)
   const determineAvailableMethods = (responseData) => {
+    let methods = [];
+    
     if (responseData?.availableMethods && responseData.availableMethods.length > 0) {
-      return responseData.availableMethods.map(m => ({
+      methods = responseData.availableMethods.map(m => ({
         ...m,
-        icon: m.type === 1 ? 'ri-mail-line' : m.type === 2 ? 'ri-shield-keyhole-line' : 'ri-smartphone-line',
-        description: m.type === 1 ? 'Receive verification codes via email' : 
-                     m.type === 2 ? 'Use Google Authenticator app' : 
-                     'Receive verification codes via SMS'
+        icon: m.type === 1 ? 'ri-mail-line' : 
+              m.type === 2 ? 'ri-shield-keyhole-line' : 
+              m.type === 3 ? 'ri-smartphone-line' :
+              'ri-fingerprint-line',
+        description: m.type === 1 ? 'Receive verification codes via email' :
+                     m.type === 2 ? 'Use Google Authenticator app' :
+                     m.type === 3 ? 'Receive verification codes via SMS' :
+                     'Use Face ID, Touch ID, or Windows Hello'
       }));
     }
-    return [];
+    
+    // Check if user has passkey and browser supports it
+    if (responseData?.hasPasskey && passkeySupported) {
+      // Add passkey as first option (type 4)
+      const passkeyMethod = {
+        type: 4,
+        name: 'Passkey',
+        label: 'Passkey',
+        icon: 'ri-fingerprint-line',
+        description: 'Use Face ID, Touch ID, or Windows Hello',
+        maskedValue: 'Biometric authentication'
+      };
+      // Insert passkey at the beginning
+      methods = [passkeyMethod, ...methods.filter(m => m.type !== 4)];
+    }
+    
+    return methods;
   };
 
   // Send OTP for login verification (resend)
   const sendLoginOtp = async (method) => {
     try {
-      // Google Auth doesn't need OTP sending
-      if (method === 2) {
+      // Google Auth and Passkey don't need OTP sending
+      if (method === 2 || method === 4) {
         return true;
       }
-      
+
       LoaderHelper.loaderStatus(true);
-      
+
       // Determine sendTo based on verification method
       // method 1 = email, method 3 = mobile
       const sendTo = method === 3 ? 'mobile' : 'email';
-      
+
       const result = await AuthService.getOtp(loginSignId, 'login', sendTo);
       if (result?.success) {
         alertSuccessMessage(result?.message || 'OTP sent successfully');
@@ -104,6 +135,74 @@ const LoginPage = () => {
     }
   };
 
+  // Handle passkey authentication
+  const handlePasskeyAuth = async () => {
+    if (!passkeySupported) {
+      alertErrorMessage('Passkeys are not supported on this device/browser');
+      return;
+    }
+
+    try {
+      setIsPasskeyLoading(true);
+      LoaderHelper.loaderStatus(true);
+
+      // Step 1: Get authentication options from server
+      const optionsResult = await AuthService.passkeyGetAuthOptions(loginSignId);
+      if (!optionsResult?.success || !optionsResult?.data) {
+        alertErrorMessage(optionsResult?.message || 'Failed to get passkey options');
+        return;
+      }
+
+      const authOptions = optionsResult.data;
+
+      // Step 2: Authenticate using browser's WebAuthn API
+      let credential;
+      try {
+        credential = await startAuthentication(authOptions);
+      } catch (webauthnError) {
+        console.error('WebAuthn authentication error:', webauthnError);
+        if (webauthnError.name === 'NotAllowedError') {
+          alertErrorMessage('Authentication was cancelled or timed out. Please try again.');
+        } else {
+          alertErrorMessage('Failed to authenticate with passkey. Please try another method.');
+        }
+        return;
+      }
+
+      // Step 3: Verify credential with server
+      const verifyResult = await AuthService.passkeyVerifyAuth(loginSignId, credential);
+      
+      if (verifyResult?.success) {
+        // Complete login - get token from backend
+        const loginResult = await AuthService.completePasskeyLogin(loginSignId, verifyResult.data);
+        
+        if (loginResult?.success && loginResult?.data?.token) {
+          alertSuccessMessage('Login successful!');
+          sessionStorage.setItem("token", loginResult.data.token);
+          sessionStorage.setItem("userId", loginResult.data.userId);
+          setLoginDetails(loginResult.data);
+          
+          // Close modal
+          $("#Confirmation_model").modal('hide');
+          
+          const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
+          navigate(redirectPath, { replace: true });
+          // window.location.reload();
+        } else {
+          alertErrorMessage(loginResult?.message || 'Login failed');
+        }
+      } else {
+        alertErrorMessage(verifyResult?.message || 'Passkey verification failed');
+      }
+    } catch (error) {
+      console.error('Passkey authentication error:', error);
+      alertErrorMessage(error?.message || 'Something went wrong');
+    } finally {
+      setIsPasskeyLoading(false);
+      LoaderHelper.loaderStatus(false);
+    }
+  };
+
   // Handle login - Step 1: Validate credentials
   const handleLogin = async (inputSignId, loginPassword, token) => {
     LoaderHelper.loaderStatus(true);
@@ -111,20 +210,30 @@ const LoginPage = () => {
       const result = await AuthService.login(inputSignId, loginPassword, token);
       if (result?.success) {
         const responseData = result?.data;
-        
+
         if (responseData?.requiresVerification) {
           setLoginSignId(inputSignId);
-          
+
           const methods = determineAvailableMethods(responseData);
           setAvailableMethods(methods);
+
+          // Priority: Passkey (4) > Google Auth (2) > Email (1) > Mobile (3)
+          let defaultMethod = responseData?.defaultMethod || 1;
           
-          const defaultMethod = responseData?.defaultMethod || 1;
+          // If passkey is available and supported, use it as default
+          if (responseData?.hasPasskey && passkeySupported) {
+            defaultMethod = 4;
+          } else if (methods.find(m => m.type === 4)) {
+            defaultMethod = 4;
+          }
+          
           setSelectedAuthMethod(defaultMethod);
-          
+
           // Reset OTP digits
           setOtpDigits(['', '', '', '', '', '']);
-          setResendTimer(defaultMethod !== 2 ? 60 : 0);
-          
+          // Passkey and Google Auth don't need timer
+          setResendTimer(defaultMethod !== 2 && defaultMethod !== 4 ? 60 : 0);
+
           // Show verification modal
           $("#Confirmation_model").modal('show');
         } else {
@@ -134,10 +243,10 @@ const LoginPage = () => {
             sessionStorage.setItem("userId", responseData.userId);
             const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
             navigate(redirectPath, { replace: true });
-            window.location.reload();
+            // window.location.reload();
           }
         }
-        
+
       } else {
         if (result?.message === "Your account has not been activated yet. Please verify your account to continue using the platform.") {
           navigate(`/account-verification/${result?.data}`);
@@ -166,18 +275,18 @@ const LoginPage = () => {
   const handleSelectMethod = async (method) => {
     setSelectedAuthMethod(method.type);
     setOtpDigits(['', '', '', '', '', '']);
-    
+
     // Reset resend timer so "GET OTP" button is shown (don't auto-send)
     setResendTimer(0);
-    
+
     // Close options popup
     $("#VerificationOptionsModal").modal('hide');
-    
+
     // Reopen verification modal after a short delay
     setTimeout(() => {
       $("#Confirmation_model").modal('show');
     }, 100);
-    
+
     // Don't auto-send OTP - let user click "GET OTP" button
   };
 
@@ -196,11 +305,11 @@ const LoginPage = () => {
       alertErrorMessage("Please enter a valid 6-digit code");
       return;
     }
-    
+
     LoaderHelper.loaderStatus(true);
     try {
       const result = await AuthService.getCode(loginSignId, selectedAuthMethod, otpCode);
-      
+
       if (result?.success) {
         alertSuccessMessage(result.message);
         sessionStorage.setItem("token", result.data.token);
@@ -209,7 +318,7 @@ const LoginPage = () => {
         $("#Confirmation_model").modal('hide');
         const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
         navigate(redirectPath, { replace: true });
-        window.location.reload();
+        // window.location.reload();
       } else {
         alertErrorMessage(result?.message || "Verification failed");
       }
@@ -305,17 +414,27 @@ const LoginPage = () => {
       const result = await AuthService.googleLogin(tokenResponse, captchaData);
       if (result?.success) {
         const responseData = result?.data;
-        
+
         if (responseData?.requiresVerification) {
           const methods = determineAvailableMethods(responseData);
           setLoginSignId(responseData?.signId || "");
           setAvailableMethods(methods);
+
+          // Priority: Passkey (4) > Google Auth (2) > Email (1) > Mobile (3)
+          let defaultMethod = responseData?.defaultMethod || 1;
           
-          const defaultMethod = responseData?.defaultMethod || 1;
+          // If passkey is available and supported, use it as default
+          if (responseData?.hasPasskey && passkeySupported) {
+            defaultMethod = 4;
+          } else if (methods.find(m => m.type === 4)) {
+            defaultMethod = 4;
+          }
+          
           setSelectedAuthMethod(defaultMethod);
           setOtpDigits(['', '', '', '', '', '']);
-          setResendTimer(defaultMethod !== 2 ? 60 : 0);
-          
+          // Passkey and Google Auth don't need timer
+          setResendTimer(defaultMethod !== 2 && defaultMethod !== 4 ? 60 : 0);
+
           $("#Confirmation_model").modal('show');
         } else if (responseData?.token) {
           alertSuccessMessage(result?.message);
@@ -324,7 +443,7 @@ const LoginPage = () => {
           setLoginDetails(responseData);
           const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
           navigate(redirectPath, { replace: true });
-          window.location.reload();
+          // window.location.reload();
         }
       } else {
         alertErrorMessage(result?.message);
@@ -352,6 +471,7 @@ const LoginPage = () => {
       case 1: return 'Email Verification Code';
       case 2: return 'Authenticator Code';
       case 3: return 'Phone Verification Code';
+      case 4: return 'Passkey Authentication';
       default: return 'Verification Code';
     }
   };
@@ -360,13 +480,15 @@ const LoginPage = () => {
   const getVerificationDescription = () => {
     const selectedMethod = availableMethods.find(m => m.type === selectedAuthMethod);
     const maskedValue = selectedMethod?.maskedValue;
-    
+
     if (selectedAuthMethod === 1) {
       return `Enter the 6-digit code sent to ${maskedValue || 'your email'}`;
     } else if (selectedAuthMethod === 2) {
       return 'Enter the 6-digit code generated by the authenticator app';
     } else if (selectedAuthMethod === 3) {
       return `Enter the 6-digit code sent to ${maskedValue || 'your phone'}`;
+    } else if (selectedAuthMethod === 4) {
+      return 'Click the button below to authenticate with your passkey';
     }
     return 'Enter your verification code';
   };
@@ -413,23 +535,23 @@ const LoginPage = () => {
                   <form onSubmit={(e) => e.preventDefault()}>
                     <div className="row">
                       <div className="col-sm-12 input_block">
-                        <input 
-                          className="input_filed" 
-                          type="email" 
-                          placeholder="Please enter your email" 
-                          value={signId} 
-                          onChange={(e) => setSignId(e.target.value)} 
-                          onBlur={(e) => setSignId(e.target.value.trim())} 
+                        <input
+                          className="input_filed"
+                          type="email"
+                          placeholder="Please enter your email"
+                          value={signId}
+                          onChange={(e) => setSignId(e.target.value)}
+                          onBlur={(e) => setSignId(e.target.value.trim())}
                         />
                       </div>
                       <div className="col-sm-12 input_block">
                         <div className="email_code">
-                          <input 
-                            className="input_filed" 
-                            type={showPassword ? "text" : "password"} 
-                            placeholder="Please enter your password" 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
+                          <input
+                            className="input_filed"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Please enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                           />
                           <div className='get_otp' onClick={handleTogglePassword}>
                             {showPassword ? <i className="ri-eye-line"></i> : <i className="ri-eye-close-line"></i>}
@@ -451,9 +573,9 @@ const LoginPage = () => {
                       </div>
 
                       <div className="col-sm-12 login_btn">
-                        <input 
-                          type="button" 
-                          value="Log In" 
+                        <input
+                          type="button"
+                          value="Log In"
                           onClick={handleEmailLogin}
                           disabled={!signId || !password}
                         />
@@ -486,31 +608,37 @@ const LoginPage = () => {
                             name="country_code_select"
                             options={countriesList}
                             onChange={(selected) => setCountryCode(selected?.value)}
+                            placeholder="Select country code"
+                            blurInputOnSelect={true}
+                            onMenuOpen={() => { }}
+                            filterOption={(option, inputValue) =>
+                              option.label.toLowerCase().includes(inputValue.toLowerCase())
+                            }
                             value={countriesList.find(option => option.value === countryCode)}
                           />
                         </div>
                       </div>
                       <div className="col-sm-12 input_block">
                         <div className="phone-input-wrapper">
-                          <input 
-                            className="input_filed" 
-                            type="number" 
-                            placeholder="Enter mobile number" 
-                            onWheel={(e) => e.target.blur()} 
-                            value={signId} 
-                            onChange={(e) => setSignId(e.target.value)} 
-                            onBlur={(e) => setSignId(e.target.value.trim())} 
+                          <input
+                            className="input_filed"
+                            type="number"
+                            placeholder="Enter mobile number"
+                            onWheel={(e) => e.target.blur()}
+                            value={signId}
+                            onChange={(e) => setSignId(e.target.value)}
+                            onBlur={(e) => setSignId(e.target.value.trim())}
                           />
                         </div>
                       </div>
                       <div className="col-sm-12 input_block">
                         <div className="email_code">
-                          <input 
-                            className="input_filed" 
-                            type={showPassword ? "text" : "password"} 
-                            placeholder="Please enter your password" 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
+                          <input
+                            className="input_filed"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Please enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                           />
                           <div className='get_otp' onClick={handleTogglePassword}>
                             {showPassword ? <i className="ri-eye-line"></i> : <i className="ri-eye-close-line"></i>}
@@ -563,54 +691,90 @@ const LoginPage = () => {
             </div>
             <div className="modal-body">
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                
-                <div className="emailinput">
-                  <label>Enter 6-digit Code</label>
-                  <div className="d-flex">
-                    <input 
-                      type="text" 
-                      placeholder="Enter OTP here..."
-                      value={getOtpCode()}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                        const newDigits = value.split('').concat(Array(6).fill('')).slice(0, 6);
-                        setOtpDigits(newDigits);
-                      }}
-                      maxLength={6}
-                    />
-                    {/* Resend button for Email/Mobile OTP */}
-                    {selectedAuthMethod !== 2 && (
-                      resendTimer > 0 ? (
-                        <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                      ) : (
-                        <button
-                          type="button"
-                          className="getotp otp-button-enabled getotp_mobile"
-                          onClick={() => sendLoginOtp(selectedAuthMethod)}
-                        >
-                          GET OTP
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
+
+                {/* Passkey Authentication UI */}
+                {selectedAuthMethod === 4 ? (
+                  <>
+                    <div className="" style={{ textAlign: 'center',}}>
+                      <div style={{ 
+                        width: '80px', 
+                        height: '80px', 
+                        borderRadius: '50%', 
+                        background: 'linear-gradient(135deg, #00c853 0%, #00a844 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 20px'
+                      }}>
+                        <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
+                      </div>
+                      <p style={{ color: '#fff', marginBottom: '10px' }}>
+                        Use your registered passkey to verify
+                      </p>
+                      <p style={{ color: '#888', fontSize: '13px' }}>
+                        This will prompt Face ID, Touch ID, or Windows Hello
+                      </p>
+                    </div>
+
+                    <button
+                      className="submit"
+                      type="button"
+                      onClick={handlePasskeyAuth}
+                      disabled={isPasskeyLoading}
+                    >
+                      {isPasskeyLoading ? 'Authenticating...' : 'Authenticate with Passkey'}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="emailinput">
+                      <label>Enter 6-digit Code</label>
+                      <div className="d-flex">
+                        <input
+                          type="text"
+                          placeholder="Enter OTP here..."
+                          value={getOtpCode()}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                            const newDigits = value.split('').concat(Array(6).fill('')).slice(0, 6);
+                            setOtpDigits(newDigits);
+                          }}
+                          maxLength={6}
+                        />
+                        {/* Resend button for Email/Mobile OTP */}
+                        {selectedAuthMethod !== 2 && (
+                          resendTimer > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="getotp otp-button-enabled getotp_mobile"
+                              onClick={() => sendLoginOtp(selectedAuthMethod)}
+                            >
+                              GET OTP
+                            </button>
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    <button
+                      className="submit"
+                      type="button"
+                      onClick={handleAuthVerify}
+                      disabled={getOtpCode().length < 6}
+                    >
+                      Confirm
+                    </button>
+                  </>
+                )}
 
                 {/* Switch verification option link - only show if multiple methods */}
                 {availableMethods.length > 1 && (
-                
-                    <div className="cursor-pointer"   onClick={(e) => { e.preventDefault(); handleOpenOptionsPopup(); }}>
-                      <small className="text-white">  Switch to Another Verification Option<i class="ri-external-link-line"></i></small>
-                    </div>  
+                  <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenOptionsPopup(); }} style={{ marginTop: '5px' }}>
+                    <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                  </div>
                 )}
-
-                <button
-                  className="submit"
-                  type="button"
-                  onClick={handleAuthVerify}
-                  disabled={getOtpCode().length < 6}
-                >
-                  Confirm
-                </button>
               </form>
             </div>
           </div>
@@ -618,7 +782,7 @@ const LoginPage = () => {
       </div>
 
       {/* Verification Options Modal - Same structure as SettingsPage */}
-      <div className="modal fade search_form" id="VerificationOptionsModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade search_form" id="VerificationOptionsModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -628,11 +792,11 @@ const LoginPage = () => {
             </div>
             <div className="modal-body">
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                
+
                 {availableMethods.map((method) => (
                   <div className="" key={method.type}>
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => handleSelectMethod(method)}
                       role="button"
                     >

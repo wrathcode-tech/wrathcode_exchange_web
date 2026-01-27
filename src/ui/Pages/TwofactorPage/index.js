@@ -4,6 +4,12 @@ import AuthService from "../../../api/services/AuthService";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { ProfileContext } from "../../../context/ProfileProvider";
 import DashboardHeader from "../../../customComponents/DashboardHeader";
+import Select from "react-select";
+import { countriesList, customStyles } from "../../../utils/CountriesList";
+import { isValidPhoneNumber } from "libphonenumber-js";
+import { startRegistration, startAuthentication } from "@simplewebauthn/browser";
+
+
 
 const TwofactorPage = (props) => {
   const { handleUserDetails } = useContext(ProfileContext);
@@ -11,51 +17,138 @@ const TwofactorPage = (props) => {
   // User data states
   const [mobileNumber, setMobileNumber] = useState("");
   const [emailID, setEmailId] = useState("");
-  
+
   // Security methods status
   const [hasEmail, setHasEmail] = useState(false);
   const [hasMobile, setHasMobile] = useState(false);
   const [hasGoogleAuth, setHasGoogleAuth] = useState(false);
-  
+  const [hasPasskey, setHasPasskey] = useState(false);
+
+  // Passkey states
+  const [passkeys, setPasskeys] = useState([]);
+  const [passkeyName, setPasskeyName] = useState("");
+  const [selectedPasskey, setSelectedPasskey] = useState(null);
+  const [deletePasskeyMethod, setDeletePasskeyMethod] = useState('totp'); // passkey, totp, email, mobile
+  const [deletePasskeyCode, setDeletePasskeyCode] = useState("");
+  const [deletePasskeyAvailableMethods, setDeletePasskeyAvailableMethods] = useState([]);
+  const [passkeySupported, setPasskeySupported] = useState(false);
+  const [isPasskeyVerifying, setIsPasskeyVerifying] = useState(false);
+
   // Google Auth setup states
   const [googleQr, setGoogleQr] = useState("");
   const [googleCode, setGoogleCode] = useState("");
   const [authenticatorCode, setAuthenticatorCode] = useState("");
-  
+
   // OTP states
   const [emailOtpCode, setEmailOtpCode] = useState("");
   const [mobileOtpCode, setMobileOtpCode] = useState("");
   const [newEmailOtpCode, setNewEmailOtpCode] = useState("");
   const [newMobileOtpCode, setNewMobileOtpCode] = useState("");
   const [googleAuthCode, setGoogleAuthCode] = useState("");
-  
-  // New values for change flows
+
+  // New values for change/add flows
   const [newEmail, setNewEmail] = useState("");
   const [newMobileNumber, setNewMobileNumber] = useState("");
   const [newCountryCode, setNewCountryCode] = useState("+91");
+
+  // Add Email flow step tracking
+  const [addEmailStep, setAddEmailStep] = useState(1);
+
+  // Disable Google Auth flow states
+  const [disableAuthMethod, setDisableAuthMethod] = useState(2); // 1=email, 2=google auth, 3=mobile, 4=passkey
+  const [disableAvailableMethods, setDisableAvailableMethods] = useState([]);
   
+  // Change Email/Mobile verification method states
+  const [changeVerifyMethod, setChangeVerifyMethod] = useState('email'); // passkey, totp, email, mobile
+  const [changeAvailableMethods, setChangeAvailableMethods] = useState([]);
+  const [passkeyVerificationResult, setPasskeyVerificationResult] = useState(null);
+
   // Timer and loading states
   const [resendTimer, setResendTimer] = useState(0);
   const [resendTimer2, setResendTimer2] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Flow step tracking
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Security reminder state
+  const [showSecurityReminder, setShowSecurityReminder] = useState(false);
+
+  // Fetch security status from API
+  const fetchSecurityStatus = async () => {
+    try {
+      const result = await AuthService.getSecurityStatus();
+      if (result?.success && result?.data) {
+        // Show security prompt if API says to show it
+        if (result.data.showSecurityPrompt) {
+          setShowSecurityReminder(true);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch security status:', error);
+    }
+  };
+
+  // Check if WebAuthn/Passkey is supported
+  const checkPasskeySupport = () => {
+    const supported = window.PublicKeyCredential !== undefined &&
+      typeof window.PublicKeyCredential === 'function';
+    setPasskeySupported(supported);
+    return supported;
+  };
+
+  // Fetch user's passkeys
+  const fetchPasskeys = async () => {
+    try {
+      const result = await AuthService.passkeyGetList();
+      if (result?.success && result?.data) {
+        setPasskeys(result.data.passkeys || []);
+        setHasPasskey(result.data.count > 0);
+      }
+    } catch (error) {
+      console.error('Failed to fetch passkeys:', error);
+    }
+  };
+
+  // Dismiss security prompt
+  const handleDismissSecurityPrompt = async () => {
+    try {
+      setShowSecurityReminder(false);
+      const modalElement = document.getElementById('securityReminderModal');
+      if (modalElement) {
+        const modal = window.bootstrap?.Modal?.getInstance(modalElement);
+        if (modal) modal.hide();
+      }
+    } catch (error) {
+      console.error('Failed to dismiss prompt:', error);
+    }
+  };
 
   // Initialize user data
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+
     const user = props?.userDetails;
     const current2fa = user?.['2fa'] || 0;
-    
+
     setEmailId(user?.emailId || '');
     setMobileNumber(`${user?.country_code || ''} ${user?.mobileNumber || ''}`);
-    
+
     // Determine which methods are active
-    setHasEmail(!!user?.emailId);
-    setHasMobile(!!user?.mobileNumber);
-    setHasGoogleAuth(current2fa === 2);
+    const userHasEmail = !!user?.emailId;
+    const userHasMobile = !!user?.mobileNumber;
+    const userHasGoogleAuth = current2fa === 2;
+    
+    setHasEmail(userHasEmail);
+    setHasMobile(userHasMobile);
+    setHasGoogleAuth(userHasGoogleAuth);
+
+    // Fetch security status from API
+    fetchSecurityStatus();
+    
+    // Check passkey support and fetch existing passkeys
+    checkPasskeySupport();
+    fetchPasskeys();
   }, [props]);
 
   // Resend timer countdown
@@ -128,16 +221,22 @@ const TwofactorPage = (props) => {
     setCurrentStep(1);
     setResendTimer(0);
     setResendTimer2(0);
+    // Passkey states
+    setPasskeyName("");
+    setSelectedPasskey(null);
+    setDeletePasskeyCode("");
   };
 
   // Close all modals
   const closeAllModals = () => {
     const modalIds = [
       'googleAuthSetupModal', 'googleAuthQrModal', 'googleAuthVerifyModal',
-      'addMobileModal', 'verifyNewMobileModal',
+      'addMobileModal', 'verifyNewMobileModal', 'addEmailModal',
       'changeEmailModal', 'changeEmailStep2Modal', 'changeEmailStep3Modal',
       'changeMobileModal', 'changeMobileStep2Modal', 'changeMobileStep3Modal',
-      'blockingModal', 'disableGoogleAuthModal'
+      'blockingModal', 'disableGoogleAuthModal', 'disableAuthOptionsModal',
+      'securityReminderModal', 'addPasskeyModal', 'deletePasskeyModal', 'deletePasskeyOptionsModal',
+      'changeVerifyOptionsModal', 'changeMobileVerifyOptionsModal'
     ];
     modalIds.forEach(id => {
       const modalElement = document.getElementById(id);
@@ -160,11 +259,53 @@ const TwofactorPage = (props) => {
     }
   };
 
+  // Show security reminder modal when security is low
+  useEffect(() => {
+    if (showSecurityReminder) {
+      const timer = setTimeout(() => {
+        openModal('securityReminderModal');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [showSecurityReminder]);
+
   // Close a specific modal and open another
   const switchModal = (closeId, openId, delay = 300) => {
     const closeModal = window.bootstrap?.Modal?.getInstance(document.getElementById(closeId));
     if (closeModal) closeModal.hide();
     setTimeout(() => openModal(openId), delay);
+  };
+
+  // Go back to previous step in multi-step flows
+  const handleGoBack = (flowType) => {
+    if (flowType === 'addMobile') {
+      if (currentStep > 1) {
+        setCurrentStep(currentStep - 1);
+      }
+    } else if (flowType === 'changeEmail') {
+      if (currentStep > 1) {
+        setCurrentStep(currentStep - 1);
+      }
+    } else if (flowType === 'changeMobile') {
+      if (currentStep > 1) {
+        setCurrentStep(currentStep - 1);
+      }
+    } else if (flowType === 'addEmail') {
+      if (addEmailStep > 1) {
+        // For addEmail, if going back from step 2 and no Google Auth, go back to step 1 or close
+        if (addEmailStep === 2 && !hasGoogleAuth) {
+          closeAllModals();
+        } else {
+          setAddEmailStep(addEmailStep - 1);
+        }
+      }
+    } else if (flowType === 'googleAuthQr') {
+      // Go back from QR to verification
+      switchModal('googleAuthQrModal', 'googleAuthSetupModal');
+    } else if (flowType === 'googleAuthVerify') {
+      // Go back from verify to QR
+      switchModal('googleAuthVerifyModal', 'googleAuthQrModal');
+    }
   };
 
   // ============ API CALLS ============
@@ -212,33 +353,112 @@ const TwofactorPage = (props) => {
     }
   };
 
-  // ============ GOOGLE AUTHENTICATOR FLOW ============
-  // Step 1: Verify email first
-  const handleGoogleAuthStart = async () => {
-    resetModalStates();
-    const sent = await handleSendOtp('email', '2fa_setup');
-    if (sent) {
-      setResendTimer(60);
-      openModal('googleAuthSetupModal');
+  // Verify using passkey (WebAuthn) - returns verification token
+  const handlePasskeyVerification = async (purpose = 'security_action') => {
+    if (!passkeySupported) {
+      alertErrorMessage('Passkeys are not supported on this device/browser');
+      return null;
+    }
+
+    try {
+      setIsPasskeyVerifying(true);
+      LoaderHelper.loaderStatus(true);
+
+      // Step 1: Get authentication options from server
+      const optionsResult = await AuthService.passkeyGetAuthOptions(emailID);
+      if (!optionsResult?.success || !optionsResult?.data) {
+        alertErrorMessage(optionsResult?.message || 'Failed to get passkey options');
+        return null;
+      }
+
+      const authOptions = optionsResult.data;
+
+      // Step 2: Authenticate using browser's WebAuthn API
+      let credential;
+      try {
+        credential = await startAuthentication(authOptions);
+      } catch (webauthnError) {
+        console.error('WebAuthn authentication error:', webauthnError);
+        if (webauthnError.name === 'NotAllowedError') {
+          alertErrorMessage('Authentication was cancelled or timed out. Please try again.');
+        } else {
+          alertErrorMessage('Failed to authenticate with passkey. Please try another method.');
+        }
+        return null;
+      }
+
+      // Step 3: Verify credential with server
+      const verifyResult = await AuthService.passkeyVerifyAuth(emailID, credential);
+      
+      if (verifyResult?.success) {
+        alertSuccessMessage('Passkey verified successfully');
+        return verifyResult.data; // Contains userId and verified flag
+      } else {
+        alertErrorMessage(verifyResult?.message || 'Passkey verification failed');
+        return null;
+      }
+    } catch (error) {
+      console.error('Passkey verification error:', error);
+      alertErrorMessage(error?.message || 'Something went wrong');
+      return null;
+    } finally {
+      setIsPasskeyVerifying(false);
+      LoaderHelper.loaderStatus(false);
     }
   };
 
-  // Step 2: After email verification, show QR code
-  const handleGoogleAuthEmailVerify = async () => {
-    if (!emailOtpCode || emailOtpCode.length !== 6) {
+  // Get default verification method with passkey as first priority
+  // eslint-disable-next-line no-unused-vars
+  const getDefaultVerificationMethod = () => {
+    if (hasPasskey && passkeySupported) return 'passkey';
+    if (hasGoogleAuth) return 'totp';
+    if (hasEmail) return 'email';
+    if (hasMobile) return 'mobile';
+    return 'email';
+  };
+
+  // Get available verification methods for selection
+  // eslint-disable-next-line no-unused-vars
+  const getAvailableVerificationMethods = () => {
+    const methods = [];
+    if (hasPasskey && passkeySupported) methods.push({ value: 'passkey', label: 'Passkey' });
+    if (hasGoogleAuth) methods.push({ value: 'totp', label: 'Google Authenticator' });
+    if (hasEmail) methods.push({ value: 'email', label: 'Email Verification' });
+    if (hasMobile) methods.push({ value: 'mobile', label: 'Mobile Verification' });
+    return methods;
+  };
+
+  // ============ GOOGLE AUTHENTICATOR FLOW ============
+  // Step 1: Verify email or mobile first
+  const handleGoogleAuthStart = () => {
+    resetModalStates();
+    // Just open the modal - user will click "Send OTP" button
+    if (hasEmail || hasMobile) {
+      openModal('googleAuthSetupModal');
+    } else {
+      alertErrorMessage('You need an email or mobile number to set up Google Authenticator');
+    }
+  };
+
+  // Step 2: After email/mobile verification, show QR code
+  const handleGoogleAuthVerifyAndSetup = async () => {
+    const otpCode = hasEmail ? emailOtpCode : mobileOtpCode;
+    const target = hasEmail ? 'email' : 'mobile';
+
+    if (!otpCode || otpCode.length !== 6) {
       alertErrorMessage('Please enter a valid 6-digit OTP');
       return;
     }
 
-    const verified = await handleVerifyOtp('email', emailOtpCode, '2fa_setup');
+    const verified = await handleVerifyOtp(target, otpCode, '2fa_setup');
     if (verified) {
-      alertSuccessMessage('Email verified! Generating QR code...');
-      
+      alertSuccessMessage('Verified! Generating QR code...');
+
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
         const result = await AuthService.security2faSetup();
-        
+
         if (result?.success) {
           setGoogleQr(result.data?.qr_code || '');
           setGoogleCode(result.data?.secret?.base32 || '');
@@ -266,7 +486,7 @@ const TwofactorPage = (props) => {
       setIsLoading(true);
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.security2faConfirm(authenticatorCode);
-      
+
       if (result?.success) {
         alertSuccessMessage(result?.message || 'Google Authenticator enabled successfully!');
         closeAllModals();
@@ -283,74 +503,214 @@ const TwofactorPage = (props) => {
   };
 
   // Start Disable Google Authenticator flow
-  const handleDisableGoogleAuthStart = async () => {
+  const handleDisableGoogleAuthStart = () => {
     if (!canMakeSensitiveChanges()) {
       alertErrorMessage('You need at least 2 security methods to disable Google Authenticator');
       return;
     }
 
     resetModalStates();
-    setCurrentStep(1);
     
-    // Send OTP to email or mobile (whichever is available, prefer email)
-    if (hasEmail) {
-      const sent = await handleSendOtp('email', '2fa_disable');
-      if (sent) {
-        setResendTimer(60);
-        openModal('disableGoogleAuthModal');
-      }
-    } else if (hasMobile) {
-      const sent = await handleSendOtp('mobile', '2fa_disable');
-      if (sent) {
-        setResendTimer(60);
-        openModal('disableGoogleAuthModal');
-      }
-    } else {
-      alertErrorMessage('No verification method available');
+    // Build available methods - Passkey first priority
+    const methods = [];
+    
+    // Add Passkey if available (first priority)
+    if (hasPasskey && passkeySupported) {
+      methods.push({
+        type: 4,
+        label: 'Passkey',
+        value: 'Passkey Authentication',
+        icon: 'ri-fingerprint-line',
+        description: 'Use your passkey for verification'
+      });
     }
+    
+    // Add Google Authenticator as option
+    methods.push({
+      type: 2,
+      label: 'Google Authenticator',
+      value: 'Google Authenticator',
+      icon: 'ri-shield-keyhole-line',
+      description: 'Use your Google Authenticator app'
+    });
+    
+    // Add email if available
+    if (hasEmail) {
+      methods.push({
+        type: 1,
+        label: 'Email',
+        value: maskEmail(emailID),
+        icon: 'ri-mail-line',
+        description: 'Receive verification code via email'
+      });
+    }
+    
+    // Add mobile if available
+    if (hasMobile) {
+      methods.push({
+        type: 3,
+        label: 'Mobile',
+        value: maskPhone(mobileNumber),
+        icon: 'ri-smartphone-line',
+        description: 'Receive verification code via SMS'
+      });
+    }
+    
+    setDisableAvailableMethods(methods);
+    // Set default method - passkey first if available
+    setDisableAuthMethod(hasPasskey && passkeySupported ? 4 : 2);
+    setResendTimer(0);
+    
+    openModal('disableGoogleAuthModal');
+  };
+  
+  // Open disable auth options popup
+  const handleOpenDisableOptionsPopup = () => {
+    const modal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableGoogleAuthModal'));
+    if (modal) modal.hide();
+    setTimeout(() => {
+      openModal('disableAuthOptionsModal');
+    }, 100);
+  };
+  
+  // Select verification method for disable flow
+  const handleSelectDisableMethod = (method) => {
+    setDisableAuthMethod(method.type);
+    setEmailOtpCode('');
+    setMobileOtpCode('');
+    setGoogleAuthCode('');
+    setResendTimer(0);
+    
+    // Close options popup
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableAuthOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    
+    // Reopen main modal
+    setTimeout(() => {
+      openModal('disableGoogleAuthModal');
+    }, 100);
+  };
+  
+  // Close options popup and reopen main disable modal
+  const handleCloseDisableOptionsPopup = () => {
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableAuthOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    setTimeout(() => {
+      openModal('disableGoogleAuthModal');
+    }, 100);
+  };
+  
+  // Get verification title for disable flow
+  const getDisableVerificationTitle = () => {
+    if (disableAuthMethod === 4) return 'Passkey Verification';
+    if (disableAuthMethod === 2) return 'Enter Google Authenticator Code';
+    if (disableAuthMethod === 1) return 'Enter Email Verification Code';
+    if (disableAuthMethod === 3) return 'Enter Mobile Verification Code';
+    return 'Verify Your Identity';
+  };
+  
+  // Get verification description for disable flow
+  const getDisableVerificationDescription = () => {
+    if (disableAuthMethod === 4) return 'Use your passkey to verify your identity';
+    if (disableAuthMethod === 2) return 'Enter the 6-digit code from your authenticator app';
+    if (disableAuthMethod === 1) return `We'll send a verification code to ${maskEmail(emailID)}`;
+    if (disableAuthMethod === 3) return `We'll send a verification code to ${maskPhone(mobileNumber)}`;
+    return '';
+  };
+  
+  // Get the current OTP code for disable flow
+  const getDisableOtpCode = () => {
+    if (disableAuthMethod === 4) return ''; // Passkey doesn't use OTP code
+    if (disableAuthMethod === 2) return googleAuthCode;
+    if (disableAuthMethod === 1) return emailOtpCode;
+    if (disableAuthMethod === 3) return mobileOtpCode;
+    return '';
+  };
+  
+  // Set the OTP code for disable flow
+  const setDisableOtpCode = (value) => {
+    if (disableAuthMethod === 2) setGoogleAuthCode(value);
+    else if (disableAuthMethod === 1) setEmailOtpCode(value);
+    else if (disableAuthMethod === 3) setMobileOtpCode(value);
+  };
+  
+  // Send OTP for disable flow
+  const sendDisableOtp = async () => {
+    if (disableAuthMethod === 4) return true; // Passkey doesn't need OTP sending
+    if (disableAuthMethod === 2) return true; // Google Auth doesn't need OTP sending
+    
+    const target = disableAuthMethod === 1 ? 'email' : 'mobile';
+    const sent = await handleSendOtp(target, '2fa_disable');
+    if (sent) {
+      setResendTimer(60);
+    }
+    return sent;
   };
 
-  // Handle disable Google Auth verification steps
-  const handleDisableGoogleAuthNextStep = async () => {
-    if (currentStep === 1) {
-      // Verify email or mobile OTP
-      const otpToVerify = hasEmail ? emailOtpCode : mobileOtpCode;
-      const target = hasEmail ? 'email' : 'mobile';
+  // Handle disable Google Auth verification
+  const handleDisableGoogleAuthVerify = async () => {
+    // For passkey verification
+    if (disableAuthMethod === 4) {
+      const verificationResult = await handlePasskeyVerification('2fa_disable');
+      if (!verificationResult) return;
       
-      if (!otpToVerify || otpToVerify.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit OTP');
-        return;
-      }
-      
-      const verified = await handleVerifyOtp(target, otpToVerify, '2fa_disable');
-      if (verified) {
-        setCurrentStep(2); // Move to authenticator code verification
-      }
-    } else if (currentStep === 2) {
-      // Verify authenticator code and disable
-      if (!googleAuthCode || googleAuthCode.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit authenticator code');
-        return;
-      }
-
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        const result = await AuthService.security2faDisable(googleAuthCode);
+        
+        // Call backend to disable with passkey verification
+        const result = await AuthService.security2faDisable(null, null, 'passkey', verificationResult.userId);
         
         if (result?.success) {
-          alertSuccessMessage(result?.message || "Google Authenticator disabled");
+          alertSuccessMessage(result?.message || 'Google Authenticator disabled successfully');
           closeAllModals();
           handleUserDetails();
+          setHasGoogleAuth(false);
         } else {
-          alertErrorMessage(result?.message || "Failed to disable 2FA");
+          alertErrorMessage(result?.message || 'Failed to disable Google Authenticator');
         }
       } catch (error) {
-        alertErrorMessage(error?.message || "Something went wrong");
+        alertErrorMessage(error?.message || 'Something went wrong');
       } finally {
         setIsLoading(false);
         LoaderHelper.loaderStatus(false);
       }
+      return;
+    }
+
+    const otpCode = getDisableOtpCode();
+    
+    if (!otpCode || otpCode.length !== 6) {
+      alertErrorMessage('Please enter a valid 6-digit code');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      LoaderHelper.loaderStatus(true);
+      
+      let result;
+      if (disableAuthMethod === 2) {
+        // Direct disable with Google Auth code
+        result = await AuthService.security2faDisable(otpCode);
+      } else {
+        // For email/mobile - send OTP directly to backend for verification and disable
+        const verifyMethod = disableAuthMethod === 1 ? 'email' : 'mobile';
+        result = await AuthService.security2faDisable(null, otpCode, verifyMethod);
+      }
+      
+      if (result?.success) {
+        alertSuccessMessage(result?.message || "Google Authenticator disabled");
+        closeAllModals();
+        handleUserDetails();
+      } else {
+        alertErrorMessage(result?.message || "Failed to disable 2FA");
+      }
+    } catch (error) {
+      alertErrorMessage(error?.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+      LoaderHelper.loaderStatus(false);
     }
   };
 
@@ -364,23 +724,238 @@ const TwofactorPage = (props) => {
     }
   };
 
+  // ============ PASSKEY FLOW ============
+  
+  // Start passkey registration
+  const handleAddPasskeyStart = () => {
+    if (!passkeySupported) {
+      alertErrorMessage('Passkeys are not supported on this device/browser');
+      return;
+    }
+    resetModalStates();
+    // Pre-fill with PROJECT_NAME and masked email/mobile
+    const projectName = process.env.REACT_APP_PROJECT_NAME || 'Exchange';
+    const maskedIdentifier = emailID ? maskEmail(emailID) : (mobileNumber ? maskPhone(mobileNumber) : '');
+    const defaultName = maskedIdentifier ? `${projectName} - ${maskedIdentifier}` : `${projectName} Passkey`;
+    setPasskeyName(defaultName);
+    openModal('addPasskeyModal');
+  };
+
+  // Register a new passkey
+  const handleRegisterPasskey = async () => {
+    if (!passkeyName.trim()) {
+      alertErrorMessage('Please enter a name for your passkey');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      LoaderHelper.loaderStatus(true);
+
+      // Step 1: Get registration options from server
+      const optionsResult = await AuthService.passkeyGetRegistrationOptions();
+      if (!optionsResult?.success || !optionsResult?.data) {
+        alertErrorMessage(optionsResult?.message || 'Failed to get registration options');
+        return;
+      }
+
+      const registrationOptions = optionsResult.data;
+
+      // Step 2: Create credential using browser's WebAuthn API
+      let credential;
+      try {
+        credential = await startRegistration(registrationOptions);
+      } catch (webauthnError) {
+        console.error('WebAuthn registration error:', webauthnError);
+        if (webauthnError.name === 'NotAllowedError') {
+          alertErrorMessage('Registration was cancelled or timed out. Please try again.');
+        } else if (webauthnError.name === 'InvalidStateError') {
+          alertErrorMessage('This passkey is already registered on this device.');
+        } else {
+          alertErrorMessage('Failed to create passkey. Please try again.');
+        }
+        return;
+      }
+
+      // Step 3: Send credential to server for verification
+      const verifyResult = await AuthService.passkeyVerifyRegistration(credential, passkeyName.trim());
+      
+      if (verifyResult?.success) {
+        alertSuccessMessage(verifyResult?.message || 'Passkey added successfully!');
+        closeAllModals();
+        fetchPasskeys(); // Refresh passkey list
+        handleUserDetails();
+      } else {
+        alertErrorMessage(verifyResult?.message || 'Failed to register passkey');
+      }
+    } catch (error) {
+      console.error('Passkey registration error:', error);
+      alertErrorMessage(error?.message || 'Something went wrong');
+    } finally {
+      setIsLoading(false);
+      LoaderHelper.loaderStatus(false);
+    }
+  };
+
+  // Start passkey deletion flow
+  const handleDeletePasskeyStart = (passkey) => {
+    setSelectedPasskey(passkey);
+    setDeletePasskeyCode('');
+    setResendTimer(0);
+    
+    // Build available verification methods for deleting passkey
+    const methods = [];
+    if (hasGoogleAuth) {
+      methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
+    }
+    if (hasEmail) {
+      methods.push({ value: 'email', label: 'Email Verification', icon: 'ri-mail-line', description: `Send code to ${maskEmail(emailID)}` });
+    }
+    if (hasMobile) {
+      methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
+    }
+    
+    setDeletePasskeyAvailableMethods(methods);
+    
+    // Set default verification method - Google Auth first, then email, then mobile
+    if (hasGoogleAuth) {
+      setDeletePasskeyMethod('totp');
+    } else if (hasEmail) {
+      setDeletePasskeyMethod('email');
+    } else if (hasMobile) {
+      setDeletePasskeyMethod('mobile');
+    }
+    
+    openModal('deletePasskeyModal');
+  };
+
+  // Delete a passkey
+  const handleDeletePasskey = async () => {
+    if (!selectedPasskey) {
+      alertErrorMessage('No passkey selected');
+      return;
+    }
+
+    if (!deletePasskeyCode || deletePasskeyCode.length !== 6) {
+      alertErrorMessage('Please enter a valid 6-digit code');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      LoaderHelper.loaderStatus(true);
+
+      const result = await AuthService.passkeyDelete(
+        selectedPasskey._id,
+        deletePasskeyMethod,
+        deletePasskeyCode
+      );
+
+      if (result?.success) {
+        alertSuccessMessage(result?.message || 'Passkey deleted successfully');
+        closeAllModals();
+        fetchPasskeys();
+        handleUserDetails();
+      } else {
+        alertErrorMessage(result?.message || 'Failed to delete passkey');
+      }
+    } catch (error) {
+      alertErrorMessage(error?.message || 'Something went wrong');
+    } finally {
+      setIsLoading(false);
+      LoaderHelper.loaderStatus(false);
+    }
+  };
+
+  // Rename a passkey (for future use - add rename button in UI)
+  // eslint-disable-next-line no-unused-vars
+  const handleRenamePasskey = async (passkeyId, newName) => {
+    if (!newName.trim()) {
+      alertErrorMessage('Please enter a valid name');
+      return;
+    }
+
+    try {
+      const result = await AuthService.passkeyRename(passkeyId, newName.trim());
+      if (result?.success) {
+        alertSuccessMessage('Passkey renamed successfully');
+        fetchPasskeys();
+      } else {
+        alertErrorMessage(result?.message || 'Failed to rename passkey');
+      }
+    } catch (error) {
+      alertErrorMessage(error?.message || 'Something went wrong');
+    }
+  };
+
+  // Get verification method title for delete flow
+  // eslint-disable-next-line no-unused-vars
+  const getDeleteVerificationTitle = () => {
+    switch (deletePasskeyMethod) {
+      case 'totp': return 'Google Authenticator';
+      case 'email': return 'Email Verification';
+      case 'mobile': return 'Mobile Verification';
+      default: return 'Verification';
+    }
+  };
+
+  // Get verification description for delete passkey flow
+  const getDeleteVerificationDescription = () => {
+    switch (deletePasskeyMethod) {
+      case 'totp': return 'Enter the 6-digit code from your authenticator app';
+      case 'email': return `We'll send a verification code to ${maskEmail(emailID)}`;
+      case 'mobile': return `We'll send a verification code to ${maskPhone(mobileNumber)}`;
+      default: return '';
+    }
+  };
+
+  // Open delete passkey options popup
+  const handleOpenDeletePasskeyOptions = () => {
+    const modal = window.bootstrap?.Modal?.getInstance(document.getElementById('deletePasskeyModal'));
+    if (modal) modal.hide();
+    setTimeout(() => {
+      openModal('deletePasskeyOptionsModal');
+    }, 100);
+  };
+
+  // Select verification method for delete passkey flow
+  const handleSelectDeletePasskeyMethod = (method) => {
+    setDeletePasskeyMethod(method.value);
+    setDeletePasskeyCode('');
+    setResendTimer(0);
+    
+    // Close options popup
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('deletePasskeyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    
+    // Reopen main modal
+    setTimeout(() => {
+      openModal('deletePasskeyModal');
+    }, 100);
+  };
+
+  // Close delete passkey options popup
+  const handleCloseDeletePasskeyOptionsPopup = () => {
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('deletePasskeyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    setTimeout(() => {
+      openModal('deletePasskeyModal');
+    }, 100);
+  };
+
   // ============ ADD MOBILE FLOW ============
   // User wants to add mobile number (requires 2FA or email verification first)
-  const handleAddMobileStart = async () => {
+  const handleAddMobileStart = () => {
     resetModalStates();
-    
+
     // If user has Google Auth enabled, verify that first
     if (hasGoogleAuth) {
       openModal('addMobileModal');
       setCurrentStep(1); // Step 1: Google Auth verification
     } else if (hasEmail) {
-      // Verify email first
-      const sent = await handleSendOtp('email', 'add_mobile');
-      if (sent) {
-        setResendTimer(60);
-        openModal('addMobileModal');
-        setCurrentStep(2); // Step 2: Email verification
-      }
+      // Just open modal - user will click "Send OTP" button
+      openModal('addMobileModal');
+      setCurrentStep(2); // Step 2: Email verification
     } else {
       alertErrorMessage('You need email verification to add a mobile number');
     }
@@ -394,20 +969,15 @@ const TwofactorPage = (props) => {
         alertErrorMessage('Please enter a valid 6-digit code');
         return;
       }
-      
-      // For now, move to email verification step
-      const sent = await handleSendOtp('email', 'add_mobile');
-      if (sent) {
-        setResendTimer(60);
-        setCurrentStep(2);
-      }
+      // Move to email verification step - user will click "Send OTP" button
+      setCurrentStep(2);
     } else if (currentStep === 2) {
       // Verify email OTP
       if (!emailOtpCode || emailOtpCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit OTP');
         return;
       }
-      
+
       const verified = await handleVerifyOtp('email', emailOtpCode, 'add_mobile');
       if (verified) {
         setCurrentStep(3); // Move to enter mobile number
@@ -415,19 +985,21 @@ const TwofactorPage = (props) => {
     }
   };
 
-  // Send OTP to new mobile and move to verification
-  const handleAddMobileSendOtp = async () => {
+  // Validate and move to verify new mobile step
+  const handleAddMobileNext = () => {
     if (!newMobileNumber || newMobileNumber.length < 6) {
       alertErrorMessage('Please enter a valid mobile number');
       return;
     }
-
-    const fullNumber = `${newCountryCode} ${newMobileNumber}`;
-    const sent = await handleSendOtp('new_mobile', 'add_mobile', fullNumber);
-    if (sent) {
-      setResendTimer2(60);
-      setCurrentStep(4); // Move to verify new mobile
+    
+    // Validate phone number according to country code
+    const fullPhoneNumber = `${newCountryCode}${newMobileNumber}`;
+    if (!isValidPhoneNumber(fullPhoneNumber)) {
+      alertErrorMessage('Please enter a valid phone number for the selected country');
+      return;
     }
+    
+    setCurrentStep(4); // Move to verify new mobile - user will click "Send OTP" button
   };
 
   // Complete add mobile
@@ -436,17 +1008,17 @@ const TwofactorPage = (props) => {
       alertErrorMessage('Please enter a valid 6-digit OTP');
       return;
     }
-    
+
     try {
       setIsLoading(true);
       LoaderHelper.loaderStatus(true);
-      
+
       const result = await AuthService.securityMobileAdd({
         mobileNumber: newMobileNumber,
         countryCode: newCountryCode,
         mobileOtp: newMobileOtpCode
       });
-      
+
       if (result?.success) {
         alertSuccessMessage(result?.message || 'Mobile number added successfully!');
         closeAllModals();
@@ -469,66 +1041,93 @@ const TwofactorPage = (props) => {
       return;
     }
     resetModalStates();
-    setCurrentStep(1);
+    setPasskeyVerificationResult(null);
+    
+    // Build available verification methods - passkey first priority
+    const methods = [];
+    if (hasPasskey && passkeySupported) {
+      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use your passkey for verification' });
+    }
+    if (hasGoogleAuth) {
+      methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
+    }
+    methods.push({ value: 'email', label: 'Email Verification', icon: 'ri-mail-line', description: `Send code to ${maskEmail(emailID)}` });
+    if (hasMobile) {
+      methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
+    }
+    
+    setChangeAvailableMethods(methods);
+    // Set default method - passkey first if available
+    setChangeVerifyMethod(hasPasskey && passkeySupported ? 'passkey' : (hasGoogleAuth ? 'totp' : 'email'));
+    setCurrentStep(1); // Start at step 1 - verification
     openModal('changeEmailModal');
   };
 
-  // Step 1: Verify Google Auth (if enabled)
-  // Step 2: Verify current email OTP
-  // Step 3: Enter new email
-  // Step 4: Verify new email OTP
+  // Step 1: Verify identity (Passkey, Google Auth, Email OTP, or Mobile OTP)
+  // Step 2: Enter new email
+  // Step 3: Verify new email OTP
   const handleChangeEmailNextStep = async () => {
-    if (currentStep === 1 && hasGoogleAuth) {
-      // Verify Google Auth code format
-      if (!googleAuthCode || googleAuthCode.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit code');
-        return;
-      }
-      // Send email OTP for current email verification
-      const sent = await handleSendOtp('email', 'change_email');
-      if (sent) {
-        setResendTimer(60);
-        setCurrentStep(2);
-      }
-    } else if (currentStep === 1 && !hasGoogleAuth) {
-      // No Google Auth, start with email
-      const sent = await handleSendOtp('email', 'change_email');
-      if (sent) {
-        setResendTimer(60);
-        setCurrentStep(2);
+    if (currentStep === 1) {
+      // Step 1: Verify identity based on selected method
+      if (changeVerifyMethod === 'passkey') {
+        const verificationResult = await handlePasskeyVerification('change_email');
+        if (!verificationResult) return;
+        setPasskeyVerificationResult(verificationResult);
+        setCurrentStep(2); // Move to enter new email
+      } else if (changeVerifyMethod === 'totp') {
+        if (!googleAuthCode || googleAuthCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit code');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new email
+      } else if (changeVerifyMethod === 'email') {
+        if (!emailOtpCode || emailOtpCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit OTP');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new email
+      } else if (changeVerifyMethod === 'mobile') {
+        if (!mobileOtpCode || mobileOtpCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit OTP');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new email
       }
     } else if (currentStep === 2) {
-      // Verify current email OTP format
-      if (!emailOtpCode || emailOtpCode.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit OTP');
-        return;
-      }
-      // Move to enter new email (we'll verify OTPs when initiating change)
-      setCurrentStep(3);
-    } else if (currentStep === 3) {
-      // Validate new email and call initiate endpoint
+      // Step 2: Validate new email and initiate change
       if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
         alertErrorMessage('Please enter a valid email address');
         return;
       }
-      
+
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        
-        // Call backend to initiate email change (verifies 2FA + current email OTP)
-        const result = await AuthService.securityEmailChangeInitiate({
+
+        // Build request based on verification method used
+        const requestData = {
           newEmail: newEmail,
-          tofaCode: hasGoogleAuth ? googleAuthCode : undefined,
-          currentEmailOtp: emailOtpCode
-        });
-        
+        };
+
+        if (passkeyVerificationResult) {
+          requestData.passkeyVerified = true;
+          requestData.passkeyUserId = passkeyVerificationResult.userId;
+        } else if (changeVerifyMethod === 'totp') {
+          requestData.tofaCode = googleAuthCode;
+        } else if (changeVerifyMethod === 'email') {
+          requestData.currentEmailOtp = emailOtpCode;
+        } else if (changeVerifyMethod === 'mobile') {
+          // Use mobile OTP as current verification
+          requestData.currentMobileOtp = mobileOtpCode;
+        }
+
+        // Call backend to initiate email change
+        const result = await AuthService.securityEmailChangeInitiate(requestData);
+
         if (result?.success) {
-          alertSuccessMessage(result?.message || 'Please verify the OTP sent to your new email');
-          // Now send OTP to new email
-          await handleSendOtp('new_email', 'change_email', newEmail);
-          setResendTimer2(60);
-          setCurrentStep(4);
+          alertSuccessMessage(result?.message || 'Verification successful. Please send OTP to your new email.');
+          // Move to step 3 - user will click "Send OTP" button
+          setCurrentStep(3);
         } else {
           alertErrorMessage(result?.message || 'Failed to initiate email change');
         }
@@ -538,7 +1137,7 @@ const TwofactorPage = (props) => {
         setIsLoading(false);
         LoaderHelper.loaderStatus(false);
       }
-    } else if (currentStep === 4) {
+    } else if (currentStep === 3) {
       // Verify new email OTP and complete
       if (!newEmailOtpCode || newEmailOtpCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit OTP');
@@ -548,12 +1147,12 @@ const TwofactorPage = (props) => {
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        
+
         // Call backend to complete email change
         const result = await AuthService.securityEmailChangeComplete({
           newEmailOtp: newEmailOtpCode
         });
-        
+
         if (result?.success) {
           alertSuccessMessage(result?.message || 'Email changed successfully!');
           closeAllModals();
@@ -570,6 +1169,89 @@ const TwofactorPage = (props) => {
     }
   };
 
+  // Open change email options popup
+  const handleOpenChangeEmailOptions = () => {
+    const modal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeEmailModal'));
+    if (modal) modal.hide();
+    setTimeout(() => {
+      openModal('changeVerifyOptionsModal');
+    }, 100);
+  };
+
+  // Select verification method for change email flow
+  const handleSelectChangeMethod = (method) => {
+    setChangeVerifyMethod(method.value);
+    setEmailOtpCode('');
+    setMobileOtpCode('');
+    setGoogleAuthCode('');
+    setResendTimer(0);
+    setPasskeyVerificationResult(null);
+    
+    // Close options popup
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeVerifyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    
+    // Reopen main modal
+    setTimeout(() => {
+      openModal('changeEmailModal');
+    }, 100);
+  };
+
+  // Close change options popup
+  const handleCloseChangeOptionsPopup = () => {
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeVerifyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    setTimeout(() => {
+      openModal('changeEmailModal');
+    }, 100);
+  };
+
+  // Get verification title for change flows
+  const getChangeVerificationTitle = () => {
+    if (changeVerifyMethod === 'passkey') return 'Passkey Verification';
+    if (changeVerifyMethod === 'totp') return 'Google Authenticator';
+    if (changeVerifyMethod === 'email') return 'Email Verification';
+    if (changeVerifyMethod === 'mobile') return 'Mobile Verification';
+    return 'Verify Your Identity';
+  };
+
+  // Get verification description for change flows
+  const getChangeVerificationDescription = () => {
+    if (changeVerifyMethod === 'passkey') return 'Use your passkey to verify your identity';
+    if (changeVerifyMethod === 'totp') return 'Enter the 6-digit code from your authenticator app';
+    if (changeVerifyMethod === 'email') return `We'll send a verification code to ${maskEmail(emailID)}`;
+    if (changeVerifyMethod === 'mobile') return `We'll send a verification code to ${maskPhone(mobileNumber)}`;
+    return '';
+  };
+
+  // Get the current OTP code for change flow
+  const getChangeOtpCode = () => {
+    if (changeVerifyMethod === 'totp') return googleAuthCode;
+    if (changeVerifyMethod === 'email') return emailOtpCode;
+    if (changeVerifyMethod === 'mobile') return mobileOtpCode;
+    return '';
+  };
+
+  // Set the OTP code for change flow
+  const setChangeOtpCode = (value) => {
+    if (changeVerifyMethod === 'totp') setGoogleAuthCode(value);
+    else if (changeVerifyMethod === 'email') setEmailOtpCode(value);
+    else if (changeVerifyMethod === 'mobile') setMobileOtpCode(value);
+  };
+
+  // Send OTP for change flow
+  const sendChangeOtp = async () => {
+    if (changeVerifyMethod === 'passkey') return true;
+    if (changeVerifyMethod === 'totp') return true;
+    
+    const target = changeVerifyMethod === 'email' ? 'email' : 'mobile';
+    const sent = await handleSendOtp(target, 'change_email');
+    if (sent) {
+      setResendTimer(60);
+    }
+    return sent;
+  };
+
   // ============ CHANGE MOBILE FLOW ============
   const handleChangeMobileStart = () => {
     if (!canMakeSensitiveChanges()) {
@@ -577,64 +1259,97 @@ const TwofactorPage = (props) => {
       return;
     }
     resetModalStates();
-    setCurrentStep(1);
+    setPasskeyVerificationResult(null);
+    
+    // Build available verification methods - passkey first priority
+    const methods = [];
+    if (hasPasskey && passkeySupported) {
+      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use your passkey for verification' });
+    }
+    if (hasGoogleAuth) {
+      methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
+    }
+    if (hasEmail) {
+      methods.push({ value: 'email', label: 'Email Verification', icon: 'ri-mail-line', description: `Send code to ${maskEmail(emailID)}` });
+    }
+    methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
+    
+    setChangeAvailableMethods(methods);
+    // Set default method - passkey first if available
+    setChangeVerifyMethod(hasPasskey && passkeySupported ? 'passkey' : (hasGoogleAuth ? 'totp' : (hasEmail ? 'email' : 'mobile')));
+    setCurrentStep(1); // Start at step 1 - verification
     openModal('changeMobileModal');
   };
 
   const handleChangeMobileNextStep = async () => {
-    if (currentStep === 1 && hasGoogleAuth) {
-      // Verify Google Auth code format
-      if (!googleAuthCode || googleAuthCode.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit code');
-        return;
-      }
-      // Send OTP to current mobile
-      const sent = await handleSendOtp('mobile', 'change_mobile');
-      if (sent) {
-        setResendTimer(60);
-        setCurrentStep(2);
-      }
-    } else if (currentStep === 1 && !hasGoogleAuth) {
-      // No Google Auth, start with current mobile
-      const sent = await handleSendOtp('mobile', 'change_mobile');
-      if (sent) {
-        setResendTimer(60);
-        setCurrentStep(2);
+    if (currentStep === 1) {
+      // Step 1: Verify identity based on selected method
+      if (changeVerifyMethod === 'passkey') {
+        const verificationResult = await handlePasskeyVerification('change_mobile');
+        if (!verificationResult) return;
+        setPasskeyVerificationResult(verificationResult);
+        setCurrentStep(2); // Move to enter new mobile
+      } else if (changeVerifyMethod === 'totp') {
+        if (!googleAuthCode || googleAuthCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit code');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new mobile
+      } else if (changeVerifyMethod === 'email') {
+        if (!emailOtpCode || emailOtpCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit OTP');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new mobile
+      } else if (changeVerifyMethod === 'mobile') {
+        if (!mobileOtpCode || mobileOtpCode.length !== 6) {
+          alertErrorMessage('Please enter a valid 6-digit OTP');
+          return;
+        }
+        setCurrentStep(2); // Move to enter new mobile
       }
     } else if (currentStep === 2) {
-      // Verify current mobile OTP format
-      if (!mobileOtpCode || mobileOtpCode.length !== 6) {
-        alertErrorMessage('Please enter a valid 6-digit OTP');
-        return;
-      }
-      // Move to enter new mobile (we'll verify OTPs when initiating change)
-      setCurrentStep(3);
-    } else if (currentStep === 3) {
-      // Validate new mobile and call initiate endpoint
+      // Step 2: Validate new mobile number and initiate change
       if (!newMobileNumber || newMobileNumber.length < 6) {
         alertErrorMessage('Please enter a valid mobile number');
         return;
       }
-      
+
+      // Validate phone number according to country code
+      const fullPhoneNumber = `${newCountryCode}${newMobileNumber}`;
+      if (!isValidPhoneNumber(fullPhoneNumber)) {
+        alertErrorMessage('Please enter a valid phone number for the selected country');
+        return;
+      }
+
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        
-        // Call backend to initiate mobile change (verifies 2FA + current mobile OTP)
-        const result = await AuthService.securityMobileChangeInitiate({
+
+        // Build request based on verification method used
+        const requestData = {
           newMobileNumber: newMobileNumber,
           newCountryCode: newCountryCode,
-          tofaCode: hasGoogleAuth ? googleAuthCode : undefined,
-          currentMobileOtp: mobileOtpCode
-        });
-        
+        };
+
+        if (passkeyVerificationResult) {
+          requestData.passkeyVerified = true;
+          requestData.passkeyUserId = passkeyVerificationResult.userId;
+        } else if (changeVerifyMethod === 'totp') {
+          requestData.tofaCode = googleAuthCode;
+        } else if (changeVerifyMethod === 'email') {
+          requestData.currentEmailOtp = emailOtpCode;
+        } else if (changeVerifyMethod === 'mobile') {
+          requestData.currentMobileOtp = mobileOtpCode;
+        }
+
+        // Call backend to initiate mobile change
+        const result = await AuthService.securityMobileChangeInitiate(requestData);
+
         if (result?.success) {
-          alertSuccessMessage(result?.message || 'Please verify the OTP sent to your new mobile');
-          // Now send OTP to new mobile
-          const fullNumber = `${newCountryCode} ${newMobileNumber}`;
-          await handleSendOtp('new_mobile', 'change_mobile', fullNumber);
-          setResendTimer2(60);
-          setCurrentStep(4);
+          alertSuccessMessage(result?.message || 'Verification successful. Please send OTP to your new mobile.');
+          // Move to step 3 - user will click "Send OTP" button
+          setCurrentStep(3);
         } else {
           alertErrorMessage(result?.message || 'Failed to initiate mobile change');
         }
@@ -644,7 +1359,7 @@ const TwofactorPage = (props) => {
         setIsLoading(false);
         LoaderHelper.loaderStatus(false);
       }
-    } else if (currentStep === 4) {
+    } else if (currentStep === 3) {
       // Verify new mobile OTP and complete
       if (!newMobileOtpCode || newMobileOtpCode.length !== 6) {
         alertErrorMessage('Please enter a valid 6-digit OTP');
@@ -654,18 +1369,138 @@ const TwofactorPage = (props) => {
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        
+
         // Call backend to complete mobile change
         const result = await AuthService.securityMobileChangeComplete({
           newMobileOtp: newMobileOtpCode
         });
-        
+
         if (result?.success) {
           alertSuccessMessage(result?.message || 'Mobile number changed successfully!');
           closeAllModals();
           handleUserDetails();
         } else {
           alertErrorMessage(result?.message || 'Failed to change mobile number');
+        }
+      } catch (error) {
+        alertErrorMessage(error?.message || 'Something went wrong');
+      } finally {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  };
+
+  // Open change mobile options popup
+  const handleOpenChangeMobileOptions = () => {
+    const modal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeMobileModal'));
+    if (modal) modal.hide();
+    setTimeout(() => {
+      openModal('changeMobileVerifyOptionsModal');
+    }, 100);
+  };
+
+  // Select verification method for change mobile flow
+  const handleSelectChangeMobileMethod = (method) => {
+    setChangeVerifyMethod(method.value);
+    setEmailOtpCode('');
+    setMobileOtpCode('');
+    setGoogleAuthCode('');
+    setResendTimer(0);
+    setPasskeyVerificationResult(null);
+    
+    // Close options popup
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeMobileVerifyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    
+    // Reopen main modal
+    setTimeout(() => {
+      openModal('changeMobileModal');
+    }, 100);
+  };
+
+  // Close change mobile options popup
+  const handleCloseChangeMobileOptionsPopup = () => {
+    const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeMobileVerifyOptionsModal'));
+    if (optionsModal) optionsModal.hide();
+    setTimeout(() => {
+      openModal('changeMobileModal');
+    }, 100);
+  };
+
+  // ============ ADD EMAIL FLOW (for users who signed up with mobile) ============
+  const handleAddEmailStart = () => {
+    resetModalStates();
+
+    // If user has Google Auth enabled, start with that verification
+    if (hasGoogleAuth) {
+      setAddEmailStep(1);
+      openModal('addEmailModal');
+    } else if (hasMobile) {
+      // Start at mobile verification - user will click "Send OTP" button
+      setAddEmailStep(2);
+      openModal('addEmailModal');
+    } else {
+      alertErrorMessage('No verification method available');
+    }
+  };
+
+  const handleAddEmailNextStep = async () => {
+    if (addEmailStep === 1 && hasGoogleAuth) {
+      // Step 1: Verify Google Auth code
+      if (!googleAuthCode || googleAuthCode.length !== 6) {
+        alertErrorMessage('Please enter a valid 6-digit code');
+        return;
+      }
+
+      // Move to mobile verification step - user will click "Send OTP" button
+      if (hasMobile) {
+        setAddEmailStep(2);
+      } else {
+        // No mobile, move directly to enter email step
+        setAddEmailStep(3);
+      }
+    } else if (addEmailStep === 2) {
+      // Step 2: Collect mobile OTP (don't verify yet - backend will verify all together)
+      if (!mobileOtpCode || mobileOtpCode.length !== 6) {
+        alertErrorMessage('Please enter a valid 6-digit OTP');
+        return;
+      }
+      // Just move to next step - OTP will be verified by backend in final call
+      setAddEmailStep(3);
+    } else if (addEmailStep === 3) {
+      // Step 3: Validate email and move to step 4 - user will click "Send OTP" button
+      if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+        alertErrorMessage('Please enter a valid email address');
+        return;
+      }
+      // Move to step 4 - user will click "Send OTP" button
+      setAddEmailStep(4);
+    } else if (addEmailStep === 4) {
+      // Step 4: Verify new email OTP and complete
+      if (!newEmailOtpCode || newEmailOtpCode.length !== 6) {
+        alertErrorMessage('Please enter a valid 6-digit OTP');
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        LoaderHelper.loaderStatus(true);
+
+        // Call backend to add email
+        const result = await AuthService.securityEmailAdd({
+          email: newEmail,
+          tofaCode: hasGoogleAuth ? googleAuthCode : undefined,
+          mobileOtp: mobileOtpCode,
+          emailOtp: newEmailOtpCode
+        });
+
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Email added successfully!');
+          closeAllModals();
+          handleUserDetails();
+        } else {
+          alertErrorMessage(result?.message || 'Failed to add email');
         }
       } catch (error) {
         alertErrorMessage(error?.message || 'Something went wrong');
@@ -710,7 +1545,7 @@ const TwofactorPage = (props) => {
                   <><img src="/images/enabled_icon.svg" alt="Not Set" /> Not Set</>
                 )}
               </div>
-              
+
               {hasEmail && canMakeSensitiveChanges() && (
                 <button className="btn btn-outline" onClick={handleChangeEmailStart} disabled={isLoading}>
                   Change
@@ -718,6 +1553,11 @@ const TwofactorPage = (props) => {
               )}
               {hasEmail && !canMakeSensitiveChanges() && (
                 <span style={{ color: '#888', fontSize: '12px' }}>Add another method to change</span>
+              )}
+              {!hasEmail && hasMobile && (
+                <button className="btn btn-outline" onClick={handleAddEmailStart} disabled={isLoading}>
+                  Add Email
+                </button>
               )}
             </div>
 
@@ -735,7 +1575,7 @@ const TwofactorPage = (props) => {
                   <><img src="/images/enabled_icon.svg" alt="Not Set" /> Not Set</>
                 )}
               </div>
-              
+
               {!hasMobile ? (
                 <button className="btn btn-outline" onClick={handleAddMobileStart} disabled={isLoading}>
                   Add Mobile
@@ -753,8 +1593,8 @@ const TwofactorPage = (props) => {
             <div className={`factor_bl ${hasGoogleAuth ? 'active' : ''}`}>
               <div className="lftcnt">
                 <h6>
-                  <img src="/images/lock_icon.svg" alt="Authenticator" /> 
-                  Google Authenticator 
+                  <img src="/images/lock_icon.svg" alt="Authenticator" />
+                  Google Authenticator
                   {/* <span className="recommended-badge">Recommended</span> */}
                 </h6>
                 <p>Use time-based codes from Google Authenticator or similar apps for the highest security level.</p>
@@ -767,27 +1607,106 @@ const TwofactorPage = (props) => {
                   <><img src="/images/enabled_icon.svg" alt="Not Enabled" /> Not Enabled</>
                 )}
               </div>
-              
+
               {hasGoogleAuth ? (
-                <button 
-                  className="btn btn-outline" 
-                  onClick={handleDisableGoogleAuthStart} 
+                <button
+                  className="btn btn-outline"
+                  onClick={handleDisableGoogleAuthStart}
                   disabled={isLoading || !canMakeSensitiveChanges()}
                   title={!canMakeSensitiveChanges() ? 'Need at least 2 methods to disable' : ''}
                 >
                   Disable
                 </button>
               ) : (
-                <button className="btn btn-outline" onClick={handleGoogleAuthStart} disabled={isLoading || !hasEmail}>
+                <button className="btn btn-outline" onClick={handleGoogleAuthStart} disabled={isLoading || (!hasEmail && !hasMobile)}>
                   Set Up
                 </button>
               )}
             </div>
 
+            {/* Passkey Authentication */}
+            {passkeySupported && (
+              <div className={`factor_bl ${hasPasskey ? 'active' : ''}`}>
+                <div className="lftcnt">
+                  <h6>
+                    <i className="ri-fingerprint-line" style={{ fontSize: '20px', marginRight: '8px' }}></i>
+                    Passkey
+                  </h6>
+                  <p>Use Face ID, Touch ID, or Windows Hello for fast and secure passwordless login.</p>
+                </div>
+
+                <div className="enable">
+                  {hasPasskey ? (
+                    <><img src="/images/verified_icon.svg" alt="Enabled" /> {passkeys.length} Passkey{passkeys.length !== 1 ? 's' : ''}</>
+                  ) : (
+                    <><img src="/images/enabled_icon.svg" alt="Not Enabled" /> Not Enabled</>
+                  )}
+                </div>
+
+                <button 
+                  className="btn btn-outline" 
+                  onClick={handleAddPasskeyStart} 
+                  disabled={isLoading}
+                >
+                  {hasPasskey ? 'Add Another' : 'Set Up'}
+                </button>
+              </div>
+            )}
+
+            {/* Passkey List */}
+            {hasPasskey && passkeys.length > 0 && (
+              <div className="factor_bl passkey-list">
+                <div className="lftcnt" style={{ width: '100%' }}>
+                  <h6>
+                    <i className="ri-key-2-line" style={{ fontSize: '18px', marginRight: '8px' }}></i>
+                    Registered Passkeys
+                  </h6>
+                  <div className="passkey-items" style={{ marginTop: '15px' }}>
+                    {passkeys.map((passkey) => (
+                      <div 
+                        key={passkey._id} 
+                        className="passkey-item d-flex align-items-center justify-content-between"
+                        style={{ 
+                          padding: '12px 15px', 
+                          background: '#2F3542', 
+                          borderRadius: '8px', 
+                          marginBottom: '10px' 
+                        }}
+                      >
+                        <div className="passkey-info">
+                          <div className="d-flex align-items-center">
+                            <i className="ri-fingerprint-line" style={{ fontSize: '18px', marginRight: '10px', color: '#00c853' }}></i>
+                            <div>
+                              <strong style={{ color: '#fff' }}>{passkey.name}</strong>
+                              <div style={{ fontSize: '11px', color: '#888' }}>
+                                {passkey.deviceInfo?.browser || 'Unknown'} • {passkey.deviceInfo?.os || 'Unknown'}
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#666' }}>
+                                Added {new Date(passkey.createdAt).toLocaleDateString()}
+                                {passkey.lastUsedAt && ` • Last used ${new Date(passkey.lastUsedAt).toLocaleDateString()}`}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <button 
+                          className="btn btn-sm"
+                          style={{ background: '#dc3545', color: '#fff', padding: '5px 12px', borderRadius: '5px' }}
+                          onClick={() => handleDeletePasskeyStart(passkey)}
+                          disabled={isLoading}
+                        >
+                          <i className="ri-delete-bin-line"></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Security Tips */}
-            <div className="factor_bl security-tips">
+            <div className=" security-tips">
               <div className="lftcnt">
-                <h6><img src="/images/noneicon.svg" alt="Tips" /> Security Tips</h6>
+                <h6><i class="ri-folder-shield-2-line"></i>Security Tips</h6>
                 <ul className="security-tips-list">
                   <li>✓ Enable at least 2 security methods for better protection</li>
                   <li>✓ Google Authenticator provides the highest security level</li>
@@ -801,20 +1720,20 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* ============ GOOGLE AUTHENTICATOR MODALS ============ */}
-      
-      {/* Step 1: Email Verification for Google Auth Setup */}
-      <div className="modal fade search_form" id="googleAuthSetupModal" tabIndex="-1" aria-hidden="true">
+
+      {/* Step 1: Email/Mobile Verification for Google Auth Setup */}
+      <div className="modal fade search_form" id="googleAuthSetupModal" tabIndex="-1" aria-hidden="true"  data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Enable Google Authenticator</h5>
-              <p>Step 1: Verify your email first for security</p>
+              <p>Step 1: Verify your {hasEmail ? 'email' : 'mobile'} first for security</p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="verify_authenticator_s">
-                <img src="/images/verifyemail.svg" alt="Verify" />
-                <p>We've sent a verification code to <strong>{maskEmail(emailID)}</strong></p>
+                <img src={hasEmail ? "/images/verifyemail.svg" : "/images/mobile_icon.svg"} alt="Verify" />
+                <p>Click "Send OTP" to receive a verification code on <strong>{hasEmail ? maskEmail(emailID) : maskPhone(mobileNumber)}</strong></p>
               </div>
 
               <div className="verify_authenticator_form">
@@ -822,18 +1741,28 @@ const TwofactorPage = (props) => {
                   <div className="emailinput">
                     <label>Enter verification code</label>
                     <div className="d-flex">
-                      <input
-                        type="text"
-                        placeholder="123456"
-                        maxLength={6}
-                        value={emailOtpCode}
-                        onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
-                      />
+                      {hasEmail ? (
+                        <input
+                          type="text"
+                          placeholder="123456"
+                          maxLength={6}
+                          value={emailOtpCode}
+                          onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          placeholder="123456"
+                          maxLength={6}
+                          value={mobileOtpCode}
+                          onChange={(e) => setMobileOtpCode(e.target.value.replace(/\D/g, ''))}
+                        />
+                      )}
                       {resendTimer > 0 ? (
                         <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
                       ) : (
-                        <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', '2fa_setup').then(() => setResendTimer(60))}>
-                          Resend
+                        <div className="getotp cursor-pointer" onClick={() => handleSendOtp(hasEmail ? 'email' : 'mobile', '2fa_setup').then(() => setResendTimer(60))}>
+                          Send OTP
                         </div>
                       )}
                     </div>
@@ -842,8 +1771,8 @@ const TwofactorPage = (props) => {
                   <button
                     className="submit"
                     type="button"
-                    disabled={isLoading || emailOtpCode.length !== 6}
-                    onClick={handleGoogleAuthEmailVerify}
+                    disabled={isLoading || (hasEmail ? emailOtpCode.length !== 6 : mobileOtpCode.length !== 6)}
+                    onClick={handleGoogleAuthVerifyAndSetup}
                   >
                     {isLoading ? 'Verifying...' : 'Verify & Continue'}
                   </button>
@@ -855,11 +1784,16 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* Step 2: QR Code Display */}
-      <div className="modal fade search_form" id="googleAuthQrModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="googleAuthQrModal" tabIndex="-1" aria-hidden="true"  data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Scan QR Code</h5>
+
+              {/* <button type="button" className="btn-back" onClick={() => handleGoBack('googleAuthQr')} title="Go back">
+              </button> */}
+
+
+              <h5 className="modal-title">  <i className="ri-arrow-left-line cursor-pointer" onClick={() => handleGoBack('googleAuthQr')} ></i>Scan QR Code</h5>
               <p>Step 2: Scan with Google Authenticator app</p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -886,14 +1820,14 @@ const TwofactorPage = (props) => {
                   </div>
                 </div>
                 <form className="profile_form">
-                <button
-                  className="submit"
-                  type="button"
-                  disabled={!googleCode}
-                  onClick={() => switchModal('googleAuthQrModal', 'googleAuthVerifyModal')}
-                >
-                  Continue
-                </button>
+                  <button
+                    className="submit"
+                    type="button"
+                    disabled={!googleCode}
+                    onClick={() => switchModal('googleAuthQrModal', 'googleAuthVerifyModal')}
+                  >
+                    Continue
+                  </button>
                 </form>
               </div>
             </div>
@@ -902,11 +1836,13 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* Step 3: Verify Authenticator Code */}
-      <div className="modal fade search_form" id="googleAuthVerifyModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="googleAuthVerifyModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Verify Setup</h5>
+              {/* <button type="button" className="btn-back" onClick={() => handleGoBack('googleAuthVerify')} title="Go back">
+              </button> */}
+              <h5 className="modal-title">    <i className="ri-arrow-left-line cursor-pointer" onClick={() => handleGoBack('googleAuthVerify')} ></i>Verify Setup</h5>
               <p>Step 3: Enter the code from your authenticator app</p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -947,11 +1883,16 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* ============ ADD MOBILE MODAL ============ */}
-      <div className="modal fade search_form" id="addMobileModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="addMobileModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add Mobile Number</h5>
+              {/* {currentStep > 1 && (
+                <button type="button" className="btn-back" onClick={() => handleGoBack('addMobile')} title="Go back">
+                  <i className="ri-arrow-left-line"></i>
+                </button>
+              )} */}
+              <h5 className="modal-title">  {currentStep > 2 && (<i className="ri-arrow-left-line cursor-pointer" onClick={() => handleGoBack('addMobile')} ></i>)}Add Mobile Number</h5>
               <p>
                 {currentStep === 1 && hasGoogleAuth && 'Step 1: Verify Google Authenticator'}
                 {currentStep === 2 && 'Step 2: Verify your email'}
@@ -963,7 +1904,7 @@ const TwofactorPage = (props) => {
             <div className="modal-body">
               <div className="verify_authenticator_form">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                  
+
                   {/* Step 1: Google Auth (if enabled) */}
                   {currentStep === 1 && hasGoogleAuth && (
                     <div className="emailinput">
@@ -983,25 +1924,25 @@ const TwofactorPage = (props) => {
                   {/* Step 2: Email OTP */}
                   {currentStep === 2 && (
                     <>
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskEmail(emailID)}</strong></p>
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{maskEmail(emailID)}</strong></p>
 
-                    <div className="emailinput">
-                      <label>Email Verification Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={emailOtpCode}
-                          onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                        {resendTimer > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', 'add_mobile').then(() => setResendTimer(60))}>
-                            Resend
-                          </div>
-                        )}
+                      <div className="emailinput">
+                        <label>Email Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={emailOtpCode}
+                            onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', 'add_mobile').then(() => setResendTimer(60))}>
+                              Send OTP
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>
@@ -1010,18 +1951,23 @@ const TwofactorPage = (props) => {
                   {/* Step 3: Enter mobile number */}
                   {currentStep === 3 && (
                     <>
-                      <div className="emailinput">
-                        <label>Country Code</label>
-                        <select
-                          className="form-control"
-                          value={newCountryCode}
-                          onChange={(e) => setNewCountryCode(e.target.value)}
-                        >
-                          <option value="+91">+91 (India)</option>
-                          <option value="+1">+1 (USA)</option>
-                          <option value="+44">+44 (UK)</option>
-                          <option value="+86">+86 (China)</option>
-                        </select>
+                      
+                      <div className="input_block">
+                        {/* <label>Country Code</label> */}
+                        <Select
+                          styles={customStyles}
+                          inputId="countryCode"
+                          name="country_code_select"
+                          options={countriesList}
+                          onChange={(selected) => setNewCountryCode(selected?.value || '+91')}
+                          value={countriesList.find(option => option.value === newCountryCode)}
+                          placeholder="Select country code"
+                          // blurInputOnSelect={true}
+                          onMenuOpen={() => {}}
+                          filterOption={(option, inputValue) => 
+                            option.label.toLowerCase().includes(inputValue.toLowerCase())
+                          }
+                        />
                       </div>
                       <div className="emailinput" style={{ marginTop: '15px' }}>
                         <label>Mobile Number</label>
@@ -1038,30 +1984,30 @@ const TwofactorPage = (props) => {
                   {/* Step 4: Verify new mobile */}
                   {currentStep === 4 && (
                     <>
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{newCountryCode} {newMobileNumber}</strong></p>
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{newCountryCode} {newMobileNumber}</strong></p>
 
-                    <div className="emailinput">
-                      <label>Mobile Verification Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={newMobileOtpCode}
-                          onChange={(e) => setNewMobileOtpCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                        {resendTimer2 > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => {
-                            const fullNumber = `${newCountryCode} ${newMobileNumber}`;
-                            handleSendOtp('new_mobile', 'add_mobile', fullNumber).then(() => setResendTimer2(60));
-                          }}>
-                            Resend
-                          </div>
-                        )}
+                      <div className="emailinput">
+                        <label>Mobile Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={newMobileOtpCode}
+                            onChange={(e) => setNewMobileOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer2 > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => {
+                              const fullNumber = `${newCountryCode} ${newMobileNumber}`;
+                              handleSendOtp('new_mobile', 'add_mobile', fullNumber).then(() => setResendTimer2(60));
+                            }}>
+                              Send OTP
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
                     </>
                   )}
 
@@ -1071,7 +2017,7 @@ const TwofactorPage = (props) => {
                     disabled={isLoading}
                     onClick={() => {
                       if (currentStep <= 2) handleAddMobileVerifyIdentity();
-                      else if (currentStep === 3) handleAddMobileSendOtp();
+                      else if (currentStep === 3) handleAddMobileNext();
                       else if (currentStep === 4) handleAddMobileComplete();
                     }}
                   >
@@ -1085,114 +2031,159 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* ============ CHANGE EMAIL MODAL ============ */}
-      <div className="modal fade search_form" id="changeEmailModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="changeEmailModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Change Email Address</h5>
+              <h5 className="modal-title">
+                {currentStep > 1 && (<i className="ri-arrow-left-line cursor-pointer me-2" onClick={() => handleGoBack('changeEmail')}></i>)}
+                Change Email Address
+              </h5>
               <p>
-                {currentStep === 1 && hasGoogleAuth && 'Step 1: Verify Google Authenticator'}
-                {currentStep === 1 && !hasGoogleAuth && 'Step 1: Verify current email'}
-                {currentStep === 2 && 'Step 2: Verify current email'}
-                {currentStep === 3 && 'Step 3: Enter new email address'}
-                {currentStep === 4 && 'Step 4: Verify new email'}
+                {currentStep === 1 && getChangeVerificationTitle()}
+                {currentStep === 2 && 'Step 2: Enter new email address'}
+                {currentStep === 3 && 'Step 3: Verify new email'}
               </p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="verify_authenticator_form">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                  
-                  {/* Step 1: Google Auth (if enabled) */}
-                  {currentStep === 1 && hasGoogleAuth && (
-                    <div className="emailinput">
-                      <label>Google Authenticator Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={googleAuthCode}
-                          onChange={(e) => setGoogleAuthCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                      </div>
-                    </div>
-                  )}
 
-                  {/* Step 2: Current Email OTP */}
-                  {currentStep === 2 && (
+                  {/* Step 1: Verify identity */}
+                  {currentStep === 1 && (
                     <>
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskEmail(emailID)}</strong></p>
-                    <div className="emailinput">
-                    
-                      <label>Current Email Verification Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={emailOtpCode}
-                          onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                        {resendTimer > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', 'change_email').then(() => setResendTimer(60))}>
-                            Resend
+                      {/* Passkey verification */}
+                      {changeVerifyMethod === 'passkey' ? (
+                        <div className="" style={{ textAlign: 'center' }}>
+                          <div style={{ 
+                            width: '80px', 
+                            height: '80px', 
+                            borderRadius: '50%', 
+                            background: 'rgba(255,255,255,0.1)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            margin: '0 auto 20px'
+                          }}>
+                            <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
                           </div>
-                        )}
+                          <p className="text-white mb-3">{getChangeVerificationDescription()}</p>
+                          <button
+                            className="submit w-100"
+                            type="button"
+                            onClick={handleChangeEmailNextStep}
+                            disabled={isLoading || isPasskeyVerifying}
+                          >
+                            {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
+                          </button>
                         </div>
-                      </div>
+                      ) : (
+                        <>
+                          <p style={{ marginBottom: '10px' }}>{getChangeVerificationDescription()}</p>
+                          <div className="emailinput">
+                            <label>Enter 6-digit Code</label>
+                            <div className="d-flex">
+                              <input
+                                type="text"
+                                placeholder="123456"
+                                maxLength={6}
+                                value={getChangeOtpCode()}
+                                onChange={(e) => setChangeOtpCode(e.target.value.replace(/\D/g, ''))}
+                              />
+                              {/* Send OTP button for Email/Mobile */}
+                              {changeVerifyMethod !== 'totp' && (
+                                resendTimer > 0 ? (
+                                  <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="getotp otp-button-enabled getotp_mobile"
+                                    onClick={sendChangeOtp}
+                                  >
+                                    GET OTP
+                                  </button>
+                                )
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            className="submit"
+                            type="button"
+                            disabled={isLoading || getChangeOtpCode().length < 6}
+                            onClick={handleChangeEmailNextStep}
+                          >
+                            {isLoading ? 'Processing...' : 'Continue'}
+                          </button>
+                        </>
+                      )}
+
+                      {/* Switch verification option */}
+                      {changeAvailableMethods.length > 1 && (
+                        <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenChangeEmailOptions(); }} style={{ marginTop: '15px' }}>
+                          <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                        </div>
+                      )}
                     </>
                   )}
 
-                  {/* Step 3: Enter new email */}
-                  {currentStep === 3 && (
-                    <div className="emailinput">
-                      <label>New Email Address</label>
-                      <input
-                        type="email"
-                        placeholder="Enter new email address"
-                        value={newEmail}
-                        onChange={(e) => setNewEmail(e.target.value)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Step 4: Verify new email */}
-                  {currentStep === 4 && (
-                    <>                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{newEmail}</strong></p>
-
-                    <div className="emailinput">
-                      <label>New Email Verification Code</label>
-                      <div className="d-flex">
+                  {/* Step 2: Enter new email */}
+                  {currentStep === 2 && (
+                    <>
+                      <div className="emailinput">
+                        <label>New Email Address</label>
                         <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={newEmailOtpCode}
-                          onChange={(e) => setNewEmailOtpCode(e.target.value.replace(/\D/g, ''))}
+                          type="email"
+                          placeholder="Enter new email address"
+                          value={newEmail}
+                          onChange={(e) => setNewEmail(e.target.value)}
                         />
-                        {resendTimer2 > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('new_email', 'change_email', newEmail).then(() => setResendTimer2(60))}>
-                            Resend
-                          </div>
-                        )}
                       </div>
-                    </div></>
-
+                      <button
+                        className="submit"
+                        type="button"
+                        disabled={isLoading}
+                        onClick={handleChangeEmailNextStep}
+                      >
+                        {isLoading ? 'Processing...' : 'Continue'}
+                      </button>
+                    </>
                   )}
 
-                  <button
-                    className="submit"
-                    type="button"
-                    disabled={isLoading}
-                    onClick={handleChangeEmailNextStep}
-                  >
-                    {isLoading ? 'Processing...' : currentStep === 4 ? 'Change Email' : 'Continue'}
-                  </button>
+                  {/* Step 3: Verify new email */}
+                  {currentStep === 3 && (
+                    <>
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{newEmail}</strong></p>
+                      <div className="emailinput">
+                        <label>New Email Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={newEmailOtpCode}
+                            onChange={(e) => setNewEmailOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer2 > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => handleSendOtp('new_email', 'change_email', newEmail).then(() => setResendTimer2(60))}>
+                              Send OTP
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        className="submit"
+                        type="button"
+                        disabled={isLoading}
+                        onClick={handleChangeEmailNextStep}
+                      >
+                        {isLoading ? 'Processing...' : 'Change Email'}
+                      </button>
+                    </>
+                  )}
+
                 </form>
               </div>
             </div>
@@ -1200,83 +2191,155 @@ const TwofactorPage = (props) => {
         </div>
       </div>
 
-      {/* ============ CHANGE MOBILE MODAL ============ */}
-      <div className="modal fade search_form" id="changeMobileModal" tabIndex="-1" aria-hidden="true">
+      {/* Change Email Verification Options Modal */}
+      <div className="modal fade search_form" id="changeVerifyOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Change Mobile Number</h5>
+              <h5 className="modal-title">Select a Verification Option</h5>
+              <p>Choose how you want to verify your identity</p>
+              <button type="button" className="btn-close" onClick={handleCloseChangeOptionsPopup} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                {changeAvailableMethods.map((method) => (
+                  <div className="" key={method.value}>
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => handleSelectChangeMethod(method)}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className={`${method.icon} me-3`}></i>
+                        <div>
+                          <strong>{method.label}</strong>
+                          <p className="mb-0 small">{method.description}</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                ))}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ CHANGE MOBILE MODAL ============ */}
+      <div className="modal fade search_form" id="changeMobileModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                {currentStep > 1 && (<i className="ri-arrow-left-line cursor-pointer me-2" onClick={() => handleGoBack('changeMobile')}></i>)}
+                Change Mobile Number
+              </h5>
               <p>
-                {currentStep === 1 && hasGoogleAuth && 'Step 1: Verify Google Authenticator'}
-                {currentStep === 1 && !hasGoogleAuth && 'Step 1: Verify current mobile'}
-                {currentStep === 2 && 'Step 2: Verify current mobile'}
-                {currentStep === 3 && 'Step 3: Enter new mobile number'}
-                {currentStep === 4 && 'Step 4: Verify new mobile'}
+                {currentStep === 1 && getChangeVerificationTitle()}
+                {currentStep === 2 && 'Step 2: Enter new mobile number'}
+                {currentStep === 3 && 'Step 3: Verify new mobile'}
               </p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="verify_authenticator_form">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                  
-                  {/* Step 1: Google Auth (if enabled) */}
-                  {currentStep === 1 && hasGoogleAuth && (
-                    <div className="emailinput">
-                      <label>Google Authenticator Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={googleAuthCode}
-                          onChange={(e) => setGoogleAuthCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                      </div>
-                    </div>
-                  )}
 
-                  {/* Step 2: Current Mobile OTP */}
-                  {currentStep === 2 && (
+                  {/* Step 1: Verify identity */}
+                  {currentStep === 1 && (
                     <>
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskPhone(mobileNumber)}</strong></p>
+                      {/* Passkey verification */}
+                      {changeVerifyMethod === 'passkey' ? (
+                        <div className="" style={{ textAlign: 'center' }}>
+                           <form>
 
-                    <div className="emailinput">
-                      <label>Current Mobile Verification Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={mobileOtpCode}
-                          onChange={(e) => setMobileOtpCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                        {resendTimer > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => handleSendOtp('mobile', 'change_mobile').then(() => setResendTimer(60))}>
-                            Resend
+                          <div style={{ 
+                            width: '80px', 
+                            height: '80px', 
+                            borderRadius: '50%', 
+                            background: 'rgba(255,255,255,0.1)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            margin: '0 auto 20px'
+                          }}>
+                            <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
                           </div>
-                        )}
-                      </div>
-                    </div>
+                          <p className="text-white mb-3">{getChangeVerificationDescription()}</p>
+                       
+                          <button
+                            className="submit w-100"
+                            type="button"
+                            onClick={handleChangeMobileNextStep}
+                            disabled={isLoading || isPasskeyVerifying}
+                          >
+                            {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
+                          </button>
+                          </form>
+                        </div>
+                      ) : (
+                        <>
+                          <p style={{ marginBottom: '10px' }}>{getChangeVerificationDescription()}</p>
+                          <div className="emailinput">
+                            <label>Enter 6-digit Code</label>
+                            <div className="d-flex">
+                              <input
+                                type="text"
+                                placeholder="123456"
+                                maxLength={6}
+                                value={getChangeOtpCode()}
+                                onChange={(e) => setChangeOtpCode(e.target.value.replace(/\D/g, ''))}
+                              />
+                              {/* Send OTP button for Email/Mobile */}
+                              {changeVerifyMethod !== 'totp' && (
+                                resendTimer > 0 ? (
+                                  <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="getotp otp-button-enabled getotp_mobile"
+                                    onClick={sendChangeOtp}
+                                  >
+                                    GET OTP
+                                  </button>
+                                )
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            className="submit"
+                            type="button"
+                            disabled={isLoading || getChangeOtpCode().length < 6}
+                            onClick={handleChangeMobileNextStep}
+                          >
+                            {isLoading ? 'Processing...' : 'Continue'}
+                          </button>
+                        </>
+                      )}
+
+                      {/* Switch verification option */}
+                      {changeAvailableMethods.length > 1 && (
+                        <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenChangeMobileOptions(); }} style={{ marginTop: '15px' }}>
+                          <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                        </div>
+                      )}
                     </>
                   )}
 
-                  {/* Step 3: Enter new mobile */}
-                  {currentStep === 3 && (
+                  {/* Step 2: Enter new mobile */}
+                  {currentStep === 2 && (
                     <>
-                      <div className="emailinput">
-                        <label>Country Code</label>
-                        <select
-                          className="form-control"
-                          value={newCountryCode}
-                          onChange={(e) => setNewCountryCode(e.target.value)}
-                        >
-                          <option value="+91">+91 (India)</option>
-                          <option value="+1">+1 (USA)</option>
-                          <option value="+44">+44 (UK)</option>
-                          <option value="+86">+86 (China)</option>
-                        </select>
+                      <div className="input_block">
+                        <Select
+                          styles={customStyles}
+                          inputId="newCountryCode"
+                          name="new_country_code_select"
+                          options={countriesList}
+                          onChange={(selected) => setNewCountryCode(selected?.value || '+91')}
+                          value={countriesList.find(option => option.value === newCountryCode)}
+                          placeholder="Select country code"
+                        />
                       </div>
                       <div className="emailinput" style={{ marginTop: '15px' }}>
                         <label>New Mobile Number</label>
@@ -1287,47 +2350,54 @@ const TwofactorPage = (props) => {
                           onChange={(e) => setNewMobileNumber(e.target.value.replace(/\D/g, ''))}
                         />
                       </div>
+                      <button
+                        className="submit"
+                        type="button"
+                        disabled={isLoading}
+                        onClick={handleChangeMobileNextStep}
+                      >
+                        {isLoading ? 'Processing...' : 'Continue'}
+                      </button>
                     </>
                   )}
 
-                  {/* Step 4: Verify new mobile */}
-                  {currentStep === 4 && (
+                  {/* Step 3: Verify new mobile */}
+                  {currentStep === 3 && (
                     <>
-                      <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{newCountryCode} {newMobileNumber}</strong></p>
-
-                    <div className="emailinput">
-                      <label>New Mobile Verification Code</label>
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="123456"
-                          maxLength={6}
-                          value={newMobileOtpCode}
-                          onChange={(e) => setNewMobileOtpCode(e.target.value.replace(/\D/g, ''))}
-                        />
-                        {resendTimer2 > 0 ? (
-                          <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
-                        ) : (
-                          <div className="getotp cursor-pointer" onClick={() => {
-                            const fullNumber = `${newCountryCode} ${newMobileNumber}`;
-                            handleSendOtp('new_mobile', 'change_mobile', fullNumber).then(() => setResendTimer2(60));
-                          }}>
-                            Resend
-                          </div>
-                        )}
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{newCountryCode} {newMobileNumber}</strong></p>
+                      <div className="emailinput">
+                        <label>New Mobile Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={newMobileOtpCode}
+                            onChange={(e) => setNewMobileOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer2 > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => {
+                              const fullNumber = `${newCountryCode} ${newMobileNumber}`;
+                              handleSendOtp('new_mobile', 'change_mobile', fullNumber).then(() => setResendTimer2(60));
+                            }}>
+                              Send OTP
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                      <button
+                        className="submit"
+                        type="button"
+                        disabled={isLoading}
+                        onClick={handleChangeMobileNextStep}
+                      >
+                        {isLoading ? 'Processing...' : 'Change Mobile'}
+                      </button>
                     </>
                   )}
 
-                  <button
-                    className="submit"
-                    type="button"
-                    disabled={isLoading}
-                    onClick={handleChangeMobileNextStep}
-                  >
-                    {isLoading ? 'Processing...' : currentStep === 4 ? 'Change Mobile' : 'Continue'}
-                  </button>
                 </form>
               </div>
             </div>
@@ -1335,8 +2405,43 @@ const TwofactorPage = (props) => {
         </div>
       </div>
 
+      {/* Change Mobile Verification Options Modal */}
+      <div className="modal fade search_form" id="changeMobileVerifyOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Select a Verification Option</h5>
+              <p>Choose how you want to verify your identity</p>
+              <button type="button" className="btn-close" onClick={handleCloseChangeMobileOptionsPopup} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                {changeAvailableMethods.map((method) => (
+                  <div className="" key={method.value}>
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => handleSelectChangeMobileMethod(method)}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className={`${method.icon} me-3`}></i>
+                        <div>
+                          <strong>{method.label}</strong>
+                          <p className="mb-0 small">{method.description}</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                ))}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ============ BLOCKING MODAL (Not enough security methods) ============ */}
-      <div className="modal fade search_form" id="blockingModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="blockingModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -1366,84 +2471,164 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* ============ DISABLE GOOGLE AUTHENTICATOR MODAL ============ */}
-      <div className="modal fade search_form" id="disableGoogleAuthModal" tabIndex="-1" aria-hidden="true">
+      <div className="modal fade search_form" id="disableGoogleAuthModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Disable Google Authenticator</h5>
+              <h5 className="modal-title">{getDisableVerificationTitle()}</h5>
+              <p>{getDisableVerificationDescription()}</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                
+                {/* Passkey verification - no OTP input needed */}
+                {disableAuthMethod === 4 ? (
+                  <div className="" style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      width: '80px', 
+                      height: '80px', 
+                      borderRadius: '50%', 
+                      background: 'rgba(255,255,255,0.1)', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      margin: '0 auto 20px'
+                    }}>
+                      <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
+                    </div>
+                    <p className="text-white mb-3">Click the button below to authenticate with your passkey</p>
+                    <button
+                      className="submit w-100"
+                      type="button"
+                      onClick={handleDisableGoogleAuthVerify}
+                      disabled={isLoading || isPasskeyVerifying}
+                    >
+                      {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="emailinput">
+                      <label>Enter 6-digit Code</label>
+                      <div className="d-flex">
+                        <input
+                          type="text"
+                          placeholder="Enter code here..."
+                          value={getDisableOtpCode()}
+                          onChange={(e) => setDisableOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          maxLength={6}
+                        />
+                        {/* Send OTP button for Email/Mobile */}
+                        {disableAuthMethod !== 2 && (
+                          resendTimer > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="getotp otp-button-enabled getotp_mobile"
+                              onClick={sendDisableOtp}
+                            >
+                              GET OTP
+                            </button>
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    <button
+                      className="submit"
+                      type="button"
+                      onClick={handleDisableGoogleAuthVerify}
+                      disabled={isLoading || getDisableOtpCode().length < 6}
+                    >
+                      {isLoading ? 'Processing...' : 'Disable Google Authenticator'}
+                    </button>
+                  </>
+                )}
+
+                {/* Switch verification option link - only show if multiple methods */}
+                {disableAvailableMethods.length > 1 && (
+                  <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenDisableOptionsPopup(); }} style={{ marginTop: '15px' }}>
+                    <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                  </div>
+                )}
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Verification Options Modal for Disable Flow */}
+      <div className="modal fade search_form" id="disableAuthOptionsModal" tabIndex="-1" aria-hidden="true"data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Select a Verification Option</h5>
+              <p>Choose how you want to verify your identity</p>
+              <button type="button" className="btn-close" onClick={handleCloseDisableOptionsPopup} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                
+                {disableAvailableMethods.map((method) => (
+                  <div className="" key={method.type}>
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => handleSelectDisableMethod(method)}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className={`${method.icon} me-3`}></i>
+                        <div>
+                          <strong>{method.label}</strong>
+                          <p className="mb-0 small">{method.description}</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                ))}
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ ADD EMAIL MODAL (for users who signed up with phone) ============ */}
+      <div className="modal fade search_form" id="addEmailModal" tabIndex="-1" aria-hidden="true"data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              {/* {((addEmailStep > 1 && hasGoogleAuth) || (addEmailStep > 2 && !hasGoogleAuth)) && (
+                <button type="button" className="btn-back" onClick={() => handleGoBack('addEmail')} title="Go back">
+                  <i className="ri-arrow-left-line"></i>
+                </button>
+              )} */}
+              <h5 className="modal-title">   {((addEmailStep > 1 && hasGoogleAuth) || (addEmailStep > 2 && !hasGoogleAuth)) && (<i className="ri-arrow-left-line cursor-pointer" onClick={() => handleGoBack('addEmail')}></i>)} Add Email Address</h5>
               <p>
-                {currentStep === 1 && hasEmail && 'Step 1: Verify your email'}
-                {currentStep === 1 && !hasEmail && hasMobile && 'Step 1: Verify your mobile'}
-                {currentStep === 2 && 'Step 2: Verify your authenticator code'}
+                {addEmailStep === 1 && hasGoogleAuth && 'Step 1: Verify Google Authenticator'}
+                {addEmailStep === 2 && 'Step 2: Verify your mobile number'}
+                {addEmailStep === 3 && 'Step 3: Enter your email address'}
+                {addEmailStep === 4 && 'Step 4: Verify your email address'}
               </p>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="verify_authenticator_form">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                  
-                  {/* Step 1: Email or Mobile OTP verification */}
-                  {currentStep === 1 && (
-                    <>
-                      {hasEmail ? (
-                        <>
-                          <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskEmail(emailID)}</strong></p>
-                          <div className="emailinput">
-                            <label>Email Verification Code</label>
-                            <div className="d-flex">
-                              <input
-                                type="text"
-                                placeholder="123456"
-                                maxLength={6}
-                                value={emailOtpCode}
-                                onChange={(e) => setEmailOtpCode(e.target.value.replace(/\D/g, ''))}
-                              />
-                              {resendTimer > 0 ? (
-                                <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                              ) : (
-                                <div className="getotp cursor-pointer" onClick={() => handleSendOtp('email', '2fa_disable').then(() => setResendTimer(60))}>
-                                  Resend
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      ) : hasMobile ? (
-                        <>
-                          <p style={{ marginBottom: '10px' }}>We've sent a code to <strong>{maskPhone(mobileNumber)}</strong></p>
-                          <div className="emailinput">
-                            <label>Mobile Verification Code</label>
-                            <div className="d-flex">
-                              <input
-                                type="text"
-                                placeholder="123456"
-                                maxLength={6}
-                                value={mobileOtpCode}
-                                onChange={(e) => setMobileOtpCode(e.target.value.replace(/\D/g, ''))}
-                              />
-                              {resendTimer > 0 ? (
-                                <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                              ) : (
-                                <div className="getotp cursor-pointer" onClick={() => handleSendOtp('mobile', '2fa_disable').then(() => setResendTimer(60))}>
-                                  Resend
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      ) : null}
-                    </>
-                  )}
 
-                  {/* Step 2: Authenticator code verification */}
-                  {currentStep === 2 && (
+                  {/* Step 1: Google Auth (if enabled) */}
+                  {addEmailStep === 1 && hasGoogleAuth && (
                     <>
                       <div className="verify_authenticator_s">
                         <img src="/images/verifylock.svg" alt="Verify" />
-                        <p>Enter the 6-digit code from your Google Authenticator app to confirm</p>
+                        <p>Enter the 6-digit code from your Google Authenticator app</p>
                       </div>
                       <div className="emailinput">
-                        <label>Authenticator Code</label>
+                        <label>Google Authenticator Code</label>
                         <div className="d-flex">
                           <input
                             type="text"
@@ -1457,16 +2642,346 @@ const TwofactorPage = (props) => {
                     </>
                   )}
 
+                  {/* Step 2: Mobile OTP verification */}
+                  {addEmailStep === 2 && (
+                    <>
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{maskPhone(mobileNumber)}</strong></p>
+                      <div className="emailinput">
+                        <label>Mobile Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={mobileOtpCode}
+                            onChange={(e) => setMobileOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => handleSendOtp('mobile', 'add_email').then(() => setResendTimer(60))}>
+                              Send OTP
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 3: Enter email address */}
+                  {addEmailStep === 3 && (
+                    <>
+                      <div className="verify_authenticator_s">
+                        <img src="/images/verifyemail.svg" alt="Email" />
+                        <p>Enter the email address you want to add to your account</p>
+                      </div>
+                      <div className="emailinput">
+                        <label>Email Address</label>
+                        <input
+                          type="email"
+                          placeholder="Enter your email address"
+                          value={newEmail}
+                          onChange={(e) => setNewEmail(e.target.value)}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 4: Verify new email OTP */}
+                  {addEmailStep === 4 && (
+                    <>
+                      <p style={{ marginBottom: '10px' }}>Click "Send OTP" to receive a code on <strong>{newEmail}</strong></p>
+                      <div className="emailinput">
+                        <label>Email Verification Code</label>
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={newEmailOtpCode}
+                            onChange={(e) => setNewEmailOtpCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          {resendTimer2 > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer2}s)</div>
+                          ) : (
+                            <div className="getotp cursor-pointer" onClick={() => handleSendOtp('new_email', 'add_email', newEmail).then(() => setResendTimer2(60))}>
+                              Send OTP
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <button
                     className="submit"
                     type="button"
                     disabled={isLoading}
-                    onClick={handleDisableGoogleAuthNextStep}
+                    onClick={handleAddEmailNextStep}
                   >
-                    {isLoading ? 'Processing...' : currentStep === 2 ? 'Disable Google Authenticator' : 'Continue'}
+                    {isLoading ? 'Processing...' : addEmailStep === 4 ? 'Add Email Address' : 'Continue'}
                   </button>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ SECURITY REMINDER MODAL ============ */}
+      <div className="modal fade search_form" id="securityReminderModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Security Reminder</h5>
+              <p>Enhance your account protection</p>
+              <button type="button" className="btn-close" onClick={handleDismissSecurityPrompt} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="">
+                <p>
+                  Your account security level is currently low. Please link at least one additional verification method to enhance security.
+                </p>
+               
+              </div>
+
+              {/* Available methods to add */}
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                {!hasEmail && (
+                  <div className="">
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => { handleDismissSecurityPrompt(); handleAddEmailStart && handleAddEmailStart(); }}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className="ri-mail-line me-3"></i>
+                        <div>
+                          <strong>Email Verification</strong>
+                          <p className="mb-0 small">Link your email address</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                )}
+
+                {!hasMobile && (
+                  <div className="">
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => { handleDismissSecurityPrompt(); handleAddMobileStart && handleAddMobileStart(); }}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className="ri-smartphone-line me-3"></i>
+                        <div>
+                          <strong>Mobile Verification</strong>
+                          <p className="mb-0 small">Link your mobile number</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                )}
+
+                {!hasGoogleAuth && (
+                  <div className="">
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => { handleDismissSecurityPrompt(); handleGoogleAuthStart && handleGoogleAuthStart(); }}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className="ri-shield-keyhole-line me-3"></i>
+                        <div>
+                          <strong>Google Authenticator</strong>
+                          <p className="mb-0 small">Enable 2FA for highest security</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                )}
+                  <button
+                className="submit"
+                type="button"
+                onClick={handleDismissSecurityPrompt}
+                style={{ marginTop: '15px' }}
+              >
+                Remind Me Later
+              </button>
+              </form>
+
+            
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ ADD PASSKEY MODAL ============ */}
+      <div className="modal fade search_form" id="addPasskeyModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <i className="ri-fingerprint-line" style={{ marginRight: '8px' }}></i>
+                Add Passkey
+              </h5>
+              <p>Set up passwordless authentication</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s">
+                <div style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(135deg, #00c853 0%, #00a844 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px'
+                }}>
+                  <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
+                </div>
+                <p style={{ marginBottom: '10px' }}>
+                  Passkeys provide secure, passwordless authentication using your device's built-in security features.
+                </p>
+                <ul style={{ textAlign: 'left', fontSize: '13px', color: '#888', marginBottom: '20px' }}>
+                  <li>Use Face ID, Touch ID, or Windows Hello</li>
+                  <li>No passwords to remember</li>
+                  <li>Protected by your device's hardware security</li>
+                  <li>Works across your synced devices</li>
+                </ul>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <div className="emailinput">
+                  <label>Passkey Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., My MacBook, iPhone"
+                    value={passkeyName}
+                    onChange={(e) => setPasskeyName(e.target.value)}
+                    maxLength={50}
+                  />
+                </div>
+
+                <button
+                  className="submit"
+                  type="button"
+                  disabled={isLoading || !passkeyName.trim()}
+                  onClick={handleRegisterPasskey}
+                  style={{ marginTop: '15px' }}
+                >
+                  {isLoading ? 'Creating Passkey...' : 'Create Passkey'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ DELETE PASSKEY MODAL ============ */}
+      <div className="modal fade search_form" id="deletePasskeyModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Delete Passkey</h5>
+              <p>Verify to remove "{selectedPasskey?.name}"</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s">
+                <p>{getDeleteVerificationDescription()}</p>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <div className="emailinput">
+                  <label>Enter 6-digit Code</label>
+                  <div className="d-flex">
+                    <input
+                      type="text"
+                      placeholder="Enter code here..."
+                      value={deletePasskeyCode}
+                      onChange={(e) => setDeletePasskeyCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      maxLength={6}
+                    />
+                    {/* Send OTP button for Email/Mobile */}
+                    {deletePasskeyMethod !== 'totp' && (
+                      resendTimer > 0 ? (
+                        <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="getotp otp-button-enabled getotp_mobile"
+                          onClick={() => {
+                            handleSendOtp(deletePasskeyMethod, 'delete_passkey')
+                              .then(() => setResendTimer(60));
+                          }}
+                        >
+                          GET OTP
+                        </button>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  className="submit"
+                  type="button"
+                  disabled={isLoading || deletePasskeyCode.length !== 6}
+                  onClick={handleDeletePasskey}
+                >
+                  {isLoading ? 'Processing...' : 'Delete Passkey'}
+                </button>
+
+                {/* Switch verification option link - only show if multiple methods */}
+                {deletePasskeyAvailableMethods.length > 1 && (
+                  <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenDeletePasskeyOptions(); }} style={{ marginTop: '15px' }}>
+                    <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                  </div>
+                )}
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Verification Options Modal for Delete Passkey Flow */}
+      <div className="modal fade search_form" id="deletePasskeyOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Select a Verification Option</h5>
+              <p>Choose how you want to verify your identity</p>
+              <button type="button" className="btn-close" onClick={handleCloseDeletePasskeyOptionsPopup} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                
+                {deletePasskeyAvailableMethods.map((method) => (
+                  <div className="" key={method.value}>
+                    <div 
+                      className="d-flex align-items-center justify-content-between text-white" 
+                      onClick={() => handleSelectDeletePasskeyMethod(method)}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className={`${method.icon} me-3`}></i>
+                        <div>
+                          <strong>{method.label}</strong>
+                          <p className="mb-0 small">{method.description}</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                ))}
+
+              </form>
             </div>
           </div>
         </div>

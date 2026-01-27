@@ -1,105 +1,14 @@
 import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
-import { validateEmail, matchPassword } from "../../../utils/Validation";
+import {  matchPassword } from "../../../utils/Validation";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
 import { ApiConfig } from "../../../api/apiConfig/apiConfig";
 import { ProfileContext } from "../../../context/ProfileProvider";
 import DashboardHeader from "../../../customComponents/DashboardHeader";
-import { isValidPhoneNumber } from "libphonenumber-js";
-import Select from "react-select";
-import { countriesList } from "../../../utils/CountriesList";
 import "./SettingsPage.css";
 
-// Custom styles for react-select in dark theme modal
-const selectStyles = {
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: '#2d2d2d00',
-    borderRadius: '8px',
-    border: "none",
-    boxShadow: 'none',
-    minHeight: '48px',
-    padding: '0 4px',
-    fontSize: '14px',
-    fontWeight: 500,
-    '&:hover': {
-      borderColor: '#f3bb2c',
-    },
-  }),
-  valueContainer: (base) => ({
-    ...base,
-    padding: '0 8px',
-  }),
-  input: (base) => ({
-    ...base,
-    margin: 0,
-    padding: 0,
-    boxShadow: 'none !important',
-    border: 'none !important',
-    outline: 'none !important',
-    color: '#fff !important',
-  }),
-  indicatorsContainer: (base) => ({
-    ...base,
-    paddingRight: '8px',
-  }),
-  dropdownIndicator: (base) => ({
-    ...base,
-    color: '#999',
-    '&:hover': {
-      color: '#fff',
-    },
-  }),
-  indicatorSeparator: () => ({
-    display: 'none',
-  }),
-  placeholder: (base) => ({
-    ...base,
-    color: '#999999',
-    fontSize: '14px',
-  }),
-  singleValue: (base) => ({
-    ...base,
-    color: '#ffffff',
-    display: 'flex',
-    alignItems: 'center',
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isFocused ? '#636f83' : state.isSelected ? '#636f83' : '#373e4b',
-    color: state.isSelected ? '#ffffff' : '#ffffff',
-    cursor: 'pointer',
-    padding: '10px 15px',
-    fontSize: '13px',
-    '&:active': {
-      backgroundColor: '#f3bb2c',
-    },
-  }),
-  menu: (base) => ({
-    ...base,
-    backgroundColor: '#373e4b',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    fontSize: '13px',
-    zIndex: 9999,
-    border: '1px solid #444',
-  }),
-  menuList: (base) => ({
-    ...base,
-    maxHeight: '200px',
-    '&::-webkit-scrollbar': {
-      width: '6px',
-    },
-    '&::-webkit-scrollbar-track': {
-      background: '#2d2d2d',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background: '#555',
-      borderRadius: '3px',
-    },
-  }),
-};
+
 
 const SettingsPage = (props) => {
 
@@ -109,29 +18,23 @@ const SettingsPage = (props) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [mobile, setMobile] = useState('');
-  const [countryCode, setCountryCode] = useState("+91");
   const [myfile, setMyfile] = useState('');
   const [localSelfy, setLocalSelfy] = useState("");
-  const [disableBtn, setDisbaleBtn] = useState(false);
-  const [disableBtn2, setDisbaleBtn2] = useState(false);
-  const [emailOtp, setEmailOtp] = useState("");
-  const [mobileOtp, setMobileOtp] = useState("");
-  const [timer, setTimer] = useState(0);
-  const [timer2, setTimer2] = useState(0);
 
-  const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState('');
-  const [newCountryCode, setNewCountryCode] = useState("+91");
   const [currencyType, setCurrencyType] = useState('USDT');
   const [password, setPassword] = useState('');
   const [conPassword, setConPassword] = useState('');
   const [passwordOtp, setPasswordOtp] = useState('');
   const [passwordTimer, setPasswordTimer] = useState(0);
-  const [passwordDisableBtn, setPasswordDisableBtn] = useState(false);
-  const [registeredSignId, setRegisteredSignId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConPassword, setShowConPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Multiple verification method states for password change
+  const [passwordVerifyMethod, setPasswordVerifyMethod] = useState(1); // 1=email, 2=google auth, 3=mobile
+  const [passwordAvailableMethods, setPasswordAvailableMethods] = useState([]);
+
+
 
   // Ref to track object URLs for cleanup
   const objectUrlRef = useRef(null);
@@ -145,23 +48,49 @@ const SettingsPage = (props) => {
       setFirstName(details.firstName || '');
       setLastName(details.lastName || '');
       setMyfile(details.profilepicture || '');
-      setCountryCode(details.country_code || '+91');
       setCurrencyType(details.currency_prefrence || 'USDT');
+      
+      // Set up security methods
+      const userHasEmail = !!details.emailId;
+      const userHasMobile = !!details.mobileNumber;
+      const userHasGoogleAuth = details['2fa'] === 2;
+      
+      // Build available methods for password change
+      const methods = [];
+      if (userHasEmail) {
+        methods.push({
+          type: 1,
+          label: 'Email',
+          icon: 'ri-mail-line',
+          description: 'Receive verification code via email'
+        });
+      }
+      if (userHasGoogleAuth) {
+        methods.push({
+          type: 2,
+          label: 'Google Authenticator',
+          icon: 'ri-shield-keyhole-line',
+          description: 'Use your Google Authenticator app'
+        });
+      }
+      if (userHasMobile) {
+        methods.push({
+          type: 3,
+          label: 'Mobile',
+          icon: 'ri-smartphone-line',
+          description: 'Receive verification code via SMS'
+        });
+      }
+      setPasswordAvailableMethods(methods);
+      
+      // Set default verification method
+      if (userHasEmail) setPasswordVerifyMethod(1);
+      else if (userHasGoogleAuth) setPasswordVerifyMethod(2);
+      else if (userHasMobile) setPasswordVerifyMethod(3);
+
+      // Fetch security status from API
     }
   }, [props?.userDetails, userDetails]);
-
-  // Set registered sign ID for password change
-  useEffect(() => {
-    const currentUserDetails = userDetails || props?.userDetails;
-    if (currentUserDetails?.registeredBy === "phone") {
-      const code = currentUserDetails?.country_code || "+91";
-      const mobileNumber = currentUserDetails?.mobileNumber || mobile;
-      setRegisteredSignId(mobileNumber ? `${code} ${mobileNumber}` : "");
-    } else {
-      const email = currentUserDetails?.emailId || emailId;
-      setRegisteredSignId(email || "");
-    }
-  }, [userDetails, props?.userDetails, mobile, emailId]);
 
   // Cleanup object URLs on unmount
   useEffect(() => {
@@ -199,6 +128,8 @@ const SettingsPage = (props) => {
     }
   }, [modalBackdropRemove]);
 
+
+
   const openModal = useCallback((modalId) => {
     try {
       const modalElement = document.getElementById(modalId);
@@ -210,6 +141,7 @@ const SettingsPage = (props) => {
       // Silently handle error
     }
   }, []);
+
 
   const handleChangeSelfie = useCallback((event) => {
     event.preventDefault();
@@ -249,55 +181,7 @@ const SettingsPage = (props) => {
     }, 300);
   }, [closeModal, openModal]);
 
-  const handleGetOtp = useCallback(async (type, inputType) => {
-    if (isSubmitting) return;
-
-    try {
-      let signId;
-      if (inputType === "email") {
-        if (!newEmail || validateEmail(newEmail) !== undefined) {
-          alertErrorMessage("Please enter valid email address");
-          return;
-        }
-        signId = newEmail;
-      } else {
-        if (!newPhone) {
-          alertErrorMessage("Please enter a phone number");
-          return;
-        }
-        const fullPhone = `${newCountryCode}${newPhone}`;
-        if (!isValidPhoneNumber(fullPhone)) {
-          alertErrorMessage("Please enter a valid phone number for the selected country");
-          return;
-        }
-        signId = `${newCountryCode} ${newPhone}`;
-      }
-
-      setIsSubmitting(true);
-      LoaderHelper.loaderStatus(true);
-      const result = await AuthService.getOtp(signId, type);
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-
-      if (result?.success) {
-        alertSuccessMessage(result?.message || "OTP sent successfully");
-        if (inputType === "email") {
-          setDisbaleBtn(true);
-          setTimer(30);
-        } else {
-          setDisbaleBtn2(true);
-          setTimer2(30);
-        }
-      } else {
-        alertErrorMessage(result?.message || "Failed to send OTP. Please try again.");
-      }
-    } catch (error) {
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP.");
-    }
-  }, [isSubmitting, newEmail, newPhone, newCountryCode]);
-
+ 
   const editavatar = useCallback(async () => {
     if (!myfile || typeof myfile === 'string') {
       return false;
@@ -372,62 +256,39 @@ const SettingsPage = (props) => {
     }
   }, [firstName, lastName, handleUserDetails]);
 
-  const editEmail = useCallback(async () => {
-    if (isSubmitting) return;
-
-    if (!newEmail || validateEmail(newEmail) !== undefined) {
-      alertErrorMessage("Please enter valid email address");
-      return;
-    }
-    if (!emailOtp || emailOtp.length < 5) {
-      alertErrorMessage("Invalid OTP");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      LoaderHelper.loaderStatus(true);
-      const result = await AuthService.editemail(newEmail, emailOtp);
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-
-      if (result?.success) {
-        setEmailOtp("");
-        setNewEmail("");
-        setTimer(0);
-        setDisbaleBtn(false);
-        closeModal('emailpop');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        alertSuccessMessage(result?.message || "Email updated successfully");
-        handleUserDetails();
-      } else {
-        alertErrorMessage(result?.message || "Failed to update email.");
-      }
-    } catch (error) {
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating email.");
-    }
-  }, [isSubmitting, newEmail, emailOtp, closeModal, handleUserDetails]);
 
   const handleGetPasswordOtp = useCallback(async () => {
     if (isSubmitting) return;
-
-    if (!registeredSignId) {
-      alertErrorMessage("Please update your email or phone number first");
-      return;
-    }
+    
+    // Google Auth doesn't need OTP sending
+    if (passwordVerifyMethod === 2) return;
 
     try {
       setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.getOtp(registeredSignId, "forgot_password");
+      
+      let signId;
+      if (passwordVerifyMethod === 1) {
+        signId = emailId;
+      } else if (passwordVerifyMethod === 3) {
+        const details = userDetails || props?.userDetails;
+        const code = details?.country_code || "+91";
+        signId = `${code} ${mobile}`;
+      }
+      
+      if (!signId) {
+        alertErrorMessage("Please update your email or phone number first");
+        setIsSubmitting(false);
+        LoaderHelper.loaderStatus(false);
+        return;
+      }
+      
+      const result = await AuthService.getOtp(signId, "forgot_password");
       LoaderHelper.loaderStatus(false);
       setIsSubmitting(false);
 
       if (result?.success) {
         alertSuccessMessage(result?.message || "OTP sent successfully");
-        setPasswordDisableBtn(true);
         setPasswordTimer(30);
       } else {
         alertErrorMessage(result?.message || "Failed to send OTP.");
@@ -437,7 +298,7 @@ const SettingsPage = (props) => {
       setIsSubmitting(false);
       alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while sending OTP.");
     }
-  }, [isSubmitting, registeredSignId]);
+  }, [isSubmitting, passwordVerifyMethod, emailId, mobile, userDetails, props?.userDetails]);
 
   // Custom password validation function
   const validatePasswordSettings = useCallback((value) => {
@@ -481,20 +342,15 @@ const SettingsPage = (props) => {
       return;
     }
 
-    if (!passwordOtp || passwordOtp.length < 5) {
+    if (!passwordOtp || passwordOtp.length < 6) {
       alertErrorMessage("Invalid verification code");
-      return;
-    }
-
-    if (!registeredSignId) {
-      alertErrorMessage("Please update your email or phone number first");
       return;
     }
 
     try {
       setIsSubmitting(true);
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.setSecurity(password, conPassword, passwordOtp, registeredSignId);
+      const result = await AuthService.setSecurity(password, conPassword, passwordOtp, passwordVerifyMethod);
       LoaderHelper.loaderStatus(false);
       setIsSubmitting(false);
 
@@ -503,7 +359,6 @@ const SettingsPage = (props) => {
         setConPassword("");
         setPasswordOtp("");
         setPasswordTimer(0);
-        setPasswordDisableBtn(false);
         closeModal('security_verification');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         alertSuccessMessage(result?.message || "Password changed successfully");
@@ -515,7 +370,56 @@ const SettingsPage = (props) => {
       setIsSubmitting(false);
       alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while changing password.");
     }
-  }, [isSubmitting, password, conPassword, passwordOtp, registeredSignId, validatePasswordSettings, closeModal]);
+  }, [isSubmitting, password, conPassword, passwordOtp, passwordVerifyMethod, validatePasswordSettings, closeModal]);
+
+  // Helper functions for password verification flow
+  const getPasswordVerificationTitle = useCallback(() => {
+    if (passwordVerifyMethod === 2) return 'Enter Google Authenticator Code';
+    if (passwordVerifyMethod === 1) return 'Enter Email Verification Code';
+    if (passwordVerifyMethod === 3) return 'Enter Mobile Verification Code';
+    return 'Security Verification';
+  }, [passwordVerifyMethod]);
+
+  const getPasswordVerificationDescription = useCallback(() => {
+    if (passwordVerifyMethod === 2) return 'Enter the 6-digit code from your authenticator app';
+    if (passwordVerifyMethod === 1) {
+      const maskedEmail = emailId ? `${emailId.substring(0, 3)}***${emailId.substring(emailId.length - 4)}` : 'your email';
+      return `We'll send a verification code to ${maskedEmail}`;
+    }
+    if (passwordVerifyMethod === 3) {
+      const maskedMobile = mobile ? `****${mobile.slice(-4)}` : 'your mobile';
+      return `We'll send a verification code to ${maskedMobile}`;
+    }
+    return '';
+  }, [passwordVerifyMethod, emailId, mobile]);
+
+  // Open password verification options popup
+  const handleOpenPasswordOptionsPopup = useCallback(() => {
+    closeModal('security_verification');
+    setTimeout(() => {
+      openModal('passwordVerificationOptionsModal');
+    }, 100);
+  }, [closeModal, openModal]);
+
+  // Select verification method for password change
+  const handleSelectPasswordMethod = useCallback((method) => {
+    setPasswordVerifyMethod(method.type);
+    setPasswordOtp('');
+    setPasswordTimer(0);
+    
+    closeModal('passwordVerificationOptionsModal');
+    setTimeout(() => {
+      openModal('security_verification');
+    }, 100);
+  }, [closeModal, openModal]);
+
+  // Close options popup and reopen main modal
+  const handleClosePasswordOptionsPopup = useCallback(() => {
+    closeModal('passwordVerificationOptionsModal');
+    setTimeout(() => {
+      openModal('security_verification');
+    }, 100);
+  }, [closeModal, openModal]);
 
   const handleCurrency = useCallback(async (selectedCurrency) => {
     if (isSubmitting) return;
@@ -545,51 +449,6 @@ const SettingsPage = (props) => {
     }
   }, [isSubmitting, handleUserDetails]);
 
-  const editPhone = useCallback(async () => {
-    if (isSubmitting) return;
-
-    if (!newPhone) {
-      alertErrorMessage("Please enter a phone number");
-      return;
-    }
-
-    const fullPhone = `${newCountryCode}${newPhone}`;
-    if (!isValidPhoneNumber(fullPhone)) {
-      alertErrorMessage("Please enter a valid phone number for the selected country");
-      return;
-    }
-
-    if (!mobileOtp || mobileOtp.length < 5) {
-      alertErrorMessage("Invalid OTP");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      LoaderHelper.loaderStatus(true);
-      const result = await AuthService.editPhone(`${newCountryCode} ${newPhone}`, mobileOtp);
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-
-      if (result?.success) {
-        setNewCountryCode("+91");
-        setMobileOtp("");
-        setNewPhone("");
-        setTimer2(0);
-        setDisbaleBtn2(false);
-        closeModal('mobilepop');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        alertSuccessMessage(result?.message || "Phone number updated successfully");
-        handleUserDetails();
-      } else {
-        alertErrorMessage(result?.message || "Failed to update phone number.");
-      }
-    } catch (error) {
-      LoaderHelper.loaderStatus(false);
-      setIsSubmitting(false);
-      alertErrorMessage(error?.response?.data?.message || error?.message || "An error occurred while updating phone number.");
-    }
-  }, [isSubmitting, newPhone, newCountryCode, mobileOtp, closeModal, handleUserDetails]);
 
   const handleProfileSubmit = useCallback(async () => {
     if (isSubmitting) return;
@@ -666,30 +525,8 @@ const SettingsPage = (props) => {
     }
   }, [isSubmitting, myfile, editavatar, closeModal]);
 
-  // Timer effects
-  useEffect(() => {
-    let interval;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setDisbaleBtn(false);
-    }
-    return () => clearInterval(interval);
-  }, [timer]);
 
-  useEffect(() => {
-    let interval;
-    if (timer2 > 0) {
-      interval = setInterval(() => {
-        setTimer2((prev) => prev - 1);
-      }, 1000);
-    } else if (timer2 === 0) {
-      setDisbaleBtn2(false);
-    }
-    return () => clearInterval(interval);
-  }, [timer2]);
+
 
   useEffect(() => {
     let interval;
@@ -697,37 +534,11 @@ const SettingsPage = (props) => {
       interval = setInterval(() => {
         setPasswordTimer((prev) => prev - 1);
       }, 1000);
-    } else if (passwordTimer === 0) {
-      setPasswordDisableBtn(false);
     }
     return () => clearInterval(interval);
   }, [passwordTimer]);
 
-  // Helper functions for display
-  const hasEmail = () => {
-    const email = userDetails?.emailId || props?.userDetails?.emailId || emailId;
-    return !!email;
-  };
-
-  const hasPhone = () => {
-    const phone = userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile;
-    return !!phone;
-  };
-
-  const getDisplayEmail = () => {
-    const email = userDetails?.emailId || props?.userDetails?.emailId || emailId;
-    if (email && email.length > 7) {
-      return `${email.substring(0, 3)}***${email.substring(email.length - 4)}`;
-    }
-    return email || 'Not set';
-  };
-
-  const getDisplayPhone = () => {
-    const phone = userDetails?.mobileNumber || props?.userDetails?.mobileNumber || mobile;
-    const code = userDetails?.country_code || props?.userDetails?.country_code || countryCode || '+91';
-    return phone ? `${code}-${phone}` : 'Not set';
-  };
-
+ 
   const getDisplayName = () => {
     const first = userDetails?.firstName || props?.userDetails?.firstName || firstName;
     const last = userDetails?.lastName || props?.userDetails?.lastName || lastName;
@@ -747,23 +558,11 @@ const SettingsPage = (props) => {
     return pic ? `${ApiConfig.baseImage}${pic}` : "/images/user.png";
   };
 
-  const getMaskedSignId = () => {
-    if (registeredSignId && registeredSignId.length > 7) {
-      return `${registeredSignId.substring(0, 3)}***${registeredSignId.substring(registeredSignId.length - 4)}`;
-    }
-    return registeredSignId || 'your registered email/phone';
-  };
-
-  const isRegisteredByEmail = userDetails?.registeredBy === "email" || userDetails?.registeredBy === "google" || 
-                              props?.userDetails?.registeredBy === "email" || props?.userDetails?.registeredBy === "google";
-  
   const isRegisteredByPhone = userDetails?.registeredBy === "phone" || props?.userDetails?.registeredBy === "phone";
 
   const canSubmitProfile = (firstName?.trim() || lastName?.trim() || (myfile && typeof myfile !== 'string')) && !isSubmitting;
-  const canSubmitEmail = !isSubmitting && newEmail && validateEmail(newEmail) === undefined && emailOtp && emailOtp.length >= 5;
-  const canSubmitPhone = !isSubmitting && newPhone && mobileOtp && mobileOtp.length >= 5 && isValidPhoneNumber(`${newCountryCode}${newPhone}`);
   const canSubmitPassword = !isSubmitting && validatePasswordSettings(password).isValid && password && 
-                           matchPassword(password, conPassword) === undefined && passwordOtp && passwordOtp.length >= 5;
+                           matchPassword(password, conPassword) === undefined && passwordOtp && passwordOtp.length >= 6;
 
   return (
     <>
@@ -801,31 +600,6 @@ const SettingsPage = (props) => {
               <button className="btn" data-bs-toggle="modal" data-bs-target="#profilepop">Change</button>
             </div>
 
-            {/* <div className="factor_bl">
-              <div className="lftcnt">
-                <h6><img src="/images/email_icon2.svg" alt="Email Verification" /> Email Verification</h6>
-                <p>Link your email address to your account for login, password recovery, and withdrawal confirmation. Secure your account and withdrawals with a passkey.</p>
-              </div>
-
-              <div className="enable">
-                <img src={hasEmail() ? "/images/verified_icon.svg" : "/images/closebtn2.svg"} alt="Email Verification" />
-                {getDisplayEmail()}
-              </div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#emailpop">{hasEmail() ? 'Change' : 'Add'}</button>
-            </div>
-
-            <div className="factor_bl">
-              <div className="lftcnt">
-                <h6><img src="/images/mobile_icon.svg" alt="Mobile Verification" /> Mobile Verification</h6>
-                <p>Link your mobile number to your account to receive verification codes via SMS for confirmations on withdrawal, password change, and security settings.</p>
-              </div>
-
-              <div className="enable">
-                <img src={hasPhone() ? "/images/verified_icon.svg" : "/images/closebtn2.svg"} alt="mobile" />
-                {getDisplayPhone()}
-              </div>
-              <button className="btn" data-bs-toggle="modal" data-bs-target="#mobilepop">{hasPhone() ? 'Change' : 'Add'}</button>
-            </div> */}
           </div>
         </div>
 
@@ -953,215 +727,52 @@ const SettingsPage = (props) => {
           </div>
         </div>
 
-        {/* Edit Phone Modal */}
-        <div className="modal fade search_form" id="mobilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered ">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Edit Phone</h5>
-                <p>Update your phone number. You will receive an OTP for verification.</p>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-              
-
-                  <div className="emailinput">
-                    <label>Registered Phone</label>
-                    <div className="d-flex">
-                      <input type="text" value={mobile ? `${countryCode} ${mobile}` : "Not set"} disabled />
-                    </div>
-                  </div>
-
-                  {isRegisteredByPhone && (
-                    <div className="alert alert-warning mb-3" role="alert">
-                      <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in phone number.
-                    </div>
-                  )}
-
-                  {!isRegisteredByPhone && (
-                    <>
-                      <div className="emailinput">
-                        <label>Country Code</label>
-                        <div className="country-select-wrapper">
-                          <Select
-                            styles={selectStyles}
-                            inputId="newCountryCode"
-                            name="country_code_select"
-                            options={countriesList}
-                            onChange={(selected) => setNewCountryCode(selected?.value || '+91')}
-                            value={countriesList.find(option => option.value === newCountryCode)}
-                            placeholder="Select country code"
-                            isSearchable={true}
-                            menuPlacement="auto"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="emailinput">
-                        <label>New Phone Number</label>
-                        <div className="d-flex">
-                          <input
-                            type="text"
-                            placeholder="Enter phone number"
-                            value={newPhone || ""}
-                            onChange={(e) => setNewPhone(e.target.value.replace(/\D/g, ''))}
-                            maxLength={15}
-                          />
-                          {!disableBtn2 ?  <button
-                            type="button"
-                            className={`getotp ${disableBtn2 ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
-                            onClick={() => !disableBtn2 && !isSubmitting && handleGetOtp("registration", "phone")}
-                            disabled={disableBtn2 || isSubmitting  }
-                          >
-                            {disableBtn2 ? `Resend OTP (${timer2}s)` : "GET OTP"}
-                          </button>: <div className="resend otp-button-disabled">Resend ({timer2}s)</div>}
-                         
-                        </div>
-                       
-                      </div>
-                    
-                      <div className="emailinput">
-                        <label>OTP</label>
-                        <div className="d-flex">
-                          <input
-                            type="text"
-                            placeholder="Enter OTP here..."
-                            value={mobileOtp}
-                            onChange={(e) => setMobileOtp(e.target.value.replace(/\D/g, ''))}
-                            maxLength={6}
-                          />
-                        </div>
-                      </div>
-
-                      <button
-                        className="submit"
-                        type="button"
-                        onClick={editPhone}
-                        disabled={!canSubmitPhone}
-                      >
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
-                      </button>
-                    </>
-                  )}
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Edit Email Modal */}
-        <div className="modal fade search_form" id="emailpop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered ">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Edit Email</h5>
-                <p>Update your email address. You will receive an OTP for verification.</p>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-              
-
-                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                  <div className="emailinput">
-                    <label>Registered Email</label>
-                    <div className="d-flex">
-                      <input type="email" value={emailId || ""} disabled />
-                    </div>
-                  </div>
-                  {isRegisteredByEmail && (
-                  <div className="alert alert-warning mb-3" role="alert">
-                    <strong>Note:</strong> Signup method cannot be changed. Contact support for any modification in email.
-                  </div>
-                )}
-
-                  {!isRegisteredByEmail && (
-                    <>
-                      <div className="emailinput">
-                        <label>New Email</label>
-                        <div className="d-flex">
-                          <input
-                            type="email"
-                            placeholder="Enter email here..."
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                          />
-                           {!disableBtn ?  <button
-                            type="button"
-                            className={`getotp ${disableBtn ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
-                            onClick={() => !disableBtn && !isSubmitting && handleGetOtp("registration", "email")}
-                            disabled={disableBtn || isSubmitting  }
-                          >
-                            {disableBtn ? `Resend OTP (${timer}s)` : "GET OTP"}
-                          </button>: <div className="resend otp-button-disabled">Resend ({timer}s)</div>}
-
-                   
-                        </div>
-                      </div>
-
-                      <div className="emailinput">
-                        <label>OTP</label>
-                        <div className="d-flex">
-                          <input
-                            type="text"
-                            placeholder="Enter OTP here..."
-                            value={emailOtp}
-                            onChange={(e) => setEmailOtp(e.target.value.replace(/\D/g, ''))}
-                            maxLength={6}
-                          />
-                        </div>
-                      </div>
-
-                      <button
-                        className="submit"
-                        type="button"
-                        onClick={editEmail}
-                        disabled={!canSubmitEmail}
-                      >
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
-                      </button>
-                    </>
-                  )}
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Security Verification Modal */}
-        <div className="modal fade search_form" id="security_verification" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade search_form" id="security_verification" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
           <div className="modal-dialog modal-dialog-centered ">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Security Verification</h5>
-                <p>Enter the code sent to <span>{getMaskedSignId()}</span></p>
+                <h5 className="modal-title" id="exampleModalLabel">{getPasswordVerificationTitle()}</h5>
+                <p>{getPasswordVerificationDescription()}</p>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
                 <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                   <div className="emailinput">
-                    <label>Verification Code</label>
+                    <label>Enter 6-digit Code</label>
                     
-
                     <div className="d-flex">
                       <input
                         type="text"
-                        placeholder="Enter OTP here..."
+                        placeholder="Enter code here..."
                         value={passwordOtp}
                         onChange={(e) => setPasswordOtp(e.target.value.replace(/\D/g, ''))}
                         maxLength={6}
                       />
-                     {!passwordDisableBtn ?   <button
-                        type="button"
-                        className={`getotp ${passwordDisableBtn ? 'otp-button-disabled' : 'otp-button-enabled'} getotp_mobile`}
-                        onClick={() => !passwordDisableBtn && !isSubmitting && handleGetPasswordOtp()}
-                        disabled={passwordDisableBtn || isSubmitting}
-                      >
-                        {passwordDisableBtn ? `Resend (${passwordTimer}s)` : "Send OTP"}
-                      </button>: <div className="resend otp-button-disabled">Resend ({passwordTimer}s)</div>}
-
+                      {/* Send OTP button for Email/Mobile only */}
+                      {passwordVerifyMethod !== 2 && (
+                        passwordTimer > 0 ? (
+                          <div className="resend otp-button-disabled">Resend ({passwordTimer}s)</div>
+                        ) : (
+                          <button
+                            type="button"
+                            className="getotp otp-button-enabled getotp_mobile"
+                            onClick={handleGetPasswordOtp}
+                            disabled={isSubmitting}
+                          >
+                            GET OTP
+                          </button>
+                        )
+                      )}
                     </div>
                   </div>
+
+                  {/* Switch verification option link - only show if multiple methods */}
+                  {passwordAvailableMethods.length > 1 && (
+                    <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); handleOpenPasswordOptionsPopup(); }}>
+                      <small className="text-white">Switch to Another Verification Option<i className="ri-external-link-line"></i></small>
+                    </div>
+                  )}
 
                   <div className="emailinput">
                     <label>New Password</label>
@@ -1244,6 +855,43 @@ const SettingsPage = (props) => {
           </div>
         </div>
 
+        {/* Password Verification Options Modal */}
+        <div className="modal fade search_form" id="passwordVerificationOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Select a Verification Option</h5>
+                <p>Choose how you want to verify your identity</p>
+                <button type="button" className="btn-close" onClick={handleClosePasswordOptionsPopup} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                  
+                  {passwordAvailableMethods.map((method) => (
+                    <div className="" key={method.type}>
+                      <div 
+                        className="d-flex align-items-center justify-content-between text-white" 
+                        onClick={() => handleSelectPasswordMethod(method)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center">
+                          <i className={`${method.icon} me-3`}></i>
+                          <div>
+                            <strong>{method.label}</strong>
+                            <p className="mb-0 small">{method.description}</p>
+                          </div>
+                        </div>
+                        <i className="ri-arrow-right-s-line"></i>
+                      </div>
+                    </div>
+                  ))}
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Edit Profile Modal */}
         <div className="modal fade search_form" id="profilepop" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered ">
@@ -1318,6 +966,8 @@ const SettingsPage = (props) => {
             </div>
           </div>
         </div>
+
+  
       </div>
     </>
   );

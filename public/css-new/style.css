@@ -25194,6 +25194,12 @@ button.copy_code {
 }
 
 @media screen and (max-width:480px) {
+    .twofactor_outer_s{
+        padding: 12px !important;
+    }
+    .factor_bl{
+        padding: 20px 12px;
+    }
 
     footer .row .footer_logo {
         max-width: 210px;
@@ -26223,3 +26229,16 @@ body.modal-open {
     width: 100%;
     overflow: hidden;
   }
+
+
+  ul.security-tips-list {
+    color: #7d828c;
+    font-size: small;
+}
+
+.security-tips h6 {
+  color: #7d828c;
+}
+.security-tips  {
+margin-top: 15px;
+}

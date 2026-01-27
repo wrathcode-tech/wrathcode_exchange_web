@@ -112,7 +112,9 @@ const AuthService = {
     const params = {
       "email_or_phone": signId,
       "type": type,
-      "otp": Number(otp)
+      // For Google Auth (type 2), keep as string to preserve leading zeros
+      // For Email/Mobile OTP (type 1 & 3), convert to number
+      "otp": type === 2 ? otp : parseInt(otp, 10)
     };
     const headers = {
       "Content-Type": "application/json",
@@ -751,15 +753,15 @@ const AuthService = {
 
   },
 
-  setSecurity: async (password, conPassword, verificationcode, email_or_phone) => {
+  setSecurity: async (password, conPassword, verificationcode, verifyMethod) => {
     const token = sessionStorage.getItem("token");
     const { baseAuth, setSecurity } = ApiConfig;
     const url = baseAuth + setSecurity;
     const params = {
       new_password: password,
       confirm_password: conPassword,
-      verification_code: verificationcode,
-      email_or_phone: email_or_phone
+      verification_code: verifyMethod === 2 ? verificationcode : verificationcode, // Keep as string for Google Auth
+      verify_method: verifyMethod // 1=email, 2=google auth, 3=mobile
     };
     const headers = {
       "Content-Type": "application/json",
@@ -2489,6 +2491,22 @@ const AuthService = {
    * @param {string} purpose - Purpose of OTP (login, 2fa_setup, email_change, phone_change, etc.)
    * @param {string} value - Optional: New email/phone value when target is 'new_email' or 'new_mobile'
    */
+  /**
+   * Get user's security status and methods
+   */
+  getSecurityStatus: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityStatus } = ApiConfig;
+    const url = baseSecurity + securityStatus;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallGet(url, headers);
+  },
+
+
+
   securitySendOtp: async (target, purpose, value = null) => {
     const token = sessionStorage.getItem("token");
     const { baseSecurity, securitySendOtp } = ApiConfig;
@@ -2573,8 +2591,11 @@ const AuthService = {
   /**
    * Disable 2FA
    * @param {string} authenticatorCode - The 6-digit code from Google Authenticator
+   * @param {string} otpCode - OTP code for email/mobile verification
+   * @param {string} verifyMethod - 'email', 'mobile', or 'passkey'
+   * @param {string} passkeyUserId - User ID from passkey verification
    */
-  security2faDisable: async (authenticatorCode) => {
+  security2faDisable: async (authenticatorCode, otpCode = null, verifyMethod = null, passkeyUserId = null) => {
     const token = sessionStorage.getItem("token");
     const { baseSecurity, security2faDisable: disableEndpoint } = ApiConfig;
     const url = baseSecurity + disableEndpoint;
@@ -2582,7 +2603,12 @@ const AuthService = {
       "Content-Type": "application/json",
       Authorization: token,
     };
-    return ApiCallPost(url, { code: authenticatorCode }, headers);
+    const data = {};
+    if (authenticatorCode) data.code = authenticatorCode;
+    if (otpCode) data.otpCode = otpCode;
+    if (verifyMethod) data.verifyMethod = verifyMethod;
+    if (passkeyUserId) data.passkeyUserId = passkeyUserId;
+    return ApiCallPost(url, data, headers);
   },
 
   /**
@@ -2593,6 +2619,21 @@ const AuthService = {
     const token = sessionStorage.getItem("token");
     const { baseSecurity, securityMobileAdd: mobileAddEndpoint } = ApiConfig;
     const url = baseSecurity + mobileAddEndpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, data, headers);
+  },
+
+  /**
+   * Add Email (for users who signed up with phone)
+   * @param {object} data - { email, tofaCode (optional), mobileOtp, emailOtp }
+   */
+  securityEmailAdd: async (data) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, securityEmailAdd: emailAddEndpoint } = ApiConfig;
+    const url = baseSecurity + emailAddEndpoint;
     const headers = {
       "Content-Type": "application/json",
       Authorization: token,
@@ -2658,6 +2699,129 @@ const AuthService = {
       Authorization: token,
     };
     return ApiCallPost(url, data, headers);
+  },
+
+  // ============================================================================
+  // PASSKEY (WebAuthn) METHODS
+  // ============================================================================
+
+  /**
+   * Get passkey registration options (Step 1)
+   * Returns challenge and options for WebAuthn registration
+   */
+  passkeyGetRegistrationOptions: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, passkeyRegisterOptions } = ApiConfig;
+    const url = baseSecurity + passkeyRegisterOptions;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, {}, headers);
+  },
+
+  /**
+   * Verify passkey registration (Step 2)
+   * @param {object} credential - WebAuthn credential response
+   * @param {string} name - User-friendly name for the passkey
+   */
+  passkeyVerifyRegistration: async (credential, name = null) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, passkeyRegisterVerify } = ApiConfig;
+    const url = baseSecurity + passkeyRegisterVerify;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, { credential, name }, headers);
+  },
+
+  /**
+   * Get list of user's passkeys
+   */
+  passkeyGetList: async () => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, passkeyList } = ApiConfig;
+    const url = baseSecurity + passkeyList;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallGet(url, headers);
+  },
+
+  /**
+   * Rename a passkey
+   * @param {string} passkeyId - ID of the passkey
+   * @param {string} name - New name for the passkey
+   */
+  passkeyRename: async (passkeyId, name) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, passkeyRename: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, { passkeyId, name }, headers);
+  },
+
+  /**
+   * Delete a passkey
+   * @param {string} passkeyId - ID of the passkey
+   * @param {string} verifyMethod - 'totp', 'email', or 'mobile'
+   * @param {string} code - Verification code
+   */
+  passkeyDelete: async (passkeyId, verifyMethod, code) => {
+    const token = sessionStorage.getItem("token");
+    const { baseSecurity, passkeyDelete: endpoint } = ApiConfig;
+    const url = baseSecurity + endpoint;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallPost(url, { passkeyId, verifyMethod, code }, headers);
+  },
+
+  /**
+   * Get passkey authentication options (for login)
+   * @param {string} signId - Email or phone number
+   */
+  passkeyGetAuthOptions: async (signId) => {
+    const { baseSecurity, passkeyAuthOptions } = ApiConfig;
+    const url = baseSecurity + passkeyAuthOptions;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return ApiCallPost(url, { signId }, headers);
+  },
+
+  /**
+   * Verify passkey authentication (for login)
+   * @param {string} signId - Email or phone number
+   * @param {object} credential - WebAuthn credential response
+   */
+  passkeyVerifyAuth: async (signId, credential) => {
+    const { baseSecurity, passkeyAuthVerify } = ApiConfig;
+    const url = baseSecurity + passkeyAuthVerify;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return ApiCallPost(url, { signId, credential }, headers);
+  },
+
+  /**
+   * Complete login after passkey verification
+   * @param {string} signId - Email or phone number
+   * @param {object} verificationData - Data from passkey verification
+   */
+  completePasskeyLogin: async (signId, verificationData) => {
+    const { baseSecurity } = ApiConfig;
+    const url = baseSecurity + "passkey/login/complete";
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return ApiCallPost(url, { signId, ...verificationData }, headers);
   },
 
   // ============================================================================

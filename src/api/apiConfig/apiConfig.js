@@ -1,5 +1,5 @@
-const appUrl = "http://159.195.23.93:5001";
-// const appUrl = "http://localhost:5001";
+// const appUrl = "http://159.195.23.93:5001";
+const appUrl = "http://localhost:5001";
 const appUrl2 = appUrl//"http://159.195.23.93:5001";
 
 export const deployedUrl = `${window.origin}/`
@@ -222,6 +222,7 @@ export const ApiConfig = {
   getP2pProfile: "profile",
 
   // Security & 2FA endpoints
+  securityStatus: "status",
   securitySendOtp: "send-otp",
   securityVerifyOtp: "verify-otp",
   securityGenerateGoogleQr: "generate-google-qr",
@@ -229,6 +230,7 @@ export const ApiConfig = {
   security2faConfirm: "2fa/confirm",
   security2faDisable: "2fa/disable",
   securityUpdate2fa: "update-2fa",
+  securityEmailAdd: "email/add",
   securityEmailChangeInitiate: "email/change/initiate",
   securityEmailChangeComplete: "email/change/complete",
   securityMobileAdd: "mobile/add",
@@ -237,6 +239,16 @@ export const ApiConfig = {
   securitySettings: "settings",
   securityLogin2fa: "login-2fa",
   securityChangePassword: "change-password",
+  
+  // Passkey (WebAuthn) endpoints
+  passkeyRegisterOptions: "passkey/register/options",
+  passkeyRegisterVerify: "passkey/register/verify",
+  passkeyList: "passkeys",
+  passkeyRename: "passkey/rename",
+  passkeyDelete: "passkey/delete",
+  passkeyAuthOptions: "passkey/auth/options",
+  passkeyAuthVerify: "passkey/auth/verify",
+  passkeyLoginComplete: "passkey/login/complete",
 
   // ============URLs================
 

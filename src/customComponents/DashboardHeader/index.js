@@ -62,7 +62,7 @@ const DashboardHeader = ({ props }) => {
   const userDetails = props?.userDetails;
   const displayEmail = isInfoHidden ? maskEmail(userDetails?.emailId) : (userDetails?.emailId || "----");
   const displayUID = isInfoHidden ? maskUID(userDetails?.uuid) : shortenAddress(userDetails?.uuid);
-  const displayIP = isInfoHidden ? maskIP(userDetails?.lastLoginIP) : (userDetails?.lastLoginIP || "----");
+  const displayIP = isInfoHidden ? maskIP(userDetails?.last_login_ip) : (userDetails?.last_login_ip || "----");
 
   const formatDate = useCallback((date) => {
     if (!date) return "----";
@@ -102,7 +102,7 @@ const DashboardHeader = ({ props }) => {
             
           </h3> 
           <span className='subdel'>
-            Last Login: {formatDate(userDetails?.lastLoginTime)}, {formatTime(userDetails?.lastLoginTime)}
+            Last Login: {formatDate(userDetails?.last_login_at)}, {formatTime(userDetails?.last_login_at)}
           </span>
         </div>
       </div>
