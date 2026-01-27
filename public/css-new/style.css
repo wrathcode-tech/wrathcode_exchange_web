@@ -3013,7 +3013,9 @@ ul.wallet_price_list li {
     border-radius: 50px;
 }
 
-.wallet_btn_small a:hover{ color: #000; }
+.wallet_btn_small a:hover {
+    color: #000;
+}
 
 .wallet_btn_small button img {
     width: 15px;
@@ -5013,7 +5015,9 @@ body .red {
     font-size: 11px;
 }
 
-.qrcode button.btn:hover{ color: #000; }
+.qrcode button.btn:hover {
+    color: #000;
+}
 
 .qrcode .scan_img {
     background-color: #fff;
@@ -16615,6 +16619,7 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 18px;
+    justify-content: space-between;
 }
 
 .referral_event_item:last-child {
@@ -16669,6 +16674,15 @@ a:hover {
     background-color: #F2F4F6;
     width: 24px;
     border-radius: 5px;
+}
+
+.refrefer_earn_outer .card {
+    padding: 0px;
+    border: none;
+}
+
+button.p2p-submit-button {
+    border-radius: 10px;
 }
 
 
@@ -17124,6 +17138,15 @@ a:hover {
 
     .navbar-expand-lg .navbar-nav .dropdown-menu {
         margin-top: 18px;
+    }
+
+    .referral_events_slider h6 {
+        font-size: 16px;
+    }
+
+    .referral_events_slider button.btn.btn-primary {
+        padding: 8px 24px;
+        font-size: 12px;
     }
 
     .slider_group_wrapper button.subscribe_btn {
@@ -19866,6 +19889,10 @@ a:hover {
         margin-top: 10px;
     }
 
+    .referral_events_slider_wrapper {
+        margin-top: 20px;
+    }
+
     .how_to_refer_s {
         margin-bottom: 40px;
     }
@@ -19892,6 +19919,11 @@ a:hover {
 
     .referral_code_s ul li span a {
         margin-left: 0px;
+    }
+
+    .referral_event_item {
+        flex: 0 0 100%;
+        margin-right: 0;
     }
 
     .desktop_view {
@@ -26413,11 +26445,12 @@ ul.security-tips-list {
 .security-tips h6 {
     color: #7d828c;
 }
-.security-tips  {
-margin-top: 15px;
+
+.security-tips {
+    margin-top: 15px;
 }
 
-.remove_authenticator_s p{
+.remove_authenticator_s p {
     max-width: 100% !important;
 
 }

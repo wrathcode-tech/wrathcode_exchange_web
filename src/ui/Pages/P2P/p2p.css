@@ -11560,9 +11560,7 @@ body.light_theme .p2p-loading-container {
     font-size: 13px;
   }
 
-  .pricehigh_box_item_container {
-    gap: 24px;
-  }
+
 
   .pricehigh_box_item_title {
     font-size: 18px;
@@ -12162,6 +12160,11 @@ body.light_theme .p2p-loading-container {
   .p2p-create-post-preview-remarks-title {
     font-size: 12px;
   }
+
+  .pricehigh_box_item_container {
+    gap: 24px;
+  }
+
 }
 
 .p2p-create-post-preview-remarks-text {
@@ -12727,9 +12730,9 @@ body.light_theme .p2p-radio-text {
   font-size: 13px;
   padding: 20px;
   text-align: center;
-  background: #0d0d14;
+  background: #373f4d;
   border-radius: 10px;
-  border: 1px solid #2a2a3a;
+  border: 1px solid #373f4d;
 }
 
 .p2p-payment-methods-empty.error {
@@ -12818,7 +12821,8 @@ body.light_theme .p2p-radio-text {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #ffdc88;
+  font-weight: 300;
+  color: #fff;
   background: transparent;
   border: none;
   font-size: 13px;
@@ -12907,7 +12911,7 @@ body.light_theme .p2p-payment-method-item-text {
 }
 
 .p2p-create-post-section-icon {
-  color: #ffdc88;
+  color: #F3BB2B;
 }
 
 .p2p-create-post-textarea {
@@ -12971,7 +12975,7 @@ body.light_theme .p2p-payment-method-item-text {
 .p2p-create-post-checkbox {
   width: 18px;
   height: 18px;
-  accent-color: #ffdc88;
+  accent-color: #f3bb2b;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -13668,6 +13672,17 @@ body.light_theme .p2p-row-expanded {
 
 @media (max-width:767px) {
 
+  .payment_method_pop.modal.fade .modal-dialog {
+    min-width: 100%;
+  }
+
+  .userprofile_pop ul.list_upi li {
+    font-size: 12px;
+  }
+
+  .userprofile_pop ul.list_upi {
+    gap: 10px;
+  }
 
   .p2p-create-post-container {
     grid-template-columns: 1fr 0px;
@@ -13731,7 +13746,7 @@ body.light_theme .p2p-row-expanded {
   .p2p-filter-section.myadsfillter {
     background: #3f4856;
     padding: 20px;
-}
+  }
 
 }
 
@@ -13741,11 +13756,13 @@ body.light_theme .p2p-row-expanded {
   }
 
   .p2p-create-post-radio-text {
-    font-size: 12px; }
+    font-size: 12px;
+  }
 
-    .p2p-create-post-radio-input {
-      width: 16px;
-      height: 16px; }    
+  .p2p-create-post-radio-input {
+    width: 16px;
+    height: 16px;
+  }
 
 }
 

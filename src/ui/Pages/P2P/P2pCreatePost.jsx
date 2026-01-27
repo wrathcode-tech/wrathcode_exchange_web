@@ -630,7 +630,7 @@ const P2pCreatePost = () => {
             marginBottom: isMobile ? '16px' : '20px'
         },
         sectionIcon: {
-            color: '#ffdc88'
+            color: '#F3BB2B'
         },
         inputGroup: {
             marginBottom: isMobile ? '16px' : '20px',
@@ -651,7 +651,7 @@ const P2pCreatePost = () => {
             maxWidth: '100%',
             minWidth: 0,
             padding: isMobile ? '12px 40px 12px 14px' : '14px 44px 14px 16px',
-            background: '#0d0d14',
+            background: '#373f4d',
             border: '1px solid #2a2a3a',
             borderRadius: '10px',
             color: '#fff',
@@ -671,7 +671,7 @@ const P2pCreatePost = () => {
         input: {
             width: '100%',
             padding: isMobile ? '12px 14px' : '14px 16px',
-            background: '#0d0d14',
+            background: '#373f4d',
             border: '1px solid #2a2a3a',
             borderRadius: '10px',
             color: '#fff',
@@ -683,7 +683,7 @@ const P2pCreatePost = () => {
         inputWithSuffix: {
             display: 'flex',
             alignItems: 'center',
-            background: '#0d0d14',
+            background: '#373f4d',
             border: '1px solid #2a2a3a',
             borderRadius: '10px',
             // overflow: 'hidden',
@@ -722,7 +722,7 @@ const P2pCreatePost = () => {
             marginTop: isMobile ? '16px' : '20px'
         },
         infoBox: {
-            background: '#0d0d14',
+            background: '#373f4d',
             borderRadius: '10px',
             padding: isMobile ? '12px' : '16px',
             marginTop: '16px'
@@ -746,7 +746,7 @@ const P2pCreatePost = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: isMobile ? '12px 14px' : '14px 16px',
-            background: '#0d0d14',
+            background: '#373f4d',
             border: '1px solid #2a2a3a',
             borderRadius: '10px',
             marginBottom: '12px',

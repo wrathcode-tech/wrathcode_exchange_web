@@ -119,6 +119,7 @@ const ReferalPage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderContainerRef = useRef(null);
   const [slideOffset, setSlideOffset] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const referralEvents = [
     {
@@ -138,23 +139,41 @@ const ReferalPage = () => {
     }
   ];
 
-  const totalSlides = Math.ceil(referralEvents.length / 2);
+  const cardsPerSlide = isMobile ? 1 : 2;
+  const totalSlides = Math.ceil(referralEvents.length / cardsPerSlide);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    // Reset slide when switching between mobile/desktop
+    setCurrentSlide(0);
+  }, [isMobile]);
 
   useEffect(() => {
     const calculateSlideOffset = () => {
       if (sliderContainerRef.current) {
         const containerWidth = sliderContainerRef.current.offsetWidth;
-        // Card width is (100% - 24px) / 2, gap is 24px
-        // Slide distance = card width + gap = (containerWidth - 24) / 2 + 24
-        const slideDistance = (containerWidth - 24) / 2 + 24;
-        setSlideOffset((slideDistance / containerWidth) * 100);
+        if (isMobile) {
+          // Mobile: 1 card per slide, card width is 100%, no gap needed
+          setSlideOffset(100);
+        } else {
+          // Desktop: 2 cards per slide, card width is (100% - 24px) / 2, gap is 24px
+          const slideDistance = (containerWidth - 24) / 2 + 24;
+          setSlideOffset((slideDistance / containerWidth) * 100);
+        }
       }
     };
 
     calculateSlideOffset();
     window.addEventListener('resize', calculateSlideOffset);
     return () => window.removeEventListener('resize', calculateSlideOffset);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!searchTerm) {
