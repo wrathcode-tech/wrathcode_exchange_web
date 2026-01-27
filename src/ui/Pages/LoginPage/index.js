@@ -117,8 +117,22 @@ const LoginPage = () => {
       // Determine sendTo based on verification method
       // method 1 = email, method 3 = mobile
       const sendTo = method === 3 ? 'mobile' : 'email';
+      
+      // Get the correct identifier based on selected method
+      let otpSignId = loginSignId;
+      if (method === 3) {
+        const mobileMethod = availableMethods.find(m => m.type === 3);
+        if (mobileMethod?.value) {
+          otpSignId = mobileMethod.value;
+        }
+      } else if (method === 1) {
+        const emailMethod = availableMethods.find(m => m.type === 1);
+        if (emailMethod?.value) {
+          otpSignId = emailMethod.value;
+        }
+      }
 
-      const result = await AuthService.getOtp(loginSignId, 'login', sendTo);
+      const result = await AuthService.getOtp(otpSignId, 'login', sendTo);
       if (result?.success) {
         alertSuccessMessage(result?.message || 'OTP sent successfully');
         setResendTimer(60);
@@ -178,8 +192,8 @@ const LoginPage = () => {
         
         if (loginResult?.success && loginResult?.data?.token) {
           alertSuccessMessage('Login successful!');
-          sessionStorage.setItem("token", loginResult.data.token);
-          sessionStorage.setItem("userId", loginResult.data.userId);
+          localStorage.setItem("token", loginResult.data.token);
+          localStorage.setItem("userId", loginResult.data.userId);
           setLoginDetails(loginResult.data);
           
           // Close modal
@@ -203,6 +217,50 @@ const LoginPage = () => {
     }
   };
 
+  // Attempt silent passkey verification for login
+  const attemptSilentPasskeyLoginVerification = async (signIdForPasskey) => {
+    if (!passkeySupported) {
+      return { success: false, reason: 'not_supported' };
+    }
+
+    try {
+      // Step 1: Get authentication options from server
+      const optionsResult = await AuthService.passkeyGetAuthOptions(signIdForPasskey);
+      if (!optionsResult?.success || !optionsResult?.data) {
+        return { success: false, reason: 'no_options' };
+      }
+
+      const authOptions = optionsResult.data;
+
+      // Step 2: Authenticate using browser's WebAuthn API
+      let credential;
+      try {
+        credential = await startAuthentication(authOptions);
+      } catch (webauthnError) {
+        // Handle various WebAuthn errors silently:
+        // - NotAllowedError: User cancelled or denied
+        // - AbortError: Operation was aborted
+        // - Timeout: Operation timed out
+        // - InvalidStateError: Authenticator not available
+        const errorName = webauthnError?.name || '';
+        const errorMessage = webauthnError?.message || '';
+        return { success: false, reason: 'cancelled' };
+      }
+
+      // Step 3: Verify credential with server
+      const verifyResult = await AuthService.passkeyVerifyAuth(signIdForPasskey, credential);
+      
+      if (verifyResult?.success) {
+        return { success: true, verifyData: verifyResult.data };
+      } else {
+        return { success: false, reason: 'verification_failed' };
+      }
+    } catch (error) {
+      // Catch any other unexpected errors silently
+      return { success: false, reason: 'error' };
+    }
+  };
+
   // Handle login - Step 1: Validate credentials
   const handleLogin = async (inputSignId, loginPassword, token) => {
     LoaderHelper.loaderStatus(true);
@@ -217,10 +275,34 @@ const LoginPage = () => {
           const methods = determineAvailableMethods(responseData);
           setAvailableMethods(methods);
 
+          // If user has passkey and browser supports it, attempt silent passkey verification first
+          if (responseData?.hasPasskey && passkeySupported) {
+            setIsPasskeyLoading(true);
+            const passkeyResult = await attemptSilentPasskeyLoginVerification(inputSignId);
+            setIsPasskeyLoading(false);
+
+            if (passkeyResult.success) {
+              // Passkey verification succeeded - complete login directly
+              const loginResult = await AuthService.completePasskeyLogin(inputSignId, passkeyResult.verifyData);
+              
+              if (loginResult?.success && loginResult?.data?.token) {
+                alertSuccessMessage('Login successful!');
+                localStorage.setItem("token", loginResult.data.token);
+                localStorage.setItem("userId", loginResult.data.userId);
+                setLoginDetails(loginResult.data);
+                
+                const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
+                navigate(redirectPath, { replace: true });
+                return; // Exit early - login complete
+              }
+            }
+            // If passkey failed, fall through to show verification modal
+          }
+
           // Priority: Passkey (4) > Google Auth (2) > Email (1) > Mobile (3)
           let defaultMethod = responseData?.defaultMethod || 1;
           
-          // If passkey is available and supported, use it as default
+          // If passkey is available and supported, use it as default (in case user wants to retry)
           if (responseData?.hasPasskey && passkeySupported) {
             defaultMethod = 4;
           } else if (methods.find(m => m.type === 4)) {
@@ -231,16 +313,17 @@ const LoginPage = () => {
 
           // Reset OTP digits
           setOtpDigits(['', '', '', '', '', '']);
-          // Passkey and Google Auth don't need timer
-          setResendTimer(defaultMethod !== 2 && defaultMethod !== 4 ? 60 : 0);
+          // Reset timer to 0 - user will click "GET OTP" button to send OTP
+          // This prevents confusion where timer shows 60 but no OTP was sent
+          setResendTimer(0);
 
           // Show verification modal
           $("#Confirmation_model").modal('show');
         } else {
           if (responseData?.token) {
             alertSuccessMessage(result.message);
-            sessionStorage.setItem("token", responseData.token);
-            sessionStorage.setItem("userId", responseData.userId);
+            localStorage.setItem("token", responseData.token);
+            localStorage.setItem("userId", responseData.userId);
             const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
             navigate(redirectPath, { replace: true });
             // window.location.reload();
@@ -308,12 +391,32 @@ const LoginPage = () => {
 
     LoaderHelper.loaderStatus(true);
     try {
-      const result = await AuthService.getCode(loginSignId, selectedAuthMethod, otpCode);
+      // Get the correct identifier based on selected method
+      // For mobile verification (type 3), we need to find the mobile number from availableMethods
+      // For email verification (type 1), use the email
+      // For Google Auth (type 2), the loginSignId (email/phone used for login) works
+      let verifySignId = loginSignId;
+      
+      if (selectedAuthMethod === 3) {
+        // Find mobile method and get its actual value (not masked)
+        const mobileMethod = availableMethods.find(m => m.type === 3);
+        if (mobileMethod?.value) {
+          verifySignId = mobileMethod.value;
+        }
+      } else if (selectedAuthMethod === 1) {
+        // Find email method and get its actual value (not masked)
+        const emailMethod = availableMethods.find(m => m.type === 1);
+        if (emailMethod?.value) {
+          verifySignId = emailMethod.value;
+        }
+      }
+      
+      const result = await AuthService.getCode(verifySignId, selectedAuthMethod, otpCode);
 
       if (result?.success) {
         alertSuccessMessage(result.message);
-        sessionStorage.setItem("token", result.data.token);
-        sessionStorage.setItem("userId", result.data.userId);
+        localStorage.setItem("token", result.data.token);
+        localStorage.setItem("userId", result.data.userId);
         setLoginDetails(result.data);
         $("#Confirmation_model").modal('hide');
         const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
@@ -416,14 +519,40 @@ const LoginPage = () => {
         const responseData = result?.data;
 
         if (responseData?.requiresVerification) {
+          const googleLoginSignId = responseData?.signId || "";
+          setLoginSignId(googleLoginSignId);
+          
           const methods = determineAvailableMethods(responseData);
-          setLoginSignId(responseData?.signId || "");
           setAvailableMethods(methods);
+
+          // If user has passkey and browser supports it, attempt silent passkey verification first
+          if (responseData?.hasPasskey && passkeySupported && googleLoginSignId) {
+            setIsPasskeyLoading(true);
+            const passkeyResult = await attemptSilentPasskeyLoginVerification(googleLoginSignId);
+            setIsPasskeyLoading(false);
+
+            if (passkeyResult.success) {
+              // Passkey verification succeeded - complete login directly
+              const loginResult = await AuthService.completePasskeyLogin(googleLoginSignId, passkeyResult.verifyData);
+              
+              if (loginResult?.success && loginResult?.data?.token) {
+                alertSuccessMessage('Login successful!');
+                localStorage.setItem("token", loginResult.data.token);
+                localStorage.setItem("userId", loginResult.data.userId);
+                setLoginDetails(loginResult.data);
+                
+                const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
+                navigate(redirectPath, { replace: true });
+                return; // Exit early - login complete
+              }
+            }
+            // If passkey failed, fall through to show verification modal
+          }
 
           // Priority: Passkey (4) > Google Auth (2) > Email (1) > Mobile (3)
           let defaultMethod = responseData?.defaultMethod || 1;
           
-          // If passkey is available and supported, use it as default
+          // If passkey is available and supported, use it as default (in case user wants to retry)
           if (responseData?.hasPasskey && passkeySupported) {
             defaultMethod = 4;
           } else if (methods.find(m => m.type === 4)) {
@@ -432,14 +561,14 @@ const LoginPage = () => {
           
           setSelectedAuthMethod(defaultMethod);
           setOtpDigits(['', '', '', '', '', '']);
-          // Passkey and Google Auth don't need timer
-          setResendTimer(defaultMethod !== 2 && defaultMethod !== 4 ? 60 : 0);
+          // Reset timer to 0 - user will click "GET OTP" button to send OTP
+          setResendTimer(0);
 
           $("#Confirmation_model").modal('show');
         } else if (responseData?.token) {
           alertSuccessMessage(result?.message);
-          sessionStorage.setItem("token", responseData.token);
-          sessionStorage.setItem("userId", responseData.userId);
+          localStorage.setItem("token", responseData.token);
+          localStorage.setItem("userId", responseData.userId);
           setLoginDetails(responseData);
           const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
           navigate(redirectPath, { replace: true });

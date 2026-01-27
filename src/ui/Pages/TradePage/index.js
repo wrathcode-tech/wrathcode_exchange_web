@@ -20,9 +20,9 @@ const Trade = () => {
     const location = useLocation();
     const { state } = location;
 
-    const token = sessionStorage.getItem('token');
-    const userId = sessionStorage.getItem('userId');
-    let recentPair = sessionStorage.getItem('RecentPair');
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    let recentPair = localStorage.getItem('RecentPair');
     let ParsedPair = JSON.parse(recentPair);
     const [urlPath, setUrlPath] = useState(URL ? URL : []);
     const [search, setsearch] = useState('');
@@ -79,11 +79,11 @@ const Trade = () => {
     const currentSubscriptionRef = useRef(null);
     const [orderBookColor, setOrderBookColor] = useState({ buy: "#1c2a2b", sell: "#301e27" });
     const navigate = useNavigate()
-    let socketId = sessionStorage.getItem("socketId")
+    let socketId = localStorage.getItem("socketId")
 
     useEffect(() => {
 
-        const Theme = sessionStorage.getItem('theme');
+        const Theme = localStorage.getItem('theme');
         if (Theme === "light") {
             setOrderBookColor({ buy: "#1c2a2b", sell: "#301e27" })
         } else {

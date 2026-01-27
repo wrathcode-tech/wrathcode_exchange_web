@@ -15,14 +15,11 @@ const SignupPage = () => {
     $("body").addClass("signupbg");
     const navigate = useNavigate();
     const ref1 = window.location.href.split("=")[0];
-    console.log("🚀 ~ SignupPage ~ ref1:", ref1)
     const ref = window.location.href.split("=")[1];
-    console.log("🚀 ~ SignupPage ~ ref:", ref)
     const googlecaptchaRef = useRef()
     const recaptchaRef = useRef()
     const recaptchaRef2 = useRef()
     const [invitation, setInvitation] = useState(ref1?.includes("reffcode") ? ref : "");
-    console.log("🚀 ~ SignupPage ~ invitation:", invitation)
     const [password, setPassword] = useState("");
     const [countryCode, setCountryCode] = useState("+91");
     const [signId, setSignId] = useState(ref1?.includes("emailId") ? ref : "");
@@ -102,13 +99,17 @@ const SignupPage = () => {
             return;
         }
 
-        const token = recaptchaRef.current.getValue()
+        let token = '';
+        try {
+            token = recaptchaRef.current?.getValue() || '';
+        } catch (captchaError) {
+            // reCAPTCHA timeout or error - continue without token
+        }
 
         // if (!token) {
         //     alertErrorMessage("Please validate captcha");
         //     return;
         // }
-
 
         LoaderHelper.loaderStatus(true);
         try {
@@ -122,8 +123,15 @@ const SignupPage = () => {
                 alertErrorMessage(result?.message);
             }
         } catch (error) {
-            alertErrorMessage(error?.message);
-        } finally { LoaderHelper.loaderStatus(false); recaptchaRef.current.reset(); }
+            alertErrorMessage(error?.message || "Registration failed. Please try again.");
+        } finally { 
+            LoaderHelper.loaderStatus(false); 
+            try {
+                recaptchaRef.current?.reset();
+            } catch (e) {
+                // Ignore reCAPTCHA reset errors
+            }
+        }
     };
 
 

@@ -12,7 +12,7 @@ const ReferalPage = () => {
 
   const [refferlsData, setRefferalData] = useState({ user_code: "" });
   const [isCopied, setIsCopied] = useState(false);
-  const token = sessionStorage.getItem("token")
+  const token = localStorage.getItem("token")
 
   const handleReffrals = async () => {
     LoaderHelper.loaderStatus(true);

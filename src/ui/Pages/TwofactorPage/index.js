@@ -57,7 +57,7 @@ const TwofactorPage = (props) => {
   // Disable Google Auth flow states
   const [disableAuthMethod, setDisableAuthMethod] = useState(2); // 1=email, 2=google auth, 3=mobile, 4=passkey
   const [disableAvailableMethods, setDisableAvailableMethods] = useState([]);
-  
+
   // Change Email/Mobile verification method states
   const [changeVerifyMethod, setChangeVerifyMethod] = useState('email'); // passkey, totp, email, mobile
   const [changeAvailableMethods, setChangeAvailableMethods] = useState([]);
@@ -74,6 +74,17 @@ const TwofactorPage = (props) => {
   // Security reminder state
   const [showSecurityReminder, setShowSecurityReminder] = useState(false);
 
+  // Consent warning states - to show security warnings before sensitive actions
+  // eslint-disable-next-line no-unused-vars
+  const [pendingAction, setPendingAction] = useState(null); // 'changeEmail', 'changeMobile', 'disablePasskey', 'disableGoogleAuth'
+
+  // Add Passkey verification flow states
+  const [addPasskeyVerifyMethod, setAddPasskeyVerifyMethod] = useState('email'); // email, mobile, totp
+  const [addPasskeyAvailableMethods, setAddPasskeyAvailableMethods] = useState([]);
+  const [addPasskeyOtpCode, setAddPasskeyOtpCode] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [addPasskeyStep, setAddPasskeyStep] = useState(1); // 1=verify identity, 2=name passkey & register
+
   // Fetch security status from API
   const fetchSecurityStatus = async () => {
     try {
@@ -85,7 +96,7 @@ const TwofactorPage = (props) => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch security status:', error);
+      // Security status fetch error - silent fail
     }
   };
 
@@ -106,7 +117,7 @@ const TwofactorPage = (props) => {
         setHasPasskey(result.data.count > 0);
       }
     } catch (error) {
-      console.error('Failed to fetch passkeys:', error);
+      // Passkey fetch error - silent fail
     }
   };
 
@@ -120,7 +131,7 @@ const TwofactorPage = (props) => {
         if (modal) modal.hide();
       }
     } catch (error) {
-      console.error('Failed to dismiss prompt:', error);
+      // Dismiss prompt error - silent fail
     }
   };
 
@@ -138,14 +149,14 @@ const TwofactorPage = (props) => {
     const userHasEmail = !!user?.emailId;
     const userHasMobile = !!user?.mobileNumber;
     const userHasGoogleAuth = current2fa === 2;
-    
+
     setHasEmail(userHasEmail);
     setHasMobile(userHasMobile);
     setHasGoogleAuth(userHasGoogleAuth);
 
     // Fetch security status from API
     fetchSecurityStatus();
-    
+
     // Check passkey support and fetch existing passkeys
     checkPasskeySupport();
     fetchPasskeys();
@@ -172,6 +183,7 @@ const TwofactorPage = (props) => {
     if (hasEmail) count++;
     if (hasMobile) count++;
     if (hasGoogleAuth) count++;
+    if (hasPasskey) count++;
     return count;
   };
 
@@ -235,8 +247,11 @@ const TwofactorPage = (props) => {
       'changeEmailModal', 'changeEmailStep2Modal', 'changeEmailStep3Modal',
       'changeMobileModal', 'changeMobileStep2Modal', 'changeMobileStep3Modal',
       'blockingModal', 'disableGoogleAuthModal', 'disableAuthOptionsModal',
-      'securityReminderModal', 'addPasskeyModal', 'deletePasskeyModal', 'deletePasskeyOptionsModal',
-      'changeVerifyOptionsModal', 'changeMobileVerifyOptionsModal'
+      'securityReminderModal', 'addPasskeyModal', 'addPasskeyVerifyModal', 'addPasskeyVerifyOptionsModal',
+      'deletePasskeyModal', 'deletePasskeyOptionsModal',
+      'changeVerifyOptionsModal', 'changeMobileVerifyOptionsModal',
+      'changeEmailConsentModal', 'changeMobileConsentModal', 'disablePasskeyConsentModal', 'disableGoogleAuthConsentModal',
+      'viewPasskeysModal'
     ];
     modalIds.forEach(id => {
       const modalElement = document.getElementById(id);
@@ -248,6 +263,15 @@ const TwofactorPage = (props) => {
     document.body.classList.remove('modal-open');
     document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
     resetModalStates();
+  };
+
+  // Close a specific modal
+  const closeModal = (modalId) => {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modal = window.bootstrap?.Modal?.getInstance(modalElement);
+      if (modal) modal.hide();
+    }
   };
 
   // Open a modal
@@ -378,7 +402,7 @@ const TwofactorPage = (props) => {
       try {
         credential = await startAuthentication(authOptions);
       } catch (webauthnError) {
-        console.error('WebAuthn authentication error:', webauthnError);
+        // WebAuthn authentication error - show user-friendly message
         if (webauthnError.name === 'NotAllowedError') {
           alertErrorMessage('Authentication was cancelled or timed out. Please try again.');
         } else {
@@ -389,7 +413,7 @@ const TwofactorPage = (props) => {
 
       // Step 3: Verify credential with server
       const verifyResult = await AuthService.passkeyVerifyAuth(emailID, credential);
-      
+
       if (verifyResult?.success) {
         alertSuccessMessage('Passkey verified successfully');
         return verifyResult.data; // Contains userId and verified flag
@@ -398,8 +422,55 @@ const TwofactorPage = (props) => {
         return null;
       }
     } catch (error) {
-      console.error('Passkey verification error:', error);
+      // Passkey verification error - show user-friendly message
       alertErrorMessage(error?.message || 'Something went wrong');
+      return null;
+    } finally {
+      setIsPasskeyVerifying(false);
+      LoaderHelper.loaderStatus(false);
+    }
+  };
+
+  // Silent passkey verification - attempts passkey auth without showing error messages
+  // Returns verification result if successful, null if failed (silently)
+  const attemptSilentPasskeyVerification = async (purpose) => {
+    if (!hasPasskey || !passkeySupported) return null;
+
+    try {
+      setIsPasskeyVerifying(true);
+      LoaderHelper.loaderStatus(true);
+
+      // Step 1: Get authentication options
+      const optionsResult = await AuthService.passkeyGetAuthOptions(emailID || mobileNumber);
+      if (!optionsResult?.success || !optionsResult?.data) {
+        return null;
+      }
+
+      const authOptions = optionsResult.data;
+
+      // Step 2: Authenticate using browser's WebAuthn API
+      let credential;
+      try {
+        credential = await startAuthentication(authOptions);
+      } catch (webauthnError) {
+        // Handle various WebAuthn errors silently:
+        // - NotAllowedError: User cancelled or denied
+        // - AbortError: Operation was aborted
+        // - Timeout: Operation timed out
+        // - InvalidStateError: Authenticator not available
+        return null; // Silently fail - webauthnError details intentionally not logged for production
+      }
+
+      // Step 3: Verify credential with server
+      const verifyResult = await AuthService.passkeyVerifyAuth(emailID || mobileNumber, credential);
+
+      if (verifyResult?.success) {
+        alertSuccessMessage('Passkey verified successfully');
+        return verifyResult.data; // Contains userId and verified flag
+      }
+      return null;
+    } catch (error) {
+      // Catch any other unexpected errors silently
       return null;
     } finally {
       setIsPasskeyVerifying(false);
@@ -429,10 +500,41 @@ const TwofactorPage = (props) => {
   };
 
   // ============ GOOGLE AUTHENTICATOR FLOW ============
-  // Step 1: Verify email or mobile first
-  const handleGoogleAuthStart = () => {
+  // Step 1: Verify with passkey (auto) or email/mobile first
+  const handleGoogleAuthStart = async () => {
     resetModalStates();
-    // Just open the modal - user will click "Send OTP" button
+    setPasskeyVerificationResult(null);
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('2fa_setup');
+      if (verificationResult) {
+        // Passkey verified successfully - go directly to QR code
+        setPasskeyVerificationResult(verificationResult);
+        try {
+          setIsLoading(true);
+          LoaderHelper.loaderStatus(true);
+          const result = await AuthService.security2faSetup();
+
+          if (result?.success) {
+            setGoogleQr(result.data?.qr_code || '');
+            setGoogleCode(result.data?.secret?.base32 || '');
+            openModal('googleAuthQrModal');
+          } else {
+            alertErrorMessage(result?.message || "Failed to get QR code");
+          }
+        } catch (error) {
+          alertErrorMessage(error?.message || "Something went wrong");
+        } finally {
+          setIsLoading(false);
+          LoaderHelper.loaderStatus(false);
+        }
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
+
+    // Fallback: Just open the modal - user will click "Send OTP" button
     if (hasEmail || hasMobile) {
       openModal('googleAuthSetupModal');
     } else {
@@ -502,29 +604,69 @@ const TwofactorPage = (props) => {
     }
   };
 
-  // Start Disable Google Authenticator flow
+  // Start Disable Google Authenticator flow - show consent warning first
   const handleDisableGoogleAuthStart = () => {
     if (!canMakeSensitiveChanges()) {
       alertErrorMessage('You need at least 2 security methods to disable Google Authenticator');
       return;
     }
+    setPendingAction('disableGoogleAuth');
+    openModal('disableGoogleAuthConsentModal');
+  };
 
+  // Proceed with disabling Google Auth after user consent
+  const handleDisableGoogleAuthProceed = async () => {
+    closeModal('disableGoogleAuthConsentModal');
     resetModalStates();
-    
-    // Build available methods - Passkey first priority
+    setPasskeyVerificationResult(null);
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('disable_2fa');
+      if (verificationResult) {
+        // Passkey verified successfully - disable Google Auth directly
+        try {
+          setIsLoading(true);
+          LoaderHelper.loaderStatus(true);
+
+          const result = await AuthService.security2faDisable(
+            null, // code
+            null, // otpCode
+            'passkey', // verifyMethod
+            verificationResult.userId // passkeyUserId
+          );
+
+          if (result?.success) {
+            alertSuccessMessage(result?.message || 'Google Authenticator disabled successfully');
+            handleUserDetails();
+          } else {
+            alertErrorMessage(result?.message || 'Failed to disable Google Authenticator');
+          }
+        } catch (error) {
+          alertErrorMessage(error?.message || 'Something went wrong');
+        } finally {
+          setIsLoading(false);
+          LoaderHelper.loaderStatus(false);
+        }
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
+
+    // Build available methods (including passkey as manual option even if silent failed)
     const methods = [];
-    
-    // Add Passkey if available (first priority)
+
+    // Add Passkey as option if available
     if (hasPasskey && passkeySupported) {
       methods.push({
         type: 4,
         label: 'Passkey',
-        value: 'Passkey Authentication',
+        value: 'Passkey',
         icon: 'ri-fingerprint-line',
-        description: 'Use your passkey for verification'
+        description: 'Use Face ID, Touch ID, or Windows Hello'
       });
     }
-    
+
     // Add Google Authenticator as option
     methods.push({
       type: 2,
@@ -533,7 +675,7 @@ const TwofactorPage = (props) => {
       icon: 'ri-shield-keyhole-line',
       description: 'Use your Google Authenticator app'
     });
-    
+
     // Add email if available
     if (hasEmail) {
       methods.push({
@@ -544,7 +686,7 @@ const TwofactorPage = (props) => {
         description: 'Receive verification code via email'
       });
     }
-    
+
     // Add mobile if available
     if (hasMobile) {
       methods.push({
@@ -555,15 +697,15 @@ const TwofactorPage = (props) => {
         description: 'Receive verification code via SMS'
       });
     }
-    
+
     setDisableAvailableMethods(methods);
-    // Set default method - passkey first if available
+    // Set default method - Passkey first if available, otherwise Google Auth
     setDisableAuthMethod(hasPasskey && passkeySupported ? 4 : 2);
     setResendTimer(0);
-    
+
     openModal('disableGoogleAuthModal');
   };
-  
+
   // Open disable auth options popup
   const handleOpenDisableOptionsPopup = () => {
     const modal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableGoogleAuthModal'));
@@ -572,7 +714,7 @@ const TwofactorPage = (props) => {
       openModal('disableAuthOptionsModal');
     }, 100);
   };
-  
+
   // Select verification method for disable flow
   const handleSelectDisableMethod = (method) => {
     setDisableAuthMethod(method.type);
@@ -580,17 +722,17 @@ const TwofactorPage = (props) => {
     setMobileOtpCode('');
     setGoogleAuthCode('');
     setResendTimer(0);
-    
+
     // Close options popup
     const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableAuthOptionsModal'));
     if (optionsModal) optionsModal.hide();
-    
+
     // Reopen main modal
     setTimeout(() => {
       openModal('disableGoogleAuthModal');
     }, 100);
   };
-  
+
   // Close options popup and reopen main disable modal
   const handleCloseDisableOptionsPopup = () => {
     const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('disableAuthOptionsModal'));
@@ -599,7 +741,7 @@ const TwofactorPage = (props) => {
       openModal('disableGoogleAuthModal');
     }, 100);
   };
-  
+
   // Get verification title for disable flow
   const getDisableVerificationTitle = () => {
     if (disableAuthMethod === 4) return 'Passkey Verification';
@@ -608,7 +750,7 @@ const TwofactorPage = (props) => {
     if (disableAuthMethod === 3) return 'Enter Mobile Verification Code';
     return 'Verify Your Identity';
   };
-  
+
   // Get verification description for disable flow
   const getDisableVerificationDescription = () => {
     if (disableAuthMethod === 4) return 'Use your passkey to verify your identity';
@@ -617,7 +759,7 @@ const TwofactorPage = (props) => {
     if (disableAuthMethod === 3) return `We'll send a verification code to ${maskPhone(mobileNumber)}`;
     return '';
   };
-  
+
   // Get the current OTP code for disable flow
   const getDisableOtpCode = () => {
     if (disableAuthMethod === 4) return ''; // Passkey doesn't use OTP code
@@ -626,19 +768,19 @@ const TwofactorPage = (props) => {
     if (disableAuthMethod === 3) return mobileOtpCode;
     return '';
   };
-  
+
   // Set the OTP code for disable flow
   const setDisableOtpCode = (value) => {
     if (disableAuthMethod === 2) setGoogleAuthCode(value);
     else if (disableAuthMethod === 1) setEmailOtpCode(value);
     else if (disableAuthMethod === 3) setMobileOtpCode(value);
   };
-  
+
   // Send OTP for disable flow
   const sendDisableOtp = async () => {
     if (disableAuthMethod === 4) return true; // Passkey doesn't need OTP sending
     if (disableAuthMethod === 2) return true; // Google Auth doesn't need OTP sending
-    
+
     const target = disableAuthMethod === 1 ? 'email' : 'mobile';
     const sent = await handleSendOtp(target, '2fa_disable');
     if (sent) {
@@ -653,14 +795,14 @@ const TwofactorPage = (props) => {
     if (disableAuthMethod === 4) {
       const verificationResult = await handlePasskeyVerification('2fa_disable');
       if (!verificationResult) return;
-      
+
       try {
         setIsLoading(true);
         LoaderHelper.loaderStatus(true);
-        
+
         // Call backend to disable with passkey verification
         const result = await AuthService.security2faDisable(null, null, 'passkey', verificationResult.userId);
-        
+
         if (result?.success) {
           alertSuccessMessage(result?.message || 'Google Authenticator disabled successfully');
           closeAllModals();
@@ -679,7 +821,7 @@ const TwofactorPage = (props) => {
     }
 
     const otpCode = getDisableOtpCode();
-    
+
     if (!otpCode || otpCode.length !== 6) {
       alertErrorMessage('Please enter a valid 6-digit code');
       return;
@@ -688,7 +830,7 @@ const TwofactorPage = (props) => {
     try {
       setIsLoading(true);
       LoaderHelper.loaderStatus(true);
-      
+
       let result;
       if (disableAuthMethod === 2) {
         // Direct disable with Google Auth code
@@ -698,7 +840,7 @@ const TwofactorPage = (props) => {
         const verifyMethod = disableAuthMethod === 1 ? 'email' : 'mobile';
         result = await AuthService.security2faDisable(null, otpCode, verifyMethod);
       }
-      
+
       if (result?.success) {
         alertSuccessMessage(result?.message || "Google Authenticator disabled");
         closeAllModals();
@@ -725,20 +867,156 @@ const TwofactorPage = (props) => {
   };
 
   // ============ PASSKEY FLOW ============
-  
-  // Start passkey registration
-  const handleAddPasskeyStart = () => {
+
+  // Start passkey registration - requires identity verification first
+  const handleAddPasskeyStart = async () => {
     if (!passkeySupported) {
       alertErrorMessage('Passkeys are not supported on this device/browser');
       return;
     }
     resetModalStates();
-    // Pre-fill with PROJECT_NAME and masked email/mobile
+    setAddPasskeyStep(1);
+    setAddPasskeyOtpCode("");
+    setResendTimer(0);
+
+    // Pre-fill passkey name
     const projectName = process.env.REACT_APP_PROJECT_NAME || 'Exchange';
     const maskedIdentifier = emailID ? maskEmail(emailID) : (mobileNumber ? maskPhone(mobileNumber) : '');
     const defaultName = maskedIdentifier ? `${projectName} - ${maskedIdentifier}` : `${projectName} Passkey`;
     setPasskeyName(defaultName);
-    openModal('addPasskeyModal');
+
+    // If user already has a passkey, try silent passkey verification first
+    if (hasPasskey) {
+      const verificationResult = await attemptSilentPasskeyVerification('add_passkey');
+      if (verificationResult) {
+        // Passkey verified successfully - proceed directly to naming
+        setAddPasskeyStep(2);
+        openModal('addPasskeyModal');
+        return;
+      }
+    }
+
+    // Build available verification methods
+    const methods = [];
+    if (hasEmail) {
+      methods.push({
+        id: 'email',
+        label: 'Email OTP',
+        icon: 'ri-mail-line',
+        description: `Send code to ${maskEmail(emailID)}`
+      });
+    }
+    if (hasMobile) {
+      methods.push({
+        id: 'mobile',
+        label: 'Mobile OTP',
+        icon: 'ri-smartphone-line',
+        description: `Send code to ${maskPhone(mobileNumber)}`
+      });
+    }
+    if (hasGoogleAuth) {
+      methods.push({
+        id: 'totp',
+        label: 'Google Authenticator',
+        icon: 'ri-shield-keyhole-line',
+        description: 'Use your authenticator app'
+      });
+    }
+
+    setAddPasskeyAvailableMethods(methods);
+
+    // Set default method based on availability
+    if (hasGoogleAuth) {
+      setAddPasskeyVerifyMethod('totp');
+    } else if (hasEmail) {
+      setAddPasskeyVerifyMethod('email');
+    } else if (hasMobile) {
+      setAddPasskeyVerifyMethod('mobile');
+    }
+
+    openModal('addPasskeyVerifyModal');
+  };
+
+  // Send OTP for add passkey verification
+  const handleAddPasskeySendOtp = async () => {
+    if (addPasskeyVerifyMethod === 'totp') return; // No OTP needed for Google Auth
+
+    const target = addPasskeyVerifyMethod === 'email' ? 'email' : 'mobile';
+    try {
+      setIsLoading(true);
+      const result = await AuthService.securitySendOtp(target, 'add_passkey');
+      if (result?.success) {
+        alertSuccessMessage(result?.message || `OTP sent to your ${target}`);
+        setResendTimer(60);
+      } else {
+        alertErrorMessage(result?.message || 'Failed to send OTP');
+      }
+    } catch (error) {
+      alertErrorMessage(error?.message || 'Failed to send OTP');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Verify identity and proceed to passkey registration
+  const handleAddPasskeyVerify = async () => {
+    if (addPasskeyVerifyMethod === 'totp') {
+      // Verify TOTP
+      if (!addPasskeyOtpCode || addPasskeyOtpCode.length !== 6) {
+        alertErrorMessage('Please enter a valid 6-digit code');
+        return;
+      }
+      try {
+        setIsLoading(true);
+        LoaderHelper.loaderStatus(true);
+        const result = await AuthService.securityVerifyTotp(String(addPasskeyOtpCode), 'add_passkey');
+        if (result?.success) {
+          alertSuccessMessage('Verified!');
+          setAddPasskeyStep(2);
+          switchModal('addPasskeyVerifyModal', 'addPasskeyModal');
+        } else {
+          alertErrorMessage(result?.message || 'Invalid code');
+        }
+      } catch (error) {
+        alertErrorMessage(error?.message || 'Verification failed');
+      } finally {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
+      }
+    } else {
+      // Verify Email or Mobile OTP
+      if (!addPasskeyOtpCode || addPasskeyOtpCode.length !== 6) {
+        alertErrorMessage('Please enter a valid 6-digit OTP');
+        return;
+      }
+      const target = addPasskeyVerifyMethod === 'email' ? 'email' : 'mobile';
+      const verified = await handleVerifyOtp(target, addPasskeyOtpCode, 'add_passkey');
+      if (verified) {
+        alertSuccessMessage('Verified!');
+        setAddPasskeyStep(2);
+        switchModal('addPasskeyVerifyModal', 'addPasskeyModal');
+      }
+    }
+  };
+
+  // Get add passkey verification title
+  const getAddPasskeyVerificationTitle = () => {
+    switch (addPasskeyVerifyMethod) {
+      case 'email': return 'Email Verification';
+      case 'mobile': return 'Mobile Verification';
+      case 'totp': return 'Google Authenticator';
+      default: return 'Verification';
+    }
+  };
+
+  // Get add passkey verification description
+  const getAddPasskeyVerificationDescription = () => {
+    switch (addPasskeyVerifyMethod) {
+      case 'email': return `Enter the 6-digit code sent to ${maskEmail(emailID)}`;
+      case 'mobile': return `Enter the 6-digit code sent to ${maskPhone(mobileNumber)}`;
+      case 'totp': return 'Enter the 6-digit code from your authenticator app';
+      default: return 'Enter your verification code';
+    }
   };
 
   // Register a new passkey
@@ -766,7 +1044,7 @@ const TwofactorPage = (props) => {
       try {
         credential = await startRegistration(registrationOptions);
       } catch (webauthnError) {
-        console.error('WebAuthn registration error:', webauthnError);
+        // WebAuthn registration error - show user-friendly message
         if (webauthnError.name === 'NotAllowedError') {
           alertErrorMessage('Registration was cancelled or timed out. Please try again.');
         } else if (webauthnError.name === 'InvalidStateError') {
@@ -779,7 +1057,7 @@ const TwofactorPage = (props) => {
 
       // Step 3: Send credential to server for verification
       const verifyResult = await AuthService.passkeyVerifyRegistration(credential, passkeyName.trim());
-      
+
       if (verifyResult?.success) {
         alertSuccessMessage(verifyResult?.message || 'Passkey added successfully!');
         closeAllModals();
@@ -789,7 +1067,7 @@ const TwofactorPage = (props) => {
         alertErrorMessage(verifyResult?.message || 'Failed to register passkey');
       }
     } catch (error) {
-      console.error('Passkey registration error:', error);
+      // Passkey registration error - show user-friendly message
       alertErrorMessage(error?.message || 'Something went wrong');
     } finally {
       setIsLoading(false);
@@ -797,14 +1075,59 @@ const TwofactorPage = (props) => {
     }
   };
 
-  // Start passkey deletion flow
+  // Start passkey deletion flow - show consent warning first
   const handleDeletePasskeyStart = (passkey) => {
     setSelectedPasskey(passkey);
+    setPendingAction('disablePasskey');
+    openModal('disablePasskeyConsentModal');
+  };
+
+  // Proceed with deleting passkey after user consent
+  const handleDeletePasskeyProceed = async () => {
+    closeModal('disablePasskeyConsentModal');
     setDeletePasskeyCode('');
     setResendTimer(0);
-    
+
+    // Try silent passkey verification if passkey is available
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('delete_passkey');
+      if (verificationResult) {
+        // Passkey verified successfully - delete directly
+        try {
+          setIsLoading(true);
+          LoaderHelper.loaderStatus(true);
+
+          const result = await AuthService.passkeyDelete(
+            selectedPasskey._id,
+            'passkey',
+            null, // No OTP code needed
+            verificationResult.userId
+          );
+
+          if (result?.success) {
+            alertSuccessMessage(result?.message || 'Passkey deleted successfully');
+            fetchPasskeys();
+            handleUserDetails();
+          } else {
+            alertErrorMessage(result?.message || 'Failed to delete passkey');
+          }
+        } catch (error) {
+          alertErrorMessage(error?.message || 'Something went wrong');
+        } finally {
+          setIsLoading(false);
+          LoaderHelper.loaderStatus(false);
+        }
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
+
     // Build available verification methods for deleting passkey
     const methods = [];
+    // Add passkey as option if available (user can verify with any passkey including another one)
+    if (hasPasskey && passkeySupported) {
+      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use passkey to verify' });
+    }
     if (hasGoogleAuth) {
       methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
     }
@@ -814,18 +1137,20 @@ const TwofactorPage = (props) => {
     if (hasMobile) {
       methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
     }
-    
+
     setDeletePasskeyAvailableMethods(methods);
-    
-    // Set default verification method - Google Auth first, then email, then mobile
-    if (hasGoogleAuth) {
+
+    // Set default verification method - Passkey first, then Google Auth, then email, then mobile
+    if (hasPasskey && passkeySupported) {
+      setDeletePasskeyMethod('passkey');
+    } else if (hasGoogleAuth) {
       setDeletePasskeyMethod('totp');
     } else if (hasEmail) {
       setDeletePasskeyMethod('email');
     } else if (hasMobile) {
       setDeletePasskeyMethod('mobile');
     }
-    
+
     openModal('deletePasskeyModal');
   };
 
@@ -836,6 +1161,40 @@ const TwofactorPage = (props) => {
       return;
     }
 
+    // Handle passkey verification
+    if (deletePasskeyMethod === 'passkey') {
+      const verificationResult = await handlePasskeyVerification('delete_passkey');
+      if (!verificationResult) return;
+
+      try {
+        setIsLoading(true);
+        LoaderHelper.loaderStatus(true);
+
+        const result = await AuthService.passkeyDelete(
+          selectedPasskey._id,
+          'passkey',
+          null,
+          verificationResult.userId
+        );
+
+        if (result?.success) {
+          alertSuccessMessage(result?.message || 'Passkey deleted successfully');
+          closeAllModals();
+          fetchPasskeys();
+          handleUserDetails();
+        } else {
+          alertErrorMessage(result?.message || 'Failed to delete passkey');
+        }
+      } catch (error) {
+        alertErrorMessage(error?.message || 'Something went wrong');
+      } finally {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
+      }
+      return;
+    }
+
+    // Handle OTP-based verification
     if (!deletePasskeyCode || deletePasskeyCode.length !== 6) {
       alertErrorMessage('Please enter a valid 6-digit code');
       return;
@@ -892,6 +1251,7 @@ const TwofactorPage = (props) => {
   // eslint-disable-next-line no-unused-vars
   const getDeleteVerificationTitle = () => {
     switch (deletePasskeyMethod) {
+      case 'passkey': return 'Passkey Verification';
       case 'totp': return 'Google Authenticator';
       case 'email': return 'Email Verification';
       case 'mobile': return 'Mobile Verification';
@@ -902,6 +1262,7 @@ const TwofactorPage = (props) => {
   // Get verification description for delete passkey flow
   const getDeleteVerificationDescription = () => {
     switch (deletePasskeyMethod) {
+      case 'passkey': return 'Use another passkey to verify your identity';
       case 'totp': return 'Enter the 6-digit code from your authenticator app';
       case 'email': return `We'll send a verification code to ${maskEmail(emailID)}`;
       case 'mobile': return `We'll send a verification code to ${maskPhone(mobileNumber)}`;
@@ -923,11 +1284,11 @@ const TwofactorPage = (props) => {
     setDeletePasskeyMethod(method.value);
     setDeletePasskeyCode('');
     setResendTimer(0);
-    
+
     // Close options popup
     const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('deletePasskeyOptionsModal'));
     if (optionsModal) optionsModal.hide();
-    
+
     // Reopen main modal
     setTimeout(() => {
       openModal('deletePasskeyModal');
@@ -944,9 +1305,23 @@ const TwofactorPage = (props) => {
   };
 
   // ============ ADD MOBILE FLOW ============
-  // User wants to add mobile number (requires 2FA or email verification first)
-  const handleAddMobileStart = () => {
+  // User wants to add mobile number (requires passkey, 2FA or email verification first)
+  const handleAddMobileStart = async () => {
     resetModalStates();
+    setPasskeyVerificationResult(null);
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('add_mobile');
+      if (verificationResult) {
+        // Passkey verified successfully - skip to step 3 (enter new mobile)
+        setPasskeyVerificationResult(verificationResult);
+        setCurrentStep(3);
+        openModal('addMobileModal');
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
 
     // If user has Google Auth enabled, verify that first
     if (hasGoogleAuth) {
@@ -991,14 +1366,14 @@ const TwofactorPage = (props) => {
       alertErrorMessage('Please enter a valid mobile number');
       return;
     }
-    
+
     // Validate phone number according to country code
     const fullPhoneNumber = `${newCountryCode}${newMobileNumber}`;
     if (!isValidPhoneNumber(fullPhoneNumber)) {
       alertErrorMessage('Please enter a valid phone number for the selected country');
       return;
     }
-    
+
     setCurrentStep(4); // Move to verify new mobile - user will click "Send OTP" button
   };
 
@@ -1035,18 +1410,39 @@ const TwofactorPage = (props) => {
   };
 
   // ============ CHANGE EMAIL FLOW ============
+  // Show consent warning first
   const handleChangeEmailStart = () => {
     if (!canMakeSensitiveChanges()) {
       openModal('blockingModal');
       return;
     }
+    setPendingAction('changeEmail');
+    openModal('changeEmailConsentModal');
+  };
+
+  // Proceed with change email after user consent
+  const handleChangeEmailProceed = async () => {
+    closeModal('changeEmailConsentModal');
     resetModalStates();
     setPasskeyVerificationResult(null);
-    
-    // Build available verification methods - passkey first priority
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('change_email');
+      if (verificationResult) {
+        // Passkey verified successfully - skip to step 2 (enter new email)
+        setPasskeyVerificationResult(verificationResult);
+        setCurrentStep(2);
+        openModal('changeEmailModal');
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
+
+    // Build available verification methods (excluding passkey if it failed)
     const methods = [];
     if (hasPasskey && passkeySupported) {
-      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use your passkey for verification' });
+      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use Face ID, Touch ID, or Windows Hello' });
     }
     if (hasGoogleAuth) {
       methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
@@ -1055,9 +1451,9 @@ const TwofactorPage = (props) => {
     if (hasMobile) {
       methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
     }
-    
+
     setChangeAvailableMethods(methods);
-    // Set default method - passkey first if available
+    // Set default method - Passkey first if available, then Google Auth, then email
     setChangeVerifyMethod(hasPasskey && passkeySupported ? 'passkey' : (hasGoogleAuth ? 'totp' : 'email'));
     setCurrentStep(1); // Start at step 1 - verification
     openModal('changeEmailModal');
@@ -1070,10 +1466,13 @@ const TwofactorPage = (props) => {
     if (currentStep === 1) {
       // Step 1: Verify identity based on selected method
       if (changeVerifyMethod === 'passkey') {
+        // Trigger passkey verification
         const verificationResult = await handlePasskeyVerification('change_email');
-        if (!verificationResult) return;
-        setPasskeyVerificationResult(verificationResult);
-        setCurrentStep(2); // Move to enter new email
+        if (verificationResult) {
+          setPasskeyVerificationResult(verificationResult);
+          setCurrentStep(2); // Move to enter new email
+        }
+        return;
       } else if (changeVerifyMethod === 'totp') {
         if (!googleAuthCode || googleAuthCode.length !== 6) {
           alertErrorMessage('Please enter a valid 6-digit code');
@@ -1186,11 +1585,11 @@ const TwofactorPage = (props) => {
     setGoogleAuthCode('');
     setResendTimer(0);
     setPasskeyVerificationResult(null);
-    
+
     // Close options popup
     const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeVerifyOptionsModal'));
     if (optionsModal) optionsModal.hide();
-    
+
     // Reopen main modal
     setTimeout(() => {
       openModal('changeEmailModal');
@@ -1243,7 +1642,7 @@ const TwofactorPage = (props) => {
   const sendChangeOtp = async () => {
     if (changeVerifyMethod === 'passkey') return true;
     if (changeVerifyMethod === 'totp') return true;
-    
+
     const target = changeVerifyMethod === 'email' ? 'email' : 'mobile';
     const sent = await handleSendOtp(target, 'change_email');
     if (sent) {
@@ -1253,18 +1652,39 @@ const TwofactorPage = (props) => {
   };
 
   // ============ CHANGE MOBILE FLOW ============
+  // Show consent warning first
   const handleChangeMobileStart = () => {
     if (!canMakeSensitiveChanges()) {
       openModal('blockingModal');
       return;
     }
+    setPendingAction('changeMobile');
+    openModal('changeMobileConsentModal');
+  };
+
+  // Proceed with change mobile after user consent
+  const handleChangeMobileProceed = async () => {
+    closeModal('changeMobileConsentModal');
     resetModalStates();
     setPasskeyVerificationResult(null);
-    
-    // Build available verification methods - passkey first priority
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('change_mobile');
+      if (verificationResult) {
+        // Passkey verified successfully - skip to step 2 (enter new mobile)
+        setPasskeyVerificationResult(verificationResult);
+        setCurrentStep(2);
+        openModal('changeMobileModal');
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
+
+    // Build available verification methods (excluding passkey if it failed)
     const methods = [];
     if (hasPasskey && passkeySupported) {
-      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use your passkey for verification' });
+      methods.push({ value: 'passkey', label: 'Passkey', icon: 'ri-fingerprint-line', description: 'Use Face ID, Touch ID, or Windows Hello' });
     }
     if (hasGoogleAuth) {
       methods.push({ value: 'totp', label: 'Google Authenticator', icon: 'ri-shield-keyhole-line', description: 'Use your authenticator app' });
@@ -1273,9 +1693,9 @@ const TwofactorPage = (props) => {
       methods.push({ value: 'email', label: 'Email Verification', icon: 'ri-mail-line', description: `Send code to ${maskEmail(emailID)}` });
     }
     methods.push({ value: 'mobile', label: 'Mobile Verification', icon: 'ri-smartphone-line', description: `Send code to ${maskPhone(mobileNumber)}` });
-    
+
     setChangeAvailableMethods(methods);
-    // Set default method - passkey first if available
+    // Set default method - Passkey first if available, then Google Auth, then email, then mobile
     setChangeVerifyMethod(hasPasskey && passkeySupported ? 'passkey' : (hasGoogleAuth ? 'totp' : (hasEmail ? 'email' : 'mobile')));
     setCurrentStep(1); // Start at step 1 - verification
     openModal('changeMobileModal');
@@ -1285,10 +1705,13 @@ const TwofactorPage = (props) => {
     if (currentStep === 1) {
       // Step 1: Verify identity based on selected method
       if (changeVerifyMethod === 'passkey') {
+        // Trigger passkey verification
         const verificationResult = await handlePasskeyVerification('change_mobile');
-        if (!verificationResult) return;
-        setPasskeyVerificationResult(verificationResult);
-        setCurrentStep(2); // Move to enter new mobile
+        if (verificationResult) {
+          setPasskeyVerificationResult(verificationResult);
+          setCurrentStep(2); // Move to enter new mobile
+        }
+        return;
       } else if (changeVerifyMethod === 'totp') {
         if (!googleAuthCode || googleAuthCode.length !== 6) {
           alertErrorMessage('Please enter a valid 6-digit code');
@@ -1408,11 +1831,11 @@ const TwofactorPage = (props) => {
     setGoogleAuthCode('');
     setResendTimer(0);
     setPasskeyVerificationResult(null);
-    
+
     // Close options popup
     const optionsModal = window.bootstrap?.Modal?.getInstance(document.getElementById('changeMobileVerifyOptionsModal'));
     if (optionsModal) optionsModal.hide();
-    
+
     // Reopen main modal
     setTimeout(() => {
       openModal('changeMobileModal');
@@ -1429,8 +1852,22 @@ const TwofactorPage = (props) => {
   };
 
   // ============ ADD EMAIL FLOW (for users who signed up with mobile) ============
-  const handleAddEmailStart = () => {
+  const handleAddEmailStart = async () => {
     resetModalStates();
+    setPasskeyVerificationResult(null);
+
+    // If passkey is available, try silent verification first
+    if (hasPasskey && passkeySupported) {
+      const verificationResult = await attemptSilentPasskeyVerification('add_email');
+      if (verificationResult) {
+        // Passkey verified successfully - skip to step 3 (enter new email)
+        setPasskeyVerificationResult(verificationResult);
+        setAddEmailStep(3);
+        openModal('addEmailModal');
+        return;
+      }
+      // Passkey failed or cancelled - show fallback options
+    }
 
     // If user has Google Auth enabled, start with that verification
     if (hasGoogleAuth) {
@@ -1526,7 +1963,7 @@ const TwofactorPage = (props) => {
           <div className="security_level">
             <p>
               Security Level: <span style={{ color: securityLevel.color, fontWeight: 'bold' }}>{securityLevel.level}</span>
-              <span style={{ marginLeft: '15px', color: '#888' }}>({activeMethodsCount}/3 methods active)</span>
+              <span style={{ marginLeft: '15px', color: '#888' }}>({activeMethodsCount}/4 methods active)</span>
             </p>
           </div>
 
@@ -1637,15 +2074,15 @@ const TwofactorPage = (props) => {
 
                 <div className="enable">
                   {hasPasskey ? (
-                    <><img src="/images/verified_icon.svg" alt="Enabled" /> {passkeys.length} Passkey{passkeys.length !== 1 ? 's' : ''}</>
+                    <><img src="/images/verified_icon.svg" alt="Enabled" /> {passkeys.length} Passkey{passkeys.length !== 1 ? 's' : ''} <strong  className="cursor-pointer" onClick={() => openModal('viewPasskeysModal')}>(View)</strong></>
                   ) : (
                     <><img src="/images/enabled_icon.svg" alt="Not Enabled" /> Not Enabled</>
                   )}
                 </div>
 
-                <button 
-                  className="btn btn-outline" 
-                  onClick={handleAddPasskeyStart} 
+                <button
+                  className="btn btn-outline"
+                  onClick={handleAddPasskeyStart}
                   disabled={isLoading}
                 >
                   {hasPasskey ? 'Add Another' : 'Set Up'}
@@ -1653,60 +2090,10 @@ const TwofactorPage = (props) => {
               </div>
             )}
 
-            {/* Passkey List */}
-            {hasPasskey && passkeys.length > 0 && (
-              <div className="factor_bl passkey-list">
-                <div className="lftcnt" style={{ width: '100%' }}>
-                  <h6>
-                    <i className="ri-key-2-line" style={{ fontSize: '18px', marginRight: '8px' }}></i>
-                    Registered Passkeys
-                  </h6>
-                  <div className="passkey-items" style={{ marginTop: '15px' }}>
-                    {passkeys.map((passkey) => (
-                      <div 
-                        key={passkey._id} 
-                        className="passkey-item d-flex align-items-center justify-content-between"
-                        style={{ 
-                          padding: '12px 15px', 
-                          background: '#2F3542', 
-                          borderRadius: '8px', 
-                          marginBottom: '10px' 
-                        }}
-                      >
-                        <div className="passkey-info">
-                          <div className="d-flex align-items-center">
-                            <i className="ri-fingerprint-line" style={{ fontSize: '18px', marginRight: '10px', color: '#00c853' }}></i>
-                            <div>
-                              <strong style={{ color: '#fff' }}>{passkey.name}</strong>
-                              <div style={{ fontSize: '11px', color: '#888' }}>
-                                {passkey.deviceInfo?.browser || 'Unknown'} • {passkey.deviceInfo?.os || 'Unknown'}
-                              </div>
-                              <div style={{ fontSize: '11px', color: '#666' }}>
-                                Added {new Date(passkey.createdAt).toLocaleDateString()}
-                                {passkey.lastUsedAt && ` • Last used ${new Date(passkey.lastUsedAt).toLocaleDateString()}`}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <button 
-                          className="btn btn-sm"
-                          style={{ background: '#dc3545', color: '#fff', padding: '5px 12px', borderRadius: '5px' }}
-                          onClick={() => handleDeletePasskeyStart(passkey)}
-                          disabled={isLoading}
-                        >
-                          <i className="ri-delete-bin-line"></i>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Security Tips */}
             <div className=" security-tips">
               <div className="lftcnt">
-                <h6><i class="ri-folder-shield-2-line"></i>Security Tips</h6>
+                <h6><i className="ri-folder-shield-2-line"></i>Security Tips</h6>
                 <ul className="security-tips-list">
                   <li>✓ Enable at least 2 security methods for better protection</li>
                   <li>✓ Google Authenticator provides the highest security level</li>
@@ -1722,7 +2109,7 @@ const TwofactorPage = (props) => {
       {/* ============ GOOGLE AUTHENTICATOR MODALS ============ */}
 
       {/* Step 1: Email/Mobile Verification for Google Auth Setup */}
-      <div className="modal fade search_form" id="googleAuthSetupModal" tabIndex="-1" aria-hidden="true"  data-bs-backdrop="static">
+      <div className="modal fade search_form" id="googleAuthSetupModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -1784,7 +2171,7 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* Step 2: QR Code Display */}
-      <div className="modal fade search_form" id="googleAuthQrModal" tabIndex="-1" aria-hidden="true"  data-bs-backdrop="static">
+      <div className="modal fade search_form" id="googleAuthQrModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -1951,7 +2338,7 @@ const TwofactorPage = (props) => {
                   {/* Step 3: Enter mobile number */}
                   {currentStep === 3 && (
                     <>
-                      
+
                       <div className="input_block">
                         {/* <label>Country Code</label> */}
                         <Select
@@ -1963,8 +2350,8 @@ const TwofactorPage = (props) => {
                           value={countriesList.find(option => option.value === newCountryCode)}
                           placeholder="Select country code"
                           // blurInputOnSelect={true}
-                          onMenuOpen={() => {}}
-                          filterOption={(option, inputValue) => 
+                          onMenuOpen={() => { }}
+                          filterOption={(option, inputValue) =>
                             option.label.toLowerCase().includes(inputValue.toLowerCase())
                           }
                         />
@@ -2056,13 +2443,13 @@ const TwofactorPage = (props) => {
                       {/* Passkey verification */}
                       {changeVerifyMethod === 'passkey' ? (
                         <div className="" style={{ textAlign: 'center' }}>
-                          <div style={{ 
-                            width: '80px', 
-                            height: '80px', 
-                            borderRadius: '50%', 
-                            background: 'rgba(255,255,255,0.1)', 
-                            display: 'flex', 
-                            alignItems: 'center', 
+                          <div style={{
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            background: 'rgba(255,255,255,0.1)',
+                            display: 'flex',
+                            alignItems: 'center',
                             justifyContent: 'center',
                             margin: '0 auto 20px'
                           }}>
@@ -2204,8 +2591,8 @@ const TwofactorPage = (props) => {
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                 {changeAvailableMethods.map((method) => (
                   <div className="" key={method.value}>
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => handleSelectChangeMethod(method)}
                       role="button"
                     >
@@ -2252,30 +2639,30 @@ const TwofactorPage = (props) => {
                       {/* Passkey verification */}
                       {changeVerifyMethod === 'passkey' ? (
                         <div className="" style={{ textAlign: 'center' }}>
-                           <form>
+                          <form>
 
-                          <div style={{ 
-                            width: '80px', 
-                            height: '80px', 
-                            borderRadius: '50%', 
-                            background: 'rgba(255,255,255,0.1)', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            margin: '0 auto 20px'
-                          }}>
-                            <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
-                          </div>
-                          <p className="text-white mb-3">{getChangeVerificationDescription()}</p>
-                       
-                          <button
-                            className="submit w-100"
-                            type="button"
-                            onClick={handleChangeMobileNextStep}
-                            disabled={isLoading || isPasskeyVerifying}
-                          >
-                            {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
-                          </button>
+                            <div style={{
+                              width: '80px',
+                              height: '80px',
+                              borderRadius: '50%',
+                              background: 'rgba(255,255,255,0.1)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              margin: '0 auto 20px'
+                            }}>
+                              <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
+                            </div>
+                            <p className="text-white mb-3">{getChangeVerificationDescription()}</p>
+
+                            <button
+                              className="submit w-100"
+                              type="button"
+                              onClick={handleChangeMobileNextStep}
+                              disabled={isLoading || isPasskeyVerifying}
+                            >
+                              {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
+                            </button>
                           </form>
                         </div>
                       ) : (
@@ -2418,8 +2805,8 @@ const TwofactorPage = (props) => {
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                 {changeAvailableMethods.map((method) => (
                   <div className="" key={method.value}>
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => handleSelectChangeMobileMethod(method)}
                       role="button"
                     >
@@ -2481,17 +2868,17 @@ const TwofactorPage = (props) => {
             </div>
             <div className="modal-body">
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                
+
                 {/* Passkey verification - no OTP input needed */}
                 {disableAuthMethod === 4 ? (
                   <div className="" style={{ textAlign: 'center' }}>
-                    <div style={{ 
-                      width: '80px', 
-                      height: '80px', 
-                      borderRadius: '50%', 
-                      background: 'rgba(255,255,255,0.1)', 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       margin: '0 auto 20px'
                     }}>
@@ -2561,7 +2948,7 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* Verification Options Modal for Disable Flow */}
-      <div className="modal fade search_form" id="disableAuthOptionsModal" tabIndex="-1" aria-hidden="true"data-bs-backdrop="static">
+      <div className="modal fade search_form" id="disableAuthOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -2571,11 +2958,11 @@ const TwofactorPage = (props) => {
             </div>
             <div className="modal-body">
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                
+
                 {disableAvailableMethods.map((method) => (
                   <div className="" key={method.type}>
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => handleSelectDisableMethod(method)}
                       role="button"
                     >
@@ -2598,7 +2985,7 @@ const TwofactorPage = (props) => {
       </div>
 
       {/* ============ ADD EMAIL MODAL (for users who signed up with phone) ============ */}
-      <div className="modal fade search_form" id="addEmailModal" tabIndex="-1" aria-hidden="true"data-bs-backdrop="static">
+      <div className="modal fade search_form" id="addEmailModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -2742,15 +3129,15 @@ const TwofactorPage = (props) => {
                 <p>
                   Your account security level is currently low. Please link at least one additional verification method to enhance security.
                 </p>
-               
+
               </div>
 
               {/* Available methods to add */}
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
                 {!hasEmail && (
                   <div className="">
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => { handleDismissSecurityPrompt(); handleAddEmailStart && handleAddEmailStart(); }}
                       role="button"
                     >
@@ -2768,8 +3155,8 @@ const TwofactorPage = (props) => {
 
                 {!hasMobile && (
                   <div className="">
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => { handleDismissSecurityPrompt(); handleAddMobileStart && handleAddMobileStart(); }}
                       role="button"
                     >
@@ -2787,8 +3174,8 @@ const TwofactorPage = (props) => {
 
                 {!hasGoogleAuth && (
                   <div className="">
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => { handleDismissSecurityPrompt(); handleGoogleAuthStart && handleGoogleAuthStart(); }}
                       role="button"
                     >
@@ -2803,17 +3190,121 @@ const TwofactorPage = (props) => {
                     </div>
                   </div>
                 )}
-                  <button
-                className="submit"
-                type="button"
-                onClick={handleDismissSecurityPrompt}
-                style={{ marginTop: '15px' }}
-              >
-                Remind Me Later
-              </button>
+                <button
+                  className="submit"
+                  type="button"
+                  onClick={handleDismissSecurityPrompt}
+                  style={{ marginTop: '15px' }}
+                >
+                  Remind Me Later
+                </button>
               </form>
 
-            
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ ADD PASSKEY VERIFY MODAL ============ */}
+      <div className="modal fade search_form" id="addPasskeyVerifyModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">{getAddPasskeyVerificationTitle()}</h5>
+              <p>{getAddPasskeyVerificationDescription()}</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+
+                {addPasskeyVerifyMethod === 'totp' ? (
+                  <div className="emailinput">
+                    <label>Authenticator Code</label>
+                    <input
+                      type="text"
+                      placeholder="Enter 6-digit code"
+                      value={addPasskeyOtpCode}
+                      onChange={(e) => setAddPasskeyOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      maxLength={6}
+                    />
+                  </div>
+                ) : (
+                  <div className="emailinput">
+                    <label>Verification Code</label>
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        placeholder="Enter 6-digit code"
+                        value={addPasskeyOtpCode}
+                        onChange={(e) => setAddPasskeyOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        maxLength={6}
+                      />
+                      <div
+                        className={`getotp cursor-pointer ${resendTimer > 0 ? 'disabled' : ''}`}
+                        onClick={() => resendTimer === 0 && handleAddPasskeySendOtp()}
+                      >
+                        {resendTimer > 0 ? `Resend (${resendTimer}s)` : 'GET OTP'}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  className="submit"
+                  type="button"
+                  disabled={isLoading || !addPasskeyOtpCode || addPasskeyOtpCode.length !== 6}
+                  onClick={handleAddPasskeyVerify}
+                >
+                  {isLoading ? 'Verifying...' : 'Verify & Continue'}
+                </button>
+
+                {addPasskeyAvailableMethods.length > 1 && (
+                  <div className="cursor-pointer" onClick={() => openModal('addPasskeyVerifyOptionsModal')} style={{ marginTop: '15px' }}>
+                    <small className="text-white">Switch to Another Verification Option <i className="ri-external-link-line"></i></small>
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Passkey Verification Options Modal */}
+      <div className="modal fade search_form" id="addPasskeyVerifyOptionsModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Select a Verification Option</h5>
+              <p>Choose how you want to verify your identity</p>
+              <button type="button" className="btn-close" onClick={() => closeModal('addPasskeyVerifyOptionsModal')} aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                {addPasskeyAvailableMethods.map((method) => (
+                  <div className="" key={method.id}>
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
+                      onClick={() => {
+                        setAddPasskeyVerifyMethod(method.id);
+                        setAddPasskeyOtpCode('');
+                        setResendTimer(0);
+                        closeModal('addPasskeyVerifyOptionsModal');
+                      }}
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <i className={`${method.icon} me-3`}></i>
+                        <div>
+                          <strong>{method.label}</strong>
+                          <p className="mb-0 small">{method.description}</p>
+                        </div>
+                      </div>
+                      <i className="ri-arrow-right-s-line"></i>
+                    </div>
+                  </div>
+                ))}
+              </form>
             </div>
           </div>
         </div>
@@ -2833,10 +3324,10 @@ const TwofactorPage = (props) => {
             </div>
             <div className="modal-body">
               <div className="verify_authenticator_s">
-                <div style={{ 
-                  width: '80px', 
-                  height: '80px', 
-                  borderRadius: '50%', 
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
                   background: 'linear-gradient(135deg, #00c853 0%, #00a844 100%)',
                   display: 'flex',
                   alignItems: 'center',
@@ -2848,7 +3339,7 @@ const TwofactorPage = (props) => {
                 <p style={{ marginBottom: '10px' }}>
                   Passkeys provide secure, passwordless authentication using your device's built-in security features.
                 </p>
-                <ul style={{ textAlign: 'left', fontSize: '13px', color: '#888', marginBottom: '20px' }}>
+                <ul style={{  fontSize: '13px', color: '#888', marginBottom: '20px' }}>
                   <li>Use Face ID, Touch ID, or Windows Hello</li>
                   <li>No passwords to remember</li>
                   <li>Protected by your device's hardware security</li>
@@ -2883,6 +3374,87 @@ const TwofactorPage = (props) => {
         </div>
       </div>
 
+      {/* ============ VIEW PASSKEYS MODAL ============ */}
+      <div className="modal fade search_form" id="viewPasskeysModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <i className="ri-key-2-line" style={{ marginRight: '8px' }}></i>
+                Registered Passkeys
+              </h5>
+              <p>Manage your passkeys for passwordless login</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body ">
+              {passkeys.length > 0 ? (
+                <div className="passkey-items">
+                  {passkeys.map((passkey) => (
+                    <div
+                      key={passkey._id}
+                      className="d-flex align-items-center justify-content-between"
+                      style={{
+                        padding: '12px 15px',
+                        background: '#2F3542',
+                        borderRadius: '8px',
+                        marginBottom: '10px'
+                      }}
+                    >
+                      <div className="passkey-info">
+                        <div className="d-flex align-items-center">
+                          <i className="ri-fingerprint-line" style={{ fontSize: '18px', marginRight: '10px', color: '#00c853' }}></i>
+                          <div>
+                            <strong style={{ color: '#fff' }}>{passkey.name}</strong>
+                            <div style={{ fontSize: '11px', color: '#888' }}>
+                              {passkey.deviceInfo?.browser || 'Unknown'} • {passkey.deviceInfo?.os || 'Unknown'}
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#666' }}>
+                              Added {new Date(passkey.createdAt).toLocaleDateString()}
+                              {passkey.lastUsedAt && ` • Last used ${new Date(passkey.lastUsedAt).toLocaleDateString()}`}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        className="btn btn-sm"
+                        style={{ background: '#dc3545', color: '#fff', padding: '5px 12px', borderRadius: '5px' }}
+                        onClick={() => {
+                          closeModal('viewPasskeysModal');
+                          setTimeout(() => handleDeletePasskeyStart(passkey), 300);
+                        }}
+                        disabled={isLoading}
+                      >
+                        <i className="ri-delete-bin-line"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center" style={{ padding: '30px', color: '#888' }}>
+                  <i className="ri-fingerprint-line" style={{ fontSize: '48px', marginBottom: '15px', display: 'block' }}></i>
+                  <p>No passkeys registered yet</p>
+                </div>
+              )}
+              <form onSubmit={(e) => e.preventDefault()} className="profile_form">
+                <button
+                  className="submit w-100"
+                  type="submit"
+                  onClick={() => {
+                    closeModal('viewPasskeysModal');
+                    setTimeout(() => handleAddPasskeyStart(), 300);
+                  }}
+                  disabled={isLoading}
+                  style={{ marginTop: '15px' }}
+                >
+                  <i className="ri-add-line" style={{ marginRight: '5px' }}></i>
+                  Add New Passkey
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ============ DELETE PASSKEY MODAL ============ */}
       <div className="modal fade search_form" id="deletePasskeyModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered">
@@ -2898,44 +3470,72 @@ const TwofactorPage = (props) => {
               </div>
 
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                <div className="emailinput">
-                  <label>Enter 6-digit Code</label>
-                  <div className="d-flex">
-                    <input
-                      type="text"
-                      placeholder="Enter code here..."
-                      value={deletePasskeyCode}
-                      onChange={(e) => setDeletePasskeyCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      maxLength={6}
-                    />
-                    {/* Send OTP button for Email/Mobile */}
-                    {deletePasskeyMethod !== 'totp' && (
-                      resendTimer > 0 ? (
-                        <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
-                      ) : (
-                        <button
-                          type="button"
-                          className="getotp otp-button-enabled getotp_mobile"
-                          onClick={() => {
-                            handleSendOtp(deletePasskeyMethod, 'delete_passkey')
-                              .then(() => setResendTimer(60));
-                          }}
-                        >
-                          GET OTP
-                        </button>
-                      )
-                    )}
+                {/* Passkey verification - no OTP input needed */}
+                {deletePasskeyMethod === 'passkey' ? (
+                  <div className="" style={{ textAlign: 'center' }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 20px'
+                    }}>
+                      <i className="ri-fingerprint-line" style={{ fontSize: '40px', color: '#fff' }}></i>
+                    </div>
+                    <button
+                      className="submit w-100"
+                      type="button"
+                      onClick={handleDeletePasskey}
+                      disabled={isLoading || isPasskeyVerifying}
+                    >
+                      {isPasskeyVerifying ? 'Authenticating...' : 'Authenticate with Passkey'}
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="emailinput">
+                      <label>Enter 6-digit Code</label>
+                      <div className="d-flex">
+                        <input
+                          type="text"
+                          placeholder="Enter code here..."
+                          value={deletePasskeyCode}
+                          onChange={(e) => setDeletePasskeyCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          maxLength={6}
+                        />
+                        {/* Send OTP button for Email/Mobile */}
+                        {deletePasskeyMethod !== 'totp' && (
+                          resendTimer > 0 ? (
+                            <div className="resend otp-button-disabled">Resend ({resendTimer}s)</div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="getotp otp-button-enabled getotp_mobile"
+                              onClick={() => {
+                                handleSendOtp(deletePasskeyMethod, 'delete_passkey')
+                                  .then(() => setResendTimer(60));
+                              }}
+                            >
+                              GET OTP
+                            </button>
+                          )
+                        )}
+                      </div>
+                    </div>
 
-                <button
-                  className="submit"
-                  type="button"
-                  disabled={isLoading || deletePasskeyCode.length !== 6}
-                  onClick={handleDeletePasskey}
-                >
-                  {isLoading ? 'Processing...' : 'Delete Passkey'}
-                </button>
+                    <button
+                      className="submit"
+                      type="button"
+                      disabled={isLoading || deletePasskeyCode.length !== 6}
+                      onClick={handleDeletePasskey}
+                    >
+                      {isLoading ? 'Processing...' : 'Delete Passkey'}
+                    </button>
+                  </>
+                )}
 
                 {/* Switch verification option link - only show if multiple methods */}
                 {deletePasskeyAvailableMethods.length > 1 && (
@@ -2961,11 +3561,11 @@ const TwofactorPage = (props) => {
             </div>
             <div className="modal-body">
               <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
-                
+
                 {deletePasskeyAvailableMethods.map((method) => (
                   <div className="" key={method.value}>
-                    <div 
-                      className="d-flex align-items-center justify-content-between text-white" 
+                    <div
+                      className="d-flex align-items-center justify-content-between text-white"
                       onClick={() => handleSelectDeletePasskeyMethod(method)}
                       role="button"
                     >
@@ -2980,6 +3580,233 @@ const TwofactorPage = (props) => {
                     </div>
                   </div>
                 ))}
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ CONSENT WARNING MODALS ============ */}
+
+      {/* Change Email Consent Modal */}
+      <div className="modal fade search_form" id="changeEmailConsentModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <i className="ri-error-warning-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                Security Notice
+              </h5>
+              <p>Please read carefully before proceeding</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s remove_authenticator_s">
+                <div style={{
+                  width: '70px',
+                  height: '70px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px'
+                }}>
+                  <i className="ri-mail-settings-line" style={{ fontSize: '35px', color: '#fff' }}></i>
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <p style={{ color: '#fff', marginBottom: '15px', fontSize: '14px' }}>
+                    <i className="ri-information-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                    Withdrawals and P2P transactions might be disabled for <strong>24 hours</strong> after changing your email verification to ensure the safety of your assets.
+                  </p>
+                  <p style={{ color: '#fff', marginBottom: '0', fontSize: '14px' }}>
+                    <i className="ri-time-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                    The old email address cannot be used to re-register for <strong>30 days</strong> after updating it.
+                  </p>
+                </div>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <button
+                  className="submit"
+                  type="button"
+                  onClick={handleChangeEmailProceed}
+                >
+                  I Understand, Continue
+                </button>
+                {/* <button
+                  className="btn btn-outline w-100"
+                  type="button"
+                  data-bs-dismiss="modal"
+                  style={{ marginTop: '10px' }}
+                >
+                  Cancel
+                </button> */}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Change Mobile Consent Modal */}
+      <div className="modal fade search_form" id="changeMobileConsentModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <i className="ri-error-warning-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                Security Notice
+              </h5>
+              <p>Please read carefully before proceeding</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s">
+                <div style={{
+                  width: '70px',
+                  height: '70px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px'
+                }}>
+                  <i className="ri-smartphone-line" style={{ fontSize: '35px', color: '#fff' }}></i>
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <p style={{ color: '#fff', marginBottom: '15px', fontSize: '14px' }}>
+                    <i className="ri-information-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                    Withdrawals and P2P transactions might be disabled for <strong>24 hours</strong> after changing your phone verification to ensure the safety of your assets.
+                  </p>
+                  <p style={{ color: '#fff', marginBottom: '0', fontSize: '14px' }}>
+                    <i className="ri-time-line" style={{ color: '#ffc107', marginRight: '8px' }}></i>
+                    The old phone number cannot be used to re-register for <strong>30 days</strong> after updating it.
+                  </p>
+                </div>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <button
+                  className="submit"
+                  type="button"
+                  onClick={handleChangeMobileProceed}
+                >
+                  I Understand, Continue
+                </button>
+                {/* <button
+                  className="btn btn-outline w-100"
+                  type="button"
+                  data-bs-dismiss="modal"
+                  style={{ marginTop: '10px' }}
+                >
+                  Cancel
+                </button> */}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Disable Passkey Consent Modal */}
+      <div className="modal fade search_form" id="disablePasskeyConsentModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <i className="ri-error-warning-line" style={{ color: '#dc3545', marginRight: '8px' }}></i>
+                Are You Sure You Want to Remove Your Passkey?
+              </h5>
+              <p>This action affects your account security</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s remove_authenticator_s">
+                <div style={{
+                  width: '70px',
+                  height: '70px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px'
+                }}>
+                  <i className="ri-fingerprint-line" style={{ fontSize: '35px', color: '#fff' }}></i>
+                </div>
+                <div style={{  marginBottom: '20px' }}>
+                  <p >
+                    <i className="ri-information-line" style={{ color: '#dc3545', marginRight: '8px' }}></i>
+                    Withdrawals and P2P transactions might be disabled for <strong>24 hours</strong> after removing your passkey to ensure the safety of your assets, based on our assessment of your risk level.
+                  </p>
+                  <p>
+                    <i className="ri-shield-check-line" style={{ color: '#28a745', marginRight: '8px' }}></i>
+                    Passkeys give good protection to your account and assets. <strong>We recommend that you keep using passkeys.</strong>
+                  </p>
+                </div>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <button
+                  className="submit"
+                  type="button"
+                  onClick={handleDeletePasskeyProceed}
+                >
+                  Remove Passkey Anyway
+                </button>
+            
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Disable Google Authenticator Consent Modal */}
+      <div className="modal fade search_form" id="disableGoogleAuthConsentModal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                Are You Sure You Want to Disable Authenticator?
+              </h5>
+              <p>This action affects your account security</p>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className="verify_authenticator_s remove_authenticator_s">
+                <div style={{
+                  width: '70px',
+                  height: '70px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 20px'
+                }}>
+                  <i className="ri-shield-keyhole-line" style={{ fontSize: '35px', color: '#fff' }}></i>
+                </div>
+                <div >
+                  <p >
+                    <i className="ri-information-line text-danger  mx-2" ></i>
+                    Withdrawals and P2P transactions might be disabled for <strong>24 hours</strong> after removing your authenticator app verification to ensure the safety of your assets.
+                  </p>
+                  <p >
+                    <i className="ri-shield-check-line text-warning mx-2" ></i>
+                    Two security verification methods are required for withdrawals and other actions. <strong>Using only one verification method will put your account at greater risk.</strong>
+                  </p>
+                </div>
+              </div>
+
+              <form className="profile_form" onSubmit={(e) => e.preventDefault()}>
+                <button
+                  className="submit"
+                  type="button"
+                  onClick={handleDisableGoogleAuthProceed}
+                >
+                  Disable Authenticator Anyway
+                </button>
 
               </form>
             </div>

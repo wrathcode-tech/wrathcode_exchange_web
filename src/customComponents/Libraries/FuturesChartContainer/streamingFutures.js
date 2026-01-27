@@ -79,8 +79,8 @@ export async function subscribeFuturesOnStream(
 
   channelToSubscription.set(channelString, subscriptionItem);
 
-  const userId = sessionStorage.getItem('userId');
-  let socketId = sessionStorage.getItem("socketIdFuture");
+  const userId = localStorage.getItem('userId');
+  let socketId = localStorage.getItem("socketIdFuture");
   let payload = {
     message: 'futures',
     // base_currency_id: CoinID?.base_currency_id,

@@ -77,8 +77,8 @@ export async function subscribeOnStream(
 
   channelToSubscription.set(channelString, subscriptionItem);
 
-  const userId = sessionStorage.getItem('userId');
-  let socketId = sessionStorage.getItem("socketId");
+  const userId = localStorage.getItem('userId');
+  let socketId = localStorage.getItem("socketId");
   let payload = {
     message: 'exchange',
     base_currency_id: CoinID?.base_currency_id,

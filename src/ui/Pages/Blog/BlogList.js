@@ -6,7 +6,7 @@ import Slider from "react-slick";
 
 const BlogList = () => {
 
-  const token = sessionStorage.getItem("token")
+  const token = localStorage.getItem("token")
 
   let blogContent = [
     {

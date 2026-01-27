@@ -29,10 +29,10 @@ const LandingPage = () => {
   const nextPage = useCallback((data) => {
     if (!data?.base_currency || !data?.quote_currency) return;
     try {
-      sessionStorage.setItem('RecentPair', JSON.stringify(data));
+      localStorage.setItem('RecentPair', JSON.stringify(data));
       navigate(`/trade/${data.base_currency}_${data.quote_currency}`);
     } catch {
-      // Silent fail for sessionStorage errors
+      // Silent fail for localStorage errors
     }
   }, [navigate]);
 
@@ -57,8 +57,8 @@ const LandingPage = () => {
       const result = await AuthService.googleLogin(tokenResponse);
       if (result?.success) {
         alertSuccessMessage(result?.message);
-        sessionStorage.setItem("token", result.data?.token || "");
-        sessionStorage.setItem("userId", result.data?.userId || "");
+        localStorage.setItem("token", result.data?.token || "");
+        localStorage.setItem("userId", result.data?.userId || "");
         setLoginDetails(result?.data);
         const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
         navigate(redirectPath, { replace: true });

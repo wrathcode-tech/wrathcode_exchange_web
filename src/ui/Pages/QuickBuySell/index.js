@@ -19,7 +19,7 @@ const BuySell = () => {
     const [AllData, setAllData] = useState([]);
     const [selectedCurrImg, setSelectedCurrImg] = useState();
     const { socket } = useContext(SocketContext);
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const toFixed = (value) => parseFloat(value?.toFixed(6))
 
 

@@ -17,7 +17,7 @@ function ArbitrageDashboard(props) {
     const [selectedWallet, setSelectedWallet] = useState("");
     const [walletBalance, setWalletBalance] = useState(0);
     const [subscriptionAmount, setSubscriptionAmount] = useState(0);
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     const handlePackageList = async () => {
         LoaderHelper.loaderStatus(true);

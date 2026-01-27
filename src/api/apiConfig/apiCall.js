@@ -71,6 +71,6 @@ export const ApiCallPatch = async (url, parameters, headers) => {
 
 const tokenExpire = () => {
   alertErrorMessage('Token is Expired Please Login Again');
-  sessionStorage.clear();
+  localStorage.clear();
   window.location.reload();
 }

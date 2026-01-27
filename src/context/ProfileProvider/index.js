@@ -26,10 +26,10 @@ export function ProfileProvider(props) {
   // Refs to track if APIs have been called
   const isInitialized = useRef(false);
 
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
   const updateModelHideStatus = (value) => {
-    sessionStorage.setItem(value, true);
+    localStorage.setItem(value, true);
     setRefreshModal(!refreshModal);
   };
 
@@ -133,7 +133,7 @@ export function ProfileProvider(props) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       uniqueId += characters.charAt(randomIndex);
     }
-    sessionStorage.setItem("socketId", uniqueId);
+    localStorage.setItem("socketId", uniqueId);
   }, []);
 
   const generateFutureSocketUniqueId = useCallback((length = 15) => {
@@ -143,7 +143,7 @@ export function ProfileProvider(props) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       uniqueId += characters.charAt(randomIndex);
     }
-    sessionStorage.setItem("socketIdFuture", uniqueId);
+    localStorage.setItem("socketIdFuture", uniqueId);
   }, []);
 
   // Initialize all APIs once after login
@@ -187,20 +187,20 @@ export function ProfileProvider(props) {
     const htmlTag = document.documentElement;
     const currentTheme = htmlTag.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    sessionStorage.setItem('theme', newTheme);
+    localStorage.setItem('theme', newTheme);
     htmlTag.setAttribute('data-theme', newTheme);
     setNewStoredTheme(newTheme);
   };
 
   useEffect(() => {
-    const storedTheme = sessionStorage.getItem('theme');
+    const storedTheme = localStorage.getItem('theme');
     const htmlTag = document.documentElement;
     if (storedTheme) {
       htmlTag.setAttribute('data-theme', storedTheme);
     } else {
       const defaultTheme = 'dark';
       htmlTag.setAttribute('data-theme', defaultTheme);
-      sessionStorage.setItem('CurrentTheme', defaultTheme);
+      localStorage.setItem('CurrentTheme', defaultTheme);
     }
   }, []);
 

@@ -36,7 +36,7 @@ const AuthHeader = () => {
 
   // eslint-disable-next-line no-unused-vars
   const logOut = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/", { replace: true, state: null });
     window.location.reload();
   };
@@ -115,7 +115,7 @@ const AuthHeader = () => {
   };
 
   const nextPage = (data) => {
-    sessionStorage.setItem("RecentPair", JSON.stringify(data));
+    localStorage.setItem("RecentPair", JSON.stringify(data));
     navigate(`/trade/${data?.base_currency}_${data?.quote_currency}`);
     window.location.reload();
   };

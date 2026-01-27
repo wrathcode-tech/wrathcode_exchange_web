@@ -5,6 +5,7 @@ import { alertErrorMessage, alertSuccessMessage } from "../../../customComponent
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { Helmet } from "react-helmet-async";
 import ReCAPTCHA from "react-google-recaptcha";
+import { $ } from "react-jquery-plugin";
 
 const RegistrationVerification = () => {
   const { authenticationToken } = useParams()
@@ -20,12 +21,31 @@ const RegistrationVerification = () => {
   const [signId, setSignId] = useState("");
   const [registeredBy, setRegisteredBy] = useState("");
 
+  // Add loginbg class on mount for consistent styling
+  useEffect(() => {
+    $("body").addClass("loginbg");
+    return () => {
+      $("body").removeClass("loginbg");
+    };
+  }, []);
+
+  const handleRecaptchaError = () => {
+    // Handle recaptcha error silently
+  };
+
   const handleLogin = async () => {
-    const token = googlecaptchaRef.current.getValue()
+    let token = '';
+    try {
+      token = googlecaptchaRef.current?.getValue() || '';
+    } catch (captchaError) {
+      // reCAPTCHA timeout or error - continue without token
+    }
+
     // if (!token) {
     //   alertErrorMessage("Please validate captcha");
     //   return;
     // }
+
     if (otp?.length < 5) {
       alertErrorMessage("Invalid OTP");
       return
@@ -33,34 +53,34 @@ const RegistrationVerification = () => {
 
     LoaderHelper.loaderStatus(true);
     try {
-      const result = await AuthService.verifyRegistrationOtp(signId, +otp,registeredBy, token);
+      const result = await AuthService.verifyRegistrationOtp(signId, +otp, registeredBy, token);
       if (result?.success) {
         alertSuccessMessage(result?.message);
         navigate(`/account-activate/${authenticationToken}`);
         LoaderHelper.loaderStatus(false);
       } else {
-        // recaptchaRef.current.reset();
         LoaderHelper.loaderStatus(false);
         alertErrorMessage(result?.message);
       }
     } catch (error) {
       if (error.response) {
-        // Handle specific HTTP response errors
         alertErrorMessage(error.response.data.message);
         LoaderHelper.loaderStatus(false);
       } else if (error.request) {
-        // Handle network connection errors
         alertErrorMessage("Network error. Please check your internet connection.");
         LoaderHelper.loaderStatus(false);
       } else {
-        // Handle other errors
         alertErrorMessage("An error occurred. Please try again later.");
         LoaderHelper.loaderStatus(false);
       }
-    } finally { googlecaptchaRef.current.reset(); }
+    } finally {
+      try {
+        googlecaptchaRef.current?.reset();
+      } catch (e) {
+        // Ignore reCAPTCHA reset errors
+      }
+    }
   };
-
-
 
   const handleGetOtp = async () => {
     LoaderHelper.loaderStatus(true);
@@ -98,8 +118,6 @@ const RegistrationVerification = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-
-
   const verifyRegistrationToken = async () => {
     try {
       LoaderHelper.loaderStatus(true);
@@ -110,7 +128,6 @@ const RegistrationVerification = () => {
           setRegisteredBy(result?.data?.registeredBy);
         } else {
           navigate(`/account-activate/${authenticationToken}`);
-          // Show account verified page
         }
       } else {
         if (result?.accountStatus === "Blocked") {
@@ -120,95 +137,96 @@ const RegistrationVerification = () => {
       }
     } catch (error) {
       alertErrorMessage(error?.message);
-    } finally { LoaderHelper.loaderStatus(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    } finally {
+      LoaderHelper.loaderStatus(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
-
 
   useEffect(() => {
     verifyRegistrationToken()
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationToken]);
-
-
-
-
-
-  useEffect(() => {
-    const currentRecaptchaRef = googlecaptchaRef.current;
-
-    return () => {
-      window.location.reload()
-      if (currentRecaptchaRef) {
-        currentRecaptchaRef.reset();
-      }
-    };
-  }, []);
 
   return (
     <>
       <Helmet>
-        <title> Wrathcode | The world class new generation crypto asset exchange</title>
+        <title>Wrathcode | Account Verification</title>
+        <meta name="description" content="Verify your Wrathcode account to start trading securely." />
       </Helmet>
 
-
-      <div className="login_section m-auto verifiedform">
-
-        <div className="login_form_right account-verification">
-
-          <div className="form_block_login">
-
-            <div className="security_shield_vector">
-              <img src="/images/security_shield.svg" alt="security" />
-            </div>
-
-            <h4>Please Verify Your Account</h4>
-
-            <p>Make your account 100% secure against unauthorized logins.</p>
-            <p>Registered {registeredBy || "---"}: <span>{signId || "---"}</span></p>
-            <div className="tab-content" id="myTabContent">
-              <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <form>
-                  <div className="row">
-                    <div className="col-sm-12 input_block">
-                      <label>Email Verification Code*</label>
-                      <div className="email_code">
-                        <input className="input_filed" type="number" placeholder="Enter Code" value={otp} onChange={(e) => setOtp(e.target.value)} onWheel={(e) => e.target.blur()} />
-                        <button className="get_otp otpcode" type="button" disabled={disableBtn} onClick={() => { handleGetOtp(signId, 'registration'); }}>{disableBtn ? `Resend OTP (${timer}s)` : "GET OTP"}</button>
-                      </div>
-                      {attemptLeft && <small className="text-warning">Verification attempts left: {attemptLeft - 1}</small>}
-                    </div>
-                    <div className="col-sm-12 input_block">
-                      <ReCAPTCHA
-                        theme="light"
-                        ref={googlecaptchaRef}
-                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
-                      />
-                    </div>
-
-                    <div className="col-sm-12 login_btn">
-                      {!signId || otp?.length < 5 ?
-                        <input type="button" value="Verify" disabled />
-                        :
-                        <input
-                          value="Verify"
-                          type="button"
-                          onClick={() => handleLogin()} />
-                      }
-                    </div>
-                    <div className="col-sm-12 registration__info bottom">
-                      <p>Already have an account? <Link to="/Login">Login</Link></p>
-                    </div>
-                  </div>
-                </form>
+      <div className="login_fullhieght">
+        <div className="login_section">
+          <div className="login_form_right">
+            <div className="form_block_login">
+              <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
+              
+              <div className="security_shield_vector">
+                <img src="/images/security_shield.svg" alt="security" />
               </div>
+
+              <h2>Verify Your Account</h2>
+              <p className="text-center mb-3">Make your account 100% secure against unauthorized logins.</p>
+              <p className="text-center mb-4">
+                Registered {registeredBy || "---"}: <span className="text-primary">{signId || "---"}</span>
+              </p>
+
+              <form onSubmit={(e) => e.preventDefault()}>
+                <div className="row">
+                  <div className="col-sm-12 input_block">
+                    <label>{registeredBy === "Email" ? "Email" : "Mobile"} Verification Code</label>
+                    <div className="email_code">
+                      <input
+                        className="input_filed"
+                        type="text"
+                        placeholder="Enter verification code"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        maxLength={6}
+                      />
+                      <button
+                        className="get_otp otpcode"
+                        type="button"
+                        disabled={disableBtn}
+                        onClick={() => handleGetOtp()}
+                      >
+                        {disableBtn ? `Resend (${timer}s)` : "GET OTP"}
+                      </button>
+                    </div>
+                    {attemptLeft && (
+                      <small className="text-warning d-block mt-2">
+                        Verification attempts left: {attemptLeft - 1}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="col-sm-12 input_block">
+                    <ReCAPTCHA
+                      theme="dark"
+                      ref={googlecaptchaRef}
+                      sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_CLIENTID}
+                      onErrored={handleRecaptchaError}
+                    />
+                  </div>
+
+                  <div className="col-sm-12 login_btn">
+                    <input
+                      type="button"
+                      value="Verify Account"
+                      onClick={() => handleLogin()}
+                      disabled={!signId || otp?.length < 5}
+                    />
+                  </div>
+
+                  <div className="col-sm-12 registration__info bottom">
+                    <p>Already have an account? <Link to="/Login">Login</Link></p>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-
-
-
-
     </>
   )
 }

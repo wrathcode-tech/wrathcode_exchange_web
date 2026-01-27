@@ -157,7 +157,7 @@ const MiniSparkline = React.memo(({ symbol, isPositive }) => {
 
 
 const Market = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [favCoins, setFavCoins] = useState([]);
@@ -384,7 +384,7 @@ const Market = () => {
   const nextPage = useCallback((data) => {
     if (!data?.base_currency || !data?.quote_currency) return;
     try {
-      sessionStorage.setItem('RecentPair', JSON.stringify(data));
+      localStorage.setItem('RecentPair', JSON.stringify(data));
       navigate(`/trade/${data.base_currency}_${data.quote_currency}`);
     } catch {
       // Silent fail
@@ -395,7 +395,7 @@ const Market = () => {
   const nextFuturesPage = useCallback((data) => {
     if (!data?.short_name) return;
     try {
-      sessionStorage.setItem('FuturesPair', JSON.stringify(data));
+      localStorage.setItem('FuturesPair', JSON.stringify(data));
       navigate(`/usd_futures/${data.short_name}_USDT`);
     } catch {
       // Silent fail

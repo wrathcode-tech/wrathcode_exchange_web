@@ -48,8 +48,8 @@ const LoginTest = () => {
                 LoaderHelper.loaderStatus(false);
                 if (result?.data?.['2fa'] === 0) {
                     alertSuccessMessage(result.message);
-                    sessionStorage.setItem("token", result.data.token);
-                    sessionStorage.setItem("userId", result.data.userId);
+                    localStorage.setItem("token", result.data.token);
+                    localStorage.setItem("userId", result.data.userId);
                     setLoginDetails(result.data);
 
 
@@ -89,8 +89,8 @@ const LoginTest = () => {
             if (result.success) {
                 try {
                     alertSuccessMessage(result.message);
-                    sessionStorage.setItem("token", result.data.token);
-                    sessionStorage.setItem("userId", result.data.userId);
+                    localStorage.setItem("token", result.data.token);
+                    localStorage.setItem("userId", result.data.userId);
                     setLoginDetails(result.data);
                     $("#Confirmation_model").modal('hide');
                     navigate("/user_profile/dashboard");
@@ -135,8 +135,8 @@ const LoginTest = () => {
             const result = await AuthService.googleLogin(tokenResponse, captchaData);
             if (result?.success) {
                 alertSuccessMessage(result?.message);
-                sessionStorage.setItem("token", result.data.token);
-                sessionStorage.setItem("userId", result.data.userId);
+                localStorage.setItem("token", result.data.token);
+                localStorage.setItem("userId", result.data.userId);
                 setLoginDetails(result?.data);
                 navigate("/user_profile/dashboard");
                 window.location.reload()

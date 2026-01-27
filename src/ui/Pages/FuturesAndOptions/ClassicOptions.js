@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 function ClassicOptions() {
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const { contractSymbol } = useParams();
 
     const { socket } = useContext(SocketContext);

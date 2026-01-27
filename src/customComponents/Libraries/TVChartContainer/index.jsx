@@ -19,7 +19,7 @@ export default function TVChartContainer({ symbol }) {
       setTimeout(() => getChart(symbol), 500); // Retry after 500ms
       return;
     }
-    const Theme = sessionStorage.getItem('theme');
+    const Theme = localStorage.getItem('theme');
     const isMobile = window.innerWidth <= 480;
 
     const widgetOptions = {
@@ -178,7 +178,7 @@ useEffect(() => {
         try {
           // Wait until _innerWindowLoaded promise is fulfilled
           await tvWidget._innerWindowLoaded;
-          const Theme = sessionStorage.getItem('theme');
+          const Theme = localStorage.getItem('theme');
 
           // Change theme based on the stored theme
           if (Theme === 'light') {

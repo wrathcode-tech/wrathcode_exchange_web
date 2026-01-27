@@ -2221,7 +2221,7 @@ section.hot_articles_s .row {
 }
 
 .login_section.verifiedform .form_block_login h4 {
-    color: #000;
+    /* color: #000; */
 }
 
 .login_section.verifiedform .email_code .get_otp.otpcode {
@@ -26241,4 +26241,9 @@ body.modal-open {
 }
 .security-tips  {
 margin-top: 15px;
+}
+
+.remove_authenticator_s p{
+    max-width: 100% !important;
+
 }

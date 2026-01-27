@@ -84,7 +84,7 @@ const P2pOrderDetails = () => {
     const [mobileTab, setMobileTab] = useState('details')
 
     // Get current user ID from storage
-    const currentUserId = sessionStorage.getItem('userId') || localStorage.getItem('userId')
+    const currentUserId = localStorage.getItem('userId') || localStorage.getItem('userId')
 
     // Fetch order details function
     const fetchOrderDetails = useCallback(async () => {
@@ -179,14 +179,14 @@ const P2pOrderDetails = () => {
 
     // Show welcome popup on first visit (only for buyer)
     useEffect(() => {
-        const hasSeenWelcome = sessionStorage.getItem('p2p_welcome_seen')
+        const hasSeenWelcome = localStorage.getItem('p2p_welcome_seen')
         if (!hasSeenWelcome && userRole === 'BUYER' && orderDetails?.status === 'PENDING_PAYMENT') {
             setShowWelcomePopup(true)
         }
     }, [userRole, orderDetails?.status])
 
     const handleCloseWelcomePopup = () => {
-        sessionStorage.setItem('p2p_welcome_seen', 'true')
+        localStorage.setItem('p2p_welcome_seen', 'true')
         setShowWelcomePopup(false)
     }
 

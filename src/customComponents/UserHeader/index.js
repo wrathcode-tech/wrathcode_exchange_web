@@ -81,7 +81,7 @@ const UserHeader = () => {
     setOpenDropdown(openDropdown === key ? null : key);
 
   const nextPage = (data) => {
-    sessionStorage.setItem("RecentPair", JSON.stringify(data));
+    localStorage.setItem("RecentPair", JSON.stringify(data));
     navigate(`/trade/${data?.base_currency}_${data?.quote_currency}`);
     window.location.reload();
   };

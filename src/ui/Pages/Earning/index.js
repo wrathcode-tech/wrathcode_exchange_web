@@ -28,7 +28,7 @@ function Earning() {
   const [subscribedCompletedPackage, setSubscribedCompletedPackage] = useState([]);
 
   const [portfolio, setPortfoilio] = useState([]);
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
 
 

@@ -75,7 +75,7 @@ export async function subscribeOnStream(
 
   channelToSubscription.set(channelString, subscriptionItem);
 
-  let socketId = sessionStorage.getItem("socketId");
+  let socketId = localStorage.getItem("socketId");
   let payload = {
     message: 'phone-chart',
     socketId: socketId,

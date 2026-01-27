@@ -15,7 +15,7 @@ const MobileChart = () => {
         quote_currency: initialPair[1]
     });
 
-    let socketId = sessionStorage.getItem("socketId");
+    let socketId = localStorage.getItem("socketId");
 
     // Listen for RN WebView messages to change symbol without reload
     useEffect(() => {

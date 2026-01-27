@@ -633,7 +633,7 @@ const LaunchpadCoinPage = () => {
                                 <div className="project_cycle_wrapper">
                                     <div className="project_cycle_header">
                                         <h2>Project Cycle</h2>
-                                        {sessionStorage.getItem("token") &&
+                                        {localStorage.getItem("token") &&
                                             currentLaunchpad?.status?.toLowerCase() === "live" && (
                                                 <div
                                                     className="my_subscription_link"
@@ -651,7 +651,7 @@ const LaunchpadCoinPage = () => {
 
                                    
                                     <div style={{ marginTop: "20px" }}>
-                                        {!sessionStorage.getItem("token") ? (
+                                        {!localStorage.getItem("token") ? (
                                             
                                             <button
                                                 className="buy_now_btn"

@@ -22,7 +22,7 @@ export default function TVFuturesChartContainer({ symbol }) {
       return;
     }
 
-    const Theme = sessionStorage.getItem('theme');
+    const Theme = localStorage.getItem('theme');
     const options = {
       symbol,
       interval: '1',
@@ -145,7 +145,7 @@ export default function TVFuturesChartContainer({ symbol }) {
     (async () => {
       try {
         await tvWidget._innerWindowLoaded;
-        const Theme = sessionStorage.getItem('theme');
+        const Theme = localStorage.getItem('theme');
         tvWidget.changeTheme(Theme === 'light' ? 'light' : 'dark');
       } catch (e) {
         console.error('Theme change failed:', e);

@@ -72,7 +72,7 @@ const ProfilePage = (props) => {
   };
 
   const logOut = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/");
     window.location.reload()
   }

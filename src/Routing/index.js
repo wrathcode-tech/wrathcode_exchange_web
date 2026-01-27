@@ -88,7 +88,7 @@ import P2pProfile from "../ui/Pages/P2P/P2pProfile";
 
 function Routing() {
   const location = useLocation();
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const { userDetails } = useContext(ProfileContext);
   const isChartPage = location?.pathname?.includes('/chart');
 

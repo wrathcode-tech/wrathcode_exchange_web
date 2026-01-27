@@ -24,7 +24,7 @@ export const useP2PChat = (orderId, currentUserId, onOrderStatusChange = null) =
     const socketRef = useRef(null);
     const typingTimeoutRef = useRef(null);
     const onOrderStatusChangeRef = useRef(onOrderStatusChange);
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     
     // Keep ref updated
     useEffect(() => {

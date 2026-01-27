@@ -8,9 +8,9 @@ import AuthService from '../../../api/services/AuthService';
 import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import { alertErrorMessage, alertSuccessMessage } from '../../../customComponents/CustomAlertMessage';
 function UsdMFutures() {
-    const socketId = sessionStorage.getItem("socketIdFuture")
-    const userId = sessionStorage.getItem('userId');
-    const token = sessionStorage.getItem('token');
+    const socketId = localStorage.getItem("socketIdFuture")
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
     const orderBookColor = { buy: "#1c2a2b", sell: "#301e27" };
 
     let params = useParams()
