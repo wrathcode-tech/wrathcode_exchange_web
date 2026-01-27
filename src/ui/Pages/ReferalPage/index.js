@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import AuthService from "../../../api/services/AuthService";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import { Helmet } from "react-helmet-async";
@@ -116,6 +116,45 @@ const ReferalPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredList, setFilteredList] = useState(refferalList || []);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const sliderContainerRef = useRef(null);
+  const [slideOffset, setSlideOffset] = useState(0);
+
+  const referralEvents = [
+    {
+      title: "Earn 60 USDT！",
+      description: "Invite Friends to Join Exchange",
+      image: "/images/earngift_vector.png"
+    },
+    {
+      title: "Invite to Earn 500 USDT",
+      description: "Win rewards with friends",
+      image: "/images/usdtearn_vector.png"
+    },
+    {
+      title: "Earn 60 USDT！",
+      description: "Invite Friends to Join Exchange",
+      image: "/images/earngift_vector.png"
+    }
+  ];
+
+  const totalSlides = Math.ceil(referralEvents.length / 2);
+
+  useEffect(() => {
+    const calculateSlideOffset = () => {
+      if (sliderContainerRef.current) {
+        const containerWidth = sliderContainerRef.current.offsetWidth;
+        // Card width is (100% - 24px) / 2, gap is 24px
+        // Slide distance = card width + gap = (containerWidth - 24) / 2 + 24
+        const slideDistance = (containerWidth - 24) / 2 + 24;
+        setSlideOffset((slideDistance / containerWidth) * 100);
+      }
+    };
+
+    calculateSlideOffset();
+    window.addEventListener('resize', calculateSlideOffset);
+    return () => window.removeEventListener('resize', calculateSlideOffset);
+  }, []);
 
   useEffect(() => {
     if (!searchTerm) {
@@ -154,7 +193,7 @@ const ReferalPage = () => {
             <div className="card twofa_card">
               <div className="card-body" >
                 <div className="row gx-5">
-                  <div className="col-lg-7">
+                  <div className="col-lg-6">
                     <div className="ref_col" >
                       {/* <div className="ref_cards mb-0" >
                     <p className="mb-0" >Total Referral Comission</p>
@@ -166,27 +205,28 @@ const ReferalPage = () => {
                         <h4>Earn 1 USDT for every friend you invite!</h4>
                         <h6>Invite a friend to Wrathcode and Earn 0.5 USDT on Referral Sign Up and 0.5 USDT after completing their KYC.</h6>
                       </div>
-                      <div className="card-body_inner p-0" >
-                        <div className=" ref_body">
+                      <div className="card-body_inner referral_code_s">
+                        <div className="mt-0">
+                        <ul>
+                                    <li><div><i class="ri-link-m"></i> Referral link: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i class="ri-checkbox-multiple-blank-line"></i></a></span></li>
+                                    <li><div><i class="ri-user-line"></i>Referral code: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i class="ri-checkbox-multiple-blank-line"></i></a></span></li>
+                                  </ul>
                           {/* <div className="referrals__title">Invite friends & Earn <span className="text-gradient text-underline" >5000</span> SHIBA INU Free  </div> */}
-                          <div className="row mb-4">
-                            <div className="col-12">
                               <div className="field">
                                 {token ?
                                   <>
-                                    <div className="field__label">Referral code</div>
+                                  
+                                    {/* <div className="field__label">Referral code</div> */}
                                     <div className="field__wrap  field-otp-box">
 
                                       <input className="field__input form-control" type="text" name="referral-code" defaultValue={refferlsData?.user_code} readOnly />
                                       <button type="button" className="btn btn-xs custom-btn" onClick={() => copyToClipboard(refferlsData?.user_code)}><span> {isCopied ? 'Copied!' : 'Copy'} </span></button>
 
                                     </div></>
-                                  : <div className="trade_btn">
+                                  : <div className="trade_btn mt-0">
                                     <button><Link to={`/login`}>Login now <span> <img src="images/trade_arrow.svg" alt="trade arrow" /></span></Link></button></div>}
                               </div>
-                            </div>
-                          </div>
-                          <label>
+                          {/* <label>
                             <small>OR share via</small></label>
                           <div className="d-flex  joc_social_row mt-2">
                             <span className="joc_social cursor-pointer" title="Facebook" onClick={handleShareFacebook}>
@@ -204,29 +244,106 @@ const ReferalPage = () => {
                             <span className="joc_social cursor-pointer" title="Instagram" onClick={handleShareTelegram}>
                               <i className="ri-telegram-fill  ri-xl"></i>
                             </span>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 
 
                     </div>
 
-                    <div className="refrefer_earn_mobile_vector">
-                      <img src="/images/referral_mobilebg.jpg" className="img-fluid" alt="" />
-                    </div>
+                    
                   </div>
-                  {/* <div className="col-lg-6">
-                <div className="ref_img p-3" >
+                  <div className="col-lg-6">
+                {/* <div className="ref_img p-3" >
                   <img src="/images/referal.svg" className="img-fluid" alt="" />
-                </div>
-              </div> */}
+                </div> */}
+                <div className="refrefer_earn_vector">
+                  <div className="slider_img">
+                    <img src="/images/risingslider.png" className="img-fluid" alt="" />
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+          </div>
+          </section>
 
+        </div>
+
+<div className="how_to_refer_s">
+  <div className="container">
+    <h2>How to Refer and Earn Rewards</h2>
+
+<ul>
+  <li>
+  <img src="/images/invite_icon.svg" className="img-fluid" alt="invite" />
+    <h6>Invite Friends to Sign Up</h6>
+    <p>Send your referral code and invite friends
+    to sign up for a Exchange account</p>
+  </li>
+  <li>
+  <img src="/images/invite_link.svg" className="img-fluid" alt="invite" />
+    <h6>Automatic Linking</h6>
+    <p>Once your referees complete sign-up,
+their accounts will be automatically linked
+to you</p>
+  </li>
+  <li>
+  <img src="/images/rewards_icon.svg" className="img-fluid" alt="invite" />
+    <h6>Friends Trade, You Earn
+    Rewards</h6>
+    <p>When your referees start trading, you will
+automatically receive commission
+rewards</p>
+  </li>
+</ul>
+
+  </div>
+</div>
+
+
+<div className="how_to_refer_s">
+  <div className="container">
+    <h2>More Referral Events</h2>
+
+    <div className="referral_events_slider_wrapper">
+      <div className="referral_events_slider_container" ref={sliderContainerRef}>
+        <div 
+          className="referral_events_slider" 
+          style={{ transform: `translateX(-${currentSlide * slideOffset}%)` }}
+        >
+          {referralEvents.map((event, index) => (
+            <div key={index} className="referral_event_item">
+              <div className="referral_event_item_content">
+                <h6>{event.title}</h6>
+                <p>{event.description}</p>
+                <button className="btn btn-primary">Join Now</button>
+              </div>
+              <div className="referral_event_item_image">
+                <img src={event.image} className="img-fluid" alt="referral_event" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <div className="referral_events_pagination">
+        {Array.from({ length: totalSlides }).map((_, index) => (
+          <button
+            key={index}
+            className={`referral_events_dot ${currentSlide === index ? 'active' : ''}`}
+            onClick={() => setCurrentSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
       <div className="referral_recent_s">
         <div className="container">
           <div className="dashboard_recent_s">
@@ -280,7 +397,7 @@ const ReferalPage = () => {
               ) : (
                 <div className='no_data'>
                   <img src="/images/no_data_vector.svg" className="img-fluid" alt="no-found" />
-                  <p>No referrals found.</p>
+             
                 </div>
               )}
 
