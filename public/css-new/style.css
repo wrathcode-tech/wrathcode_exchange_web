@@ -4254,6 +4254,17 @@ input:-internal-autofill-selected {
     background-color: transparent !important;
 }
 
+/* Fix autofill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 .login_section .nav.nav-tabs li {
     height: 100%;
     padding: 0px;
@@ -9635,6 +9646,7 @@ section.block_currency {
     padding: 12px 15px;
     color: #000;
     margin-top: 20px;
+    font-weight: 600;
 }
 
 .bitcoin_top_currency {
@@ -15421,7 +15433,7 @@ button.btn_claim:active {
     border: none;
     padding: 8px;
     border-radius: 50px;
-    width: 130px;
+    width: 190px;
     text-align: left;
     display: flex;
     align-items: center;
@@ -16394,8 +16406,9 @@ body .trade_summary_table_lft .table-responsive .table-responsive {
 
 .order_datalist {
     width: 100%;
-    background-color: rgb(43 49 60);
+    /* background-color: rgb(255 255 255); */
     padding: 15px;
+    border: 1.5px solid rgb(43 49 60);
     border-radius: 5px;
 }
 
@@ -16405,6 +16418,13 @@ body .trade_summary_table_lft .table-responsive .table-responsive {
     gap: 10px;
     border-bottom: 1px solid #ffffff9c;
     padding-bottom: 24px;
+}
+.order_datalist_2 .listdata {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: none;
+    padding-bottom: 0px;
 }
 
 .order_datalist .listdata li {
@@ -21880,7 +21900,7 @@ button.p2p-submit-button {
 
     .swap_ustd_bl .from button {
         padding: 6px;
-        width: 100px;
+        width: 150px;
         font-size: 12px;
     }
 
@@ -22859,7 +22879,7 @@ button.p2p-submit-button {
 
     .mobile_view {
         padding: 20px;
-        background-color: #ffffff14;
+        /* background-color: #ffffff14; */
         color: #fff;
         font-size: 15px;
     }
@@ -22896,8 +22916,9 @@ button.p2p-submit-button {
 
     body .mobile_view {
         display: flex;
-        padding: 10px 15px;
+        padding: 10px 15px 10px 15px;
         font-size: 13px;
+        border-bottom: 1px solid #444c5b;
     }
 
     .dashboard_summary th,
@@ -22912,6 +22933,7 @@ button.p2p-submit-button {
     .mobile_view span {
         position: absolute;
         right: 26px;
+        font-size: 20px;
     }
 
     .banner_content h1 {
@@ -26453,4 +26475,14 @@ ul.security-tips-list {
 .remove_authenticator_s p {
     max-width: 100% !important;
 
+}
+.swap_button {
+    width: 100%;
+    background-color: #F3BB2B !important;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 15px;
+    color: #000;
+    margin-top: 20px;
+    font-weight: 600;
 }

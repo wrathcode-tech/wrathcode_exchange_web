@@ -8,8 +8,7 @@ const InternalWalletTransHistory = (props) => {
   const [skipQbsHistory, setSkipQbsHistory] = useState(0);
   const [buySellHist, setBuySellHist] = useState([]);
   const [totalDataLength, setTotalDataLength] = useState();
-  const [showAllListItems, setShowAllListItems] = useState({ 0: false, 1: false, 2: false });
-  const [showExecutedTrades, setShowExecutedTrades] = useState({ 0: false, 1: false, 2: false });
+  const [showAllListItems, setShowAllListItems] = useState({});
 
   const limit = 10;
 
@@ -175,99 +174,78 @@ const InternalWalletTransHistory = (props) => {
           </div>
 
           <div className='order_history_mobile_view'>
-          <h5>Internal Wallet Transfer History</h5>
-          <div className='d-flex'>
-            <div className='order_datalist'>
-              <ul className='listdata'>
-                <li>
-                  <span className='date'>USDT (TRC20)</span>
-                  <span className='date_light'>2025-08-14</span>
-                </li>
-                <li>
-                  <span>Time</span>
-                  <span>12:00:00</span>
-                </li>
-                <li>
-                  <span>Currency Pair</span>
-                  <span>BTC/USD</span>
-                </li>
-                <li>
-                  <span>Side</span>
-                  <span>Buy</span>
-                </li>
-                <li>
-                  <span>Price</span>
-                  <span>10000</span>
-                </li>
-                {showAllListItems[0] && (
-                  <>
-                    <li>
-                      <span>Average</span>
-                      <span>10000</span>
-                    </li>
-                    <li>
-                      <span>Quantity</span>
-                      <span>10000</span>
-                    </li>
-                    <li>
-                      <span>Remaining</span>
-                      <span>10000</span>
-                    </li>
-                    <li>
-                      <span>Total</span>
-                      <span>10000</span>
-                    </li>
-                    <li>
-                      <span>Fee</span>
-                      <span>10000</span>
-                    </li>
-                    <li>
-                      <span>Order Type</span>
-                      <span>Market</span>
-                    </li>
-                    <li>
-                      <span>Status</span>
-                      <span className='text-success'>Executed</span>
-                    </li>
-                    <li>
-                      <span>Status</span>
-                      <span className='text-danger'>Executed</span>
-                    </li>
-                    <li>
-                      <span>Status</span>
-                      <span className='text-warning'>Executed</span>
-                    </li>
-                  </>
-                )}
-              </ul>
-              <button
-                type="button"
-                className="view_more_btn"
-                onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
-              >
-                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
-              </button>
-
-              <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
-                <button onClick={() => setShowExecutedTrades({ ...showExecutedTrades, 0: !showExecutedTrades[0] })}>
-                  <i className={`ri-arrow-drop-down-line ${showExecutedTrades[0] ? 'rotated' : ''}`}></i>Executed Trades
-                </button>
-                {showExecutedTrades[0] && (
-                  <div className='executed_trades_list_items'>
-                    <ul>
-                      <li>Trade #1:</li>
-                      <li>Trading Price: <span>10000</span></li>
-                      <li>Executed: <span>10000</span></li>
-                      <li>Trading Fee: <span>10000</span></li>
-                      <li>Total: <span>10000</span></li>
+            <h5>Internal Wallet Transfer History</h5>
+            {buySellHist?.length > 0 ? (
+              buySellHist.map((item, index) => (
+                <div className='d-flex mb-3' key={index}>
+                  <div className='order_datalist order_datalist_2'>
+                    <ul className='listdata'>
+                      <li>
+                        <span className='date'>{item?.short_name}</span>
+                        <span className='date_light'>{moment(item.createdAt).format("DD/MM/YYYY")}</span>
+                      </li>
+                      <li>
+                        <span>Time</span>
+                        <span>{moment(item.createdAt).format("hh:mm A")}</span>
+                      </li>
+                      <li>
+                        <span>Amount</span>
+                        <span>{toFixed(item?.amount)} {item?.short_name}</span>
+                      </li>
+                      <li>
+                        <span>Transfer</span>
+                        <span>{item?.from_wallet?.charAt(0).toUpperCase() + item?.from_wallet?.slice(1)} → {item?.to_wallet?.charAt(0).toUpperCase() + item?.to_wallet?.slice(1)}</span>
+                      </li>
+                      <li>
+                        <span>Status</span>
+                        <span className={item?.status === "COMPLETE" || item?.status === "Completed" ? "text-success" : item?.status === "REJECTED" ? "text-danger" : "text-warning"}>
+                          {item?.status}
+                        </span>
+                      </li>
                     </ul>
                   </div>
-                )}
+                </div>
+              ))
+            ) : (
+              <div className="no-data-wrapper text-center py-4">
+                <div className="no_data_vector">
+                  <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                </div>
               </div>
+            )}
 
-            </div>
+            {buySellHist?.length > 0 && (
+              <div className="hVPalX gap-2 mt-3">
+                <span>{skipQbsHistory + 1}-{Math.min(skipQbsHistory + limit, totalDataLength)} of {totalDataLength}</span>
+                <div className="sc-eAKtBH gVtWSU">
+                  <button type="button" aria-label="First Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('first')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                      <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
+                      <path fill="none" d="M24 24H0V0h24v24z"></path>
+                    </svg>
+                  </button>
+                  <button type="button" aria-label="Previous Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('prev')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                    </svg>
+                  </button>
+                  <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('next')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                    </svg>
+                  </button>
+                  <button type="button" aria-label="Last Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('last')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+                      <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
+                      <path fill="none" d="M0 0h24v24H0V0z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
 
         </div>
 

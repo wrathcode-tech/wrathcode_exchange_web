@@ -99,12 +99,24 @@ const TwofactorPage = (props) => {
     }
   };
 
-  // Check if WebAuthn/Passkey is supported
-  const checkPasskeySupport = () => {
-    const supported = window.PublicKeyCredential !== undefined &&
-      typeof window.PublicKeyCredential === 'function';
-    setPasskeySupported(supported);
-    return supported;
+  // Check if WebAuthn/Passkey is supported AND platform authenticator is available
+  const checkPasskeySupport = async () => {
+    // First check if WebAuthn API exists
+    if (window.PublicKeyCredential === undefined || typeof window.PublicKeyCredential !== 'function') {
+      setPasskeySupported(false);
+      return false;
+    }
+    
+    // Check if platform authenticator (fingerprint/Face ID/Windows Hello) is available
+    try {
+      const available = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      setPasskeySupported(available);
+      return available;
+    } catch (error) {
+      // If check fails, assume not supported
+      setPasskeySupported(false);
+      return false;
+    }
   };
 
   // Fetch user's passkeys

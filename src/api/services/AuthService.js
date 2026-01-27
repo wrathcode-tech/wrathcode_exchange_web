@@ -2844,6 +2844,32 @@ const AuthService = {
     return ApiCallPost(url, { signId, ...verificationData }, headers);
   },
 
+  /**
+   * Get discoverable passkey authentication options (sign in with passkey - no email required)
+   */
+  passkeyDiscoverableAuthOptions: async () => {
+    const { baseSecurity } = ApiConfig;
+    const url = baseSecurity + "passkey/discoverable/options";
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return ApiCallPost(url, {}, headers);
+  },
+
+  /**
+   * Verify discoverable passkey authentication (sign in with passkey - no email required)
+   * @param {object} credential - WebAuthn credential response
+   * @param {string} challenge - Challenge from the options response
+   */
+  passkeyDiscoverableVerify: async (credential, challenge) => {
+    const { baseSecurity } = ApiConfig;
+    const url = baseSecurity + "passkey/discoverable/verify";
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    return ApiCallPost(url, { credential, challenge }, headers);
+  },
+
   // ============================================================================
   // END OF SECURITY METHODS
   // ============================================================================

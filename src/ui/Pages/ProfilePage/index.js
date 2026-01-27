@@ -36,7 +36,7 @@ const ProfilePage = (props) => {
     else if (path.includes("bank")) setCurrentPage("Bank Details");
     else if (path.includes("currency_preference")) setCurrentPage("Currency Preference");
     else if (path.includes("support")) setCurrentPage("Support");
-    else if (path.includes("two_factor_autentication")) setCurrentPage("Two Factor Authentication");
+    else if (path.includes("two_factor_autentication")) setCurrentPage("Security");
     else if (path.includes("password_security")) setCurrentPage("Reset Password");
     else if (path.includes("arbitrage_bot") || path.includes("arbitrage_dashboard")) setCurrentPage("Arbitrage Bot");
     else if (path.includes("wallet_transfer_History")) setCurrentPage("Wallet Transfer History");
@@ -71,6 +71,40 @@ const ProfilePage = (props) => {
     setOpenSection(openSection === section ? null : section);
   };
 
+  // Icon mapping for current page
+  const getPageIcon = useMemo(() => {
+    const iconMap = {
+      "Dashboard": "/images/dasboard_home.svg",
+      "Overview": "/images/dashboard_assets.svg",
+      "Spot Order": "/images/dashboard_order.svg",
+      "Open Order": "/images/dashboard_order.svg",
+      "Transaction History": "/images/dashboard_order.svg",
+      "Swap History": "/images/dashboard_order.svg",
+      "Wallet Transfer History": "/images/dashboard_order.svg",
+      "Earning Plan History": "/images/dashboard_order.svg",
+      "Bonus History": "/images/dashboard_order.svg",
+      "Settings": "/images/dashboard_profile.svg",
+      "Verification": "/images/dashboard_profile.svg",
+      "kyc": "/images/dashboard_profile.svg",
+      "Bank Details": "/images/dashboard_profile.svg",
+      "Currency Preference": "/images/dashboard_profile.svg",
+      "Support": "/images/dashboard_profile.svg",
+      "Earning": "/images/earning_icon3.svg",
+      "Security": "/images/dashboard_security.svg",
+      "Reset Password": "/images/dashboard_security.svg",
+      "Quick Swap": "/images/quick-swap.svg",
+      "Notification": "/images/dashboard_notification.svg",
+      "Activity logs": "/images/dashboard_logs.svg",
+    };
+
+    // Check if it's a wallet page
+    if (currentPage?.includes('Wallet') && currentPage !== 'Wallet Transfer History') {
+      return "/images/dashboard_assets.svg";
+    }
+
+    return iconMap[currentPage] || "/images/dasboard_home.svg";
+  }, [currentPage]);
+
   const logOut = () => {
     localStorage.clear();
     navigate("/");
@@ -82,8 +116,11 @@ const ProfilePage = (props) => {
       <Helmet>
         <title> Wrathcode | The world class new generation crypto asset exchange</title>
       </Helmet>
-      <div className="mobile_view" id="toggleBtn" onClick={() => toggleContent()} >{currentPage}<span>
-        <i className="ri-arrow-down-s-line"></i></span></div>
+      <div className="mobile_view" id="toggleBtn" onClick={() => toggleContent()}>
+        <img src={getPageIcon} alt={currentPage} width={20} height={20} style={{ marginRight: '8px' }} />
+        {currentPage}
+        <span><i className="ri-arrow-down-s-line"></i></span>
+      </div>
 
 
       <div className="dashboard">
@@ -214,7 +251,7 @@ const ProfilePage = (props) => {
                 <img className='darkicon' src="/images/dashboard_profile.svg" alt="profile" />
                 <img className='lighticon' src="/images/dashboard_profile_light.svg" alt="profile" />
                 <div className={`dashboard_menu_hd ${(currentPage === "Settings" || currentPage === "kyc" || currentPage === "Currency Preference" || currentPage === "Support") && "active_ul"}`}>
-                  Profile
+                  Account
                   {/* <p>Update your personal info, manage account details and portofilio currency.</p> */}
                 </div>
                 <span>
@@ -233,10 +270,10 @@ const ProfilePage = (props) => {
                       Verification
                     </Link>
                   </li> */}
-                  <li onClick={() => toggleContent("kyc")}
-                    className={`${(currentPage === "kyc") && "active"} `}>
+                  <li onClick={() => toggleContent("Verification")}
+                    className={`${(currentPage === "Verification") && "active"} `}>
                     <Link to="kyc" className="rounded">
-                      Kyc Verification
+                     Verification
                     </Link>
                   </li>
                   {/* <li onClick={() => toggleContent("Bank Details")} className={`${(currentPage === "Bank Details") && "active"} `}>
@@ -294,48 +331,21 @@ const ProfilePage = (props) => {
               </Link>
             </li> */}
 
-            <li className="mb-1">
-              <button
-                className="btn btn-toggle collapsed"
-                onClick={() => toggleSection("security")}
-              >
-                <img className='darkicon' src="/images/dashboard_security.svg" alt="security" />
-                <img className='lighticon' src="/images/dashboard_security_light.svg" alt="security" />
-                <div className={`dashboard_menu_hd ${(currentPage === "Two Factor Authentication" || currentPage === "Reset Password") && "active_ul"}`}>
-                  Security
-                  {/* <p>Manage two-factor authentication, passwords, and other security settings.</p> */}
-                </div>
-                <span>
-                  <i className="ri-arrow-down-s-line"></i>
-                </span>
-              </button>
-              <div className={`collapse ${openSection === "security" ? "show" : ""}`}>
-                <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <li onClick={() => toggleContent("Two Factor Authentication")} className={`${(currentPage === "Two Factor Authentication") && "active"} `}>
-                    <Link to="two_factor_autentication" className="rounded">
-                      Two Factor Authentication
-                    </Link>
-                  </li>
-                  {/* <li onClick={() => toggleContent("Reset Password")} className={`${(currentPage === "Reset Password") && "active"} `}>
-                    <Link to="password_security" className="rounded">
-                      Reset Password
-                    </Link>
-                  </li> */}
-                </ul>
-              </div>
-            </li>
-            {/* <li onClick={() => toggleContent("Arbitrage Bot")} className={`${currentPage === "Arbitrage Bot" && "active"} mb-1`}>
-              <Link to="arbitrage_bot">
-                <img className='darkicon' src="/images/dashboard_arbitrage.svg" alt="arbitrage" />
-                <img className='lighticon' src="/images/dashboard_arbitrage_light.svg" alt="arbitrage bot" />
+           
+
+            <li onClick={() => toggleContent("Security")} className={`${currentPage === "Security" && "active"} mb-1`}>
+              <Link to="two_factor_autentication">
+                <img className='darkicon' src="/images/dashboard_security.svg" alt="two factor authentication" width={20} height={20} />
+                <img className='lighticon' src="/images/dashboard_security_light.svg" alt="two factor authentication" width={20} height={20} />
                 <div className="dashboard_menu_hd">
-                  Arbitrage BOT
-                  <p>Enable automated trading to take advantage of price gaps across markets.</p>
+               Security
+
+                  {/* <p>Instantly swap your cryptocurrencies with real-time conversion rates.</p> */}
                 </div>
 
               </Link>
-            </li> */}
-
+            </li>
+    
             <li onClick={() => toggleContent("Quick Swap")} className={`${currentPage === "Quick Swap" && "active"} mb-1`}>
               <Link to="swap">
                 <img className='darkicon' src="/images/quick-swap.svg" alt="quick swap" width={20} height={20} />
@@ -348,6 +358,9 @@ const ProfilePage = (props) => {
 
               </Link>
             </li>
+
+
+       
 
             <li onClick={() => toggleContent("Notification")} className={`${currentPage === "Notification" && "active"} mb-1`}>
               <Link to="notification">

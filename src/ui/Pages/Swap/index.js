@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
@@ -6,211 +6,560 @@ import { ApiConfig } from "../../../api/apiConfig/apiConfig";
 import { $ } from "react-jquery-plugin";
 import BigNumber from "bignumber.js";
 import moment from "moment";
+import { Link, useNavigate } from "react-router-dom";
+
+// Configure BigNumber for precision
+BigNumber.config({
+  DECIMAL_PLACES: 9,
+  ROUNDING_MODE: BigNumber.ROUND_DOWN,
+  EXPONENTIAL_AT: [-15, 20]
+});
 
 const Swap = () => {
+  const navigate = useNavigate();
+  const conversionRateRef = useRef(null);
+  const isMountedRef = useRef(true);
 
-  const [currencyList, setCurrencyList] = useState([])
+  // State management
+  const [currencyList, setCurrencyList] = useState([]);
   const [conversionRate, setConversionRate] = useState(0);
-
   const [transactionHistory, setTransactionHistory] = useState([]);
-
-  const [fromCurrency, setFromCurrency] = useState({});
-  const [receiveCurrency, setReceiveCurrency] = useState({});
-
+  const [fromCurrency, setFromCurrency] = useState(null);
+  const [receiveCurrency, setReceiveCurrency] = useState(null);
   const [fromSearch, setFromSearch] = useState("");
-  const [receieveSearch, setReceieveSearch] = useState("");
-
+  const [receiveSearch, setReceiveSearch] = useState("");
   const [fromCurrencyAmount, setFromCurrencyAmount] = useState("");
   const [receiveCurrencyAmount, setReceiveCurrencyAmount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSwapping, setIsSwapping] = useState(false);
+  const [modalType, setModalType] = useState("from"); // 'from' or 'to'
+  const [historySearch, setHistorySearch] = useState("");
 
+  // Check if user is logged in
+  const isLoggedIn = useMemo(() => {
+    return !!localStorage.getItem("token");
+  }, []);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (conversionRateRef.current) {
+        clearTimeout(conversionRateRef.current);
+      }
+    };
+  }, []);
 
+  // Format number with specified decimal places
+  const formatNumber = useCallback((value, decimals = 8) => {
+    if (value === null || value === undefined || value === "") return "";
+    const num = new BigNumber(value);
+    if (num.isNaN() || !num.isFinite()) return "0";
+    return num.decimalPlaces(decimals, BigNumber.ROUND_DOWN).toFixed();
+  }, []);
 
-  const getAvailableCurrency = async (type) => {
+  // Safe number parsing
+  const safeParseNumber = useCallback((value) => {
+    if (value === null || value === undefined || value === "") return new BigNumber(0);
+    const num = new BigNumber(value);
+    return num.isNaN() || !num.isFinite() ? new BigNumber(0) : num;
+  }, []);
+
+  // Fetch available currencies
+  const getAvailableCurrency = useCallback(async (shouldResetSelection = true) => {
+    if (!isLoggedIn) return;
+
     try {
+      setIsLoading(true);
       LoaderHelper.loaderStatus(true);
 
       const result = await AuthService.baseCurrencyList();
+
+      if (!isMountedRef.current) return;
+
       if (!result?.success) {
-        LoaderHelper.loaderStatus(false);
-        return alertErrorMessage(result.message);
+        alertErrorMessage(result?.message || "Failed to fetch currencies");
+        return;
       }
 
-      const currencies = result?.data;
+      const currencies = result?.data || [];
 
-      // Sort currencies: non-zero balances on top, then by balance descending
-      currencies.sort((a, b) => {
-        const balA = parseFloat(a.balance || 0);
-        const balB = parseFloat(b.balance || 0);
+      if (currencies.length === 0) {
+        alertErrorMessage("No currencies available for swap");
+        return;
+      }
 
-        if (balA > 0 && balB === 0) return -1;
-        if (balA === 0 && balB > 0) return 1;
+      // Sort currencies: non-zero balances first, then by balance descending
+      const sortedCurrencies = [...currencies].sort((a, b) => {
+        const balA = safeParseNumber(a.balance);
+        const balB = safeParseNumber(b.balance);
 
-        return balB - balA; // descending order
+        if (balA.isGreaterThan(0) && balB.isEqualTo(0)) return -1;
+        if (balA.isEqualTo(0) && balB.isGreaterThan(0)) return 1;
+
+        return balB.minus(balA).toNumber();
       });
 
-      if (currencies?.length > 1 || type === "update") {
-        setFromCurrency(currencies[0]);
-        setReceiveCurrency(currencies[1]);
+      setCurrencyList(sortedCurrencies);
+
+      // Set default selections only if needed
+      if (shouldResetSelection && sortedCurrencies.length >= 2) {
+        setFromCurrency(sortedCurrencies[0]);
+        setReceiveCurrency(sortedCurrencies[1]);
+      } else if (shouldResetSelection && sortedCurrencies.length === 1) {
+        setFromCurrency(sortedCurrencies[0]);
+        setReceiveCurrency(null);
+      } else if (!shouldResetSelection) {
+        // Update existing selections with fresh balance data
+        if (fromCurrency?.currency_id) {
+          const updatedFromCurrency = sortedCurrencies.find(
+            (c) => c.currency_id === fromCurrency.currency_id
+          );
+          if (updatedFromCurrency) {
+            setFromCurrency(updatedFromCurrency);
+          }
+        }
+        if (receiveCurrency?.currency_id) {
+          const updatedReceiveCurrency = sortedCurrencies.find(
+            (c) => c.currency_id === receiveCurrency.currency_id
+          );
+          if (updatedReceiveCurrency) {
+            setReceiveCurrency(updatedReceiveCurrency);
+          }
+        }
       }
-
-      setCurrencyList(currencies);
-    } catch (err) {
-      console.error("Failed to fetch/sort currency list:", err);
+    } catch (error) {
+      console.error("Failed to fetch currency list:", error);
+      if (isMountedRef.current) {
+        alertErrorMessage("Failed to fetch currencies. Please try again.");
+      }
     } finally {
-      LoaderHelper.loaderStatus(false);
+      if (isMountedRef.current) {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
+      }
     }
-  };
+  }, [isLoggedIn, safeParseNumber, fromCurrency?.currency_id, receiveCurrency?.currency_id]);
 
-  const getConversionrate = async () => {
+  // Fetch conversion rate
+  const getConversionRate = useCallback(async () => {
+    if (!fromCurrency?.short_name || !receiveCurrency?.short_name) {
+      setConversionRate(0);
+      return;
+    }
+
+    if (fromCurrency.short_name === receiveCurrency.short_name) {
+      setConversionRate(1);
+      return;
+    }
+
     try {
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.getConversionRate(fromCurrency?.short_name, receiveCurrency?.short_name);
 
+      const result = await AuthService.getConversionRate(
+        fromCurrency.short_name,
+        receiveCurrency.short_name
+      );
+
+      if (!isMountedRef.current) return;
 
       if (!result?.success) {
-        LoaderHelper.loaderStatus(false);
-        setConversionRate(0)
-        return alertErrorMessage(result.message);
+        setConversionRate(0);
+        alertErrorMessage(result?.message || "Failed to get conversion rate");
+        return;
       }
-      setConversionRate(result?.data?.rate || 0)
 
-    } catch (err) {
-      console.error("Failed to fetch/sort currency list:", err);
+      const rate = safeParseNumber(result?.data?.rate);
+      setConversionRate(rate.isGreaterThan(0) ? rate.toNumber() : 0);
+    } catch (error) {
+      console.error("Failed to fetch conversion rate:", error);
+      if (isMountedRef.current) {
+        setConversionRate(0);
+        alertErrorMessage("Failed to fetch conversion rate");
+      }
     } finally {
-      LoaderHelper.loaderStatus(false);
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
     }
-  };
+  }, [fromCurrency?.short_name, receiveCurrency?.short_name, safeParseNumber]);
 
-  const nineDecimalFormat = (data) => {
-    if (typeof (data) === "number") {
-      // return data
-      return parseFloat(data?.toFixed(9))
-    } else {
-      return 0
+  // Fetch transaction history
+  const getBuySellHistory = useCallback(async () => {
+    if (!isLoggedIn) return;
+
+    try {
+      LoaderHelper.loaderStatus(true);
+
+      const result = await AuthService.quickBuySellHistory(0, 10);
+
+      if (!isMountedRef.current) return;
+
+      if (result?.success && Array.isArray(result?.data)) {
+        setTransactionHistory(result.data);
+      } else {
+        setTransactionHistory([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch transaction history:", error);
+    } finally {
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
     }
-  };
+  }, [isLoggedIn]);
 
-  const selectCurrency = (data, type) => {
+  // Select currency handler
+  const selectCurrency = useCallback((currency, type) => {
+    if (!currency) return;
+
     if (type === "from") {
-      setFromCurrency(data);
+      // Prevent selecting same currency
+      if (receiveCurrency?.currency_id === currency.currency_id) {
+        alertErrorMessage("Cannot select the same currency for both sides");
+        return;
+      }
+      setFromCurrency(currency);
     } else {
-      setReceiveCurrency(data);
+      // Prevent selecting same currency
+      if (fromCurrency?.currency_id === currency.currency_id) {
+        alertErrorMessage("Cannot select the same currency for both sides");
+        return;
+      }
+      setReceiveCurrency(currency);
     }
 
-  };
+    // Close modal
+    $("#search_coin").modal("hide");
+  }, [fromCurrency?.currency_id, receiveCurrency?.currency_id]);
 
-  const handleInterchangeWallet = () => {
-    let fromWallet = fromCurrency;
-    let toWallet = receiveCurrency;
-    setFromCurrency(toWallet);
-    setReceiveCurrency(fromWallet);
-  };
+  // Interchange currencies
+  const handleInterchangeWallet = useCallback(() => {
+    if (!fromCurrency || !receiveCurrency) return;
 
-  const handleMaxAmount = (type) => {
-    if (!conversionRate) return;
+    const tempFrom = fromCurrency;
+    const tempTo = receiveCurrency;
+
+    setFromCurrency(tempTo);
+    setReceiveCurrency(tempFrom);
+
+    // Clear amounts on interchange
+    setFromCurrencyAmount("");
+    setReceiveCurrencyAmount("");
+  }, [fromCurrency, receiveCurrency]);
+
+  // Handle max amount - available for future use with Max button
+  // eslint-disable-next-line no-unused-vars
+  const handleMaxAmount = useCallback((type) => {
+    if (!conversionRate || conversionRate <= 0) {
+      alertErrorMessage("Conversion rate not available");
+      return;
+    }
 
     const rate = new BigNumber(conversionRate);
 
     if (type === "from") {
-      const balance = new BigNumber(fromCurrency?.balance || 0);
-      const fee = new BigNumber(fromCurrency?.swappingFee || 0);
-      const remaining = BigNumber.maximum(balance.minus(fee), 0);
+      const balance = safeParseNumber(fromCurrency?.balance);
+      const fee = safeParseNumber(fromCurrency?.swappingFee);
+      const minAmount = safeParseNumber(fromCurrency?.minSwapping);
+      const maxAmount = safeParseNumber(fromCurrency?.maxSwapping);
 
-      const receiveAmount = remaining.multipliedBy(rate);
+      // Calculate max usable amount (balance - fee)
+      let maxUsable = BigNumber.maximum(balance.minus(fee), new BigNumber(0));
 
-      setFromCurrencyAmount(parseFloat(remaining.toFixed())); // rounded to 8 decimal places
-      setReceiveCurrencyAmount(parseFloat(receiveAmount.toFixed()));
+      // Apply max limit if set
+      if (maxAmount.isGreaterThan(0)) {
+        maxUsable = BigNumber.minimum(maxUsable, maxAmount);
+      }
+
+      // Ensure minimum is met
+      if (maxUsable.isLessThan(minAmount)) {
+        alertErrorMessage(`Insufficient balance. Minimum required: ${formatNumber(minAmount.plus(fee))} ${fromCurrency?.short_name}`);
+        return;
+      }
+
+      const receiveAmount = maxUsable.multipliedBy(rate);
+
+      setFromCurrencyAmount(formatNumber(maxUsable));
+      setReceiveCurrencyAmount(formatNumber(receiveAmount));
     } else {
-      const receiveBalance = new BigNumber(receiveCurrency?.balance || 0);
+      const receiveBalance = safeParseNumber(receiveCurrency?.balance);
       const fromAmount = receiveBalance.dividedBy(rate);
-      setReceiveCurrencyAmount(parseFloat(receiveBalance.toFixed()));
-      setFromCurrencyAmount(parseFloat(fromAmount.toFixed()));
+
+      setReceiveCurrencyAmount(formatNumber(receiveBalance));
+      setFromCurrencyAmount(formatNumber(fromAmount));
     }
-  };
+  }, [conversionRate, fromCurrency, receiveCurrency, safeParseNumber, formatNumber]);
 
-  const showMoreDetails = () => {
-    $("#more_details").modal('show');
-  }
+  // Handle input change
+  const handleSwapInput = useCallback((e) => {
+    const { name, value } = e.target;
 
-  const handleCurrencySwaping = async () => {
-    if (!fromCurrency?.currency_id || !receiveCurrency?.currency_id || !+fromCurrencyAmount || +fromCurrencyAmount <= 0) {
-      return;
-    }
-    try {
-      LoaderHelper.loaderStatus(true);
-      const result = await AuthService.swapToken(fromCurrency?.currency_id, receiveCurrency?.currency_id, +fromCurrencyAmount)
-      if (result?.success) {
-        alertSuccessMessage(result?.message)
-        $("#more_details").modal('hide');
-        getAvailableCurrency("update")
-        setFromCurrencyAmount("");
-        setReceiveCurrencyAmount("");
-        getBuySellHistory()
-      } else {
-        alertErrorMessage(result?.message)
-      }
-    } finally {
-      LoaderHelper.loaderStatus(false);
-    }
-  };
-
-  const getBuySellHistory = async () => {
-    LoaderHelper.loaderStatus(true);
-    try {
-      const result = await AuthService.quickBuySellHistory(0, 10)
-      if (result?.success) {
-        if (result?.data?.length > 0) {
-          setTransactionHistory(result?.data);
-          return;
-        }
-      }
-    } finally { LoaderHelper.loaderStatus(false); }
-  };
-
-  const handleSwapInput = (e) => {
-    let input = +e.target.value;
-    let value = (nineDecimalFormat(input))
-    switch (e.target.name) {
-      case "fromSwap":
-        setFromCurrencyAmount(value);
-        setReceiveCurrencyAmount((value * conversionRate))
-        break;
-      case "toSwap":
-        setReceiveCurrencyAmount(value);
-        setFromCurrencyAmount((value / conversionRate));
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    if (fromCurrency?.short_name && receiveCurrency?.short_name) {
+    // Allow empty value
+    if (value === "") {
       setFromCurrencyAmount("");
       setReceiveCurrencyAmount("");
-      // clearTimeout(timeoutRef.current);
-      // timeoutRef.current = setTimeout(() => {
-      //   getConversionrate();
-      // }, 1000);
-      getConversionrate();
+      return;
+    }
+
+    // Validate input - allow numbers with decimals
+    const sanitizedValue = value.replace(/[^0-9.]/g, "");
+
+    // Prevent multiple decimal points
+    const parts = sanitizedValue.split(".");
+    const cleanValue = parts.length > 2
+      ? parts[0] + "." + parts.slice(1).join("")
+      : sanitizedValue;
+
+    const inputAmount = safeParseNumber(cleanValue);
+
+    if (inputAmount.isLessThan(0)) return;
+
+    const rate = safeParseNumber(conversionRate);
+
+    if (name === "fromSwap") {
+      setFromCurrencyAmount(cleanValue);
+
+      if (rate.isGreaterThan(0)) {
+        const receiveAmount = inputAmount.multipliedBy(rate);
+        setReceiveCurrencyAmount(formatNumber(receiveAmount));
+      } else {
+        setReceiveCurrencyAmount("");
+      }
+    } else if (name === "toSwap") {
+      setReceiveCurrencyAmount(cleanValue);
+
+      if (rate.isGreaterThan(0)) {
+        const fromAmount = inputAmount.dividedBy(rate);
+        setFromCurrencyAmount(formatNumber(fromAmount));
+      } else {
+        setFromCurrencyAmount("");
+      }
+    }
+  }, [conversionRate, safeParseNumber, formatNumber]);
+
+  // Validation logic
+  const validationResult = useMemo(() => {
+    if (!fromCurrency || !receiveCurrency) {
+      return { isValid: false, error: "Please select currencies" };
+    }
+
+    if (!conversionRate || conversionRate <= 0) {
+      return { isValid: false, error: "Conversion rate not available" };
+    }
+
+    const amount = safeParseNumber(fromCurrencyAmount);
+    const receiveAmount = safeParseNumber(receiveCurrencyAmount);
+    const fee = safeParseNumber(fromCurrency?.swappingFee);
+    const balance = safeParseNumber(fromCurrency?.balance);
+    const minAmount = safeParseNumber(fromCurrency?.minSwapping);
+    const maxAmount = safeParseNumber(fromCurrency?.maxSwapping);
+    const totalRequired = amount.plus(fee);
+
+    if (amount.isLessThanOrEqualTo(0)) {
+      return { isValid: false, error: null };
+    }
+
+    if (amount.isLessThan(minAmount)) {
+      return {
+        isValid: false,
+        error: `Minimum amount is ${formatNumber(minAmount)} ${fromCurrency?.short_name}`
+      };
+    }
+
+    if (maxAmount.isGreaterThan(0) && amount.isGreaterThan(maxAmount)) {
+      return {
+        isValid: false,
+        error: `Maximum amount is ${formatNumber(maxAmount)} ${fromCurrency?.short_name}`
+      };
+    }
+
+    if (totalRequired.isGreaterThan(balance)) {
+      return {
+        isValid: false,
+        error: "Insufficient balance",
+        showDeposit: true
+      };
+    }
+
+    if (receiveAmount.isLessThanOrEqualTo(0)) {
+      return { isValid: false, error: "Invalid receive amount" };
+    }
+
+    return { isValid: true, error: null };
+  }, [fromCurrency, receiveCurrency, conversionRate, fromCurrencyAmount, receiveCurrencyAmount, safeParseNumber, formatNumber]);
+
+  // Show order details modal
+  const showMoreDetails = useCallback(() => {
+    if (!validationResult.isValid) {
+      if (validationResult.error) {
+        alertErrorMessage(validationResult.error);
+      }
+      return;
+    }
+    $("#more_details").modal("show");
+  }, [validationResult]);
+
+  // Handle swap execution
+  const handleCurrencySwapping = useCallback(async () => {
+    if (!validationResult.isValid) {
+      alertErrorMessage(validationResult.error || "Invalid swap parameters");
+      return;
+    }
+
+    if (isSwapping) return;
+
+    const amount = safeParseNumber(fromCurrencyAmount);
+
+    try {
+      setIsSwapping(true);
+      LoaderHelper.loaderStatus(true);
+
+      const result = await AuthService.swapToken(
+        fromCurrency?.currency_id,
+        receiveCurrency?.currency_id,
+        amount.toNumber()
+      );
+
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        alertSuccessMessage(result?.message || "Swap completed successfully");
+        $("#more_details").modal("hide");
+
+        // Reset form
+        setFromCurrencyAmount("");
+        setReceiveCurrencyAmount("");
+
+        // Refresh data
+        await Promise.all([
+          getAvailableCurrency(false),
+          getBuySellHistory()
+        ]);
+      } else {
+        alertErrorMessage(result?.message || "Swap failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Swap failed:", error);
+      if (isMountedRef.current) {
+        alertErrorMessage("Swap failed. Please try again.");
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsSwapping(false);
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  }, [
+    validationResult,
+    isSwapping,
+    fromCurrencyAmount,
+    fromCurrency?.currency_id,
+    receiveCurrency?.currency_id,
+    safeParseNumber,
+    getAvailableCurrency,
+    getBuySellHistory
+  ]);
+
+  // Open modal for currency selection
+  const openCurrencyModal = useCallback((type) => {
+    setModalType(type);
+    setFromSearch("");
+    setReceiveSearch("");
+    $("#search_coin").modal("show");
+  }, []);
+
+  // Filter currencies for modal
+  const filteredCurrencies = useMemo(() => {
+    const searchTerm = modalType === "from" ? fromSearch : receiveSearch;
+
+    return currencyList.filter((item) => {
+      const matchesSearch = !searchTerm ||
+        item?.short_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item?.currency?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return matchesSearch;
+    });
+  }, [currencyList, modalType, fromSearch, receiveSearch]);
+
+  // Filter transaction history
+  const filteredHistory = useMemo(() => {
+    if (!historySearch) return transactionHistory;
+
+    const search = historySearch.toLowerCase();
+    return transactionHistory.filter((item) =>
+      item?.from?.toLowerCase().includes(search) ||
+      item?.to?.toLowerCase().includes(search)
+    );
+  }, [transactionHistory, historySearch]);
+
+  // Effect: Fetch currencies and history on mount
+  useEffect(() => {
+    if (isLoggedIn) {
+      getAvailableCurrency(true);
+      getBuySellHistory();
+    }
+  }, [isLoggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Effect: Fetch conversion rate when currencies change
+  useEffect(() => {
+    if (fromCurrency?.short_name && receiveCurrency?.short_name) {
+      // Clear amounts when currencies change
+      setFromCurrencyAmount("");
+      setReceiveCurrencyAmount("");
+
+      // Debounce conversion rate fetch
+      if (conversionRateRef.current) {
+        clearTimeout(conversionRateRef.current);
+      }
+
+      conversionRateRef.current = setTimeout(() => {
+        getConversionRate();
+      }, 300);
     }
 
     return () => {
-      // clearTimeout(timeoutRef.current);
+      if (conversionRateRef.current) {
+        clearTimeout(conversionRateRef.current);
+      }
+    };
+  }, [fromCurrency?.short_name, receiveCurrency?.short_name]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Render login prompt for non-authenticated users
+  const renderLoginPrompt = () => (
+    <button className="btn" onClick={() => navigate("/login")}>
+      Sign Up/Log In
+    </button>
+  );
+
+  // Render swap button based on state
+  const renderSwapButton = () => {
+    if (!isLoggedIn) {
+      return renderLoginPrompt();
     }
-  }, [fromCurrency, receiveCurrency]);
 
+    if (isSwapping) {
+      return (
+        <button className="btn" disabled>
+          Processing...
+        </button>
+      );
+    }
 
-  useEffect(() => {
-    getAvailableCurrency("")
-    getBuySellHistory("")
-  }, [])
+    return (
+      <button
+        className="btn"
+        onClick={showMoreDetails}
+        disabled={!validationResult.isValid}
+      >
+        Swap Now
+      </button>
+    );
+  };
 
   return (
     <>
-
       <div className="dashboard_right">
 
         <div className="swap_outer_section">
@@ -218,8 +567,22 @@ const Swap = () => {
           <h3>Quick Swap</h3>
           <div className="d-flex cnt_amountsl ">
             <ul className="swaplist">
-              <li><span>Minimum Amount | Maximum Amount</span>1 | 500 USDT</li>
-              <li><span>Swapping Fee</span>0.1 USDT</li>
+              <li>
+                <span>Minimum Amount | Maximum Amount</span>
+                {fromCurrency ? (
+                  `${formatNumber(fromCurrency?.minSwapping || 0)} | ${formatNumber(fromCurrency?.maxSwapping || 0)} ${fromCurrency?.short_name || "USDT"}`
+                ) : (
+                  "1 | 500 USDT"
+                )}
+              </li>
+              <li>
+                <span>Swapping Fee</span>
+                {fromCurrency ? (
+                  `${formatNumber(fromCurrency?.swappingFee || 0)} ${fromCurrency?.short_name || "USDT"}`
+                ) : (
+                  "0.1 USDT"
+                )}
+              </li>
             </ul>
             <div className="swap_bitcoin">
               <img src="/images/bitcoinswap.svg" className="img-fluid" alt="swapbitcoin" />
@@ -231,33 +594,112 @@ const Swap = () => {
             <div className="d-flex">
               <div className="swap_ustd_bl">
                 <div className="from">
-                  <p>From<i class="ri-information-line"></i></p>
-                  <p>Available -- USDT <i class="ri-add-circle-fill"></i></p>
+                  <p>From<i className="ri-information-line"></i></p>
+                  <p>
+                    Available {formatNumber(fromCurrency?.balance || 0, 4)} {fromCurrency?.short_name || "USDT"}
+                    {isLoggedIn && (
+                      <Link to="/asset_managemnet/deposit">
+                        <i className="ri-add-circle-fill"></i>
+                      </Link>
+                    )}
+                  </p>
                 </div>
                 <div className="from">
-                  <button data-bs-toggle="modal" data-bs-target="#search_coin"><img src="/images/tether_icon.png" className="img-fluid" alt="USDT" /> USDT <i class="ri-arrow-drop-down-fill"></i></button>
-                  <h6>0</h6>
+                  <button onClick={() => openCurrencyModal("from")}>
+                    <img
+                      src={fromCurrency?.icon_path ? ApiConfig?.baseImage + fromCurrency?.icon_path : "/images/tether_icon.png"}
+                      className="img-fluid"
+                      alt={fromCurrency?.short_name || "USDT"}
+                    />
+                    {fromCurrency?.short_name || "USDT"}
+                    <i className="ri-arrow-drop-down-fill"></i>
+                  </button>
+                  <input
+
+                    type="text"
+                    inputMode="decimal"
+                    name="fromSwap"
+                    value={fromCurrencyAmount}
+                    onChange={handleSwapInput}
+                    placeholder="0"
+                    style={{
+                      color: "#fff",
+                      background: "transparent",
+                      border: "none",
+                      textAlign: "right",
+                      fontSize: "18px",
+                      fontWeight: "600",
+                      width: "100%",
+                      outline: "none"
+                    }}
+                  />
                 </div>
+                {validationResult.error && fromCurrencyAmount && (
+                  <small className="text-danger d-block mt-1">
+                    {validationResult.error}
+                    {/* {validationResult.showDeposit && isLoggedIn && (
+                      <Link to="/asset_managemnet/deposit" className="ms-1">
+                        Deposit now<i className="ri-arrow-right-up-line"></i>
+                      </Link>
+                    )} */}
+                  </small>
+                )}
               </div>
 
               <div className="swap_ustd_bl">
                 <div className="from">
-                  <p>From<i class="ri-information-line"></i></p>
-                  <p>Available -- USDT <i class="ri-add-circle-fill"></i></p>
+                  <p>To<i className="ri-information-line"></i></p>
+                  <p>
+                    Available {formatNumber(receiveCurrency?.balance || 0, 4)} {receiveCurrency?.short_name || "BTC"}
+                  </p>
                 </div>
                 <div className="from">
-                  <button data-bs-toggle="modal" data-bs-target="#search_coin"><img src="/images/tether_icon.png" className="img-fluid" alt="USDT" /> USDT <i class="ri-arrow-drop-down-fill"></i></button>
-                  <h6>0</h6>
+                  <button onClick={() => openCurrencyModal("to")}>
+                    <img
+                      src={receiveCurrency?.icon_path ? ApiConfig?.baseImage + receiveCurrency?.icon_path : "/images/bitcoin_icon.png"}
+                      className="img-fluid"
+                      alt={receiveCurrency?.short_name || "BTC"}
+                    />
+                    {receiveCurrency?.short_name || "BTC"}
+                    <i className="ri-arrow-drop-down-fill"></i>
+                  </button>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    name="toSwap"
+                    value={receiveCurrencyAmount}
+                    onChange={handleSwapInput}
+                    placeholder="0"
+                    style={{
+                      color: "#fff",
+                      background: "transparent",
+                      border: "none",
+                      textAlign: "right",
+                      fontSize: "18px",
+                      fontWeight: "600",
+                      width: "100%",
+                      outline: "none"
+                    }}
+                  />
                 </div>
               </div>
 
-              <div class="vector_icon"><img src="/images/wallet_icon2.png" alt="wallet" /></div>
+              <div className="vector_icon" onClick={handleInterchangeWallet} style={{ cursor: "pointer" }}>
+                <img src="/images/wallet_icon2.png" alt="wallet" />
+              </div>
 
             </div>
 
-            <p><span>Conversion Rate (Approx.)</span> 1 USDT  2.3674632571565426 BTC</p>
+            <p>
+              <span>Conversion Rate (Approx.)</span>
+              {fromCurrency?.short_name && receiveCurrency?.short_name && conversionRate > 0 ? (
+                ` 1 ${fromCurrency?.short_name} ≈ ${formatNumber(conversionRate)} ${receiveCurrency?.short_name}`
+              ) : (
+                " Rate not available"
+              )}
+            </p>
 
-            <button className="btn">Sign Up/Log In</button>
+            {renderSwapButton()}
 
           </div>
 
@@ -265,193 +707,21 @@ const Swap = () => {
         </div>
 
 
-        {/* <div className="swap_outer_section">
-
-          <div className="give_currency_s">
-
-            <div className="currency_block">
-              <div className="top_heading_s">
-                <h2>Pay</h2>
-
-                <div className="searchBar custom-tabs">
-                  <button><i className="ri-search-line"></i></button>
-                  <input type="search" className="custom_search" placeholder="Search Crypto" value={fromSearch} onChange={(e) => setFromSearch(e.target.value)} />
-                </div>
-
-              </div>
-
-              <div className="bitcoin_cate_list">
-                <ul>
-                  {currencyList?.length > 0 ? currencyList?.map((item, index) => {
-                    return (
-                      item?.short_name?.toLowerCase()?.includes(fromSearch?.toLowerCase()) &&
-                      <li key={index} className={`icon ${fromCurrency?.currency_id === item?.currency_id && "active"} ${receiveCurrency?.currency_id === item?.currency_id && "disabled"}`} onClick={() => receiveCurrency?.currency_id !== item?.currency_id && selectCurrency(item, "from")}>
-                        <img src={ApiConfig?.baseImage + item?.icon_path} alt="bitcoin" height="28px" />
-                        <div className="bitcoin_cnt">
-                          <h4>{item?.short_name}</h4>
-                          <span className={`price ${item?.balance > 0 && "text-success"}`}>Bal: {nineDecimalFormat(item?.balance || 0)}</span>
-                        </div>
-                      </li>
-                    )
-                  }) :
-                    <div className="no_data_outer">
-                      <div className="no_data_vector">
-                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                      </div>
-                      <p>No Coin Available</p>
-                    </div>
-                  }
-                </ul>
-              </div>
-            </div>
-            <div className="currency_block">
-              <div className="top_heading_s">
-                <h2>Receive</h2>
-
-                <div className="searchBar custom-tabs">
-                  <button><i className="ri-search-line"></i></button>
-                  <input type="search" className="custom_search" placeholder="Search Crypto" value={receieveSearch} onChange={(e) => setReceieveSearch(e.target.value)} />
-                </div>
-
-              </div>
-
-              <div className="bitcoin_cate_list">
-                <ul>
-                  {currencyList?.length > 0 ? currencyList?.map((item, index) => {
-                    return (
-                      item?.short_name?.toLowerCase()?.includes(receieveSearch?.toLowerCase()) &&
-                      <li key={index} className={`icon ${receiveCurrency?.currency_id === item?.currency_id && "active"} ${fromCurrency?.currency_id === item?.currency_id && "disabled"}`} onClick={() => fromCurrency?.currency_id !== item?.currency_id && selectCurrency(item, "receive")}>
-                        <img src={ApiConfig?.baseImage + item?.icon_path} alt="bitcoin" height="28px" />
-                        <div className="bitcoin_cnt">
-                          <h4>{item?.short_name}</h4>
-                          <span className={`price ${item?.balance > 0 && "text-success"}`}>Bal: {nineDecimalFormat(item?.balance || 0)}</span>
-                        </div>
-                      </li>
-                    )
-                  }) :
-                    <div className="no_data_outer">
-                      <div className="no_data_vector">
-                        <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-                      </div>
-                      <p>No Coin Available</p>
-                    </div>
-                  }
-                </ul>
-              </div>
-
-
-            </div>
-
-          </div>
-
-          <div className="swap_currency_total">
-
-            <section className="block_currency">
-
-              <div className="bitcoin_currency">
-                <div className="bitcoin_top_currency icon">
-                  <h3><img src={ApiConfig?.baseImage + fromCurrency?.icon_path} alt={fromCurrency?.currency} height="35px" />{fromCurrency?.currency || "---"}</h3>
-                  <ul>
-                    <li>Min Amount: {nineDecimalFormat(fromCurrency?.minSwapping)} {fromCurrency?.short_name}</li>
-                    <li>Bal: {nineDecimalFormat(fromCurrency?.balance)} {fromCurrency?.short_name}</li>
-                  </ul>
-                </div>
-
-                <div className="price_max_total">
-                  <input type="number" placeholder={`Amount (${fromCurrency?.short_name || ""})`} onWheel={(e) => e.target.blur()} name="fromSwap" value={fromCurrencyAmount} onChange={handleSwapInput} />
-                  <button onClick={() => handleMaxAmount("from")}>Max</button>
-
-                </div>
-                {fromCurrencyAmount && +fromCurrencyAmount > 0 ? (
-                  (() => {
-                    const amount = new BigNumber(+fromCurrencyAmount || 0);
-                    const fee = new BigNumber(fromCurrency?.swappingFee || 0);
-                    const balance = new BigNumber(fromCurrency?.balance || 0);
-                    const minAmount = new BigNumber(fromCurrency?.minSwapping || 0);
-                    const totalRequired = amount.plus(fee);
-
-                    if (totalRequired.isGreaterThan(balance)) {
-                      return <small className="text-danger">Insufficient funds. <a href="/asset_managemnet/deposit">Deposit now<i className="ri-arrow-right-up-line"></i></a></small>;
-                    } else if (amount.isLessThan(minAmount)) {
-                      return <small className="text-danger">Amount should be greater than {fromCurrency?.minSwapping} {fromCurrency?.short_name}</small>;
-                    }
-                    return "";
-                  })()
-                ) : ""}
-              </div>
-
-              <div className="vector_icon">
-                <img src="/images/wallet_icon2.png" alt="wallet" onClick={handleInterchangeWallet} />
-              </div>
-              <div className="bitcoin_currency">
-                <div className="bitcoin_top_currency icon">
-                  <h3><img src={ApiConfig?.baseImage + receiveCurrency?.icon_path} alt={fromCurrency?.currency} height="35px" />{receiveCurrency?.currency}</h3>
-                  <ul>
-                    <li>Bal: {nineDecimalFormat(receiveCurrency?.balance)}  {receiveCurrency?.short_name}</li>
-                  </ul>
-                </div>
-
-                <div className="price_max_total">
-                  <input type="number" placeholder={`Amount (${receiveCurrency?.short_name || ""})`} value={nineDecimalFormat(receiveCurrencyAmount)} disabled />
-                  <input type="number" placeholder={`Amount (${receiveCurrency?.short_name || ""})`} onWheel={(e) => e.target.blur()} name="toSwap" value={receiveCurrencyAmount} onChange={handleSwapInput} />
-                  <button onClick={() => handleMaxAmount("to")}>Max</button>
-                </div>
-              </div>
-
-            </section>
-
-            <div className="amount_detail_bottom">
-              <div className="amount_cnt">
-                <p>Minimum Amount | Maximum Amount <span className=" text-success">{nineDecimalFormat(fromCurrency?.minSwapping)} | {nineDecimalFormat(fromCurrency?.maxSwapping)} {fromCurrency?.short_name}</span></p>
-              </div>
-
-              <div className="amount_cnt">
-                <p>Swapping Fee <span className=" text-success">{fromCurrency?.swappingFee} {fromCurrency?.short_name}</span></p>
-              </div>
-
-              <div className="amount_cnt">
-                <p>Conversion Rate (Approx.)<span className=" text-success">1 {fromCurrency?.short_name} <i className="ri-arrow-right-double-line"></i>  {(conversionRate)} {receiveCurrency?.short_name}</span></p>
-              </div>
-
-              {(() => {
-                const amount = new BigNumber(+fromCurrencyAmount || 0);
-                const fee = new BigNumber(fromCurrency?.swappingFee || 0);
-                const balance = new BigNumber(fromCurrency?.balance || 0);
-                const minAmount = new BigNumber(fromCurrency?.minSwapping || 0);
-                const totalRequired = amount.plus(fee);
-
-                const isValid = amount.isGreaterThan(0) &&
-                  receiveCurrencyAmount > 0 &&
-                  totalRequired.isLessThanOrEqualTo(balance) &&
-                  amount.isGreaterThanOrEqualTo(minAmount);
-
-                return isValid ? (
-                  <button className="orderbtn" onClick={showMoreDetails}>Place Order</button>
-                ) : (
-                  <button className="orderbtn" disabled>Place Order</button>
-                );
-              })()}
-
-            </div>
-
-          </div>
-
-        </div> */}
-
         <div className="dashboard_recent_s swap_tb_his">
           <div className="user_list_top">
             <div className="d-flex-between  mb-3  custom_dlflex">
               <h4>Recent Transactions </h4>
-              <div class="searchBar custom-tabs"><i class="ri-search-2-line"></i><input type="search" class="custom_search" placeholder="Search Crypto" /></div>
+              <div className="searchBar custom-tabs">
+                <i className="ri-search-2-line"></i>
+                <input
+                  type="search"
+                  className="custom_search"
+                  placeholder="Search Crypto"
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                />
+              </div>
             </div>
-            {/* <div className="user_search">
-              <form>
-                <input className='search' type="text" placeholder="Currency" />
-                <div className="currency_btn_2"> <button className='searchbtn'>Search</button>
-                  <button className='restbtn'>Rest</button>
-                </div>
-              </form>
-            </div> */}
           </div>
           <div className="desktop_view2">
             <div className='table-responsive'>
@@ -469,21 +739,26 @@ const Swap = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactionHistory?.map((item, index) => {
-                    return (
-                      <tr key={index}>
+                  {filteredHistory.length > 0 ? (
+                    filteredHistory.map((item, index) => (
+                      <tr key={item?._id || index}>
                         <td>{index + 1}</td>
-                        <td>{moment(item.createdAt).format("YYYY-MM-DD hh:mm A")} </td>
-                        <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
-                        <td>{item?.pay_amount} {item?.from}</td>
-                        <td>{item?.get_amount} {item?.to}</td>
-                        <td>{item?.fee} {item?.from}</td>
-                        <td>1 {item?.from} {"=>"} {item?.conversion_rate} {item?.to}</td>
+                        <td>{moment(item?.createdAt).format("YYYY-MM-DD hh:mm A")}</td>
+                        <td>{item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
+                        <td>{formatNumber(item?.pay_amount)} {item?.from}</td>
+                        <td>{formatNumber(item?.get_amount)} {item?.to}</td>
+                        <td>{formatNumber(item?.fee)} {item?.from}</td>
+                        <td>1 {item?.from} {"=>"} {formatNumber(item?.conversion_rate)} {item?.to}</td>
                         <td className="text-success">Completed</td>
                       </tr>
-                    )
-                  })}
-
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="8" className="text-center py-4">
+                        {isLoggedIn ? "No transactions found" : "Please login to view transactions"}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
 
@@ -501,16 +776,21 @@ const Swap = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactionHistory?.map((item, index) => {
-                    return (
-                      <tr key={index}>
-                        <td> {item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
-                        <td>{item?.pay_amount} {item?.from}</td>
-                        <td>{item?.get_amount} {item?.to}</td>
+                  {filteredHistory.length > 0 ? (
+                    filteredHistory.map((item, index) => (
+                      <tr key={item?._id || index}>
+                        <td>{item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
+                        <td>{formatNumber(item?.pay_amount)} {item?.from}</td>
+                        <td>{formatNumber(item?.get_amount)} {item?.to}</td>
                       </tr>
-                    )
-                  })}
-
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center py-4">
+                        {isLoggedIn ? "No transactions found" : "Please login to view transactions"}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
 
@@ -540,139 +820,73 @@ const Swap = () => {
             </div>
 
             <div className="modal-body">
-              <form>
-                <input type="text" placeholder="Search coin name " />
+              <form onSubmit={(e) => e.preventDefault()}>
+                <input
+                  type="text"
+                  placeholder="Search coin name"
+                  value={modalType === "from" ? fromSearch : receiveSearch}
+                  onChange={(e) => {
+                    if (modalType === "from") {
+                      setFromSearch(e.target.value);
+                    } else {
+                      setReceiveSearch(e.target.value);
+                    }
+                  }}
+                />
               </form>
 
               <div className="hot_trading_t">
                 <div className="table-responsive">
                   <table>
                     <tbody>
+                      {filteredCurrencies.length > 0 ? (
+                        filteredCurrencies.map((item, index) => {
+                          const isSelected = modalType === "from"
+                            ? fromCurrency?.currency_id === item?.currency_id
+                            : receiveCurrency?.currency_id === item?.currency_id;
+                          const isDisabled = modalType === "from"
+                            ? receiveCurrency?.currency_id === item?.currency_id
+                            : fromCurrency?.currency_id === item?.currency_id;
 
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751740975587-586000162.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">AVAX<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739888899-576451443.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">DOGE<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739854071-903335949.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BNB<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BTC<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BTC<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BTC<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BTC<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-                      <tr data-bs-dismiss="modal">
-                        <td>
-                          <div className="td_first">
-                            <div className="icon">
-                              <img
-                                src="https://backend.gatbits.com/icons/coin-image-1751739632227-609587235.png"
-                                alt="icon"
-                                width="30"
-                              />
-                            </div>
-                            <div className="price_heading">BTC<span>/USDT</span></div>
-                          </div>
-                        </td>
-                        <td className="right_t price_tb">0.00%</td>
-                      </tr>
-
+                          return (
+                            <tr
+                              key={item?.currency_id || index}
+                              onClick={() => !isDisabled && selectCurrency(item, modalType)}
+                              style={{
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                                opacity: isDisabled ? 0.5 : 1,
+                                backgroundColor: isSelected ? "rgb(43 49 60)" : "transparent",
+                                borderRadius: "10px",
+                              }}
+                            >
+                              <td>
+                                <div className="td_first">
+                                  <div className="icon">
+                                    <img
+                                      src={item?.icon_path ? ApiConfig?.baseImage + item?.icon_path : "/images/tether_icon.png"}
+                                      alt={item?.short_name || "icon"}
+                                      width="30"
+                                    />
+                                  </div>
+                                  <div className="price_heading">
+                                    {item?.short_name}
+                                    <span>/{item?.currency}</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="right_t price_tb">
+                                {formatNumber(item?.balance || 0, 4)}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan="2" className="text-center py-3">
+                            {isLoading ? "Loading..." : "No currencies found"}
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -683,7 +897,8 @@ const Swap = () => {
         </div>
       </div>
 
-      {/* <div className="modal fade search_form search_coin" id="more_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {/* Order Details Modal */}
+      <div className="modal fade search_form search_coin" id="more_details" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -694,41 +909,61 @@ const Swap = () => {
               <div className="hot_trading_t model_height">
                 <table>
                   <tbody>
-
                     <tr>
-                      <td>Swapping </td>
-                      <td className="right_t price_tb">{fromCurrencyAmount} {fromCurrency?.short_name} <i className="ri-arrow-right-double-line"></i>
-                        {nineDecimalFormat(receiveCurrencyAmount)} {receiveCurrency?.short_name}</td>
+                      <td>Swapping</td>
+                      <td className="right_t price_tb">
+                        {formatNumber(fromCurrencyAmount)} {fromCurrency?.short_name}
+                        <i className="ri-arrow-right-double-line"></i>
+                        {formatNumber(receiveCurrencyAmount)} {receiveCurrency?.short_name}
+                      </td>
                     </tr>
                     <tr>
                       <td>Swapping Fee</td>
-                      <td className="right_t price_tb">{fromCurrency?.swappingFee} {fromCurrency?.short_name}</td>
+                      <td className="right_t price_tb">
+                        {formatNumber(fromCurrency?.swappingFee || 0)} {fromCurrency?.short_name}
+                      </td>
                     </tr>
                     <tr>
                       <td>Deductable Amount</td>
-                      <td className="right_t price_tb">{nineDecimalFormat(fromCurrency?.swappingFee + +fromCurrencyAmount)} {fromCurrency?.short_name}</td>
-                    </tr>
-                    <tr>
-                      <td>Receivable Amount(Approx.)</td>
-                      <td className="right_t price_tb">{nineDecimalFormat(receiveCurrencyAmount) || 0} {receiveCurrency?.short_name}</td>
-                    </tr>
-                    <tr>
-                      <td className="text-info">
-                        <i className="ri-information-2-line"></i> This is an internal transfer. The final disbursed amount will be based on the current market rate at the time of execution. Minor fluctuations may occur between placing the order and its execution.
+                      <td className="right_t price_tb">
+                        {formatNumber(
+                          safeParseNumber(fromCurrency?.swappingFee)
+                            .plus(safeParseNumber(fromCurrencyAmount))
+                            .toNumber()
+                        )} {fromCurrency?.short_name}
                       </td>
                     </tr>
-
-                    <div className="mt-2">
-                      <button className="orderbtn" onClick={handleCurrencySwaping}>Confirm Order</button>
-                    </div>
-
+                    <tr>
+                      <td>Receivable Amount (Approx.)</td>
+                      <td className="right_t price_tb">
+                        {formatNumber(receiveCurrencyAmount)} {receiveCurrency?.short_name}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="2" className="">
+                        <small>
+                        <i className="ri-information-2-line"></i> This is an internal transfer. The final disbursed amount will be based on the current market rate at the time of execution. Minor fluctuations may occur between placing the order and its execution.
+                        </small>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
+                <div className="mt-3">
+                  <form>
+                  <button
+                    className="swap_button "
+                    onClick={handleCurrencySwapping}
+                    disabled={isSwapping || !validationResult.isValid}
+                  >
+                    {isSwapping ? "Processing..." : "Confirm Order"}
+                  </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
 
 
       {/* <!-- Modal   more details Pop Up End --> */}
@@ -736,7 +971,7 @@ const Swap = () => {
     </>
 
 
-  )
-}
+  );
+};
 
-export default Swap
+export default Swap;

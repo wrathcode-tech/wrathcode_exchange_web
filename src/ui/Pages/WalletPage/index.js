@@ -160,8 +160,25 @@ const WalletPage = () => {
     setToWalletType(fromWalletType);
   }, [fromWalletType, toWalletType]);
 
-  // Filter logic
-  const finalFundData = (fundData || []).filter((item) =>
+  // Sort and filter logic - currencies with balance on top
+  const sortedFundData = useMemo(() => {
+    const data = [...(fundData || [])];
+    
+    // Sort: non-zero total balance on top, then by total balance descending
+    return data.sort((a, b) => {
+      const totalA = (parseFloat(a?.balance) || 0) + (parseFloat(a?.locked_balance) || 0);
+      const totalB = (parseFloat(b?.balance) || 0) + (parseFloat(b?.locked_balance) || 0);
+
+      // Non-zero balances first
+      if (totalA > 0 && totalB === 0) return -1;
+      if (totalA === 0 && totalB > 0) return 1;
+
+      // Both have balance or both are zero - sort by total balance descending
+      return totalB - totalA;
+    });
+  }, [fundData]);
+
+  const finalFundData = sortedFundData.filter((item) =>
     (item?.short_name?.toLowerCase()?.includes(search?.toLowerCase()) ||
       item?.currency?.toLowerCase()?.includes(search?.toLowerCase()))
   );

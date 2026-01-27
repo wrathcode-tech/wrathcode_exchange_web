@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthService from "../../../api/services/AuthService";
 import { alertErrorMessage, alertSuccessMessage } from "../../../customComponents/CustomAlertMessage";
@@ -39,10 +39,27 @@ const LoginPage = () => {
   // Add loginbg class on mount
   useEffect(() => {
     $("body").addClass("loginbg");
-    // Check if WebAuthn/Passkey is supported
-    const supported = window.PublicKeyCredential !== undefined &&
-      typeof window.PublicKeyCredential === 'function';
-    setPasskeySupported(supported);
+    
+    // Check if WebAuthn/Passkey is supported AND platform authenticator is available
+    const checkPasskeySupport = async () => {
+      // First check if WebAuthn API exists
+      if (window.PublicKeyCredential === undefined || typeof window.PublicKeyCredential !== 'function') {
+        setPasskeySupported(false);
+        return;
+      }
+      
+      // Check if platform authenticator (fingerprint/Face ID/Windows Hello) is available
+      try {
+        const available = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        setPasskeySupported(available);
+      } catch (error) {
+        // If check fails, assume not supported
+        setPasskeySupported(false);
+      }
+    };
+    
+    checkPasskeySupport();
+    
     return () => {
       $("body").removeClass("loginbg");
     };
@@ -238,8 +255,6 @@ const LoginPage = () => {
         // - AbortError: Operation was aborted
         // - Timeout: Operation timed out
         // - InvalidStateError: Authenticator not available
-        const errorName = webauthnError?.name || '';
-        const errorMessage = webauthnError?.message || '';
         return { success: false, reason: 'cancelled' };
       }
 
@@ -566,6 +581,63 @@ const LoginPage = () => {
     setShowPassword(false);
   };
 
+  // Handle Sign in with Passkey (discoverable credentials)
+  const handlePasskeyLogin = async () => {
+    if (!passkeySupported) {
+      alertErrorMessage('Passkeys are not supported on this device/browser');
+      return;
+    }
+
+    try {
+      setIsPasskeyLoading(true);
+      LoaderHelper.loaderStatus(true);
+
+      // Step 1: Get authentication options from server
+      const optionsResult = await AuthService.passkeyDiscoverableAuthOptions();
+      if (!optionsResult?.success || !optionsResult?.data) {
+        alertErrorMessage(optionsResult?.message || 'Failed to get authentication options');
+        return;
+      }
+
+      const challenge = optionsResult.challenge; // Store challenge to send back
+
+      // Step 2: Prompt user to select a passkey
+      let credential;
+      try {
+        credential = await startAuthentication(optionsResult.data);
+      } catch (webauthnError) {
+        if (webauthnError.name === 'NotAllowedError') {
+          alertErrorMessage('Authentication cancelled or no passkey available');
+        } else if (webauthnError.name === 'AbortError') {
+          alertErrorMessage('Authentication was cancelled');
+        } else {
+          alertErrorMessage('Failed to authenticate with passkey');
+        }
+        return;
+      }
+
+      // Step 3: Verify the credential with server and get login token
+      const verifyResult = await AuthService.passkeyDiscoverableVerify(credential, challenge);
+
+      if (verifyResult?.success && verifyResult?.data?.token) {
+        alertSuccessMessage('Login successful!');
+        localStorage.setItem("token", verifyResult.data.token);
+        localStorage.setItem("userId", verifyResult.data.userId);
+        setLoginDetails(verifyResult.data);
+
+        const redirectPath = location?.state?.redirectTo || "/user_profile/dashboard";
+        navigate(redirectPath, { replace: true });
+      } else {
+        alertErrorMessage(verifyResult?.message || 'Passkey verification failed');
+      }
+    } catch (error) {
+      alertErrorMessage(error?.message || 'Failed to sign in with passkey');
+    } finally {
+      setIsPasskeyLoading(false);
+      LoaderHelper.loaderStatus(false);
+    }
+  };
+
   // Get verification title based on method
   const getVerificationTitle = () => {
     switch (selectedAuthMethod) {
@@ -613,7 +685,7 @@ const LoginPage = () => {
           <div className="login_form_right">
             <div className="form_block_login">
               <img className='lightlogo' src="/images/logo_light.svg" alt="logo" />
-              <h2>Login</h2>
+              <h2>Welcome To Wrathcode</h2>
               <div className="login-header">
                 <ul className="nav nav-tabs login-pills" id="myTab" role="tablist">
                   <li className="nav-item" role="presentation">
@@ -660,16 +732,13 @@ const LoginPage = () => {
                         </div>
                       </div>
 
-                      <div className="col-sm-12 forgot_password">
-                        <Link to="/forgot_password">Forgot Password?</Link>
-                      </div>
+                  
 
                       <div className="col-sm-12 login_btn">
                         <input
                           type="button"
                           value="Log In"
                           onClick={handleEmailLogin}
-                          disabled={!signId || !password}
                         />
                       </div>
                       <div className="col-sm-12 registration__info">
@@ -680,9 +749,26 @@ const LoginPage = () => {
                         <button className="google_btn" type="button" onClick={() => loginWithGoogle()}>
                           <img src="/images/google_icon.svg" alt="google" />Sign in with Google
                         </button>
+                        {passkeySupported && (
+                        <div className="col-sm-12" style={{ marginTop: '10px' }}>
+                          <button 
+                            className="google_btn" 
+                            type="button" 
+                            onClick={handlePasskeyLogin}
+                            disabled={isPasskeyLoading}
+                          >
+                            <i className="ri-fingerprint-line" style={{ fontSize: '20px', marginRight: '8px' }}></i>
+                            {isPasskeyLoading ? 'Authenticating...' : 'Sign in with Passkey'}
+                          </button>
+                        </div>
+                      )}
                       </div>
+                    
                       <div className="col-sm-12 registration__info bottom agreetext">
                         <p>Do you have an account? <Link to="/signup">Register</Link></p>
+                      </div>
+                      <div className="col-sm-12 forgot_password text-center w-100">
+                        <Link className="text-center w-100" to="/forgot_password">Forgot Password?</Link>
                       </div>
                     </div>
                   </form>
@@ -737,9 +823,7 @@ const LoginPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-sm-12 forgot_password">
-                        <Link to="/forgot_password">Forgot Password?</Link>
-                      </div>
+                      
 
                       <div className="col-sm-12 login_btn">
                         <input type="button" value="Login" onClick={handlePhoneLogin} />
@@ -752,8 +836,24 @@ const LoginPage = () => {
                           <img src="/images/google_icon.svg" alt="google" />Sign in with Google
                         </button>
                       </div>
+                      {passkeySupported && (
+                        <div className="col-sm-12" style={{ marginTop: '10px' }}>
+                          <button 
+                            className="google_btn" 
+                            type="button" 
+                            onClick={handlePasskeyLogin}
+                            disabled={isPasskeyLoading}
+                          >
+                            <i className="ri-fingerprint-line" style={{ fontSize: '20px', marginRight: '8px' }}></i>
+                            {isPasskeyLoading ? 'Authenticating...' : 'Sign in with Passkey'}
+                          </button>
+                        </div>
+                      )}
                       <div className="col-sm-12 registration__info agreetext">
                         <p>Do you have an account? <Link to="/signup">Register</Link></p>
+                      </div>
+                      <div className="col-sm-12 forgot_password text-center w-100">
+                        <Link className="text-center w-100" to="/forgot_password">Forgot Password?</Link>
                       </div>
                     </div>
                   </form>
