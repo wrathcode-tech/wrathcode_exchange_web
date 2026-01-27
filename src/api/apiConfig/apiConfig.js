@@ -6,7 +6,6 @@ const appUrl2 = appUrl;
 
 
 
-https://backend.demoexchange.wrathcode.com
 
 export const deployedUrl = `${window.origin}/`
 
