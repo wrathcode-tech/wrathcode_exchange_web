@@ -58,6 +58,8 @@ function UsdMFutures() {
 
     const [activeMainTab, setActiveMainTab] = useState("order");
     const [activeInnerTab, setActiveInnerTab] = useState("all_orders");
+    const [activePositionTab, setActivePositionTab] = useState("positions");
+    const [activeLimitTab, setActiveLimitTab] = useState("positions_two");
 
 
 
@@ -764,7 +766,7 @@ function UsdMFutures() {
                                 <img className='icon_img' src={ApiConfig?.baseImage + selectedCoin?.icon_path} alt="bitcoin" /> {selectedCoin?.short_name}/{selectedCoin?.margin_asset} <span> <img src="/images/futures_img/arrowbottom_icon.svg" alt="arrow" /></span>
                             </div>
                             {/* <!-- Modal Start --> */}
-                            <div class="modal fade currency_popup_s" id="exampleModal2" tabindex="-1"
+                            <div class="modal fade currency_popup_s search_form_modal_2" id="exampleModal2" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -839,14 +841,19 @@ function UsdMFutures() {
                                                                                         </tr>
                                                                                     )
                                                                                 })
-
-                                                                                : <div> <p className="text-center no-data h-100 mb-0 center_b" >
-                                                                                    <div className="no_data_s">
-                                                                                        <img src="/images/no_data_vector.svg" className='img-fluid ' alt="no data" width="52" />
-                                                                                        <small>No pair available</small>
-                                                                                    </div>
-                                                                                </p> </div>}
-
+                                                                                : 
+                                                                                <tr>
+                                                                                    <td colSpan="4">
+                                                                                        <div className="text-center no-data mb-0 center_b">
+                                                                                            <div className='table_responsive_2'>
+                                                                                                <div className="no_data_s">
+                                                                                                    <img src="/images/no_data_vector.svg" className='img-fluid ' alt="no data" width="52" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -1505,13 +1512,39 @@ function UsdMFutures() {
 
 
                             <ul class="limit_tabs">
-                                <li class="nav-item positions_two" role="presentation">
-                                    <button type="button" onClick={() => { setOrderType("Limit"); setShowTpSlOption(false); setQuantity(""); setPercentage(0) }}>
+                                <li 
+                                    class={`nav-item positions_two ${activeLimitTab === "positions_two" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button 
+                                        type="button" 
+                                        onClick={(e) => { 
+                                            e.preventDefault(); 
+                                            setActiveLimitTab("positions_two");
+                                            setOrderType("Limit"); 
+                                            setShowTpSlOption(false); 
+                                            setQuantity(""); 
+                                            setPercentage(0);
+                                        }}
+                                    >
                                         Limit
                                     </button>
                                 </li>
-                                <li class="nav-item open_two" role="presentation">
-                                    <button type="button" onClick={() => { setOrderType("Market"); setShowTpSlOption(false); setQuantity(""); setPercentage(0) }}>
+                                <li 
+                                    class={`nav-item open_two ${activeLimitTab === "open_two" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button 
+                                        type="button" 
+                                        onClick={(e) => { 
+                                            e.preventDefault(); 
+                                            setActiveLimitTab("open_two");
+                                            setOrderType("Market"); 
+                                            setShowTpSlOption(false); 
+                                            setQuantity(""); 
+                                            setPercentage(0);
+                                        }}
+                                    >
                                         Market
                                     </button>
                                 </li>
@@ -1535,7 +1568,7 @@ function UsdMFutures() {
                             </ul> */}
 
 
-                            <div className='cnt_table_two positions_two'>
+                            <div className={`cnt_table_two positions_two ${activeLimitTab === "positions_two" ? "active" : ""}`}>
                                 <form class="price_info">
                                     <div class="price_inputbl">
                                         <label>Price</label>
@@ -1728,7 +1761,7 @@ function UsdMFutures() {
                                 </form>
                             </div>
 
-                            <div className='cnt_table_two open_two'>
+                            <div className={`cnt_table_two open_two ${activeLimitTab === "open_two" ? "active" : ""}`}>
                                 <form class="price_info">
                                     <div class="price_inputbl">
                                         <label>Price</label>
@@ -2115,25 +2148,40 @@ function UsdMFutures() {
                     <div class="trade_summary_table_lft mt-0 position_order">
                         <div class="top_th_easyop border-0">
                             <ul class="position_list">
-                                <li class="nav-item positions" role="presentation">
-                                    <button>Positions({openPositions?.length || 0})</button>
+                                <li 
+                                    class={`nav-item positions ${activePositionTab === "positions" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("positions"); }}>Positions({openPositions?.length || 0})</button>
                                 </li>
-                                <li class="nav-item open" role="presentation">
-                                    <button>Open Orders({OpenOrders?.length || 0})</button>
+                                <li 
+                                    class={`nav-item open ${activePositionTab === "open" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("open"); }}>Open Orders({OpenOrders?.length || 0})</button>
                                 </li>
-                                <li class="nav-item order_history" role="presentation">
-                                    <button>Order History</button>
+                                <li 
+                                    class={`nav-item order_history ${activePositionTab === "order_history" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("order_history"); }}>Order History</button>
                                 </li>
-                                <li class="nav-item exercise_history" role="presentation">
-                                    <button>Trade History</button>
+                                <li 
+                                    class={`nav-item exercise_history ${activePositionTab === "exercise_history" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("exercise_history"); }}>Trade History</button>
                                 </li>
 
-                                <li class="nav-item position_history" role="presentation">
-                                    <button>Position History</button>
+                                <li 
+                                    class={`nav-item position_history ${activePositionTab === "position_history" ? "active" : ""}`} 
+                                    role="presentation"
+                                >
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("position_history"); }}>Position History</button>
                                 </li>
 
                             </ul>
-                            <div className='cnt_table positions'>
+                            <div className={`cnt_table positions ${activePositionTab === "positions" ? "active" : ""}`}>
                                 <div className="desktop_view2">
                                     <div class="table-responsive">
                                         {openPositions?.length > 0 ?
@@ -2301,7 +2349,7 @@ function UsdMFutures() {
 
                             </div>
 
-                            <div className='cnt_table open'>
+                            <div className={`cnt_table open ${activePositionTab === "open" ? "active" : ""}`}>
                                 <div className="desktop_view2">
                                     <div class="table-responsive">
                                         {OpenOrders?.length > 0 ?
@@ -2531,7 +2579,7 @@ function UsdMFutures() {
 
                             </div>
 
-                            <div className='cnt_table order_history'>
+                            <div className={`cnt_table order_history ${activePositionTab === "order_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
                                     <div class="table-responsive">
                                         {ordersHistory?.length > 0 ? <table>
@@ -2729,7 +2777,7 @@ function UsdMFutures() {
                                 </div>
 
                             </div>
-                            <div className='cnt_table exercise_history'>
+                            <div className={`cnt_table exercise_history ${activePositionTab === "exercise_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
                                     <div class="table-responsive">
                                         {tradeHistory.length > 0 ? <table>
@@ -2904,7 +2952,7 @@ function UsdMFutures() {
                                 </div>
 
                             </div>
-                            <div className='cnt_table position_history'>
+                            <div className={`cnt_table position_history ${activePositionTab === "position_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
                                     <div class="table-responsive">
                                         {closePositions?.length > 0 ? <table>

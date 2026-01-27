@@ -72,6 +72,7 @@ body {
 
 .currency_popup_s .search_form input {
     padding: 5px 15px;
+    color: #fff;
 }
 
 .no-data {
@@ -468,8 +469,9 @@ body {
 }
 
 .modal.currency_popup_s .modal-dialog .modal-content {
-    background-color: #111214;
-    border: 1px solid #262626;
+    background-color: #373E4B;
+    border: 1px solid #373E4B;
+    border-radius: 12px;
 }
 
 .modal.currency_popup_s .currency_data_list table tr td {
@@ -497,6 +499,7 @@ body {
 .modal.currency_popup_s .currency_data_list table tr th {
     font-size: 11px;
     padding: 11px 0px !important;
+    color: #a7a7a7;
 }
 
 .modal.currency_popup_s .modal-header {
@@ -3588,12 +3591,16 @@ button.bn-button.button__buy.sellbtn {
         height: 600px !important;
     }
 
+    .modal.currency_popup_s .modal-dialog .modal-content {
+        border-radius: 0px;
+    }
+
     .assets_right {
     padding: 0px 5px; }
 
 
     body .modal.currency_popup_s .modal-dialog {
-        min-width: 90%;
+        min-width:100%;
     }
 
     .buysell_btn button {

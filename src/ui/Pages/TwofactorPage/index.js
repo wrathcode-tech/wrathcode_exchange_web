@@ -3144,7 +3144,7 @@ const TwofactorPage = (props) => {
                       <div className="d-flex align-items-center">
                         <i className="ri-mail-line me-3"></i>
                         <div>
-                          <strong>Email Verification</strong>
+                          <b>Email Verification</b>
                           <p className="mb-0 small">Link your email address</p>
                         </div>
                       </div>
@@ -3163,7 +3163,7 @@ const TwofactorPage = (props) => {
                       <div className="d-flex align-items-center">
                         <i className="ri-smartphone-line me-3"></i>
                         <div>
-                          <strong>Mobile Verification</strong>
+                          <b>Mobile Verification</b>
                           <p className="mb-0 small">Link your mobile number</p>
                         </div>
                       </div>

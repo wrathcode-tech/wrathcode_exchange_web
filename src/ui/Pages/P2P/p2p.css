@@ -4291,8 +4291,8 @@ h4.p2p-profile-tab:hover {
   .p2p-filter-section .p2p-find-orders-btn {
     grid-column: 1 / -1;
     width: 100%;
-    background: #22c55e;
-    color: #fff;
+    background: #f3bb2b;
+    color: #181a20;
     border: none;
   }
 
@@ -11450,11 +11450,7 @@ body.light_theme .p2p-loading-container {
   margin: 0 0 8px 0;
 }
 
-@media (max-width: 767px) {
-  .p2p-create-post-title {
-    font-size: 18px;
-  }
-}
+
 
 .p2p-create-post-subtitle {
   color: #949AA4;
@@ -11514,9 +11510,9 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-step-circle.completed {
-  background: #22c55e;
-  border-color: #22c55e;
-  color: #fff;
+  background: #F3BB2B;
+  border-color: #F3BB2B;
+  color: #000;
 }
 
 .p2p-create-post-step-line {
@@ -11539,7 +11535,7 @@ body.light_theme .p2p-loading-container {
 }
 
 .p2p-create-post-step-line.completed {
-  background: #22c55e;
+  background: #F3BB2B;
 }
 
 .p2p-create-post-section-title {
@@ -13736,6 +13732,20 @@ body.light_theme .p2p-row-expanded {
     background: #3f4856;
     padding: 20px;
 }
+
+}
+
+@media (max-width: 767px) {
+  .p2p-create-post-title {
+    font-size: 18px;
+  }
+
+  .p2p-create-post-radio-text {
+    font-size: 12px; }
+
+    .p2p-create-post-radio-input {
+      width: 16px;
+      height: 16px; }    
 
 }
 

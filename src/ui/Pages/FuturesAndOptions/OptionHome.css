@@ -1040,7 +1040,7 @@ span.green {
 }
 
 .cnt_first_t .icon_currency img {
-    width: 28px;
+    width: 22px;
 }
 
 .cnt_first_t .icon_currency svg {
@@ -3036,7 +3036,7 @@ button.bn-button.button__buy {
 }
 
 .modal.currency_popup_s.crosstabs .modal-content {
-    background: #2B313C;
+    background: #373E4B;
     border-radius: 15px;
 }
 
@@ -4562,6 +4562,9 @@ span.arrowmobile {
 
 @media screen and (max-width:767px) {
 
+    .modal.currency_popup_s.crosstabs .modal-content {
+        border-radius: 0px;
+    }
 
     .position_order .position_list {
         overflow: auto;
@@ -5156,6 +5159,13 @@ span.arrowmobile {
         width: 42px;
     }
 
+
+    .modal.currency_popup_s.crosstabs .modal-dialog {
+        max-width: 100%;
+        min-width: 100%;
+        margin: 0 auto;
+    }
+
     body {
         font-size: 14px;
     }
@@ -5309,7 +5319,7 @@ span.arrowmobile {
     }
 
     .modal.currency_popup_s.crosstabs p {
-        font-size: 14px;
+        font-size: 12px;
         line-height: 20px;
     }
 
@@ -5324,12 +5334,6 @@ span.arrowmobile {
 
     .trade_option_bl .row .col-sm-6 {
         width: 100%;
-    }
-
-    .modal.currency_popup_s.crosstabs .modal-dialog {
-        max-width: 90%;
-        min-width: 90%;
-        margin: 0 auto;
     }
 
     .buy_sell_option h5 {

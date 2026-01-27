@@ -2153,15 +2153,15 @@ ul.exclusive_list li span.sellsub {
 
     .announcement_hero_s p {
         width: 90%;
-        font-size: 18px;
-    }
-
-    p {
         font-size: 16px;
     }
 
+    p {
+        font-size: 14px;
+    }
+
     .readbtn button {
-        font-size: 15px;
+        font-size: 14px;
     }
 
 }
@@ -3072,6 +3072,10 @@ ul.exclusive_list li span.sellsub {
     .complete_project_s .coin_data_table {
         grid-template-columns: repeat(1, 1fr);
         gap: 20px;
+    }
+
+    p {
+        font-size: 12px;
     }
 
     .dashboard_right .dashboard_listing_section.Overview_mid .coin_right {

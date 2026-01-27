@@ -1409,6 +1409,7 @@ img.animation_effect.bitcoin1 {
     border: 1px solid #2F2F2F;
     border-radius: 20px;
     overflow: hidden;
+    min-height: 480px;
 }
 
 .resources_cnt {
@@ -3011,6 +3012,8 @@ ul.wallet_price_list li {
     font-size: 14px;
     border-radius: 50px;
 }
+
+.wallet_btn_small a:hover{ color: #000; }
 
 .wallet_btn_small button img {
     width: 15px;
@@ -5009,6 +5012,8 @@ body .red {
     background-color: #f3bb2b;
     font-size: 11px;
 }
+
+.qrcode button.btn:hover{ color: #000; }
 
 .qrcode .scan_img {
     background-color: #fff;
@@ -12526,7 +12531,8 @@ section.st_sec .card-body {
     align-items: center;
     justify-content: center;
 }
-.slider_img img{
+
+.slider_img img {
     width: 500px;
     height: 454px;
     border: 1px solid #2F384E;
@@ -12604,6 +12610,7 @@ section.st_sec .card-body {
 .referral_recent_s .dashboard_recent_s {
     margin: 0px;
 }
+
 .card-body_inner.referral_code_s {
     background-color: #2B313C;
     padding: 24px;
@@ -12612,10 +12619,29 @@ section.st_sec .card-body {
     margin-top: 20px;
 }
 
-.referral_code_s ul{ display: flex; gap: 10px; flex-direction: column; }
-.referral_code_s ul li { font-size: 14px; color: #6F798C; display: flex; justify-content: space-between; gap: 15px; align-items: center; }
-.referral_code_s ul li span{ color: #fff; }
-.referral_code_s ul li span a{ color: #fff; margin-left: 20px; }
+.referral_code_s ul {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.referral_code_s ul li {
+    font-size: 14px;
+    color: #6F798C;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: center;
+}
+
+.referral_code_s ul li span {
+    color: #fff;
+}
+
+.referral_code_s ul li span a {
+    color: #fff;
+    margin-left: 20px;
+}
 
 .referral_code_s button {
     background-color: #F3BB2B;
@@ -12625,7 +12651,10 @@ section.st_sec .card-body {
     margin-top: 18px;
 }
 
-.referral_code_s button a{ color: #000; }
+.referral_code_s button a {
+    color: #000;
+}
+
 .how_to_refer_s {
     width: 100%;
     display: block;
@@ -12635,19 +12664,43 @@ section.st_sec .card-body {
 }
 
 .how_to_refer_s h2 {
-    font-size: 30px; }
+    font-size: 30px;
+}
 
-.how_to_refer_s ul{ display: flex; gap: 20px; justify-content: space-between; margin-top: 32px; }
-.how_to_refer_s ul li { font-size: 14px;
+.how_to_refer_s ul {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+.how_to_refer_s ul li {
+    font-size: 14px;
     color: #6F798C;
     display: flex;
     justify-content: space-between;
     gap: 10px;
     align-items: center;
-    flex-direction: column; }
-.how_to_refer_s ul li img{ width: 40px; height: 40px; }
-.how_to_refer_s ul li h6{ font-size: 18px; color: #fff; font-weight: 600; margin-bottom: 0px; }
-.how_to_refer_s ul li p{ font-size: 14px; color: #6F798C;  width: 70%; }
+    flex-direction: column;
+}
+
+.how_to_refer_s ul li img {
+    width: 40px;
+    height: 40px;
+}
+
+.how_to_refer_s ul li h6 {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.how_to_refer_s ul li p {
+    font-size: 14px;
+    color: #6F798C;
+    width: 70%;
+}
 
 
 /* Normal placeholder */
@@ -15081,7 +15134,7 @@ button.btn_claim:active {
     background: none;
     padding: 10px;
     font-size: 12px;
-    color: #949AA4;
+    color: #fff;
     border: none;
     width: 100%;
 }
@@ -16523,7 +16576,7 @@ button.copy_code {
     background-color: #ffffffed;
 }
 
-.market_update_table .table_responsive_2 {
+.table_responsive_2 {
     min-height: 400px;
     display: flex;
     align-items: center;
@@ -16542,6 +16595,14 @@ button.copy_code {
 .referral_events_slider {
     display: flex;
     transition: transform 0.3s ease-in-out;
+}
+
+a:hover {
+    color: #fff;
+}
+
+.learnbtn:hover {
+    color: #f3bb2b;
 }
 
 .referral_event_item {
@@ -16564,9 +16625,14 @@ button.copy_code {
     text-align: left;
 }
 
-.referral_events_slider h6{ font-size: 22px; color: #F2F4F6; }
+.referral_events_slider h6 {
+    font-size: 22px;
+    color: #F2F4F6;
+}
+
 .referral_events_slider p {
-    color: #888c95; }
+    color: #888c95;
+}
 
 .referral_events_slider button.btn.btn-primary {
     background-color: #373F4E;
@@ -17060,12 +17126,22 @@ button.copy_code {
         margin-top: 18px;
     }
 
-    .slider_img img {
-        height: 100%; }
+    .slider_group_wrapper button.subscribe_btn {
+        margin-top: 5px;
+        width: 100%;
+    }
 
-.refrefer_earn_outer .card-header.ref_header h4 {
-            font-size: 26px;
-        }        
+    .resources_news {
+        min-height: 420px;
+    }
+
+    .slider_img img {
+        height: 100%;
+    }
+
+    .refrefer_earn_outer .card-header.ref_header h4 {
+        font-size: 26px;
+    }
 
     .order_history_mobile_view {
         display: block;
@@ -18404,10 +18480,12 @@ button.copy_code {
     }
 
     .how_to_refer_s ul li p {
-        font-size: 12px; }
+        font-size: 12px;
+    }
 
-        .how_to_refer_s ul li h6 {
-            font-size: 15px; }
+    .how_to_refer_s ul li h6 {
+        font-size: 15px;
+    }
 
 
 }
@@ -18419,7 +18497,8 @@ button.copy_code {
     }
 
     .refrefer_earn_vector {
-        margin-top: 24px; }
+        margin-top: 24px;
+    }
 
     .dashboard_recent_s .mobile_view {
         background-color: transparent;
@@ -19785,8 +19864,8 @@ button.copy_code {
         border-radius: 10px;
         width: 100%;
         margin-top: 10px;
-    } 
-    
+    }
+
     .how_to_refer_s {
         margin-bottom: 40px;
     }
@@ -19794,24 +19873,26 @@ button.copy_code {
     .how_to_refer_s h2 {
         font-size: 22px;
     }
-    
+
     .card-header.ref_header h6 {
         line-height: 24px;
     }
 
-.referral_code_s .field-otp-box>input {
-        padding-left: 15px; }
+    .referral_code_s .field-otp-box>input {
+        padding-left: 15px;
+    }
 
-.referral_code_s ul li {
-            font-size: 12px; }    
-            
-.referral_code_s ul li span {
-                text-align: left;
-            }  
-            
-.referral_code_s ul li span a {
-                margin-left: 0px;
-            }            
+    .referral_code_s ul li {
+        font-size: 12px;
+    }
+
+    .referral_code_s ul li span {
+        text-align: left;
+    }
+
+    .referral_code_s ul li span a {
+        margin-left: 0px;
+    }
 
     .desktop_view {
         display: none;
@@ -19821,15 +19902,39 @@ button.copy_code {
         background: #ffffff !important;
     }
 
+    .modal.earningpopup .payment_method_f h3 {
+        font-size: 14px;
+    }
+
+    .estimated {
+        margin-top: 15px;
+    }
+
+    .earningpopup label {
+        font-size: 12px;
+    }
+
+    .earningpopup button.subscribebtn {
+        padding: 8px 10px;
+        font-size: 13px;
+        margin-top: 15px;
+    }
+
+    .modal.earningpopup h3 {
+        font-size: 16px;
+    }
+
     .qrcode p {
-        font-size: 12px; }
+        font-size: 12px;
+    }
 
     .label {
         font-size: 12px;
     }
 
-    .market_update_table .table_responsive_2 {
-        min-height: 280px; }
+    .table_responsive_2 {
+        min-height: 280px;
+    }
 
     .id_item {
         padding: 10px 12px 10px 40px;
@@ -20148,7 +20253,6 @@ button.copy_code {
 
     .latest_resources .row {
         margin-top: 30px;
-        gap: 24px;
     }
 
     .hero_section_main .d-flex.download_button {
@@ -20156,7 +20260,15 @@ button.copy_code {
     }
 
     .resources_news h3 {
-        font-size: 18px;
+        font-size: 15px;
+    }
+
+    .resources_news p {
+        font-size: 12px;
+    }
+
+    .resources_news {
+        min-height: 370px;
     }
 
     .date {
@@ -23754,11 +23866,26 @@ button.copy_code {
         font-size: 22px;
     }
 
+    .resources_news .news_img {
+        height: 130px;
+    }
+
 }
 
 
 @media screen and (max-width:660px) {
 
+    .latest_resources .row {
+        gap: 24px;
+    }
+
+    .resources_news .news_img {
+        height: 100%;
+    }
+
+    .resources_news {
+        min-height: 100%;
+    }
 
     .transaction_history_t .spotorderhist .top_heading {
         flex-direction: column;
@@ -25194,10 +25321,11 @@ button.copy_code {
 }
 
 @media screen and (max-width:480px) {
-    .twofactor_outer_s{
+    .twofactor_outer_s {
         padding: 12px !important;
     }
-    .factor_bl{
+
+    .factor_bl {
         padding: 20px 12px;
     }
 
@@ -25254,7 +25382,9 @@ button.copy_code {
         margin-bottom: 10px;
     }
 
-    .slider_group_wrapper .currency_list_b ul li.pricevalue{ font-size: 18px; }
+    .slider_group_wrapper .currency_list_b ul li.pricevalue {
+        font-size: 18px;
+    }
 
     .earning_list_block .slider_group_wrapper .currency_list_b ul {
         flex-direction: row;
@@ -25294,6 +25424,38 @@ button.copy_code {
         font-size: 12px;
     }
 
+    button.downloadbtn {
+        font-size: 12px;
+        width: 150px;
+        padding: 6px 10px;
+    }
+
+    .security_list {
+        margin-top: 15px;
+    }
+
+    .profit_cost_cnt p {
+        font-size: 12px;
+    }
+
+    .crypto_features p {
+        font-size: 12px;
+    }
+
+    footer p {
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    address {
+        font-size: 12px;
+    }
+
+    footer .row div {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
 }
 
 @media screen and (max-width:414px) {
@@ -25306,16 +25468,20 @@ button.copy_code {
         gap: 8px;
     }
 
+    .crypto_future_cnt ul.listcrypto li {
+        font-size: 12px;
+    }
+
+    .crypto_future_cnt ul.listcrypto li i {
+        font-size: 20px;
+    }
+
     .navigation .navbar-toggler img {
         width: 15px;
     }
 
     p {
-        font-size: 13px;
-    }
-
-    .resources_news p {
-        font-size: 13px;
+        font-size: 12px;
     }
 
 
@@ -26160,7 +26326,8 @@ button.copy_code {
     }
 
     .form_block_login .input_filed {
-        font-size: 12px; }
+        font-size: 12px;
+    }
 
     .modal.fade.show .modal-dialog {
         transform: translateY(0);
@@ -26185,10 +26352,12 @@ button.copy_code {
 
     form.profile_form {
         margin-top: 8px;
+        gap: 10px
     }
 
     .modal.search_form .resend {
-        font-size: 12px; }
+        font-size: 12px;
+    }
 
     .market_trade_crypto_slider .swiper-slide {
         height: auto;
@@ -26205,6 +26374,10 @@ button.copy_code {
         bottom: 0;
     }
 
+    ul.security-tips-list {
+        font-size: 12px !important;
+    }
+
     .market_trade_crypto_slider .swiper-pagination-bullet {
         width: 8px;
         height: 8px;
@@ -26219,8 +26392,9 @@ button.copy_code {
         border-radius: 4px;
     }
 }
-.getotp_mobile:hover{
-background-color: #e3e3e3 !important;
+
+.getotp_mobile:hover {
+    background-color: #e3e3e3 !important;
 }
 
 /* Prevent body scroll when modal is open */
@@ -26228,16 +26402,16 @@ body.modal-open {
     position: fixed;
     width: 100%;
     overflow: hidden;
-  }
+}
 
 
-  ul.security-tips-list {
+ul.security-tips-list {
     color: #7d828c;
     font-size: small;
 }
 
 .security-tips h6 {
-  color: #7d828c;
+    color: #7d828c;
 }
 .security-tips  {
 margin-top: 15px;
