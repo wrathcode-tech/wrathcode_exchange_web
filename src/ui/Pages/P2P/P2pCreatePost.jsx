@@ -1355,7 +1355,7 @@ const P2pCreatePost = () => {
                                     </div>
 
                                     <div className='helpguide'>
-                                        <i class="ri-question-line"></i> help & Guide
+                                        <i className="ri-question-line"></i> help & Guide
                                     </div>
 
                                 </div>

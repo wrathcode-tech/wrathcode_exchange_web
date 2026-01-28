@@ -578,9 +578,9 @@ const Swap = () => {
               <li>
                 <span>Swapping Fee</span>
                 {fromCurrency ? (
-                  `${formatNumber(fromCurrency?.swappingFee || 0)} ${fromCurrency?.short_name || "USDT"}`
+                  `${formatNumber(fromCurrency?.swappingFee || 0)}%`
                 ) : (
-                  "0.1 USDT"
+                  "0.00%"
                 )}
               </li>
             </ul>
@@ -598,8 +598,14 @@ const Swap = () => {
                   <p>
                     Available {formatNumber(fromCurrency?.balance || 0, 4)} {fromCurrency?.short_name || "USDT"}
                     {isLoggedIn && (
-                      <Link to="/asset_managemnet/deposit">
+                      <Link to="/asset_managemnet/deposit" style={{ color: "#f3bb2c" }}>
                         <i className="ri-add-circle-fill"></i>
+
+                      </Link>
+                    )}
+                    {isLoggedIn && (
+                      <Link to="/user_profile/asset_overview" style={{ color: "#f3bb2c" }}>
+                        <i className="ri-exchange-line"></i>
                       </Link>
                     )}
                   </p>
@@ -621,7 +627,7 @@ const Swap = () => {
                     name="fromSwap"
                     value={fromCurrencyAmount}
                     onChange={handleSwapInput}
-                    placeholder="0"
+                    placeholder={`0`}
                     style={{
                       color: "#fff",
                       background: "transparent",
@@ -710,7 +716,8 @@ const Swap = () => {
         <div className="dashboard_recent_s swap_tb_his">
           <div className="user_list_top">
             <div className="d-flex-between  mb-3  custom_dlflex">
-              <h4>Recent Transactions </h4>
+              <h4>Recent Transactions  <small><Link to="/user_profile/swap_history" className="mx-2 text-white"><small>View All<i className="ri-arrow-right-line"></i></small></Link></small></h4>
+             
               <div className="searchBar custom-tabs">
                 <i className="ri-search-2-line"></i>
                 <input
@@ -720,12 +727,15 @@ const Swap = () => {
                   value={historySearch}
                   onChange={(e) => setHistorySearch(e.target.value)}
                 />
+                
               </div>
+             
+             
             </div>
           </div>
           <div className="desktop_view2">
             <div className='table-responsive'>
-              <table>
+             {filteredHistory.length > 0 ? <table>
                 <thead>
                   <tr>
                     <th>S.No</th>
@@ -753,26 +763,38 @@ const Swap = () => {
                       </tr>
                     ))
                   ) : (
-                    <tr>
-                      <td colSpan="8" className="text-center py-4">
-                        {isLoggedIn ? "No transactions found" : "Please login to view transactions"}
-                      </td>
-                    </tr>
+                    <tr rowSpan="5" className="no-data-row">
+                          <td colSpan="12">
+                            <div className="no-data-wrapper">
+                              <div className="no_data_vector">
+                                <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
+                              </div>
+
+                            </div>
+
+                          </td>
+                        </tr>
                   )}
                 </tbody>
               </table>
+              :
+              <div className="table_responsive_2">
+                        <div className="favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
+                        </div>}
 
             </div>
           </div>
 
           <div className="mobile_view">
             <div className='table-responsive'>
-              <table>
+             {filteredHistory.length > 0 ? <table>
                 <thead>
                   <tr>
                     <th>Swapping Currencies</th>
                     <th>Pay Amount</th>
-                    <th>Get Amount</th>
+                    <th>Get Amount/Fee</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -781,18 +803,29 @@ const Swap = () => {
                       <tr key={item?._id || index}>
                         <td>{item?.from} <i className="ri-arrow-right-double-line"></i> {item?.to}</td>
                         <td>{formatNumber(item?.pay_amount)} {item?.from}</td>
-                        <td>{formatNumber(item?.get_amount)} {item?.to}</td>
+                        <td>{formatNumber(item?.get_amount)} {item?.to}<br/>{formatNumber(item?.fee)} {item?.to}</td>
                       </tr>
                     ))
                   ) : (
-                    <tr>
-                      <td colSpan="3" className="text-center py-4">
-                        {isLoggedIn ? "No transactions found" : "Please login to view transactions"}
-                      </td>
-                    </tr>
+                    <tr rowSpan="1" className="no-data-row">
+                    <td colSpan="12">
+                      <div className="no-data-wrapper">
+                        <div className="no_data_vector">
+                        <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>
+
+                      </div>
+
+                    </td>
+                  </tr>
                   )}
                 </tbody>
               </table>
+              :   <div className="table_responsive_2">
+                          <div className="favouriteData">
+                            <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                          </div>
+                          </div>}
 
             </div>
           </div>
@@ -918,31 +951,40 @@ const Swap = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>Swapping Fee</td>
+                      <td>Swapping Fee ({formatNumber(fromCurrency?.swappingFee || 0)}%)</td>
                       <td className="right_t price_tb">
-                        {formatNumber(fromCurrency?.swappingFee || 0)} {fromCurrency?.short_name}
+                        {formatNumber(
+                          safeParseNumber(receiveCurrencyAmount)
+                            .multipliedBy(safeParseNumber(fromCurrency?.swappingFee || 0))
+                            .dividedBy(100)
+                            .toNumber()
+                        )} {receiveCurrency?.short_name}
                       </td>
                     </tr>
                     <tr>
                       <td>Deductable Amount</td>
                       <td className="right_t price_tb">
-                        {formatNumber(
-                          safeParseNumber(fromCurrency?.swappingFee)
-                            .plus(safeParseNumber(fromCurrencyAmount))
-                            .toNumber()
-                        )} {fromCurrency?.short_name}
+                        {formatNumber(fromCurrencyAmount)} {fromCurrency?.short_name}
                       </td>
                     </tr>
                     <tr>
                       <td>Receivable Amount (Approx.)</td>
                       <td className="right_t price_tb">
-                        {formatNumber(receiveCurrencyAmount)} {receiveCurrency?.short_name}
+                        {formatNumber(
+                          safeParseNumber(receiveCurrencyAmount)
+                            .minus(
+                              safeParseNumber(receiveCurrencyAmount)
+                                .multipliedBy(safeParseNumber(fromCurrency?.swappingFee || 0))
+                                .dividedBy(100)
+                            )
+                            .toNumber()
+                        )} {receiveCurrency?.short_name}
                       </td>
                     </tr>
                     <tr>
                       <td colSpan="2" className="">
                         <small>
-                        <i className="ri-information-2-line"></i> This is an internal transfer. The final disbursed amount will be based on the current market rate at the time of execution. Minor fluctuations may occur between placing the order and its execution.
+                          <i className="ri-information-2-line"></i> This is an internal transfer. The final disbursed amount will be based on the current market rate at the time of execution. Minor fluctuations may occur between placing the order and its execution.
                         </small>
                       </td>
                     </tr>
@@ -950,13 +992,13 @@ const Swap = () => {
                 </table>
                 <div className="mt-3">
                   <form>
-                  <button
-                    className="swap_button "
-                    onClick={handleCurrencySwapping}
-                    disabled={isSwapping || !validationResult.isValid}
-                  >
-                    {isSwapping ? "Processing..." : "Confirm Order"}
-                  </button>
+                    <button
+                      className="swap_button "
+                      onClick={handleCurrencySwapping}
+                      disabled={isSwapping || !validationResult.isValid}
+                    >
+                      {isSwapping ? "Processing..." : "Confirm Order"}
+                    </button>
                   </form>
                 </div>
               </div>

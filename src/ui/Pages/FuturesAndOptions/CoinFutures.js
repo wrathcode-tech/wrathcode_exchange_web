@@ -49,11 +49,11 @@ function CoinFutures() {
 
     return (
         <>
-            <div class="usd_future_dashboard">
-                <div class="top_bar_usd_future">
-                    <div class="top_future_left_s">
-                        <div class="usd_left_pr">
-                            <div class="btcusd__currency" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div className="usd_future_dashboard">
+                <div className="top_bar_usd_future">
+                    <div className="top_future_left_s">
+                        <div className="usd_left_pr">
+                            <div className="btcusd__currency" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <img src="/images/futures_img/btc_usd_icon.svg" alt="bitcoin" /> BTC PERP/USDT
                                 <span>
                                     <img src="/images/futures_img/arrowbottom_icon.svg" alt="arrow" />
@@ -61,60 +61,60 @@ function CoinFutures() {
                             </div>
 
                             {/* <!-- Modal --> */}
-                            <div class="modal fade currency_popup_s" id="exampleModal" tabindex="-1"
+                            <div className="modal fade currency_popup_s" id="exampleModal" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body">
-                                            <div class="search_form">
+                                        <div className="modal-body">
+                                            <div className="search_form">
                                                 <img src="/images/futures_img/search_icon.svg" alt="search" />
                                                 <input type="search" placeholder="Search" />
                                             </div>
-                                            <div class="bn-tabs_favorites_bl">
-                                                <div class="top_tabs_center">
-                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link active" id="favorites-tab"
+                                            <div className="bn-tabs_favorites_bl">
+                                                <div className="top_tabs_center">
+                                                    <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                                        <li className="nav-item" role="presentation">
+                                                            <button className="nav-link active" id="favorites-tab"
                                                                 data-bs-toggle="tab" data-bs-target="#favorites" type="button"
                                                                 role="tab" aria-controls="favorites"
                                                                 aria-selected="true">Favorites</button>
                                                         </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link" id="usd-tab" data-bs-toggle="tab"
+                                                        <li className="nav-item" role="presentation">
+                                                            <button className="nav-link" id="usd-tab" data-bs-toggle="tab"
                                                                 data-bs-target="#usd-m" type="button" role="tab"
                                                                 aria-controls="usd-m" aria-selected="false">USDⓈ-M</button>
                                                         </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link" id="coin-tab" data-bs-toggle="tab"
+                                                        <li className="nav-item" role="presentation">
+                                                            <button className="nav-link" id="coin-tab" data-bs-toggle="tab"
                                                                 data-bs-target="#coin-m" type="button" role="tab"
                                                                 aria-controls="coin-m" aria-selected="false">COIN-M</button>
                                                         </li>
                                                     </ul>
 
-                                                    <div class="all_tabs_toggle">
+                                                    <div className="all_tabs_toggle">
                                                         All <img src="/images/futures_img/arrowbottom_icon.svg" alt="arrow" />
                                                     </div>
 
-                                                    <div class="orderbook_lightbox toggleactive">
+                                                    <div className="orderbook_lightbox toggleactive">
                                                         <h6>Orderbook Preference</h6>
                                                         <form>
-                                                            <div class="d-flex gap-3">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" id="all" />
-                                                                    <label class="form-check-label" for="all">All</label>
+                                                            <div className="d-flex gap-3">
+                                                                <div className="form-check">
+                                                                    <input className="form-check-input" type="checkbox" id="all" />
+                                                                    <label className="form-check-label" for="all">All</label>
                                                                 </div>
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" id="perpetual" />
-                                                                    <label class="form-check-label" for="perpetual">Perpetual</label>
+                                                                <div className="form-check">
+                                                                    <input className="form-check-input" type="checkbox" id="perpetual" />
+                                                                    <label className="form-check-label" for="perpetual">Perpetual</label>
                                                                 </div>
 
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" id="delivery" />
-                                                                    <label class="form-check-label" for="delivery">Delivery</label>
+                                                                <div className="form-check">
+                                                                    <input className="form-check-input" type="checkbox" id="delivery" />
+                                                                    <label className="form-check-label" for="delivery">Delivery</label>
                                                                 </div>
 
                                                             </div>
@@ -124,79 +124,79 @@ function CoinFutures() {
 
                                                 </div>
 
-                                                <div class="tab-content" id="myTabContent">
-                                                    <div class="tab-pane fade show active" id="favorites" role="tabpanel"
+                                                <div className="tab-content" id="myTabContent">
+                                                    <div className="tab-pane fade show active" id="favorites" role="tabpanel"
                                                         aria-labelledby="favorites-tab">
 
-                                                        <ul class="nav nav-tabs" id="myTab_three" role="tablist">
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link active" id="all-tab"
+                                                        <ul className="nav nav-tabs" id="myTab_three" role="tablist">
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link active" id="all-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#all" type="button"
                                                                     role="tab" aria-controls="all"
                                                                     aria-selected="true">All</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="new_listing-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="new_listing-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#new_listing"
                                                                     type="button" role="tab" aria-controls="new_listing"
                                                                     aria-selected="false">New Listing</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="usdc-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="usdc-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#usdc" type="button" role="tab"
                                                                     aria-controls="usdc" aria-selected="false">USDC</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="ai-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="ai-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#ai" type="button" role="tab"
                                                                     aria-controls="ai" aria-selected="false">AI</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="rwa-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="rwa-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#rwa" type="button" role="tab"
                                                                     aria-controls="rwa" aria-selected="false">RWA</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layerone-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layerone-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#layerone" type="button" role="tab"
                                                                     aria-controls="layerone" aria-selected="false">Layer
                                                                     1</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layertwo-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layertwo-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#layertwo" type="button" role="tab"
                                                                     aria-controls="layertwo" aria-selected="false">Layer
                                                                     2</button>
                                                             </li>
-                                                            <li class="nav-item dropdown" role="presentation">
-                                                                <a class="nav-link dropdown-toggle" id="dropdownMenu"
+                                                            <li className="nav-item dropdown" role="presentation">
+                                                                <a className="nav-link dropdown-toggle" id="dropdownMenu"
                                                                     data-bs-toggle="dropdown" href="#" role="button">
                                                                     Gaming
                                                                 </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                <ul className="dropdown-menu">
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#infrastructure">Infrastructure</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#DeFi">DeFi</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#metaverse">Metaverse</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#payment">Payment</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#pow">PoW</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#storage">Storage</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#nft">NFT</a></li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
 
-                                                        <div class="tab-content" id="myTabContent">
-                                                            <div class="tab-pane fade show active" id="all" role="tabpanel"
+                                                        <div className="tab-content" id="myTabContent">
+                                                            <div className="tab-pane fade show active" id="all" role="tabpanel"
                                                                 aria-labelledby="all-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -209,8 +209,8 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -232,7 +232,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -240,13 +240,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -268,7 +268,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -276,13 +276,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -304,7 +304,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -312,13 +312,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -340,7 +340,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -348,13 +348,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -376,7 +376,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -384,13 +384,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -412,7 +412,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -420,13 +420,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -448,7 +448,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -456,7 +456,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -464,10 +464,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="new_listing" role="tabpanel"
+                                                            <div className="tab-pane fade" id="new_listing" role="tabpanel"
                                                                 aria-labelledby="new_listing-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -483,9 +483,9 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="usdc" role="tabpanel"
+                                                            <div className="tab-pane fade" id="usdc" role="tabpanel"
                                                                 aria-labelledby="usdc-tab">
-                                                                <div class="no_data_found">
+                                                                <div className="no_data_found">
                                                                     <svg className="bn-svg text-[96px]" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z" fill="#AEB4BC" />
                                                                         <path
@@ -508,10 +508,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="ai" role="tabpanel"
+                                                            <div className="tab-pane fade" id="ai" role="tabpanel"
                                                                 aria-labelledby="ai-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -527,10 +527,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="rwa" role="tabpanel"
+                                                            <div className="tab-pane fade" id="rwa" role="tabpanel"
                                                                 aria-labelledby="rwa-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -546,10 +546,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layerone" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layerone" role="tabpanel"
                                                                 aria-labelledby="layerone-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -565,10 +565,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layertwo" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layertwo" role="tabpanel"
                                                                 aria-labelledby="layertwo-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -581,12 +581,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -594,17 +594,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -612,17 +612,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -630,17 +630,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -648,7 +648,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -656,10 +656,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="infrastructure" role="tabpanel"
+                                                            <div className="tab-pane fade" id="infrastructure" role="tabpanel"
                                                                 aria-labelledby="infrastructure-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -672,12 +672,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -685,17 +685,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -703,7 +703,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -711,10 +711,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="DeFi" role="tabpanel"
+                                                            <div className="tab-pane fade" id="DeFi" role="tabpanel"
                                                                 aria-labelledby="DeFi-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -727,12 +727,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -740,17 +740,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -758,7 +758,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -766,10 +766,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="metaverse" role="tabpanel"
+                                                            <div className="tab-pane fade" id="metaverse" role="tabpanel"
                                                                 aria-labelledby="metaverse-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -782,12 +782,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -795,17 +795,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -813,7 +813,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -821,10 +821,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="payment" role="tabpanel"
+                                                            <div className="tab-pane fade" id="payment" role="tabpanel"
                                                                 aria-labelledby="payment-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -837,12 +837,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -850,17 +850,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -868,7 +868,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -877,10 +877,10 @@ function CoinFutures() {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="tab-pane fade" id="pow" role="tabpanel"
+                                                            <div className="tab-pane fade" id="pow" role="tabpanel"
                                                                 aria-labelledby="pow-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -893,12 +893,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -906,17 +906,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -924,7 +924,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -932,10 +932,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="storage" role="tabpanel"
+                                                            <div className="tab-pane fade" id="storage" role="tabpanel"
                                                                 aria-labelledby="storage-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -948,12 +948,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -961,17 +961,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -979,7 +979,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -987,10 +987,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="nft" role="tabpanel"
+                                                            <div className="tab-pane fade" id="nft" role="tabpanel"
                                                                 aria-labelledby="nft-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1003,12 +1003,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1016,17 +1016,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1034,7 +1034,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1045,80 +1045,80 @@ function CoinFutures() {
 
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane fade" id="usd-m" role="tabpanel"
+                                                    <div className="tab-pane fade" id="usd-m" role="tabpanel"
                                                         aria-labelledby="usd-m-tab">
 
-                                                        <ul class="nav nav-tabs" id="myTab_three" role="tablist">
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link active" id="all_two-tab"
+                                                        <ul className="nav nav-tabs" id="myTab_three" role="tablist">
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link active" id="all_two-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#all_two" type="button"
                                                                     role="tab" aria-controls="all_two"
                                                                     aria-selected="true">All</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="new_listing_two-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="new_listing_two-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#new_listing_two"
                                                                     type="button" role="tab" aria-controls="new_listing_two"
                                                                     aria-selected="false">New Listing</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="usdc_two-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="usdc_two-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#usdc_two" type="button" role="tab"
                                                                     aria-controls="usdc_two" aria-selected="false">USDC</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="ai_two-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="ai_two-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#ai_two" type="button" role="tab"
                                                                     aria-controls="ai_two" aria-selected="false">AI</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="rwa_two-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="rwa_two-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#rwa_two" type="button" role="tab"
                                                                     aria-controls="rwa_two" aria-selected="false">RWA</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layerone_2-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layerone_2-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#layerone_2"
                                                                     type="button" role="tab" aria-controls="layerone_2"
                                                                     aria-selected="false">Layer
                                                                     1</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layertwo_2-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layertwo_2-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#layertwo_2"
                                                                     type="button" role="tab" aria-controls="layertwo_2"
                                                                     aria-selected="false">Layer
                                                                     2</button>
                                                             </li>
-                                                            <li class="nav-item dropdown" role="presentation">
-                                                                <a class="nav-link dropdown-toggle" id="dropdownMenu"
+                                                            <li className="nav-item dropdown" role="presentation">
+                                                                <a className="nav-link dropdown-toggle" id="dropdownMenu"
                                                                     data-bs-toggle="dropdown" href="#" role="button">
                                                                     Gaming
                                                                 </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                <ul className="dropdown-menu">
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#infrastructure_1">Infrastructure</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#DeFi_1">DeFi</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#metaverse_1">Metaverse</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#payment_1">Payment</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#pow_1">PoW</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#storage_1">Storage</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#nft_1">NFT</a></li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
 
-                                                        <div class="tab-content" id="myTabContent">
-                                                            <div class="tab-pane fade show active" id="all_two" role="tabpanel"
+                                                        <div className="tab-content" id="myTabContent">
+                                                            <div className="tab-pane fade show active" id="all_two" role="tabpanel"
                                                                 aria-labelledby="all_two-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1131,8 +1131,8 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1154,7 +1154,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1162,13 +1162,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1190,7 +1190,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1198,13 +1198,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1226,7 +1226,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1234,13 +1234,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1262,7 +1262,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1270,13 +1270,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1298,7 +1298,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1306,13 +1306,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1334,7 +1334,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1342,13 +1342,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -1370,7 +1370,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1378,7 +1378,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1386,10 +1386,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="new_listing_two" role="tabpanel"
+                                                            <div className="tab-pane fade" id="new_listing_two" role="tabpanel"
                                                                 aria-labelledby="new_listing_two-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -1405,10 +1405,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="usdc_two" role="tabpanel"
+                                                            <div className="tab-pane fade" id="usdc_two" role="tabpanel"
                                                                 aria-labelledby="usdc_two-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -1424,10 +1424,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="ai_two" role="tabpanel"
+                                                            <div className="tab-pane fade" id="ai_two" role="tabpanel"
                                                                 aria-labelledby="ai_two-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -1443,10 +1443,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="rwa_two" role="tabpanel"
+                                                            <div className="tab-pane fade" id="rwa_two" role="tabpanel"
                                                                 aria-labelledby="rwa_two-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -1462,10 +1462,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layerone_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layerone_2" role="tabpanel"
                                                                 aria-labelledby="layerone_2-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -1481,10 +1481,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layertwo_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layertwo_2" role="tabpanel"
                                                                 aria-labelledby="layertwo_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1497,12 +1497,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1510,17 +1510,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1528,17 +1528,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1546,17 +1546,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1564,7 +1564,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1574,10 +1574,10 @@ function CoinFutures() {
                                                             </div>
 
 
-                                                            <div class="tab-pane fade" id="infrastructure_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="infrastructure_1" role="tabpanel"
                                                                 aria-labelledby="infrastructure_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1590,12 +1590,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1603,17 +1603,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1621,7 +1621,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1629,10 +1629,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="DeFi_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="DeFi_1" role="tabpanel"
                                                                 aria-labelledby="DeFi_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1645,12 +1645,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1658,17 +1658,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1676,7 +1676,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1684,10 +1684,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="metaverse_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="metaverse_1" role="tabpanel"
                                                                 aria-labelledby="metaverse_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1700,12 +1700,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1713,17 +1713,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1731,7 +1731,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1739,10 +1739,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="payment_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="payment_1" role="tabpanel"
                                                                 aria-labelledby="payment_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1755,12 +1755,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1768,17 +1768,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1786,7 +1786,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1795,10 +1795,10 @@ function CoinFutures() {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="tab-pane fade" id="pow_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="pow_1" role="tabpanel"
                                                                 aria-labelledby="pow_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1811,12 +1811,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1824,17 +1824,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1842,7 +1842,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1850,10 +1850,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="storage_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="storage_1" role="tabpanel"
                                                                 aria-labelledby="storage_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1866,12 +1866,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1879,17 +1879,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1897,7 +1897,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1905,10 +1905,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="nft_1" role="tabpanel"
+                                                            <div className="tab-pane fade" id="nft_1" role="tabpanel"
                                                                 aria-labelledby="nft_1-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -1921,12 +1921,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1934,17 +1934,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -1952,7 +1952,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -1965,80 +1965,80 @@ function CoinFutures() {
                                                         </div>
 
                                                     </div>
-                                                    <div class="tab-pane fade" id="coin-m" role="tabpanel"
+                                                    <div className="tab-pane fade" id="coin-m" role="tabpanel"
                                                         aria-labelledby="coin-m-tab">
 
-                                                        <ul class="nav nav-tabs" id="myTab_four" role="tablist">
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link active" id="all_one-tab"
+                                                        <ul className="nav nav-tabs" id="myTab_four" role="tablist">
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link active" id="all_one-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#allone" type="button"
                                                                     role="tab" aria-controls="allone"
                                                                     aria-selected="true">All</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="new_listingone-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="new_listingone-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#new_listingone"
                                                                     type="button" role="tab" aria-controls="new_listingone"
                                                                     aria-selected="false">New Listing</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="usdcone-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="usdcone-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#usdcone" type="button" role="tab"
                                                                     aria-controls="usdcone" aria-selected="false">USDC</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="aione-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="aione-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#aione" type="button" role="tab"
                                                                     aria-controls="aione" aria-selected="false">AI</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="rwaone-tab" data-bs-toggle="tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="rwaone-tab" data-bs-toggle="tab"
                                                                     data-bs-target="#rwaone" type="button" role="tab"
                                                                     aria-controls="rwaone" aria-selected="false">RWA</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layerone_i-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layerone_i-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#layerone_i"
                                                                     type="button" role="tab" aria-controls="layerone_i"
                                                                     aria-selected="false">Layer
                                                                     1</button>
                                                             </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="layertwo_i-tab"
+                                                            <li className="nav-item" role="presentation">
+                                                                <button className="nav-link" id="layertwo_i-tab"
                                                                     data-bs-toggle="tab" data-bs-target="#layertwo_i"
                                                                     type="button" role="tab" aria-controls="layertwo_i"
                                                                     aria-selected="false">Layer
                                                                     2</button>
                                                             </li>
-                                                            <li class="nav-item dropdown" role="presentation">
-                                                                <a class="nav-link dropdown-toggle" id="dropdownMenu"
+                                                            <li className="nav-item dropdown" role="presentation">
+                                                                <a className="nav-link dropdown-toggle" id="dropdownMenu"
                                                                     data-bs-toggle="dropdown" href="#" role="button">
                                                                     Gaming
                                                                 </a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                <ul className="dropdown-menu">
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#infrastructure_2">Infrastructure</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#DeFi_2">DeFi</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#metaverse_2">Metaverse</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#payment_2">Payment</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#pow_2">PoW</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#storage_2">Storage</a></li>
-                                                                    <li><a class="dropdown-item" data-bs-toggle="tab"
+                                                                    <li><a className="dropdown-item" data-bs-toggle="tab"
                                                                         href="#nft_2">NFT</a></li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
 
-                                                        <div class="tab-content" id="myTabContent">
-                                                            <div class="tab-pane fade show active" id="allone" role="tabpanel"
+                                                        <div className="tab-content" id="myTabContent">
+                                                            <div className="tab-pane fade show active" id="allone" role="tabpanel"
                                                                 aria-labelledby="allone-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2051,8 +2051,8 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2074,7 +2074,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2082,13 +2082,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2110,7 +2110,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2118,13 +2118,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2146,7 +2146,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2154,13 +2154,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2182,7 +2182,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2190,13 +2190,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2218,7 +2218,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2226,13 +2226,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2254,7 +2254,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2262,13 +2262,13 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <svg enable-background="new 0 0 500 500"
                                                                                                     height="500px" id="Layer_1"
                                                                                                     version="1.1"
@@ -2290,7 +2290,7 @@ function CoinFutures() {
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2298,7 +2298,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2306,10 +2306,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="new_listingone" role="tabpanel"
+                                                            <div className="tab-pane fade" id="new_listingone" role="tabpanel"
                                                                 aria-labelledby="new_listingone-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -2325,10 +2325,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="usdcone" role="tabpanel"
+                                                            <div className="tab-pane fade" id="usdcone" role="tabpanel"
                                                                 aria-labelledby="usdcone-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -2344,10 +2344,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="aione" role="tabpanel"
+                                                            <div className="tab-pane fade" id="aione" role="tabpanel"
                                                                 aria-labelledby="aione-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -2363,10 +2363,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="rwaone" role="tabpanel"
+                                                            <div className="tab-pane fade" id="rwaone" role="tabpanel"
                                                                 aria-labelledby="rwaone-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -2382,10 +2382,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layerone_i" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layerone_i" role="tabpanel"
                                                                 aria-labelledby="layerone_i-tab">
-                                                                <div class="no_data_found">
-                                                                    <svg class="bn-svg text-[96px]" viewBox="0 0 96 96"
+                                                                <div className="no_data_found">
+                                                                    <svg className="bn-svg text-[96px]" viewBox="0 0 96 96"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                                         <path opacity="0.5" d="M84 28H64V8l20 20z"
                                                                             fill="#AEB4BC"></path>
@@ -2401,10 +2401,10 @@ function CoinFutures() {
                                                                     <p>No symbol under this category</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="layertwo_i" role="tabpanel"
+                                                            <div className="tab-pane fade" id="layertwo_i" role="tabpanel"
                                                                 aria-labelledby="layertwo_i-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2417,12 +2417,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2430,17 +2430,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2448,17 +2448,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2466,17 +2466,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2484,7 +2484,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2492,10 +2492,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="infrastructure_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="infrastructure_2" role="tabpanel"
                                                                 aria-labelledby="infrastructure_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2508,12 +2508,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2521,17 +2521,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2539,7 +2539,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2547,10 +2547,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="DeFi_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="DeFi_2" role="tabpanel"
                                                                 aria-labelledby="DeFi_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2563,12 +2563,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2576,17 +2576,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2594,7 +2594,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2602,10 +2602,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="metaverse_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="metaverse_2" role="tabpanel"
                                                                 aria-labelledby="metaverse_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2618,12 +2618,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2631,17 +2631,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2649,7 +2649,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2657,10 +2657,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="payment_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="payment_2" role="tabpanel"
                                                                 aria-labelledby="payment_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2673,12 +2673,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2686,17 +2686,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2704,7 +2704,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2713,10 +2713,10 @@ function CoinFutures() {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="tab-pane fade" id="pow_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="pow_2" role="tabpanel"
                                                                 aria-labelledby="pow_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2729,12 +2729,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2742,17 +2742,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2760,7 +2760,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2768,10 +2768,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="storage_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="storage_2" role="tabpanel"
                                                                 aria-labelledby="storage_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2784,12 +2784,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2797,17 +2797,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2815,7 +2815,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2823,10 +2823,10 @@ function CoinFutures() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade" id="nft_2" role="tabpanel"
+                                                            <div className="tab-pane fade" id="nft_2" role="tabpanel"
                                                                 aria-labelledby="nft_2-tab">
-                                                                <div class="currency_data_list">
-                                                                    <div class="table-responsive">
+                                                                <div className="currency_data_list">
+                                                                    <div className="table-responsive">
                                                                         <table>
                                                                             <thead>
                                                                                 <tr>
@@ -2839,12 +2839,12 @@ function CoinFutures() {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2852,17 +2852,17 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <div class="cnt_first_t">
-                                                                                            <div class="icon_currency">
+                                                                                        <div className="cnt_first_t">
+                                                                                            <div className="icon_currency">
                                                                                                 <img src="/images/futures_img/bitcoin_icon.png"
                                                                                                     alt="currency" />
                                                                                             </div>
-                                                                                            <div class="cnt">
+                                                                                            <div className="cnt">
                                                                                                 <h6>ETHUSDT <span>Perp</span>
                                                                                                 </h6>
                                                                                                 <p>Vol 29.27B</p>
@@ -2870,7 +2870,7 @@ function CoinFutures() {
                                                                                         </div>
                                                                                     </td>
                                                                                     <td>3,681.47</td>
-                                                                                    <td class="danger">-2.31%</td>
+                                                                                    <td className="danger">-2.31%</td>
                                                                                     <td>0.0000%</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -2897,52 +2897,52 @@ function CoinFutures() {
                             </div>
 
 
-                            <div class="price_top_right">
+                            <div className="price_top_right">
                                 19,338.14
                                 <span>+967.34 (3.56%)</span>
                             </div>
                         </div>
 
-                        <div class="market_price_list_top">
+                        <div className="market_price_list_top">
                             <ul>
                                 <li>
                                     <span>Mark Price</span>
-                                    <div class="price_tag">19,338.14</div>
+                                    <div className="price_tag">19,338.14</div>
                                 </li>
                                 <li>
                                     <span>Index Price</span>
-                                    <div class="price_tag">19,338.14</div>
+                                    <div className="price_tag">19,338.14</div>
                                 </li>
                                 <li>
                                     <span>24h Volume</span>
-                                    <div class="price_tag">187 M BTC</div>
+                                    <div className="price_tag">187 M BTC</div>
                                 </li>
                                 <li>
                                     <span>24h Turnover</span>
-                                    <div class="price_tag">187 M USDT</div>
+                                    <div className="price_tag">187 M USDT</div>
                                 </li>
                                 <li>
                                     <span>Open Interest</span>
-                                    <div class="price_tag">107,013 M lot</div>
+                                    <div className="price_tag">107,013 M lot</div>
                                 </li>
                                 <li>
                                     <span>Open Value</span>
-                                    <div class="price_tag">187 M BTC</div>
+                                    <div className="price_tag">187 M BTC</div>
                                 </li>
                                 <li>
                                     <span>Funding Rate/Funding Settlement</span>
-                                    <div class="price_tag"><span class="yellow">0.0021%</span> / 03:22:31</div>
+                                    <div className="price_tag"><span className="yellow">0.0021%</span> / 03:22:31</div>
                                 </li>
                                 <li>
                                     <span>Projected Funding Rate</span>
-                                    <div class="price_tag">0.0021%</div>
+                                    <div className="price_tag">0.0021%</div>
                                 </li>
                             </ul>
                         </div>
 
                     </div>
 
-                    <div class="top_future_right_s">
+                    <div className="top_future_right_s">
                         <ul>
                             <li><img src="/images/futures_img/classic_icon.svg" alt="Classic Version" />Classic Version</li>
                             <li><img src="/images/futures_img/network_icon.svg" alt="network" /></li>
@@ -2955,31 +2955,31 @@ function CoinFutures() {
                     </div>
                 </div>
 
-                <div class="dashboard_mid_s">
-                    <div class="dashboard_summary_lft">
+                <div className="dashboard_mid_s">
+                    <div className="dashboard_summary_lft">
                         <img src="/images/futures_img/dashboard_summry_left.svg" alt="dashboard" />
                     </div>
-                    <div class="order_trade_s">
+                    <div className="order_trade_s">
 
-                        <div class="order_book_info">
-                            <div class="top_hd_s">
+                        <div className="order_book_info">
+                            <div className="top_hd_s">
                                 <h2>Order Book</h2>
-                                <div class="toggle_dotted">
+                                <div className="toggle_dotted">
                                     <img src="/images/futures_img/dotted_toggle.svg" alt="toggle" />
                                 </div>
 
-                                <div class="orderbook_lightbox">
+                                <div className="orderbook_lightbox">
                                     <h6>Orderbook Preference</h6>
                                     <form>
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="d-flex gap-3">
+                                            <div className="form-check">
+                                                <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                <label className="form-check-label" for="tp-sl">TP/SL</label>
                                             </div>
 
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="tp-sl_2" />
-                                                <label class="form-check-label" for="tp-sl_2">TP/SL</label>
+                                            <div className="form-check">
+                                                <input className="form-check-input" type="checkbox" id="tp-sl_2" />
+                                                <label className="form-check-label" for="tp-sl_2">TP/SL</label>
                                             </div>
 
                                         </div>
@@ -2988,21 +2988,21 @@ function CoinFutures() {
 
                             </div>
 
-                            <div class="order_top_table_grid">
-                                <ul class="togglebtn">
+                            <div className="order_top_table_grid">
+                                <ul className="togglebtn">
                                     <li><img src="/images/futures_img/grid_toggle.svg" alt="toggle" /></li>
                                     <li><img src="/images/futures_img/grid_toggle2.svg" alt="toggle" /></li>
                                     <li><img src="/images/futures_img/grid_toggle3.svg" alt="toggle" /></li>
                                 </ul>
-                                <div class="order_right_toggle">
+                                <div className="order_right_toggle">
                                     <ul>
                                         <li>0.1 <img src="/images/futures_img/arrowright_dotted.svg" /></li>
                                         <li><img src="/images/futures_img/vertical_icon.svg" /></li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="table_info_data">
-                                <div class="table-responsive">
+                            <div className="table_info_data">
+                                <div className="table-responsive">
                                     <table>
                                         <thead>
                                             <tr>
@@ -3013,36 +3013,36 @@ function CoinFutures() {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="danger">18796.9</td>
+                                                <td className="danger">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="danger">18796.9</td>
+                                                <td className="danger">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="danger">18796.9</td>
+                                                <td className="danger">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="danger">18796.9</td>
+                                                <td className="danger">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="danger">18796.9</td>
+                                                <td className="danger">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
 
-                                            <tr class="totaltb">
-                                                <td class="danger">18,794.1</td>
+                                            <tr className="totaltb">
+                                                <td className="danger">18,794.1</td>
                                                 <td></td>
                                                 <td>
-                                                    <div class="subtotal">
+                                                    <div className="subtotal">
                                                         <div><span>M</span>18,794.1</div>
                                                         <div><span>IN</span>18,794.1</div>
                                                     </div>
@@ -3050,27 +3050,27 @@ function CoinFutures() {
                                             </tr>
 
                                             <tr>
-                                                <td class="sucess">18796.9</td>
+                                                <td className="sucess">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="sucess">18796.9</td>
+                                                <td className="sucess">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="sucess">18796.9</td>
+                                                <td className="sucess">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="sucess">18796.9</td>
+                                                <td className="sucess">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
                                             <tr>
-                                                <td class="sucess">18796.9</td>
+                                                <td className="sucess">18796.9</td>
                                                 <td>0.11106193</td>
                                                 <td>12.12946018</td>
                                             </tr>
@@ -3079,25 +3079,25 @@ function CoinFutures() {
                                 </div>
                             </div>
 
-                            <div class="trade_movers_tb">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="trades-tab" data-bs-toggle="tab"
+                            <div className="trade_movers_tb">
+                                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                    <li className="nav-item" role="presentation">
+                                        <button className="nav-link active" id="trades-tab" data-bs-toggle="tab"
                                             data-bs-target="#trades" type="button" role="tab" aria-controls="trades"
                                             aria-selected="true">Trades</button>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="top-movers-tab" data-bs-toggle="tab"
+                                    <li className="nav-item" role="presentation">
+                                        <button className="nav-link" id="top-movers-tab" data-bs-toggle="tab"
                                             data-bs-target="#top-movers" type="button" role="tab" aria-controls="top-movers"
                                             aria-selected="false">Top Movers</button>
                                     </li>
                                 </ul>
 
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="trades" role="tabpanel"
+                                <div className="tab-content" id="myTabContent">
+                                    <div className="tab-pane fade show active" id="trades" role="tabpanel"
                                         aria-labelledby="trades-tab">
-                                        <div class="table_info_data">
-                                            <div class="table-responsive">
+                                        <div className="table_info_data">
+                                            <div className="table-responsive">
                                                 <table>
                                                     <thead>
                                                         <tr>
@@ -3108,42 +3108,42 @@ function CoinFutures() {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
@@ -3155,10 +3155,10 @@ function CoinFutures() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="top-movers" role="tabpanel" aria-labelledby="top-movers-tab">
+                                    <div className="tab-pane fade" id="top-movers" role="tabpanel" aria-labelledby="top-movers-tab">
 
-                                        <div class="table_info_data">
-                                            <div class="table-responsive">
+                                        <div className="table_info_data">
+                                            <div className="table-responsive">
                                                 <table>
                                                     <thead>
                                                         <tr>
@@ -3169,42 +3169,42 @@ function CoinFutures() {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="danger">18796.9</td>
+                                                            <td className="danger">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="sucess">18796.9</td>
+                                                            <td className="sucess">18796.9</td>
                                                             <td>0.11106193</td>
                                                             <td>12.12946018</td>
                                                         </tr>
@@ -3223,97 +3223,97 @@ function CoinFutures() {
                         </div>
 
                     </div>
-                    <div class="relative_select_right">
-                        <div class="top_cross_dashboard">
+                    <div className="relative_select_right">
+                        <div className="top_cross_dashboard">
                             <ul>
                                 <li><a href="#">Cross</a></li>
                                 <li><a href="#">20x</a></li>
                             </ul>
-                            <div class="copy_icon">
+                            <div className="copy_icon">
                                 <img src="/images/futures_img/copy_vector.svg" alt="copy icon" />
                             </div>
                         </div>
 
-                        <div class="spot_future_">
+                        <div className="spot_future_">
                             <ul>
                                 <li><a href="#">Spot</a></li>
                                 <li><a href="#">Cross <span>5x <img src="/images/futures_img/arrowright_dotted.svg" /></span></a></li>
                                 <li><a href="#">Grid</a></li>
-                                <li class="active"><a href="#">Futures</a></li>
+                                <li className="active"><a href="#">Futures</a></li>
                             </ul>
                         </div>
-                        <div class="leverage_bl">
+                        <div className="leverage_bl">
                             <div>
-                                <div class="rage_txt">
+                                <div className="rage_txt">
                                     <img src="/images/futures_img/irage_icon.svg" alt="leverage" /> Leverage
                                 </div>
-                                <div class="range_price">20x <img src="/images/futures_img/arrowright_dotted.svg" /></div>
+                                <div className="range_price">20x <img src="/images/futures_img/arrowright_dotted.svg" /></div>
                             </div>
 
-                            <div class="plustext">
+                            <div className="plustext">
                                 +/=
                             </div>
                         </div>
 
-                        <div class="market_spot_form">
-                            <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                        <div className="market_spot_form">
+                            <ul className="nav nav-tabs" id="myTab2" role="tablist">
                                 {/* <!-- Normal Tabs --> */}
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="limit-tab" data-bs-toggle="tab" data-bs-target="#limit"
+                                <li className="nav-item" role="presentation">
+                                    <button className="nav-link active" id="limit-tab" data-bs-toggle="tab" data-bs-target="#limit"
                                         type="button" role="tab" aria-controls="limit" aria-selected="true">Limit</button>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market"
+                                <li className="nav-item" role="presentation">
+                                    <button className="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market"
                                         type="button" role="tab" aria-controls="market" aria-selected="false">Market</button>
                                 </li>
 
                                 {/* <!-- Dropdown Tab --> */}
-                                <li class="nav-item dropdown" role="presentation">
+                                <li className="nav-item dropdown" role="presentation">
                                     {/* <!-- Give an ID to dropdown toggle so we can update it --> */}
-                                    <a class="nav-link dropdown-toggle" id="dropdownMenu" data-bs-toggle="dropdown" href="#"
+                                    <a className="nav-link dropdown-toggle" id="dropdownMenu" data-bs-toggle="dropdown" href="#"
                                         role="button">
                                         Stop Limit
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" data-bs-toggle="tab" href="#stop-market">Stop Market</a>
+                                    <ul className="dropdown-menu">
+                                        <li><a className="dropdown-item" data-bs-toggle="tab" href="#stop-market">Stop Market</a>
                                         </li>
-                                        <li><a class="dropdown-item" data-bs-toggle="tab" href="#post-only">Post Only</a></li>
-                                        <li><a class="dropdown-item" data-bs-toggle="tab" href="#twap">TWAP</a></li>
-                                        <li><a class="dropdown-item" data-bs-toggle="tab" href="#scaled-order">Scaled Order</a>
+                                        <li><a className="dropdown-item" data-bs-toggle="tab" href="#post-only">Post Only</a></li>
+                                        <li><a className="dropdown-item" data-bs-toggle="tab" href="#twap">TWAP</a></li>
+                                        <li><a className="dropdown-item" data-bs-toggle="tab" href="#scaled-order">Scaled Order</a>
                                         </li>
-                                        <li><a class="dropdown-item" data-bs-toggle="tab" href="#trailing-stop">Trailing
+                                        <li><a className="dropdown-item" data-bs-toggle="tab" href="#trailing-stop">Trailing
                                             Stop</a></li>
                                     </ul>
                                 </li>
                             </ul>
 
                             {/* <!-- Tab Content --> */}
-                            <div class="tab-content pt-1" id="myTabContent2">
-                                <div class="tab-pane fade show active" id="limit" role="tabpanel">
+                            <div className="tab-content pt-1" id="myTabContent2">
+                                <div className="tab-pane fade show active" id="limit" role="tabpanel">
 
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3322,44 +3322,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3367,30 +3367,30 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="market" role="tabpanel">
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                <div className="tab-pane fade" id="market" role="tabpanel">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3399,44 +3399,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        {/* <!-- <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        {/* <!-- <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3444,41 +3444,41 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="stop-market" role="tabpanel">
+                                <div className="tab-pane fade" id="stop-market" role="tabpanel">
 
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3487,44 +3487,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3532,41 +3532,41 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="post-only" role="tabpanel">
+                                <div className="tab-pane fade" id="post-only" role="tabpanel">
 
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3575,44 +3575,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3620,40 +3620,40 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="twap" role="tabpanel">
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                <div className="tab-pane fade" id="twap" role="tabpanel">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3662,44 +3662,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3707,40 +3707,40 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="scaled-order" role="tabpanel">
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                <div className="tab-pane fade" id="scaled-order" role="tabpanel">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3749,44 +3749,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3794,40 +3794,40 @@ function CoinFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="trailing-stop" role="tabpanel">
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                <div className="tab-pane fade" id="trailing-stop" role="tabpanel">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li>0%</li>
                                                 <li>25%</li>
@@ -3836,44 +3836,44 @@ function CoinFutures() {
                                                 <li>100%</li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3 align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3 align-items-center">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn">Buy/Long</button>
-                                                <button class="sellbtn">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn">Buy/Long</button>
+                                                <button className="sellbtn">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -3885,122 +3885,122 @@ function CoinFutures() {
                     </div>
                 </div>
 
-                <div class="trade_account_summary_assets">
-                    <div class="trade_summary_table_lft">
-                        <ul class="nav nav-tabs" id="myTab2" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="positions-tab" data-bs-toggle="tab"
+                <div className="trade_account_summary_assets">
+                    <div className="trade_summary_table_lft">
+                        <ul className="nav nav-tabs" id="myTab2" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link active" id="positions-tab" data-bs-toggle="tab"
                                     data-bs-target="#positions" type="button" role="tab" aria-controls="positions"
                                     aria-selected="true">Positions(0)</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="open-tab" data-bs-toggle="tab" data-bs-target="#open" type="button"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="open-tab" data-bs-toggle="tab" data-bs-target="#open" type="button"
                                     role="tab" aria-controls="open" aria-selected="false">Open Orders(0)</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="order_hist-tab" data-bs-toggle="tab" data-bs-target="#order_hist"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="order_hist-tab" data-bs-toggle="tab" data-bs-target="#order_hist"
                                     type="button" role="tab" aria-controls="order_hist" aria-selected="false">Order
                                     History</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history"
                                     type="button" role="tab" aria-controls="history" aria-selected="false">Trade
                                     History</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="transaction-tab" data-bs-toggle="tab" data-bs-target="#transaction"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="transaction-tab" data-bs-toggle="tab" data-bs-target="#transaction"
                                     type="button" role="tab" aria-controls="transaction" aria-selected="false">Transaction
                                     History</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="position_his-tab" data-bs-toggle="tab"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="position_his-tab" data-bs-toggle="tab"
                                     data-bs-target="#position_his" type="button" role="tab" aria-controls="position_his"
                                     aria-selected="false">Position History</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="bots-tab" data-bs-toggle="tab" data-bs-target="#bots" type="button"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="bots-tab" data-bs-toggle="tab" data-bs-target="#bots" type="button"
                                     role="tab" aria-controls="bots" aria-selected="false">Bots</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="assets-tab" data-bs-toggle="tab" data-bs-target="#assets"
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="assets-tab" data-bs-toggle="tab" data-bs-target="#assets"
                                     type="button" role="tab" aria-controls="assets" aria-selected="false">Assets</button>
                             </li>
                         </ul>
-                        <div class="tab-content pt-1" id="myTabContent2">
-                            <div class="tab-pane fade show active" id="positions" role="tabpanel">
+                        <div className="tab-content pt-1" id="myTabContent2">
+                            <div className="tab-pane fade show active" id="positions" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="open" role="tabpanel">
+                            <div className="tab-pane fade" id="open" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="order_hist" role="tabpanel">
+                            <div className="tab-pane fade" id="order_hist" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="history" role="tabpanel">
+                            <div className="tab-pane fade" id="history" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="transaction" role="tabpanel">
+                            <div className="tab-pane fade" id="transaction" role="tabpanel">
                                 <h4>cvvcxvxcvxcvvx 5</h4>
                             </div>
-                            <div class="tab-pane fade" id="position_his" role="tabpanel">
+                            <div className="tab-pane fade" id="position_his" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="bots" role="tabpanel">
+                            <div className="tab-pane fade" id="bots" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
-                            <div class="tab-pane fade" id="assets" role="tabpanel">
+                            <div className="tab-pane fade" id="assets" role="tabpanel">
                                 <h4>Open Futures Account to trade</h4>
                             </div>
                         </div>
                     </div>
-                    <div class="assets_right">
+                    <div className="assets_right">
                         <h2>Assets</h2>
-                        <div class="asset_total_value costbtc_total">
-                            <div class="d-flex align-items-center justify-content-between">
+                        <div className="asset_total_value costbtc_total">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h5>USDT-M</h5>
                                 </div>
                                 <div><span><img src="/images/futures_img/password_hide.svg" alt="hide" /></span></div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Total Assets</h6>
                                 </div>
                                 <div><span>123,456,789.12 USDT</span></div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Available</h6>
                                 </div>
                                 <div><span>123,456,789.12 USDT</span></div>
                             </div>
                             <hr />
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h5>USDT-M</h5>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Margin</h6>
                                 </div>
                                 <div><span>123,456,789.12 USDT</span></div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Debt Rate</h6>
                                 </div>
-                                <div><span class="green"><img src="/images/futures_img/range_low_icon.svg" /> 12% Low Risk</span></div>
+                                <div><span className="green"><img src="/images/futures_img/range_low_icon.svg" /> 12% Low Risk</span></div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Unrealized PNL</h6>
                                 </div>
-                                <div><span class="danger">-89.12 USDT</span></div>
+                                <div><span className="danger">-89.12 USDT</span></div>
                             </div>
 
 
-                            <div class="d-flex align-items-center justify-content-between buy_transferbtn">
+                            <div className="d-flex align-items-center justify-content-between buy_transferbtn">
                                 <button>Buy Crypto</button>
                                 <button>Transfer</button>
                             </div>

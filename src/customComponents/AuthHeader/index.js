@@ -337,16 +337,18 @@ const AuthHeader = () => {
                         <span className="notification_count">{notificationCounts.unseen}</span>
                       )}
                       <div className="annousment_s header_notification">
-                        {notifications?.map((item, index) => (
+                        {notifications?.length > 0 ? notifications?.map((item, index) => (
                           <div key={item?._id || index} className={`annousment_left ${!item?.isSeen && "active"}`} onClick={() => !item?.isSeen && openNotification()} >
                             <img src="/images/notification_icon.svg" alt="Notification Icon" />
                             {`${item?.title?.slice(0, 20)}...`}
                             : <span>  {!item?.isSeen && "Read Now"}</span>
                           </div>
-                        ))}
-                        <div className="more_btn"><Link to="/user_profile/notification">More<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-right" viewBox="0 0 16 16">
+                        )) : <div className="favouriteData">
+                          <img src="/images/no_data_vector.svg" className="img-fluid" width="96" height="96" alt="No data" />
+                        </div>}
+                        {notifications?.length > 0 && <div className="more_btn"><Link to="/user_profile/notification">More<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-right" viewBox="0 0 16 16">
                           <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
-                        </svg></Link></div>
+                        </svg></Link></div>}
                       </div>
                     </li>
                     <li className='wallet_tb' onClick={openAsserOverview}>

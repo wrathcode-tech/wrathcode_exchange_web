@@ -774,7 +774,7 @@ const KycPage = (props) => {
                                             }
                                         >
                                             {item.q}
-                                            <span className="icon"><i class="ri-arrow-down-s-line"></i></span>
+                                            <span className="icon"><i className="ri-arrow-down-s-line"></i></span>
                                         </button>
 
                                         <div className="faq_answer">

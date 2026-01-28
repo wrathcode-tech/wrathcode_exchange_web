@@ -18,7 +18,7 @@ const RegistrationVerification = () => {
   const [signId, setSignId] = useState("");
   const [registeredBy, setRegisteredBy] = useState("");
 
-  // Add loginbg class on mount for consistent styling
+  // Add loginbg className on mount for consistent styling
   useEffect(() => {
     $("body").addClass("loginbg");
     return () => {

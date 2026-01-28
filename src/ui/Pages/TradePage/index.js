@@ -1668,7 +1668,7 @@ const Trade = () => {
                                     <div className="assets_right">
                                         <div id="tab_4_mobile" className={`trade_card orderbook_two ${showTab !== "wallets" ? "d-none" : ""}`}>
                                             <div className="assets_list">
-                                                <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i class="ri-exchange-funds-fill"></i> Convert</Link></div>
+                                                <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i className="ri-exchange-funds-fill"></i> Convert</Link></div>
 
                                                 <div className="assets_btn">
                                                     <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>
@@ -1744,8 +1744,8 @@ const Trade = () => {
                                     </div>
                                     {/* buy sell dropbox is here */}
                                     <div className={`bs_dropbox d-lg-block ${!showBuySellTab && "d-none"}`} >
-                                        <div class="row">
-                                            <div class="col-lg-6">
+                                        <div className="row">
+                                            <div className="col-lg-6">
                                                 <div className="d-flex bottm_lightbox_two">
                                                     <div id="tab_3" className={`trade_card d-lg-block summay_dasboard_pop ${showTab !== "order_book" && "d-block"}`}>
                                                         <div className="treade_card_header d-block d-lg-flex"><div className="card_header_title active">Order Book</div></div>
@@ -2268,13 +2268,13 @@ const Trade = () => {
 
                         <div className="trade_account_summary_assets">
 
-                            <div class="trade_summary_table_lft mt-0 position_order trade_summary_table_lft_position_order">
-                                <div class="top_th_easyop border-0">
-                                    <ul class="position_list">
-                                        <li class={`nav-item positions ${positionOrderTab === "positions" ? "active" : ""}`} role="presentation">
+                            <div className="trade_summary_table_lft mt-0 position_order trade_summary_table_lft_position_order">
+                                <div className="top_th_easyop border-0">
+                                    <ul className="position_list">
+                                        <li className={`nav-item positions ${positionOrderTab === "positions" ? "active" : ""}`} role="presentation">
                                             <button onClick={() => setPositionOrderTab("positions")}>Open Orders</button>
                                         </li>
-                                        <li class={`nav-item open ${positionOrderTab === "open" ? "active" : ""}`} role="presentation">
+                                        <li className={`nav-item open ${positionOrderTab === "open" ? "active" : ""}`} role="presentation">
                                             <button onClick={() => setPositionOrderTab("open")}>Order History</button>
                                         </li>
 
@@ -2418,7 +2418,7 @@ const Trade = () => {
                                                         className="view_more_btn"
                                                         onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                                     >
-                                                        {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                        {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
 
                                                     </button>
 
@@ -2620,7 +2620,7 @@ const Trade = () => {
                                                         className="view_more_btn"
                                                         onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                                     >
-                                                        {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                        {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                                     </button>
 
                                                     <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -2662,7 +2662,7 @@ const Trade = () => {
 
                                     <div className="assets_list">
 
-                                        <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i class="ri-exchange-funds-fill"></i> Convert</Link></div>
+                                        <div className="top_heading"><h4>Wallets</h4><Link className="more_btn" to="/user_profile/asset_overview"><i className="ri-exchange-funds-fill"></i> Convert</Link></div>
 
                                         <div className="assets_btn">
                                             <button><Link to="/asset_managemnet/deposit">Deposit</Link></button>

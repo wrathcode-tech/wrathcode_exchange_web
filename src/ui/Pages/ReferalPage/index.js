@@ -227,8 +227,8 @@ const ReferalPage = () => {
                       <div className="card-body_inner referral_code_s">
                         <div className="mt-0">
                         <ul>
-                                    <li><div><i class="ri-link-m"></i> Referral link: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i class="ri-checkbox-multiple-blank-line"></i></a></span></li>
-                                    <li><div><i class="ri-user-line"></i>Referral code: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i class="ri-checkbox-multiple-blank-line"></i></a></span></li>
+                                    <li><div><i className="ri-link-m"></i> Referral link: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i className="ri-checkbox-multiple-blank-line"></i></a></span></li>
+                                    <li><div><i className="ri-user-line"></i>Referral code: </div><span>https://gatbits.com/refer_earn <a href="#" onClick={() => copyToClipboard('https://gatbits.com/refer_earn')}><i className="ri-checkbox-multiple-blank-line"></i></a></span></li>
                                   </ul>
                           {/* <div className="referrals__title">Invite friends & Earn <span className="text-gradient text-underline" >5000</span> SHIBA INU Free  </div> */}
                               <div className="field">

@@ -35,26 +35,26 @@ const RiskDisclosure = () => {
 
         <section className="termsofuse">
           <div className="container">
-            <div class="create-item-wrapper plicy_sec">
+            <div className="create-item-wrapper plicy_sec">
               <div>
                 Dear Valued Wrathcode Users,<br /><br />
                 <p>We want to emphasize the importance of understanding the substantial risks associated with cryptocurrency trading. The cryptocurrency market is inherently volatile and unpredictable. Before engaging in any cryptocurrency transactions, it is crucial that you carefully assess your risk tolerance and make informed decisions. </p>
                 <p>Key Points to Consider when Trading Cryptocurrencies on the Wrathcode Platform:</p>
                 <p><strong>1. KYC Requirements: &nbsp;</strong> Services such as Spot, Savings, and vote-to-list on the Wrathcode platform are exclusively accessible to verified Wrathcode users who have completed Know Your Customer (KYC) verification.                  </p>
                 <p><strong>2. Complete KYC:  &nbsp;</strong>It is imperative for users to complete their KYC verification and provide accurate personal information.</p>
-                <p class="mb-0"><strong>3. Account Security:  &nbsp;</strong>Safeguard your account and password diligently. Never share your account information or password with anyone else. Any losses incurred due to negligence in this regard will be the user's sole responsibility.</p>
+                <p className="mb-0"><strong>3. Account Security:  &nbsp;</strong>Safeguard your account and password diligently. Never share your account information or password with anyone else. Any losses incurred due to negligence in this regard will be the user's sole responsibility.</p>
                 <br />
-                <p class="mb-0"><strong class="d-block">4. Risk Categories:</strong></p>
+                <p className="mb-0"><strong className="d-block">4. Risk Categories:</strong></p>
                 <br />
-                <p> <strong>- Policy Risk:</strong><br /><span class="d-block ms-3">Changes in national laws, regulations, or macro-policies can impact cryptocurrency transactions and potentially lead to losses.</span></p>
-                <p> <strong>- Compliance Risk: </strong><br /><span class="d-block ms-3">Violation of national laws or regulations during cryptocurrency transactions can result in losses</span></p>
-                <p> <strong>-  Compliance Risk:</strong><br /><span class="d-block ms-3">Cryptocurrency markets operate around the clock, and prices can fluctuate significantly. Users should be prepared for both positive and negative returns</span></p>
-                <p> <strong>-  Trading Risk:</strong><br /><span class="d-block ms-3">Successful transactions require mutual agreement between parties; Wrathcode does not guarantee transaction success.</span></p>
-                <p> <strong>-  Force Majeure Risk:</strong><br /><span class="d-block ms-3">Unforeseeable events like natural disasters, cyber attacks, or other unavoidable circumstances can disrupt Wrathcode operations and lead to user losses. Wrathcode bears no civil liability for losses incurred under such conditions.</span></p>
-                <p> <strong>-  Delisting Risk:</strong><br /><span class="d-block ms-3">Delisting may occur due to various reasons, potentially causing user losses.</span></p>
-                <p> <strong>-  Technical Risk: </strong><br /><span class="d-block ms-3">Though rare, technical faults during cryptocurrency transactions can impact user interests.</span></p>
-                <p> <strong>-  Operation Risk:</strong><br /><span class="d-block ms-3">Operational errors, such as transferring funds to the wrong account, can result in losses.</span></p>
-                <p> <strong>-  Account Frozen Risk:</strong><br /><span class="d-block ms-3">Accounts may be frozen or confiscated by judicial institutions in case of debt defaults or alleged crimes.</span></p>
+                <p> <strong>- Policy Risk:</strong><br /><span className="d-block ms-3">Changes in national laws, regulations, or macro-policies can impact cryptocurrency transactions and potentially lead to losses.</span></p>
+                <p> <strong>- Compliance Risk: </strong><br /><span className="d-block ms-3">Violation of national laws or regulations during cryptocurrency transactions can result in losses</span></p>
+                <p> <strong>-  Compliance Risk:</strong><br /><span className="d-block ms-3">Cryptocurrency markets operate around the clock, and prices can fluctuate significantly. Users should be prepared for both positive and negative returns</span></p>
+                <p> <strong>-  Trading Risk:</strong><br /><span className="d-block ms-3">Successful transactions require mutual agreement between parties; Wrathcode does not guarantee transaction success.</span></p>
+                <p> <strong>-  Force Majeure Risk:</strong><br /><span className="d-block ms-3">Unforeseeable events like natural disasters, cyber attacks, or other unavoidable circumstances can disrupt Wrathcode operations and lead to user losses. Wrathcode bears no civil liability for losses incurred under such conditions.</span></p>
+                <p> <strong>-  Delisting Risk:</strong><br /><span className="d-block ms-3">Delisting may occur due to various reasons, potentially causing user losses.</span></p>
+                <p> <strong>-  Technical Risk: </strong><br /><span className="d-block ms-3">Though rare, technical faults during cryptocurrency transactions can impact user interests.</span></p>
+                <p> <strong>-  Operation Risk:</strong><br /><span className="d-block ms-3">Operational errors, such as transferring funds to the wrong account, can result in losses.</span></p>
+                <p> <strong>-  Account Frozen Risk:</strong><br /><span className="d-block ms-3">Accounts may be frozen or confiscated by judicial institutions in case of debt defaults or alleged crimes.</span></p>
                 <br />
                 <hr />
                 <br /><strong> Prohibited Actions on Wrathcode: </strong><br /><br />

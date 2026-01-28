@@ -1,252 +1,327 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import moment from "moment";
 import LoaderHelper from "../../../customComponents/Loading/LoaderHelper";
 import AuthService from "../../../api/services/AuthService";
-import { alertErrorMessage } from "../../../customComponents/CustomAlertMessage";
+import { alertErrorMessage, alertWarningMessage } from "../../../customComponents/CustomAlertMessage";
 
-const ActivitylogPage = (props) => {
+const ActivitylogPage = () => {
+  const isMountedRef = useRef(true);
 
-    const [activity, setActivity] = useState("");
-    const [updatedactivity, setupdatedactivity] = useState()
-    const [activityLength, setactivityLength] = useState()
-    const [updatedLength, setupdatedLength] = useState(5);
+  // State declarations
+  const [activity, setActivity] = useState([]);
+  const [activityLength, setActivityLength] = useState(0);
+  const [skip, setSkip] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const limit = 10;
 
-    const [skip, setSkip] = useState(0);
-    const limit = 10;
-
-
-    const bannerSettings = {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-        autoplaySpeed: 2000
+  // Cleanup on unmount
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
     };
+  }, []);
 
-    useEffect(() => {
-        activityLogs(skip);
-    }, []);
+  // Fetch activity logs
+  const activityLogs = useCallback(async (skipValue) => {
+    if (isLoading) return;
 
-    const activityLogs = async (skip) => {
-        LoaderHelper.loaderStatus(true)
-        await AuthService.getActivityLogs(skip, limit).then(async result => {
-            LoaderHelper.loaderStatus(false)
-            if (result?.success) {
-                setSkip(skip)
-                setactivityLength(result?.total_count || 0);
-                setActivity(result?.data)
-            } else {
-                alertErrorMessage(result?.message);
-            }
-        });
-    };
+    try {
+      setIsLoading(true);
+      LoaderHelper.loaderStatus(true);
 
-    const handlePaginationWalletHistory = (action) => {
-        if (action === 'prev') {
-            if (skip - limit >= 0) {
-                activityLogs(skip - limit);
-            }
-        } else if (action === 'next') {
-            if (skip + limit < activityLength) {
-                activityLogs(skip + limit);
-            }
-        } else if (action === 'first') {
-            activityLogs(0);
-        } else if (action === 'last') {
-            const lastPageSkip = Math.floor(activityLength);
-            if (activityLength > 10) {
-                const data = lastPageSkip - 10
-                activityLogs(data);
-            }
+      const result = await AuthService.getActivityLogs(skipValue, limit);
+
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        if (result?.data?.length > 0) {
+          setSkip(skipValue);
+          setActivityLength(result?.total_count || 0);
+          setActivity(result?.data || []);
+        } else if (skipValue !== 0) {
+          alertWarningMessage("No more data found");
+        } else {
+          setActivity([]);
+          setActivityLength(0);
         }
-    };
+      } else {
+        alertErrorMessage(result?.message || "Failed to fetch activity logs");
+      }
+    } catch (error) {
+      console.error("Failed to fetch activity logs:", error);
+      if (isMountedRef.current) {
+        alertErrorMessage("Failed to fetch activity logs. Please try again.");
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  }, [isLoading]);
 
-    useEffect(() => {
-        if (updatedLength > 5) {
-            const mql = window.matchMedia('(max-width: 768px)');
-            if (mql?.matches) {
-                window.scrollTo({
-                    top: document.documentElement.scrollHeight - 1900,
-                    left: 0,
-                    behavior: "smooth"
-                })
-            } else {
-                window.scrollTo({
-                    top: document.documentElement.scrollHeight - 1300,
-                    left: 0,
-                    behavior: "smooth"
-                })
-            }
-
+  // Pagination handler
+  const handlePagination = useCallback((action) => {
+    switch (action) {
+      case "prev":
+        if (skip - limit >= 0) {
+          activityLogs(skip - limit);
         }
-    }, [updatedactivity]);
+        break;
+      case "next":
+        if (skip + limit < activityLength) {
+          activityLogs(skip + limit);
+        }
+        break;
+      case "first":
+        if (skip !== 0) {
+          activityLogs(0);
+        }
+        break;
+      case "last":
+        if (activityLength > limit) {
+          const lastPageSkip = Math.floor((activityLength - 1) / limit) * limit;
+          if (skip !== lastPageSkip) {
+            activityLogs(lastPageSkip);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }, [skip, activityLength, activityLogs]);
 
+  // Initial load
+  useEffect(() => {
+    activityLogs(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // Format activity status for display
+  const formatActivityStatus = (status) => {
+    if (!status) return "Unknown Activity";
+    return status;
+  };
 
-    return (
-        // <div className="tab-pane" id="ActivityPill" role="tabpanel" aria-labelledby="Activity-pill">
-        //     <div className="card twofa_card">
-        //         <div className="card-body" >
-        //             <div className="card-header mb-md-4" >
-        //                 <h3> Activity Logs</h3>
-        //                 <p className="mb-0 text-muted" >  Your Activity Logs display for all Activity </p>
-        //             </div>
-        //             {Object.keys(activity).length === 0 ?
-        //                 <div className="favouriteData">
-        //                     <img src="/images/no-data.svg" className="img-fluid" width="96" height="96" alt="" />
-        //                     <br />
-        //                     <p className="mt-3 mb-4" > No Data Found. </p>
-        //                 </div>
-        //                 :
-        //                 <>
-        //                     <div className="card-card-body_inner pt-3" >
-        //                         <div className="sessions__table" >
-        //                             <div className="activity-wrapper">
-        //                                 <div className="custom-history">
-        //                                     {updatedactivity.length > 0 ?
-        //                                         updatedactivity.map(item =>
-        //                                             <div className="single-item-history d-flex-center">
-        //                                                 <div className="content">
-        //                                                     <span className="text-muted" >Status: &nbsp;</span><b>{item?.Activity}</b>
-        //                                                     <p className="mb-0" > <samll className="text-muted" >IP:&nbsp; {item?.IP} </samll> </p>
-        //                                                 </div>
-        //                                                 <small className="date align-self-start text-muted">
+  // Get status color class
+  const getStatusClass = (activity) => {
+    const activityLower = activity?.toLowerCase() || "";
+    if (activityLower.includes("login") || activityLower.includes("success")) {
+      return "text-success";
+    }
+    if (activityLower.includes("failed") || activityLower.includes("error")) {
+      return "text-danger";
+    }
+    if (activityLower.includes("logout") || activityLower.includes("change")) {
+      return "text-warning";
+    }
+    return "text-activity   ";
+  };
 
+  // Render pagination info
+  const renderPaginationInfo = () => {
+    if (activityLength === 0) return null;
+    const start = skip + 1;
+    const end = Math.min(skip + limit, activityLength);
+    return `${start}-${end} of ${activityLength}`;
+  };
 
+  return (
+    <div className="dashboard_right">
+      <div className="dashboard_listing_section Overview_mid">
+        <div className="kyc_approval_s activity_logs">
+          <div className="cnt">
+            <h3>Activity Logs</h3>
+            <p>Your Activity Logs display for all Activity</p>
 
-        //                                                     {moment(item?.date).format('MMMM Do YYYY, h:mm:ss a')}
-        //                                                 </small>
-        //                                             </div>
-        //                                         ) : null
-        //                                     }
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                     <div className="add_pls  d-flex justify-content-center">
-        //                         {updatedLength >= activityLength ? '' :
-        //                             <button className="btn btn-sm  btn-link text-decoration-none text-muted text-center" type="button"
-        //                                 onClick={() => {
-        //                                     setupdatedLength(updatedLength + 5);
-        //                                 }}
-        //                             > <i className="ri-restart-line me-2 "></i> Load more </button>}
-        //                     </div>
-        //                 </>
-        //             }
-        //         </div>
-        //     </div>
-        // </div>
-
-
-
-        <div className="dashboard_right">
-
-
-
-
-
-            <div className="dashboard_listing_section Overview_mid">
-
-
-                <div className="kyc_approval_s activity_logs">
-
-                    <div className="cnt">
-                        <h3>Activity Logs</h3>
-                        <p>Your Activity Logs display for all Activity</p>
-
-                        <div className="dashboard_summary">
-
-                            <table>
-                                <tbody>
-                                    {activity?.length > 0 ? activity?.map((item) => {
-                                        return (
-                                            <tr>
-                                                <td><div className="price_heading">Status: <strong>{item?.Activity}</strong></div>
-                                                    <div className="price_heading">IP:<span> {item?.IP}</span></div>
-                                                </td>
-                                                <td className="right_t"> {moment(item?.date).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                                            </tr>
-
-                                        )
-                                    }) : <tr rowSpan="5">
-                                        <td colSpan="12">
-                                            <div className="no_data_outer">
-                                                <div className="no_data_vector">
-                                                    <img src="/images/Group 1171275449 (1).svg" alt="no-data" />
-
-                                                </div>
-
-                                                <p>No Data Available</p>
-
-                                            </div>
-
-                                        </td>
-                                    </tr>}
-
-
-
-
-                                </tbody>
-
-
-                            </table>
-                            {activity?.length > 0 ?
-                                < div className="hVPalX gap-2" >
-                                    <span className="" >{skip + 1}-{Math.min(skip + limit, activityLength)} of {activityLength}</span>
-                                    <div className="sc-eAKtBH gVtWSU">
-                                        <button type="button" aria-label="First Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationWalletHistory('first')}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                                                <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-                                                <path fill="none" d="M24 24H0V0h24v24z"></path>
-                                            </svg>
-                                        </button>
-                                        <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationWalletHistory('prev')}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                                                <path d="M0 0h24v24H0z" fill="none"></path>
-                                            </svg>
-                                        </button>
-
-                                        <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationWalletHistory('next')}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                                                <path d="M0 0h24v24H0z" fill="none"></path>
-                                            </svg>
-                                        </button>
-                                        <button type="button" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationWalletHistory('last')}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                                                <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-                                                <path fill="none" d="M0 0h24v24H0V0z"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                :
-                                ""
-                            }
+            {/* Desktop View */}
+            <div className="dashboard_summary desktop_view2">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Activity</th>
+                    <th>IP Address</th>
+                    <th className="right_td">Date & Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activity?.length > 0 ? (
+                    activity.map((item, index) => (
+                      <tr key={item?._id || index}>
+                        <td>
+                          <div className="price_heading">
+                            <strong className={getStatusClass(item?.Activity)}>
+                              {formatActivityStatus(item?.Activity)}
+                            </strong>
+                          </div>
+                        </td>
+                        <td>
+                          <span>{item?.IP || "N/A"}</span>
+                        </td>
+                        <td className="right_td">
+                          {item?.date
+                            ? moment(item.date).format("MMM Do YYYY, h:mm:ss A")
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="no-data-row">
+                      <td colSpan="3">
+                        <div className="no_data_outer">
+                          <div className="no_data_vector">
+                            <img
+                              src="/images/Group 1171275449 (1).svg"
+                              alt="no-data"
+                            />
+                          </div>
+                          <p>No Data Available</p>
                         </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
 
-
-
-
-
-
-                    </div>
-
-
+              {/* Pagination */}
+              {activity?.length > 0 && (
+                <div className="hVPalX gap-2">
+                  <span>{renderPaginationInfo()}</span>
+                  <div className="sc-eAKtBH gVtWSU">
+                    <button
+                      type="button"
+                      aria-label="First Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("first")}
+                      disabled={skip === 0}
+                    >
+                   <i className="ri-skip-back-fill text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Previous Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("prev")}
+                      disabled={skip === 0}
+                    >
+                      <i className="ri-arrow-left-s-line text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Next Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("next")}
+                      disabled={skip + limit >= activityLength}
+                    >
+                       <i className="ri-arrow-right-s-line text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Last Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("last")}
+                      disabled={skip + limit >= activityLength}
+                    >
+                       <i className="ri-skip-forward-fill text-white"></i>
+                    </button>
+                  </div>
                 </div>
-
-
-
-
-
+              )}
             </div>
 
-        </div>
+            {/* Mobile View */}
+            <div className="order_history_mobile_view">
+              {activity?.length > 0 ? (
+                activity.map((item, index) => (
+                  <div className="d-flex mb-3" key={item?._id || index}>
+                    <div className="order_datalist order_datalist_2">
+                      <ul className="listdata">
+                        <li>
+                          <span className="date">Activity</span>
+                          <span className={`date_light ${getStatusClass(item?.Activity)}`}>
+                            {formatActivityStatus(item?.Activity)}
+                          </span>
+                        </li>
+                        <li>
+                          <span>Date & Time</span>
+                          <span>
+                            {item?.date
+                              ? moment(item.date).format("DD/MM/YYYY, h:mm A")
+                              : "N/A"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>IP Address</span>
+                          <span>{item?.IP || "N/A"}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="no-data-wrapper text-center py-4">
+                  <div className="no_data_vector">
+                    <img
+                      src="/images/Group 1171275449 (1).svg"
+                      alt="no-data"
+                    />
+                  </div>
+                  <p>No Data Available</p>
+                </div>
+              )}
 
-    );
-}
+              {/* Mobile Pagination */}
+              {activity?.length > 0 && (
+                <div className="hVPalX gap-2 mt-3">
+                  <span>{renderPaginationInfo()}</span>
+                  <div className="sc-eAKtBH gVtWSU">
+                    <button
+                      type="button"
+                      aria-label="First Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("first")}
+                      disabled={skip === 0}
+                    >
+                      <i className="ri-skip-back-fill text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Previous Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("prev")}
+                      disabled={skip === 0}
+                    >
+                      <i className="ri-arrow-left-s-line text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Next Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("next")}
+                      disabled={skip + limit >= activityLength}
+                    >
+                      <i className="ri-arrow-right-s-line text-white"></i>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Last Page"
+                      className="sc-gjLLEI kuPCgf"
+                      onClick={() => handlePagination("last")}
+                      disabled={skip + limit >= activityLength}
+                    >
+                      <i className="ri-skip-forward-fill text-white"></i>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default ActivitylogPage;

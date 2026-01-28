@@ -149,38 +149,24 @@ const OpenOrders = (props) => {
                 </div>
 
                 {allOpenOrders?.length > 0 ?
-                  < div className="hVPalX gap-2" >
-                    <span className="" >{skipAllOrder + 1}-{Math.min(skipAllOrder + limitAllorder, totalAllOpen)} of {totalAllOpen}</span>
+                  <div className="hVPalX gap-2">
+                    <span>{skipAllOrder + 1}-{Math.min(skipAllOrder + limitAllorder, totalAllOpen)} of {totalAllOpen}</span>
                     <div className="sc-eAKtBH gVtWSU">
                       <button type="button" aria-label="First Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('first')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-                          <path fill="none" d="M24 24H0V0h24v24z"></path>
-                        </svg>
+                        <i className="ri-skip-back-fill text-white"></i>
                       </button>
-                      <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('prev')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                        </svg>
+                      <button type="button" aria-label="Previous Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('prev')}>
+                        <i className="ri-arrow-left-s-line text-white"></i>
                       </button>
-
                       <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('next')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                        </svg>
+                        <i className="ri-arrow-right-s-line text-white"></i>
                       </button>
-                      <button type="button" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('last')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-                          <path fill="none" d="M0 0h24v24H0V0z"></path>
-                        </svg>
+                      <button type="button" aria-label="Last Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationAllOrder('last')}>
+                        <i className="ri-skip-forward-fill text-white"></i>
                       </button>
                     </div>
                   </div>
-                  :
-                  ""
+                  : ""
                 }
 
               </div>
@@ -263,7 +249,7 @@ const OpenOrders = (props) => {
                 className="view_more_btn"
                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
               >
-                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
               </button>
 
               <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>

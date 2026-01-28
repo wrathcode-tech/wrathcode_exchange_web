@@ -238,16 +238,16 @@ const LaunchpadCoinPage = () => {
 
                         <div className="dellft">
 
-                            <div class="coin_lft">
-                                <div class="coin">
+                            <div className="coin_lft">
+                                <div className="coin">
                                     <img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
-                                <div class="coin_cnt">
+                                <div className="coin_cnt">
                                     <h3>ZAC</h3>
-                                    <div class="hd d-flex">
+                                    <div className="hd d-flex">
                                         <span>Initial Offering · Ended</span>
-                                        <ul class="subcate">
-                                            <li class="darkbg"><button>Official Website</button></li>
-                                            <li class="darkbg"><button>Introduction</button></li>
+                                        <ul className="subcate">
+                                            <li className="darkbg"><button>Official Website</button></li>
+                                            <li className="darkbg"><button>Introduction</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -272,7 +272,7 @@ const LaunchpadCoinPage = () => {
                             </div>
 
                             <div className="tradetpl">
-                                <button>Trade<i class="ri-arrow-down-s-line"></i></button>
+                                <button>Trade<i className="ri-arrow-down-s-line"></i></button>
                             </div>
                         </div>
 
@@ -280,24 +280,24 @@ const LaunchpadCoinPage = () => {
 
                     <div className="usdtpool_bl">
                         <div className="d-flex tbl_flex">
-                            <button className="poolbtn active">USDT Pool <span><i class="ri-user-3-fill"></i> NEW</span></button>
+                            <button className="poolbtn active">USDT Pool <span><i className="ri-user-3-fill"></i> NEW</span></button>
                             <button className="poolbtn">USDT Pool</button>
                         </div>
                         <div className="commit_usdt_del">
-                            <div class="coin_lft">
-                                <div class="coin">
+                            <div className="coin_lft">
+                                <div className="coin">
                                     <img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" />
                                     <div className="useredit">
                                         <img src="images/useredit.svg" />
                                     </div>
                                 </div>
-                                <div class="coin_cnt">
+                                <div className="coin_cnt">
                                     <h3>Commit USDT to Subscribe LIT</h3>
-                                    <div class="hd d-flex">
-                                        <ul class="subcate">
-                                            <li><button><i class="ri-user-3-fill"></i> New User Exclusive</button></li>
-                                            <li><button><i class="ri-discount-percent-fill"></i> 60% Off</button></li>
-                                            <li><button><i class="ri-share-forward-fill"></i> Raise Limit</button></li>
+                                    <div className="hd d-flex">
+                                        <ul className="subcate">
+                                            <li><button><i className="ri-user-3-fill"></i> New User Exclusive</button></li>
+                                            <li><button><i className="ri-discount-percent-fill"></i> 60% Off</button></li>
+                                            <li><button><i className="ri-share-forward-fill"></i> Raise Limit</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -323,7 +323,7 @@ const LaunchpadCoinPage = () => {
                         </div>
 
                         <div className="future_trading_block">
-                            <h5>Futures Trading Challenge <i class="ri-information-line"></i></h5>
+                            <h5>Futures Trading Challenge <i className="ri-information-line"></i></h5>
 
                             <div className="trading_process">
                                 <div className="usdt_selected">
@@ -398,8 +398,8 @@ const LaunchpadCoinPage = () => {
             </div>
 
 
-            {/* <section class="coin_single">
-                <div class="container">
+            {/* <section className="coin_single">
+                <div className="container">
                     <div className="backtop_s">
                        
                         <button
@@ -451,13 +451,13 @@ const LaunchpadCoinPage = () => {
                     </div>
 
 
-                    <div class="row mt-4">
-                        <div class="col-sm-8">
-                            <div class="leftside_detail">
-                                <div class="participation_bl">
+                    <div className="row mt-4">
+                        <div className="col-sm-8">
+                            <div className="leftside_detail">
+                                <div className="participation_bl">
                                     <h2>Current Progress</h2>
-                                    <div class="receivedblock flexreceive">
-                                        <div class="receivedblock_left">
+                                    <div className="receivedblock flexreceive">
+                                        <div className="receivedblock_left">
                                             <h5>Participants <span>{userParticipation?.participantsCount || "0.00"}</span></h5>
                                             <h5>Current Percent  <span>
                                                 {coinDetailsData?.progressPercent || "0.00"}
@@ -492,29 +492,29 @@ const LaunchpadCoinPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="participation_bl">
+                                <div className="participation_bl">
 
 
-                                    <div class="project_cycle_timeline">
-                                        <div class="timeline_item">
-                                            <div class="timeline_circle active">1</div>
-                                            <div class="timeline_content">
+                                    <div className="project_cycle_timeline">
+                                        <div className="timeline_item">
+                                            <div className="timeline_circle active">1</div>
+                                            <div className="timeline_content">
                                                 <h5>Warming up</h5>
                                                 <span>2023-10-07 17:03</span>
                                             </div>
                                         </div>
-                                        <div class="timeline_connector"></div>
-                                        <div class="timeline_item">
-                                            <div class="timeline_circle active">2</div>
-                                            <div class="timeline_content">
+                                        <div className="timeline_connector"></div>
+                                        <div className="timeline_item">
+                                            <div className="timeline_circle active">2</div>
+                                            <div className="timeline_content">
                                                 <h5>Start Subscription</h5>
                                                 <span>2023-10-13 13:30</span>
                                             </div>
                                         </div>
-                                        <div class="timeline_connector"></div>
-                                        <div class="timeline_item">
-                                            <div class="timeline_circle">3</div>
-                                            <div class="timeline_content">
+                                        <div className="timeline_connector"></div>
+                                        <div className="timeline_item">
+                                            <div className="timeline_circle">3</div>
+                                            <div className="timeline_content">
                                                 <h5>Subscription Ended</h5>
                                                 <span>2023-10-13 14:30</span>
                                             </div>
@@ -523,36 +523,36 @@ const LaunchpadCoinPage = () => {
 
                                 </div>
 
-                                <div class="participation_bl">
+                                <div className="participation_bl">
                                     <h2>Key Highlight</h2>
-                                    <div class="key_highlight_table">
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Token Symbol</span>
-                                            <span class="highlight_value">{currentLaunchpad?.tokenSymbol || "N/A"}</span>
+                                    <div className="key_highlight_table">
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Token Symbol</span>
+                                            <span className="highlight_value">{currentLaunchpad?.tokenSymbol || "N/A"}</span>
                                         </div>
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Total Supply</span>
-                                            <span class="highlight_value">
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Total Supply</span>
+                                            <span className="highlight_value">
                                                 {currentLaunchpad?.totalSupply?.toLocaleString() || "0"} {currentLaunchpad?.tokenSymbol || ""}
                                             </span>
                                         </div>
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Subscription Price</span>
-                                            <span class="highlight_value">
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Subscription Price</span>
+                                            <span className="highlight_value">
                                                 1 {currentLaunchpad?.tokenSymbol || ""} = {currentLaunchpad?.tokenPrice || 0} USDT
                                             </span>
                                         </div>
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Min Subscription Amount</span>
-                                            <span class="highlight_value">{currentLaunchpad?.minPurchase || 0} USDT</span>
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Min Subscription Amount</span>
+                                            <span className="highlight_value">{currentLaunchpad?.minPurchase || 0} USDT</span>
                                         </div>
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Max Subscription Amount</span>
-                                            <span class="highlight_value">{currentLaunchpad?.maxPurchase?.toLocaleString() || 0} USDT</span>
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Max Subscription Amount</span>
+                                            <span className="highlight_value">{currentLaunchpad?.maxPurchase?.toLocaleString() || 0} USDT</span>
                                         </div>
-                                        <div class="highlight_row">
-                                            <span class="highlight_label">Tokens For Sale</span>
-                                            <span class="highlight_value">
+                                        <div className="highlight_row">
+                                            <span className="highlight_label">Tokens For Sale</span>
+                                            <span className="highlight_value">
                                                 {currentLaunchpad?.tokensForSale?.toLocaleString() || 0} {currentLaunchpad?.tokenSymbol || ""}
                                             </span>
                                         </div>
@@ -562,10 +562,10 @@ const LaunchpadCoinPage = () => {
                         </div>
 
 
-                        <div class="col-sm-4">
-                            <div class="rightside_detail">
+                        <div className="col-sm-4">
+                            <div className="rightside_detail">
 
-                                <div class="timeline_s">
+                                <div className="timeline_s">
                                     <ul>
                                         <li>
                                             <h6>Start Time</h6>

@@ -318,7 +318,7 @@ window.scrollTo(0, 0)
                                                     {/* <input type="button" value=" Signup – Coming Soon" /> */}
                                                     <input type="button" value="Register" onClick={() => { handleEmailRegister() }} />
                                                 </div>
-                                                <div class="col-sm-12"><button class="google_btn" type="button" onClick={SignupwithGoogle}><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
+                                                <div className="col-sm-12"><button className="google_btn" type="button" onClick={SignupwithGoogle}><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
 
                                                 <div className="col-sm-12 registration__info agreetext">
                                                     <p>Already have an account? <Link to="/login">Login</Link></p>
@@ -348,7 +348,7 @@ window.scrollTo(0, 0)
 
                                                 <div className="col-sm-12 input_block">
 
-                                                    <div class="phone-input-wrapper">
+                                                    <div className="phone-input-wrapper">
 
                                                         <input className="input_filed" type="number" onWheel={(e) => e.target.blur()} placeholder="Enter mobile number" value={signId} onChange={(e) => setSignId(e.target.value)} />
                                                     </div>
@@ -408,7 +408,7 @@ window.scrollTo(0, 0)
                                                     {/* <input type="button" value=" Signup – Coming Soon" /> */}
                                                     <input type="button" value="Register" onClick={() => { handlePhoneRegister() }} />
                                                 </div>
-                                                <div class="col-sm-12"><button class="google_btn" type="button"><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
+                                                <div className="col-sm-12"><button className="google_btn" type="button"><img src="/images/google_icon.svg" alt="google" />Sign up with Google</button></div>
 
                                                 <div className="col-sm-12 registration__info agreetext">
                                                     <p>Already have an account? <Link to="/login">Login</Link></p>

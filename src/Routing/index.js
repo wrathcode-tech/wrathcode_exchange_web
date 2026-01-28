@@ -28,7 +28,6 @@ import BlogDetails from "../ui/Pages/Blog/BlodDetails";
 import SettingsPage from "../ui/Pages/SettingsPage";
 import SupportPage from "../ui/Pages/Support";
 import TwofactorPage from "../ui/Pages/TwofactorPage";
-import SecurityPage from "../ui/Pages/SecurityPage";
 import ActivitylogPage from "../ui/Pages/ActivitylogPage";
 import Dashboard from "../ui/Pages/Dashboard";
 import AssetOverview from "../ui/Pages/AssetOverview";
@@ -103,7 +102,6 @@ function Routing() {
           <Route path="notification" element={token ? (<NotificationPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="launchpad_transactions" element={token ? (<LaunchpadTransation userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="two_factor_autentication" element={token ? (<TwofactorPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
-          <Route path="password_security" element={token ? (<SecurityPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
           <Route path="activity_logs" element={token ? (<ActivitylogPage userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />
       
           <Route path="swap" element={token ? (<Swap userDetails={userDetails} />) : (<Navigate to="/login" replace />)} />

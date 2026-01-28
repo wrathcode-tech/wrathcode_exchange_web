@@ -233,7 +233,7 @@ const DepositPage = () => {
             <div className={`select_coin_option ${Object.keys(selectedCurrency).length > 0 && "select-option"}`}>
               <h2>Select Coin</h2>
               <div className="search_icon_s" data-bs-toggle="modal" data-bs-target="#search_coin">
-                <i class="ri-search-line"></i> {Object.keys(selectedCurrency).length > 0 ? `${selectedCurrency?.short_name} ${selectedCurrency?.name} ` : "Search Coin"}
+                <i className="ri-search-line"></i> {Object.keys(selectedCurrency).length > 0 ? `${selectedCurrency?.short_name} ${selectedCurrency?.name} ` : "Search Coin"}
               </div>
               {/* <!-- Modal Search Coin Start --> */}
 

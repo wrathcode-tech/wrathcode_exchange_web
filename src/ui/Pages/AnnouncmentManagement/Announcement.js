@@ -47,18 +47,18 @@ const Announcement = () => {
       </Helmet>
 
 
-      <section class="announcement_section">
-        <div class="container">
-          <div class="announcement_hero_s">
-            <div class="row">
-              <div class="col-sm-8">
+      <section className="announcement_section">
+        <div className="container">
+          <div className="announcement_hero_s">
+            <div className="row">
+              <div className="col-sm-8">
                 <h1>Announcement</h1>
                 <p>Stay informed with the latest updates, new listings, feature rollouts, and important notices from Wrathcode Exchange.
                   From exciting token launches to security enhancements and platform upgrades — everything you need to know, all in one place. 🚀</p>
               </div>
 
-              <div class="col-sm-4">
-                <div class="announcement_vector">
+              <div className="col-sm-4">
+                <div className="announcement_vector">
                   <img src="/images/AnnouncementImg/hand_speaker_img.png" alt="Announcement" />
                 </div>
               </div>
@@ -67,12 +67,12 @@ const Announcement = () => {
           </div>
         </div>
 
-        <div class="topic_block">
-          <div class="container">
+        <div className="topic_block">
+          <div className="container">
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center">
               <h2>All Topics</h2>
-              <div class="search_info">
+              <div className="search_info">
                 <button><img src="/images/AnnouncementImg/search_icon.png" alt="search" /></button>
                 <input
                   type="text"

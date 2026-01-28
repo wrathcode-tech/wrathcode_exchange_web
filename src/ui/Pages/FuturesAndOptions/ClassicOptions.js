@@ -776,11 +776,11 @@ function ClassicOptions() {
             </Helmet>
 
 
-            <div class="usd_future_dashboard">
+            <div className="usd_future_dashboard">
 
-                <div class="classic_grid_dashboard_bl d-flex option_datatable_bl">
-                    <div class="classic_grid_dashboard_left">
-                        <div class="row classic_favorites_bl">
+                <div className="classic_grid_dashboard_bl d-flex option_datatable_bl">
+                    <div className="classic_grid_dashboard_left">
+                        <div className="row classic_favorites_bl">
 
                             <div className={`rightdata_s mobileview ${isMobileViewActive ? "active" : ""
                                 }`}>
@@ -1058,7 +1058,7 @@ function ClassicOptions() {
                                             <ul className="nav nav-tabs custom-tabs mb-3" id="tradeTabs" role="tablist">
                                                 <li className="nav-item" role="presentation">
                                                     <button
-                                                        class="nav-link active"
+                                                        className="nav-link active"
                                                         id="buy-tab"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#buy"
@@ -1073,7 +1073,7 @@ function ClassicOptions() {
 
                                                 <li className="nav-item" role="presentation">
                                                     <button
-                                                        class="nav-link selltab"
+                                                        className="nav-link selltab"
                                                         id="sell-tab"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#sell"
@@ -1324,21 +1324,21 @@ function ClassicOptions() {
 
                             </div>
 
-                            <div class="col-sm-7">
+                            <div className="col-sm-7">
                                 <div className='view_data'>
 
                                     <div className='desktop_view'>
 
-                                        <div class="classic_option_top">
+                                        <div className="classic_option_top">
 
-                                            <div class="classic_usd_right">
+                                            <div className="classic_usd_right">
                                                 <ul>
                                                     {optionsPairs?.length > 0 ? optionsPairs?.map((pair) => {
                                                         return (
                                                             <li className={selectedPair?.base_currency === pair?.base_currency && "active"} onClick={() => handleSelectPair(pair)}>
                                                                 <button>
                                                                     <img src={ApiConfig?.baseImage + pair?.icon_path} alt="bitcoin" />
-                                                                    <div class="cnt_top_cl">
+                                                                    <div className="cnt_top_cl">
                                                                         <h6>{`${pair?.base_currency}${pair?.quote_currency}`}</h6>
                                                                     </div>
                                                                 </button>
@@ -1347,7 +1347,7 @@ function ClassicOptions() {
                                                     }) : <li >
                                                         <button>
 
-                                                            <div class="cnt_top_cl">
+                                                            <div className="cnt_top_cl">
                                                                 <h6>----</h6>
                                                             </div>
                                                         </button>
@@ -1358,8 +1358,8 @@ function ClassicOptions() {
                                             </div>
                                         </div>
 
-                                        <div class="d-flex topnav_selected">
-                                            <ul class="date_tbl">
+                                        <div className="d-flex topnav_selected">
+                                            <ul className="date_tbl">
                                                 {availableExpiryDates?.length > 0 ? availableExpiryDates?.map((item, index) => {
                                                     // Convert ISO date to yyyy-mm-dd
                                                     const formattedDate = new Date(item?.expiryDate).toISOString().split("T")[0];
@@ -1536,8 +1536,8 @@ function ClassicOptions() {
 
                                     </div>
 
-                                    <div class="data_option_calls">
-                                        <div class="top_barcalls_put_cnt">
+                                    <div className="data_option_calls">
+                                        <div className="top_barcalls_put_cnt">
                                             <ul>
                                                 <li><strong>Calls</strong> {`${selectedPair?.base_currency || "---"}${selectedPair?.quote_currency || "---"}`} Price: {formatNumber(selectedPair?.buy_price)}</li>
                                                 <li className='nthchild2'><strong>{formattedDate}</strong></li>
@@ -1696,29 +1696,29 @@ function ClassicOptions() {
 
 
                             </div>
-                            <div class="col-sm-5">
+                            <div className="col-sm-5">
                                 <div className='rightdata_s'>
                                     <div className='selected_product_info'>
 
                                         <div className='product_flex'>
                                             <div className='product_name'>
-                                                <div aria-hidden="true" class="favorite-icon me-1"></div> {selectedContract?.symbol || "---"}
+                                                <div aria-hidden="true" className="favorite-icon me-1"></div> {selectedContract?.symbol || "---"}
                                                 <span className='arrowmobile'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="5" viewBox="0 0 9 5" class="" data-palette="ArrowDownThin"><path fill="var(--brand-bg-primary)" d="M7.833.13a.51.51 0 01.68 0 .419.419 0 010 .627l-3.846 3.55a.51.51 0 01-.68 0L.141.757C-.047.584-.047.303.14.13s.492-.173.68 0l3.506 3.235L7.833.13z"></path></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="5" viewBox="0 0 9 5" className="" data-palette="ArrowDownThin"><path fill="var(--brand-bg-primary)" d="M7.833.13a.51.51 0 01.68 0 .419.419 0 010 .627l-3.846 3.55a.51.51 0 01-.68 0L.141.757C-.047.584-.047.303.14.13s.492-.173.68 0l3.506 3.235L7.833.13z"></path></svg>
                                                 </span>
                                             </div>
 
                                             <div className='product_header ms-auto'>
 
                                                 <button type="button"><span>Delta:</span>
-                                                    <div class="style--pepV_">
+                                                    <div className="style--pepV_">
                                                         <div data-palette="DeltaValue">{formatNumber(selectedContract?.delta || null)}</div></div></button>
 
                                                 <button type="button"><span>Contract Size:</span>
-                                                    <div class="style--pepV_">
+                                                    <div className="style--pepV_">
                                                         <div data-palette="DeltaValue"> 1 {selectedPair?.base_currency || "---"} </div></div></button>
                                                 <button type="button"><span>Min Order Size:</span>
-                                                    <div class="style--pepV_">
+                                                    <div className="style--pepV_">
                                                         <div data-palette="DeltaValue"> {formatNumber(selectedContract?.minQty || null)} </div></div></button>
 
 
@@ -1766,8 +1766,8 @@ function ClassicOptions() {
 
                                                             <div className="tab-pane show active toggle2" id="all_orders">
                                                                 <div className="table_info_data">
-                                                                    <div class="price_card_head">
-                                                                        <div class="ps-0">Price({selectedPair?.quote_currency || "---"})</div>
+                                                                    <div className="price_card_head">
+                                                                        <div className="ps-0">Price({selectedPair?.quote_currency || "---"})</div>
                                                                         <div>Size({selectedPair?.base_currency || "---"})</div>
                                                                         <div>Sum</div>
                                                                     </div>
@@ -1790,7 +1790,7 @@ function ClassicOptions() {
                                                                                     )
                                                                                 }) : <tr>
                                                                                     <td colspan="10">
-                                                                                        <div class="d-flex justify-content-center">
+                                                                                        <div className="d-flex justify-content-center">
                                                                                             <img src="/images/option-img/search_not_found.svg"
                                                                                                 alt="not found" width="80" /></div>
                                                                                     </td>
@@ -1802,10 +1802,10 @@ function ClassicOptions() {
                                                                         </table>
                                                                     </div>
 
-                                                                    <div class="mrkt_trde_tab justify-space-between">
-                                                                        <b class={`${selectedContract?.lastPrice >= selectedContract?.lastMarkPrice ? "text-success" : "text-danger"}`}>{selectedContract?.lastPrice > 0 ? formatNumber(selectedContract?.lastPrice, 2) : "----"}</b>
-                                                                        {selectedContract?.lastPrice >= selectedContract?.lastMarkPrice ? <i class="ri-arrow-up-line  ri-xl mx-3 text-success"></i> : <i class="ri-arrow-down-line ri-xl mx-3 text-danger"></i>}
-                                                                        {/* <i class="ri-arrow-up-line"></i> */}
+                                                                    <div className="mrkt_trde_tab justify-space-between">
+                                                                        <b className={`${selectedContract?.lastPrice >= selectedContract?.lastMarkPrice ? "text-success" : "text-danger"}`}>{selectedContract?.lastPrice > 0 ? formatNumber(selectedContract?.lastPrice, 2) : "----"}</b>
+                                                                        {selectedContract?.lastPrice >= selectedContract?.lastMarkPrice ? <i className="ri-arrow-up-line  ri-xl mx-3 text-success"></i> : <i className="ri-arrow-down-line ri-xl mx-3 text-danger"></i>}
+                                                                        {/* <i className="ri-arrow-up-line"></i> */}
                                                                         {/* <span>{formatNumber(selectedPair?.change_percentage)}%</span> */}
                                                                     </div>
 
@@ -1830,7 +1830,7 @@ function ClassicOptions() {
                                                                                         )
                                                                                     }) : <tr>
                                                                                         <td colspan="10">
-                                                                                            <div class="d-flex justify-content-center">
+                                                                                            <div className="d-flex justify-content-center">
                                                                                                 <img src="/images/option-img/search_not_found.svg"
                                                                                                     alt="not found" width="80" />
                                                                                             </div>
@@ -1862,17 +1862,17 @@ function ClassicOptions() {
 
                                         {/* Web BUy and SELL tab */}
 
-                                        <div class="relative_select_right">
+                                        <div className="relative_select_right">
 
                                             <div className='buysell_heder padding_space_l'>
-                                                <ul class="limit_tabs custom-tabs mb-3">
-                                                    <li class={`nav-item positions_two ${Side === "BUY" ? "active" : ""}`} role="presentation">
+                                                <ul className="limit_tabs custom-tabs mb-3">
+                                                    <li className={`nav-item positions_two ${Side === "BUY" ? "active" : ""}`} role="presentation">
                                                         <button onClick={() => setSide("BUY")}>
                                                             <span> Buy</span>
                                                         </button>
                                                     </li>
-                                                    <li class={`nav-item open_two selltab ${Side === "SELL" ? "active" : ""}`} role="presentation">
-                                                        <button class="selltab" id="sell-tab" onClick={() => setSide("SELL")}>
+                                                    <li className={`nav-item open_two selltab ${Side === "SELL" ? "active" : ""}`} role="presentation">
+                                                        <button className="selltab" id="sell-tab" onClick={() => setSide("SELL")}>
                                                             <span>Sell</span>
                                                         </button>
                                                     </li>
@@ -1881,28 +1881,28 @@ function ClassicOptions() {
 
                                             <div className={`cnt_table_two positions_two ${Side === "BUY" ? "active" : ""}`}>
 
-                                                <form class="price_info">
-                                                    <div class="price_inputbl">
+                                                <form className="price_info">
+                                                    <div className="price_inputbl">
                                                         <label>Price</label>
-                                                        <div class="price_select_option">
-                                                            <input class="inputtype" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} onWheel={(e) => e.target.blur()} />
+                                                        <div className="price_select_option">
+                                                            <input className="inputtype" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} onWheel={(e) => e.target.blur()} />
                                                             <select>
                                                                 <option>{selectedPair?.quote_currency || "---"}</option>
                                                             </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl">
-                                                        <label>Size <span class="btctoggle">({selectedPair?.base_currency || "---"})</span></label>
-                                                        <div class="price_select_option">
-                                                            <input class="inputtype" type="number" placeholder="Size" value={quantity} onChange={(e) => setQuantity(e.target.value)} onWheel={(e) => e.target.blur()} />
+                                                    <div className="price_inputbl">
+                                                        <label>Size <span className="btctoggle">({selectedPair?.base_currency || "---"})</span></label>
+                                                        <div className="price_select_option">
+                                                            <input className="inputtype" type="number" placeholder="Size" value={quantity} onChange={(e) => setQuantity(e.target.value)} onWheel={(e) => e.target.blur()} />
                                                             <select>
                                                                 <option>{selectedPair?.base_currency || "---"}</option>
                                                             </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl value_choose">
+                                                    <div className="price_inputbl value_choose">
                                                         {/* <ul>
                                                                 <li><button type="button" onClick={() => setQuantity(1)} >1 Cont.</button></li>
                                                                 <li><button type="button" onClick={() => setQuantity(2)}>2 Cont.</button></li>
@@ -1912,67 +1912,67 @@ function ClassicOptions() {
                                                             </ul> */}
                                                     </div>
 
-                                                    <div class="price_inputbl">
-                                                        <div class="avail_total_usd">
+                                                    <div className="price_inputbl">
+                                                        <div className="avail_total_usd">
                                                             <label>Cost</label>
-                                                            <div class="usd_price">{formatNumber(finalCost, 3) || "---"}</div>
+                                                            <div className="usd_price">{formatNumber(finalCost, 3) || "---"}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Avail.</label>
-                                                            <div class="usd_price">{formatNumber(balance)} {selectedPair?.quote_currency || "---"}</div>
+                                                            <div className="usd_price">{formatNumber(balance)} {selectedPair?.quote_currency || "---"}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Symbol</label>
-                                                            <div class="usd_price">{(selectedContract?.symbol)}</div>
+                                                            <div className="usd_price">{(selectedContract?.symbol)}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Expiry Date</label>
-                                                            <div class="usd_price">{formattedDate}</div>
+                                                            <div className="usd_price">{formattedDate}</div>
                                                         </div>
                                                     </div>
 
 
 
-                                                    <div class="price_inputbl">
-                                                        <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                            <button class="buybtn" type="button" onClick={handleplaceOrder}>Buy</button>
+                                                    <div className="price_inputbl">
+                                                        <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                            <button className="buybtn" type="button" onClick={handleplaceOrder}>Buy</button>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl mt-2">
-                                                        <div class="d-flex justify-content-between costbtc_total liq_price">
-                                                            <div class="d-flex align-items-center">
+                                                    <div className="price_inputbl mt-2">
+                                                        <div className="d-flex justify-content-between costbtc_total liq_price">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Min Size <span> {formatNumber(selectedContract?.minQty, 2)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Max Size <span>{formatNumber(selectedContract?.maxQty)}</span></h5>
                                                             </div>
                                                         </div>
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Delta <span> {formatNumber(selectedContract?.delta, 4)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Gamma <span> {formatNumber(selectedContract?.gamma, 4)}</span></h5>
                                                             </div>
                                                         </div>
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Strike <span> {formatNumber(selectedContract?.strikePrice)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Mark <span> {formatNumber(selectedContract?.lastMarkPrice)}</span></h5>
                                                             </div>
                                                         </div>
 
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Transaction Fee <span> {formatNumber(fees?.transactionFee, 4)}%</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Exercise Fee <span> {formatNumber(fees?.exerciseFee, 4)}%</span></h5>
                                                             </div>
                                                         </div>
@@ -1984,28 +1984,28 @@ function ClassicOptions() {
 
                                             <div className={`cnt_table_two open_two ${Side === "SELL" ? "active" : ""}`}>
 
-                                                <form class="price_info">
-                                                    <div class="price_inputbl">
+                                                <form className="price_info">
+                                                    <div className="price_inputbl">
                                                         <label>Price</label>
-                                                        <div class="price_select_option">
-                                                            <input class="inputtype" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} onWheel={(e) => e.target.blur()} />
+                                                        <div className="price_select_option">
+                                                            <input className="inputtype" type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} onWheel={(e) => e.target.blur()} />
                                                             <select>
                                                                 <option>{selectedPair?.quote_currency || "---"}</option>
                                                             </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl">
-                                                        <label>Size <span class="btctoggle">({selectedPair?.base_currency || "---"})</span></label>
-                                                        <div class="price_select_option">
-                                                            <input class="inputtype" type="number" placeholder="Size" value={quantity} onChange={(e) => setQuantity(e.target.value)} onWheel={(e) => e.target.blur()} />
+                                                    <div className="price_inputbl">
+                                                        <label>Size <span className="btctoggle">({selectedPair?.base_currency || "---"})</span></label>
+                                                        <div className="price_select_option">
+                                                            <input className="inputtype" type="number" placeholder="Size" value={quantity} onChange={(e) => setQuantity(e.target.value)} onWheel={(e) => e.target.blur()} />
                                                             <select>
                                                                 <option>{selectedPair?.base_currency || "---"}</option>
                                                             </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl value_choose">
+                                                    <div className="price_inputbl value_choose">
                                                         {/* <ul>
                                                                 <li><button type="button" onClick={() => setQuantity(1)} >1 Cont.</button></li>
                                                                 <li><button type="button" onClick={() => setQuantity(2)}>2 Cont.</button></li>
@@ -2015,66 +2015,66 @@ function ClassicOptions() {
                                                             </ul> */}
                                                     </div>
 
-                                                    <div class="price_inputbl">
-                                                        <div class="avail_total_usd">
+                                                    <div className="price_inputbl">
+                                                        <div className="avail_total_usd">
                                                             <label>Cost</label>
-                                                            <div class="usd_price">{formatNumber(calcOrderFee(Number(price), Number(selectedPair?.buy_price), Number(quantity)), 3) || "---"}</div>
+                                                            <div className="usd_price">{formatNumber(calcOrderFee(Number(price), Number(selectedPair?.buy_price), Number(quantity)), 3) || "---"}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Avail.</label>
-                                                            <div class="usd_price">{formatNumber(balance)} {selectedPair?.quote_currency || "---"}</div>
+                                                            <div className="usd_price">{formatNumber(balance)} {selectedPair?.quote_currency || "---"}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Symbol</label>
-                                                            <div class="usd_price">{(selectedContract?.symbol)}</div>
+                                                            <div className="usd_price">{(selectedContract?.symbol)}</div>
                                                         </div>
-                                                        <div class="avail_total_usd">
+                                                        <div className="avail_total_usd">
                                                             <label>Expiry Date</label>
-                                                            <div class="usd_price">{formattedDate}</div>
+                                                            <div className="usd_price">{formattedDate}</div>
                                                         </div>
                                                     </div>
 
 
-                                                    <div class="price_inputbl">
-                                                        <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                            <button class="sellbtn" type="button" onClick={handleplaceOrder}>Sell</button>
+                                                    <div className="price_inputbl">
+                                                        <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                            <button className="sellbtn" type="button" onClick={handleplaceOrder}>Sell</button>
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl mt-2">
-                                                        <div class="d-flex justify-content-between costbtc_total liq_price">
-                                                            <div class="d-flex align-items-center">
+                                                    <div className="price_inputbl mt-2">
+                                                        <div className="d-flex justify-content-between costbtc_total liq_price">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Min Size <span> {formatNumber(selectedContract?.minQty, 2)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Max Size <span>{formatNumber(selectedContract?.maxQty)}</span></h5>
                                                             </div>
                                                         </div>
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Delta <span> {formatNumber(selectedContract?.delta, 4)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Gamma <span> {formatNumber(selectedContract?.gamma, 4)}</span></h5>
                                                             </div>
                                                         </div>
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Strike <span> {formatNumber(selectedContract?.strikePrice)}</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Mark <span> {formatNumber(selectedContract?.lastMarkPrice)}</span></h5>
                                                             </div>
                                                         </div>
 
 
-                                                        <div class="d-flex justify-content-between costbtc_total">
-                                                            <div class="d-flex align-items-center">
+                                                        <div className="d-flex justify-content-between costbtc_total">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Transaction Fee <span> {formatNumber(fees?.transactionFee, 4)}%</span></h5>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
+                                                            <div className="d-flex align-items-center">
                                                                 <h5>Exercise Fee <span> {formatNumber(fees?.exerciseFee, 4)}%</span></h5>
                                                             </div>
                                                         </div>
@@ -2084,14 +2084,14 @@ function ClassicOptions() {
 
                                             </div>
 
-                                            {/* <div class="tab-content" id="tradeTabsContent">
+                                            {/* <div className="tab-content" id="tradeTabsContent">
 
-                                                <div class="tab-pane fade show active" id="buy-web" role="tabpanel" aria-labelledby="buy-tab">
+                                                <div className="tab-pane fade show active" id="buy-web" role="tabpanel" aria-labelledby="buy-tab">
 
 
                                                 </div>
 
-                                                <div class="tab-pane fade" id="sell-web" role="tabpanel" aria-labelledby="sell-tab">
+                                                <div className="tab-pane fade" id="sell-web" role="tabpanel" aria-labelledby="sell-tab">
 
 
                                                   
@@ -2113,24 +2113,24 @@ function ClassicOptions() {
 
                             <div className='col-sm-12'>
 
-                                <div class="trade_summary_table_lft mt-4 position_order">
-                                    <div class="top_th_easyop">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <ul class="position_list">
-                                                    <li class="nav-item positions" role="presentation">
+                                <div className="trade_summary_table_lft mt-4 position_order">
+                                    <div className="top_th_easyop">
+                                        <div className="row">
+                                            <div className="col-sm-12">
+                                                <ul className="position_list">
+                                                    <li className="nav-item positions" role="presentation">
                                                         <button>Positions({openPositions?.length})</button>
                                                     </li>
-                                                    <li class="nav-item open" role="presentation">
+                                                    <li className="nav-item open" role="presentation">
                                                         <button>Open
                                                             Orders({openOrder?.length})</button>
                                                     </li>
-                                                    <li class="nav-item order_history" role="presentation">
+                                                    <li className="nav-item order_history" role="presentation">
                                                         <button>Order
                                                             History</button>
                                                     </li>
 
-                                                    <li class="nav-item exercise_history" role="presentation">
+                                                    <li className="nav-item exercise_history" role="presentation">
                                                         <button>Exercise History</button>
                                                     </li>
                                                 </ul>
@@ -2309,7 +2309,7 @@ function ClassicOptions() {
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="15">
-                                                                            <div class="notfound_vector">
+                                                                            <div className="notfound_vector">
                                                                                 <img
                                                                                     src="/images/option-img/search_not_found.svg"
                                                                                     alt="not found"
@@ -2324,7 +2324,7 @@ function ClassicOptions() {
                                                     </div>
 
 
-                                                        : <div class="notfound_vector">
+                                                        : <div className="notfound_vector">
                                                             <img
                                                                 src="/images/option-img/search_not_found.svg"
                                                                 alt="not found"
@@ -2407,7 +2407,7 @@ function ClassicOptions() {
                                                         </table>
                                                     </div> :
 
-                                                        <div class="notfound_vector">
+                                                        <div className="notfound_vector">
                                                             <img
                                                                 src="/images/option-img/search_not_found.svg"
                                                                 alt="not found"
@@ -2510,7 +2510,7 @@ function ClassicOptions() {
                                                                 ) : (
                                                                     <tr>
                                                                         <td colSpan="15">
-                                                                            <div class="notfound_vector">
+                                                                            <div className="notfound_vector">
                                                                                 <img
                                                                                     src="/images/option-img/search_not_found.svg"
                                                                                     alt="not found"
@@ -2524,7 +2524,7 @@ function ClassicOptions() {
                                                         </table>
                                                     </div> :
 
-                                                        <div class="notfound_vector">
+                                                        <div className="notfound_vector">
                                                             <img
                                                                 src="/images/option-img/search_not_found.svg"
                                                                 alt="not found"
@@ -2617,7 +2617,7 @@ function ClassicOptions() {
                                                         </table>
                                                     </div> :
 
-                                                        <div class="notfound_vector">
+                                                        <div className="notfound_vector">
                                                             <img
                                                                 src="/images/option-img/search_not_found.svg"
                                                                 alt="not found"
@@ -2632,9 +2632,9 @@ function ClassicOptions() {
                                         </div>
                                     </div>
 
-                                    {/* <div class="tab-content pt-1" id="myTabContent2">
+                                    {/* <div className="tab-content pt-1" id="myTabContent2">
                                         <div
-                                            class="tab-pane fade active show"
+                                            className="tab-pane fade active show"
                                             id="positions"
                                             role="tabpanel"
                                             aria-labelledby="positions-tab"
@@ -2723,8 +2723,8 @@ function ClassicOptions() {
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane fade" id="order_hist" role="tabpanel" aria-labelledby="order_hist-tab">
-                                            <div class="table-responsive">
+                                        <div className="tab-pane fade" id="order_hist" role="tabpanel" aria-labelledby="order_hist-tab">
+                                            <div className="table-responsive">
                                                 <table>
                                                     <thead>
                                                         <tr>
@@ -2813,7 +2813,7 @@ function ClassicOptions() {
                                                         ) : (
                                                             <tr>
                                                                 <td colSpan="15">
-                                                                    <div class="notfound_vector">
+                                                                    <div className="notfound_vector">
                                                                         <img
                                                                             src="/images/option-img/search_not_found.svg"
                                                                             alt="not found"
@@ -2829,9 +2829,9 @@ function ClassicOptions() {
                                         </div>
 
 
-                                        <div class="tab-pane fade" id="Exercise" role="tabpanel"
+                                        <div className="tab-pane fade" id="Exercise" role="tabpanel"
                                             aria-labelledby="transaction-tab">
-                                            <div class="table-responsive">
+                                            <div className="table-responsive">
                                                 <table>
                                                     <thead>
                                                         <tr>
@@ -2849,7 +2849,7 @@ function ClassicOptions() {
                                                     <tbody>
                                                         <tr>
                                                             <td colspan="15">
-                                                                <div class="notfound_vector"><img src="/images/option-img/search_not_found.svg"
+                                                                <div className="notfound_vector"><img src="/images/option-img/search_not_found.svg"
                                                                     alt="not found" width="80" /></div>
                                                             </td>
                                                         </tr>
@@ -2871,15 +2871,15 @@ function ClassicOptions() {
             </div >
 
             {/* <!-- Modal Start leverage --> */}
-            <div class="modal fade currency_popup_s crosstabs" id="twox" tabindex="-1"
+            <div className="modal fade currency_popup_s crosstabs" id="twox" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <h3>Adjust Leverage</h3>
 
                             <div className='range_value'>
@@ -2928,7 +2928,7 @@ function ClassicOptions() {
                             <p className='redcolor'>* Selecting higher leverage such as [10x] increases your liquidation
                                 risk. Always manage your risk levels. See our help article for more information.</p>
                             <div className='bn-modal-footer d-flex btnsupport'>
-                                <button class="bn-button verifybtn" data-bs-dismiss="modal">Confirm</button>
+                                <button className="bn-button verifybtn" data-bs-dismiss="modal">Confirm</button>
                             </div>
                         </div>
                     </div>

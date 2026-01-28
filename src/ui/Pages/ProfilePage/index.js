@@ -229,11 +229,11 @@ const ProfilePage = (props) => {
                       Earning History
                     </Link>
                   </li>
-                  <li onClick={() => toggleContent("Bonus History")} className={`${(currentPage === "Bonus History") && "active"} `}>
+                  {/* <li onClick={() => toggleContent("Bonus History")} className={`${(currentPage === "Bonus History") && "active"} `}>
                     <Link to="bonus_history" className="rounded">
                       Bonus History
                     </Link>
-                  </li>
+                  </li> */}
                   {/* <li onClick={() => toggleContent("Launchpad Transactions")} className={`${(currentPage === "Launchpad Transactions") && "active"} `}>
                     <Link to="launchpad_transactions" className="rounded">
                       Launchpad Transactions

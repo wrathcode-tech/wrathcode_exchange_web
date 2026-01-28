@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
@@ -6,283 +6,439 @@ import LoaderHelper from '../../../customComponents/Loading/LoaderHelper';
 import AuthService from '../../../api/services/AuthService';
 import { alertErrorMessage, alertSuccessMessage } from '../../../customComponents/CustomAlertMessage';
 import { ApiConfig } from '../../../api/apiConfig/apiConfig';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { $ } from 'react-jquery-plugin';
 import moment from 'moment';
 import { Helmet } from 'react-helmet-async';
 
 function Earning() {
+  // Ref for component mount state
+  const isMountedRef = useRef(true);
+  const navigate = useNavigate();
+
+  // State management
   const [packageList, setPackageList] = useState([]);
-  const [fundData, setFundData] = useState([]);
   const [search, setSearch] = useState("");
-  const [hideAssets, setHideAssets] = useState(true);
   const [packageDetails, setPackageDetails] = useState({});
   const [walletType, setWalletType] = useState([]);
   const [selectedWallet, setSelectedWallet] = useState("");
   const [walletBalance, setWalletBalance] = useState(0);
   const [subscriptionAmount, setSubscriptionAmount] = useState("");
-  const [searchPackage, setSearchPackage] = useState("");
-
+  const [searchPackage] = useState("");
 
   const [subscribedActivePackages, setSubscribedActivePackages] = useState([]);
   const [subscribedCompletedPackage, setSubscribedCompletedPackage] = useState([]);
+  const [portfolio, setPortfolio] = useState([]); // Array of currency-wise portfolio
+  const [portfolioSummary, setPortfolioSummary] = useState({}); // Summary in USDT
 
-  const [portfolio, setPortfoilio] = useState([]);
+  // Loading states
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  // Pagination states
+  const [skipActive] = useState(0);
+  const [skipCompleted] = useState(0);
+  const limit = 10;
+
+  // Agreement checkbox
+  const [agreeTerms, setAgreeTerms] = useState(false);
+
+  // Store all packages for selected currency (for duration selection)
+  const [selectedCurrencyPackages, setSelectedCurrencyPackages] = useState([]);
+
   const token = localStorage.getItem("token");
 
-
-
-  const getPackageList = async (type) => {
-    try {
-      LoaderHelper.loaderStatus(true);
-
-      const result = await AuthService.packageList(type);
-      if (result?.success) {
-        setPackageList(result?.data);
-      } else {
-        alertErrorMessage(result?.message)
-      }
-    } catch (error) {
+  // Utility functions
+  const formatToNineDecimals = useCallback((data) => {
+    if (typeof data === "number" && !isNaN(data)) {
+      return parseFloat(data.toFixed(9));
     }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
-
-  const earningPortfolio = async (type) => {
-    try {
-      LoaderHelper.loaderStatus(true);
-
-      const result = await AuthService.earningPortfolio(type);
-      if (result?.success) {
-        setPortfoilio(result?.data);
-      } else {
-        alertErrorMessage(result?.message)
-      }
-    } catch (error) {
-    }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
-
-  const subscribedPackageList = async (type) => {
-    try {
-      LoaderHelper.loaderStatus(true);
-
-      const result = await AuthService.subscribedPackageList(type);
-      if (result?.success) {
-        let completedPackage = result?.data?.filter((item) => item?.status === "COMPLETED")
-        let activePackage = result?.data?.filter((item) => item?.status === "ACTIVE")
-        setSubscribedActivePackages(activePackage);
-        setSubscribedCompletedPackage(completedPackage);
-      } else {
-        alertErrorMessage(result?.message)
-      }
-    } catch (error) {
-    }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
-
-  const handleUserFunds = async (type) => {
-    try {
-      const result = await AuthService.getUserfunds("earning");
-      if (result?.success) {
-        const wallets = result?.data || [];
-
-        // Parse balance to number and sort
-        const walletsWithBalance = wallets
-          .filter(wallet => parseFloat(wallet.balance) > 0)
-          .sort((a, b) => parseFloat(b.balance) - parseFloat(a.balance));
-
-        let topWalletsList = [];
-
-        if (walletsWithBalance.length >= 2) {
-          topWalletsList = walletsWithBalance;
-        } else {
-          // Add existing non-zero wallets
-          topWalletsList = [...walletsWithBalance];
-
-          // Fill remaining with top wallets regardless of balance
-          const remaining = 2 - topWalletsList.length;
-          const walletsSorted = wallets
-            .sort((a, b) => parseFloat(b.balance) - parseFloat(a.balance))
-            .filter(w => !topWalletsList.find(tw => tw.currency_id === w.currency_id));
-
-          topWalletsList = topWalletsList.concat(walletsSorted.slice(0, remaining));
-        }
-
-        setFundData(wallets);
-
-      }
-    } catch (error) {
-      console.error("Error fetching user funds:", error);
-    }
-  };
-
-  // Filtered data
-  const filteredPackageList = packageList.filter(group =>
-    group.some(item =>
-      item.currency.toLowerCase().includes(searchPackage.toLowerCase()) ||
-      item.currency_fullname.toLowerCase().includes(searchPackage.toLowerCase())
-    )
-  );
-
-
-  const finalFundData = fundData?.filter((item) =>
-    item?.short_name?.toLowerCase()?.includes(search?.toLowerCase()) || item?.currency?.toLowerCase()?.includes(search?.toLowerCase())
-  );
-
-  const filteredCoinList = hideAssets
-    ? finalFundData.filter(item => (item.balance + item?.bonus + item.locked_balance || 0) > 0.000001)
-    : finalFundData;
-
-  const handleCheckboxChange = (type) => {
-    if (type === "balance") {
-      setHideAssets(!hideAssets);
-    } else {
-      setHideAssets(false);
-    }
-  };
-
-  useEffect(() => {
-    getPackageList()
-    token && handleUserFunds()
-    token && earningPortfolio()
-    token && subscribedPackageList()
-
+    return 0;
   }, []);
 
-  const getWalletType = async () => {
+  const formatNumber = useCallback((num, decimals = 2) => {
+    if (num === null || num === undefined || isNaN(num)) return "0.00";
+    return parseFloat(num).toLocaleString(undefined, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  }, []);
+
+  // API calls with proper error handling
+  const getPackageList = useCallback(async () => {
+    try {
+      LoaderHelper.loaderStatus(true);
+      const result = await AuthService.packageList();
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        setPackageList(result?.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching package list:", error);
+    } finally {
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  }, []);
+
+  const earningPortfolio = useCallback(async () => {
+    if (!token) return;
+    try {
+      const result = await AuthService.earningPortfolio();
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        setPortfolio(result?.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching earning portfolio:", error);
+    }
+  }, [token]);
+
+  const earningPortfolioSummary = useCallback(async () => {
+    if (!token) return;
+    try {
+      const result = await AuthService.earningPortfolioSummary();
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        setPortfolioSummary(result?.data || {});
+      }
+    } catch (error) {
+      console.error("Error fetching earning portfolio summary:", error);
+    }
+  }, [token]);
+
+  const subscribedPackageList = useCallback(async (status = "ACTIVE", skip = 0) => {
+    if (!token) return;
+    try {
+      LoaderHelper.loaderStatus(true);
+      const result = await AuthService.subscribedPackageList(skip, limit);
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        const allData = result?.data || [];
+        const completedPackage = allData.filter((item) => item?.status === "COMPLETED");
+        const activePackage = allData.filter((item) => item?.status === "ACTIVE");
+
+        setSubscribedActivePackages(activePackage);
+        setSubscribedCompletedPackage(completedPackage);
+      }
+    } catch (error) {
+      console.error("Error fetching subscribed packages:", error);
+    } finally {
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  }, [token]);
+
+
+  const getWalletType = useCallback(async () => {
     try {
       LoaderHelper.loaderStatus(true);
       const result = await AuthService.availableWalletTypes();
+      if (!isMountedRef.current) return;
+
       if (result?.success) {
-        setWalletType(result?.data);
-        setSelectedWallet(result?.data[0] || "")
+        const types = result?.data || [];
+        setWalletType(types);
+        if (types.length > 0) {
+          setSelectedWallet(types[0]);
+        }
       }
     } catch (error) {
+      console.error("Error fetching wallet types:", error);
+    } finally {
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
     }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
+  }, []);
 
-  const resetInput = () => {
-    setSubscriptionAmount("");
-    setPackageDetails({});
-  }
+  const getWalletBalance = useCallback(async () => {
+    if (!packageDetails?.currency_id || !selectedWallet) return;
 
-  const subscribeEarningPackage = async () => {
-    if (!packageDetails?._id || !subscriptionAmount || !selectedWallet) {
-      alertErrorMessage("Invalid subscription details, please reload the page and try again")
-      return;
-    }
     try {
       LoaderHelper.loaderStatus(true);
-      const result = await AuthService.subscribeEarningPackage(packageDetails?._id, subscriptionAmount, selectedWallet);
+      const result = await AuthService.getWalletBalance(packageDetails.currency_id, selectedWallet);
+      if (!isMountedRef.current) return;
+
+      if (result?.success) {
+        setWalletBalance(formatToNineDecimals(result?.data?.balance || 0));
+      }
+    } catch (error) {
+      console.error("Error fetching wallet balance:", error);
+    } finally {
+      if (isMountedRef.current) {
+        LoaderHelper.loaderStatus(false);
+      }
+    }
+  }, [packageDetails?.currency_id, selectedWallet, formatToNineDecimals]);
+
+  // Subscription handlers
+  const resetInput = useCallback(() => {
+    setSubscriptionAmount("");
+    setPackageDetails({});
+    setAgreeTerms(false);
+    setSelectedCurrencyPackages([]);
+  }, []);
+
+  const subscribeEarningPackage = useCallback(async () => {
+    if (!packageDetails?._id) {
+      alertErrorMessage("Please select a package");
+      return;
+    }
+    if (!subscriptionAmount || parseFloat(subscriptionAmount) <= 0) {
+      alertErrorMessage("Please enter a valid subscription amount");
+      return;
+    }
+    if (!selectedWallet) {
+      alertErrorMessage("Please select a wallet");
+      return;
+    }
+    if (parseFloat(subscriptionAmount) > walletBalance) {
+      alertErrorMessage("Insufficient balance in selected wallet");
+      return;
+    }
+    if (packageDetails?.min_amount && parseFloat(subscriptionAmount) < packageDetails.min_amount) {
+      alertErrorMessage(`Minimum subscription amount is ${packageDetails.min_amount} ${packageDetails.currency}`);
+      return;
+    }
+    if (packageDetails?.max_amount && parseFloat(subscriptionAmount) > packageDetails.max_amount) {
+      alertErrorMessage(`Maximum subscription amount is ${packageDetails.max_amount} ${packageDetails.currency}`);
+      return;
+    }
+    if (!agreeTerms) {
+      alertErrorMessage("Please agree to the Earn Service Agreement");
+      return;
+    }
+
+    try {
+      setIsSubscribing(true);
+      LoaderHelper.loaderStatus(true);
+      const result = await AuthService.subscribeEarningPackage(
+        packageDetails._id,
+        parseFloat(subscriptionAmount),
+        selectedWallet
+      );
+
+      if (!isMountedRef.current) return;
+
       if (result?.success) {
         resetInput();
         $("#more_details").modal('hide');
-        alertSuccessMessage(result?.message);
-        subscribedPackageList()
-        earningPortfolio()
-        handleUserFunds()
+        $("#package_details").modal('hide');
+        alertSuccessMessage(result?.message || "Subscription successful!");
+        // Refresh data
+        subscribedPackageList();
+        earningPortfolio();
+        earningPortfolioSummary();
       } else {
-        alertErrorMessage(result?.message)
+        alertErrorMessage(result?.message || "Subscription failed");
       }
     } catch (error) {
-      alertSuccessMessage(error?.message)
-    }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
-
-  const getWalletBalance = async () => {
-    try {
-      LoaderHelper.loaderStatus(true);
-      const result = await AuthService.getWalletBalance(packageDetails?.currency_id, selectedWallet);
-      if (result?.success) {
-        setWalletBalance(formatToNineDecimals(result?.data?.balance || 0))
+      console.error("Error subscribing to package:", error);
+      alertErrorMessage(error?.message || "An error occurred during subscription");
+    } finally {
+      if (isMountedRef.current) {
+        setIsSubscribing(false);
+        LoaderHelper.loaderStatus(false);
       }
-    } catch (error) {
     }
-    finally { LoaderHelper.loaderStatus(false); }
-  };
+  }, [packageDetails, subscriptionAmount, selectedWallet, walletBalance, agreeTerms, resetInput, subscribedPackageList, earningPortfolio, earningPortfolioSummary]);
 
-  const showPackageDetails = (data) => {
-    resetInput()
-    setPackageDetails(data)
-    $("#package_details").modal('show');
-    if (data?.currency_id !== packageDetails?.currency_id) {
-      getWalletType()
+  // UI handlers
+  const showPackageDetails = useCallback((data, allCurrencyPackages = null) => {
+    if (!token) {
+      navigate('/login');
+      return;
     }
-  };
-
-  // Format function (DD/MM/YYYY)
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-
-  const showOrderDetail = () => {
-    const today = new Date();
-    const subscriptionDate = formatDate(today);
-    const redemptionDate = formatDate(new Date(today.getTime() + packageDetails?.duration_days * 24 * 60 * 60 * 1000));
-    setPackageDetails({ ...packageDetails, subscriptionDate, redemptionDate })
-    $("#package_details").modal('hide');
-    $("#more_details").modal('show');
-  };
-
-  const showBackModel = () => {
-    $("#package_details").modal('show');
-    $("#more_details").modal('hide');
-  }
-  const formatToNineDecimals = (data) => {
-    if (typeof (data) === "number") {
-      // return data
-      return parseFloat(data?.toFixed(9))
+    resetInput();
+    setPackageDetails(data);
+    
+    // Find all packages for this currency from packageList
+    if (allCurrencyPackages) {
+      // Sort by duration_days ascending
+      const sortedPackages = [...allCurrencyPackages].sort((a, b) => a.duration_days - b.duration_days);
+      setSelectedCurrencyPackages(sortedPackages);
     } else {
-      return 0
+      // Find from packageList by currency_id
+      const currencyGroup = packageList.find(group => 
+        Array.isArray(group) && group.some(pkg => pkg.currency_id === data.currency_id)
+      );
+      if (currencyGroup) {
+        const sortedPackages = [...currencyGroup].sort((a, b) => a.duration_days - b.duration_days);
+        setSelectedCurrencyPackages(sortedPackages);
+      } else {
+        setSelectedCurrencyPackages([data]);
+      }
     }
-  };
+    
+    $("#package_details").modal('show');
+    getWalletType();
+  }, [token, navigate, resetInput, getWalletType, packageList]);
 
-  const settings = (packageNumber) => {
+  // Handle duration selection in modal
+  const handleDurationSelect = useCallback((pkg) => {
+    setPackageDetails(pkg);
+    setSubscriptionAmount(""); // Reset amount when duration changes
+  }, []);
+
+  const handleMaxAmount = useCallback(() => {
+    if (walletBalance > 0) {
+      const maxAmount = packageDetails?.max_amount
+        ? Math.min(walletBalance, packageDetails.max_amount)
+        : walletBalance;
+      setSubscriptionAmount(maxAmount.toString());
+    }
+  }, [walletBalance, packageDetails?.max_amount]);
+
+  const handleSubscriptionAmountChange = useCallback((e) => {
+    const value = e.target.value;
+    // Allow only numbers and decimal point
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setSubscriptionAmount(value);
+    }
+  }, []);
+
+  // Memoized filtered data
+  const filteredPackageList = useMemo(() => {
+    if (!packageList || !Array.isArray(packageList)) return [];
+    return packageList.filter(group =>
+      Array.isArray(group) && group.some(item =>
+        item?.currency?.toLowerCase().includes(searchPackage.toLowerCase()) ||
+        item?.currency_fullname?.toLowerCase().includes(searchPackage.toLowerCase())
+      )
+    );
+  }, [packageList, searchPackage]);
+
+  // Flatten packages for "All Products" table
+  const allPackagesFlat = useMemo(() => {
+    if (!packageList || !Array.isArray(packageList)) return [];
+    return packageList.flat().filter(Boolean);
+  }, [packageList]);
+
+  // Group packages by currency for display
+  const groupedPackages = useMemo(() => {
+    const groups = {};
+    allPackagesFlat.forEach(pkg => {
+      const key = pkg.currency_id || pkg.currency;
+      if (!groups[key]) {
+        groups[key] = {
+          currency: pkg.currency,
+          currency_fullname: pkg.currency_fullname,
+          icon_path: pkg.icon_path,
+          packages: []
+        };
+      }
+      groups[key].packages.push(pkg);
+    });
+    return Object.values(groups);
+  }, [allPackagesFlat]);
+
+  // Calculate returns based on return percentage for the duration
+  // return_percentage is the TOTAL return for that specific duration (not annual)
+  // Total Return = Amount * return_percentage / 100
+  // Daily Return = Total Return / duration_days
+  const totalReturns = useMemo(() => {
+    if (!subscriptionAmount || !packageDetails?.return_percentage) return "0.00";
+    const amount = parseFloat(subscriptionAmount) || 0;
+    const returnPercentage = packageDetails.return_percentage || 0;
+    // Total return = Amount * percentage / 100
+    const total = amount * returnPercentage / 100;
+    return formatToNineDecimals(total);
+  }, [subscriptionAmount, packageDetails, formatToNineDecimals]);
+
+  const dailyReturns = useMemo(() => {
+    if (!subscriptionAmount || !packageDetails?.return_percentage || !packageDetails?.duration_days) return "0.00";
+    const amount = parseFloat(subscriptionAmount) || 0;
+    const returnPercentage = packageDetails.return_percentage || 0;
+    const days = packageDetails.duration_days || 1;
+    // Daily return = (Amount * percentage / 100) / days
+    const daily = (amount * returnPercentage / 100) / days;
+    return formatToNineDecimals(daily);
+  }, [subscriptionAmount, packageDetails, formatToNineDecimals]);
+
+  const totalReceivable = useMemo(() => {
+    if (!subscriptionAmount) return "0.00";
+    const amount = parseFloat(subscriptionAmount) || 0;
+    const returns = parseFloat(totalReturns) || 0;
+    return formatToNineDecimals(amount + returns);
+  }, [subscriptionAmount, totalReturns, formatToNineDecimals]);
+
+  // Slider settings
+  const getSliderSettings = useCallback((packageNumber) => {
+    const slidesToShow = Math.min(packageNumber, 3);
     return {
       dots: true,
-      infinite: true,
+      infinite: packageNumber > 3,
       speed: 600,
-      slidesToShow: packageNumber <= 6 ? 6 : 1,
+      slidesToShow: slidesToShow,
       slidesToScroll: 1,
       autoplay: false,
       autoplaySpeed: 3000,
       arrows: false,
       responsive: [
         {
+          breakpoint: 1366,
+          settings: {
+            slidesToShow: Math.min(packageNumber, 2),
+            dots: true,
+            arrows: false,
+          },
+        },
+        {
           breakpoint: 1024,
-          settings: { slidesToShow: 2 },
+          settings: {
+            slidesToShow: 1,
+            dots: true,
+            arrows: false,
+          },
         },
         {
           breakpoint: 600,
-          settings: { slidesToShow: 2 },
+          settings: {
+            slidesToShow: 1,
+            dots: true,
+            arrows: false,
+          },
         },
       ],
     };
-  };
+  }, []);
 
+  // Effects
   useEffect(() => {
-    if (selectedWallet && selectedWallet !== "") {
-      getWalletBalance()
+    isMountedRef.current = true;
+    getPackageList();
+    if (token) {
+      earningPortfolio();
+      earningPortfolioSummary();
+      subscribedPackageList();
     }
 
-  }, [selectedWallet]);
+    return () => {
+      isMountedRef.current = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (selectedWallet && packageDetails?.currency_id) {
+      getWalletBalance();
+    }
+  }, [selectedWallet, packageDetails?.currency_id, getWalletBalance]);
 
   return (
     <>
       <Helmet>
         <title>Rewards & Yield – Wrathcode Earning Platform</title>
-
         <meta
           name="description"
           content="Access Wrathcode earning programs: rewards, staking and yield-based crypto solutions on a trusted platform."
         />
-
         <meta
           name="keywords"
           content="crypto yield, earn with crypto, Wrathcode earning, crypto rewards platform"
@@ -291,13 +447,6 @@ function Earning() {
 
       <section className='earning_outer_s'>
         <div className='earning_section_cate'>
-
-          {/* <div className='col-sm-2'>
-                <div className='earning_tp_heading'>
-                  <img src="/images/earning_vector.png" className="img-fluid" alt="earning" /><h4>Earning</h4>
-                </div>
-              </div> */}
-
           <div className='earning_right_tab'>
             <div className='toptabs_hd'>
               <div className='container'>
@@ -308,365 +457,215 @@ function Earning() {
                   <li className="nav-item" role="presentation">
                     <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Earning Dashboard</button>
                   </li>
-                  {/* <li className="nav-item" role="presentation" >
-                        <button className="nav-link" id="earning-tab" data-bs-toggle="tab" data-bs-target="#earning" type="button" role="tab" aria-controls="earning" aria-selected="false">Earning Dashboard</button>
-                      </li> */}
                 </ul>
               </div>
             </div>
-
           </div>
 
           <div className='container'>
-
             <div className="tab-content" id="myTabContent">
-
+              {/* Earning Tab */}
               <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
                 <div className='exchange_earning_bnr'>
                   <div className='earningbnr_cnt'>
                     <h2>Wrathcode Exchange Earning</h2>
                     <p>New user exclusive: Up to <span>600% APR</span></p>
-                    <button className='signbtn'>Sign Up Now</button>
+                    {!token && (
+                      <button className='signbtn' onClick={() => navigate('/register')}>Sign Up Now</button>
+                    )}
                   </div>
-
                   <div className='earning_bnr'>
                     <img src="/images/earining_bnr_vector.png" alt="Exchange Earning" />
                   </div>
                 </div>
 
-
-                {/* <div className="user_search earningtop_search">
-                  <form className='searchinput'>
-                    <button><i className="ri-search-line"></i></button>
-                    <input type="text" placeholder="Search" onChange={(e) => setSearchPackage(e.target.value)} value={searchPackage} />
-
-                  </form>
-
-                </div> */}
-
                 <div className='earning_list_block'>
-                  {filteredPackageList?.length > 0 ? filteredPackageList.slice(0, 1).map((packagees, groupIndex) => {
-                    const groupSlidesCount = packagees.length;
-                    const groupSettings = {
-                      ...settings,
-                      dots: true,
-                      arrows: false,
-                      slidesToShow: groupSlidesCount >= 3 ? 3 : groupSlidesCount,
-                      responsive: [
-                        {
-                          breakpoint: 1366,
-                          settings: {
-                            slidesToShow: groupSlidesCount >= 2 ? 2 : groupSlidesCount,
-                            dots: true,
-                            arrows: false,
-                          },
-                        },
-                        {
-                          breakpoint: 1024,
-                          settings: {
-                            slidesToShow: groupSlidesCount >= 1 ? 1 : groupSlidesCount,
-                            dots: true,
-                            arrows: false,
-                          },
-                        },
-                        {
-                          breakpoint: 600,
-                          settings: {
-                            slidesToShow: 1,
-                            dots: true,
-                            arrows: false,
-                          },
-                        },
-                      ],
-                    };
-                    return (
-                      <div key={groupIndex} className="slider_group_wrapper">
-                        <Slider {...groupSettings}>
-                          {packagees.map((item, index) => (
-                            <div key={item._id} className="currency_list_b" >
-                              <ul>
-                                <li>
-                                  <div className="currency_bit">
-                                    <img
-                                      src={ApiConfig?.baseImage + item?.icon_path}
-                                      className="img-fluid"
-                                      alt={item?.currency_fullname}
-                                    />
-                                    <h2>
-                                      {item?.currency}
-                                      <span>({item?.currency_fullname})</span>
-                                    </h2>
-                                    <span className='newtag'>New User Exclusive</span>
-                                  </div>
+                  {filteredPackageList?.length > 0 ? (
+                    filteredPackageList.slice(0, 1).map((packages, groupIndex) => {
+                      const groupSlidesCount = packages.length;
+                      const groupSettings = getSliderSettings(groupSlidesCount);
 
-                                  <ul className='usd_detail_list'>
-                                    <li> <span>{item?.duration_days}</span> Days</li>
-                                    <li className='pricevalue'><span>% APY</span>{item?.return_percentage?.toFixed(2)}</li>
-                                  </ul>
-                                  <button className="subscribe_btn">
-                                    {token ? <a href="#/" onClick={() => showPackageDetails(item)}>Subscribe</a> : <Link to="/login">Login</Link>}
-                                  </button>
-
-                                </li>
-                              </ul>
-                            </div>
-                          ))}
-                        </Slider>
+                      return (
+                        <div key={groupIndex} className="slider_group_wrapper">
+                          <Slider {...groupSettings}>
+                            {packages.map((item) => (
+                              <div key={item._id} className="currency_list_b">
+                                <ul>
+                                  <li>
+                                    <div className="currency_bit">
+                                      <img
+                                        src={ApiConfig?.baseImage + item?.icon_path}
+                                        className="img-fluid"
+                                        alt={item?.currency_fullname}
+                                        onError={(e) => { e.target.src = '/images/default-coin.png'; }}
+                                      />
+                                      <h2>
+                                        {item?.currency}
+                                        <span>({item?.currency_fullname})</span>
+                                      </h2>
+                                      <span className='newtag'>Trending<i className="ri-fire-line"></i></span>
+                                    </div>
+                                    <ul className='usd_detail_list'>
+                                      <li><span>{item?.duration_days}</span> Days</li>
+                                      <li className='pricevalue'><span>% APY</span>{item?.return_percentage?.toFixed(2)}</li>
+                                    </ul>
+                                    <button className="subscribe_btn">
+                                      {token ? (
+                                        <a href="#/" onClick={(e) => { e.preventDefault(); showPackageDetails(item, packages); }}>Subscribe</a>
+                                      ) : (
+                                        <Link to="/login">Login</Link>
+                                      )}
+                                    </button>
+                                  </li>
+                                </ul>
+                              </div>
+                            ))}
+                          </Slider>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className='d-flex justify-content-center'>
+                      <div className="no_data_outer">
+                        <div className="table-responsive">
+                          <div className="no_data_vector">
+                            <img src="/images/no_data_vector.svg" alt="no-data" />
+                          </div>
+                        </div>
                       </div>
-                    );
-                  }) :  <div className=' d-flex justify-content-center'>
-                  <div className="no_data_outer">
-                  <div className="table-responsive">
-                    <div className="no_data_vector">
-                      <img src="/images/no_data_vector.svg" alt="no-data" />
                     </div>
-                  </div>
-                </div>
-                </div>}
+                  )}
 
+                  {/* All Products Section */}
                   <div className='all_product_data'>
-                    <h3>All Products</h3>
+                    <h3>All Plans</h3>
+
+                    {/* Desktop View */}
                     <div className='desktop_view'>
-                    <table class="table ">
-                      <thead>
-                        <tr>
-                          <th> Token</th>
-                          <th> Est. APR</th>
-                          <th> Duration</th>
-                          <th className='action_td'> Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                          <td className='action_td'> <span class="btn custom-btn subscribebtn"><button data-bs-toggle="modal" data-bs-target="#earningpopup">Subscribe</button></span></td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Token</th>
+                            <th>Est. APR</th>
+                            <th>Duration</th>
+                            <th className='action_td'>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {groupedPackages.length > 0 ? (
+                            groupedPackages.map((group, index) => {
+                              const minApr = Math.min(...group.packages.map(p => p.return_percentage || 0));
+                              const maxApr = Math.max(...group.packages.map(p => p.return_percentage || 0));
+                              const minDays = Math.min(...group.packages.map(p => p.duration_days || 0));
+                              const maxDays = Math.max(...group.packages.map(p => p.duration_days || 0));
+
+                              return (
+                                <tr key={group.currency + index}>
+                                  <td>
+                                    <div className="td_div">
+                                      <img
+                                        alt={group.currency}
+                                        src={ApiConfig?.baseImage + group.icon_path}
+                                        className="img-fluid icon_img coinimg me-2"
+                                        onError={(e) => { e.target.src = '/images/default-coin.png'; }}
+                                      />
+                                      {group.currency}
+                                    </div>
+                                  </td>
+                                  <td>{minApr.toFixed(2)}% ~ {maxApr.toFixed(2)}%</td>
+                                  <td>{minDays}/{maxDays} days</td>
+                                  <td className='action_td'>
+                                    <span className="btn custom-btn subscribebtn">
+                                      <button onClick={() => showPackageDetails(group.packages[0], group.packages)}>
+                                        Subscribe
+                                      </button>
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ) : (
+                            <tr className="no-data-row">
+                              <td colSpan="4">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_vector">
+                                    <img src="/images/no_data_vector.svg" alt="no-data" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
 
+                    {/* Mobile View */}
                     <div className='mobile_view'>
-                    <table class="table ">
-                      <thead>
-                        <tr>
-                          <th> Token</th>
-                          <th> Est. APR</th>
-                          <th> Duration</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                      </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                      </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                      </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                      </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                      </tr>
-                        <tr>
-                          <td>
-                            <div class="td_div"><span class="star_btn btn_icon active"><i class="ri ri-star-line me-2 "></i></span><img alt="" src="https://backend.gatbits.com/icons/coin-image-1751740819775-850287886.jpeg" class="img-fluid icon_img coinimg me-2 " />WIF/USDT</div>
-                          </td>
-                          <td>15.00% ~ 600.00%</td>
-                          <td>30/360 days</td>
-                       </tr>
-                      </tbody>
-                    </table>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Token</th>
+                            <th>Est. APR</th>
+                            <th>Duration</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {groupedPackages.length > 0 ? (
+                            groupedPackages.map((group, index) => {
+                              const minApr = Math.min(...group.packages.map(p => p.return_percentage || 0));
+                              const maxApr = Math.max(...group.packages.map(p => p.return_percentage || 0));
+                              const minDays = Math.min(...group.packages.map(p => p.duration_days || 0));
+                              const maxDays = Math.max(...group.packages.map(p => p.duration_days || 0));
+
+                              return (
+                                <tr key={group.currency + index} onClick={() => showPackageDetails(group.packages[0], group.packages)} style={{ cursor: 'pointer' }}>
+                                  <td>
+                                    <div className="td_div">
+                                      <span className="star_btn btn_icon">
+                                        <i className="ri ri-star-line me-2"></i>
+                                      </span>
+                                      <img
+                                        alt={group.currency}
+                                        src={ApiConfig?.baseImage + group.icon_path}
+                                        className="img-fluid icon_img coinimg me-2"
+                                        onError={(e) => { e.target.src = '/images/default-coin.png'; }}
+                                      />
+                                      {group.currency}
+                                    </div>
+                                  </td>
+                                  <td>{minApr.toFixed(2)}% ~ {maxApr.toFixed(2)}%</td>
+                                  <td>{minDays}/{maxDays} days</td>
+                                </tr>
+                              );
+                            })
+                          ) : (
+                            <tr className="no-data-row">
+                              <td colSpan="3">
+                                <div className="no-data-wrapper">
+                                  <div className="no_data_vector">
+                                    <img src="/images/no_data_vector.svg" alt="no-data" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
-
-
                   </div>
-
-
                 </div>
               </div>
+
+              {/* Earning Dashboard Tab */}
               <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-
                 <div className='exchange_earning_bnr'>
                   <div className='earningbnr_cnt'>
                     <h2>Wrathcode Exchange Earning Balance</h2>
                     <p>View your total earnings, rewards, and growth in one place.</p>
-                    <button className='signbtn'>Sign Up Now</button>
+                    {!token && (
+                      <button className='signbtn' onClick={() => navigate('/register')}>Sign Up Now</button>
+                    )}
                   </div>
-
                   <div className='earning_bnr'>
                     <img src="/images/earning_balance_vector.png" alt="Exchange Earning" />
                   </div>
@@ -675,8 +674,8 @@ function Earning() {
                 <ul className='balance_list_s'>
                   <li>
                     <div className='balance_cnt'>
-                      <h4>$60,230.00</h4>
-                      <p>Total Earning Balance </p>
+                      <h4>{formatNumber(portfolioSummary?.total_invested || 0)} $</h4>
+                      <p>Total Invested</p>
                     </div>
                     <div className='balance_vector'>
                       <img src="/images/wallet_coins_balance.svg" alt="Earning Balance" />
@@ -684,8 +683,8 @@ function Earning() {
                   </li>
                   <li>
                     <div className='balance_cnt'>
-                      <h4>$23,540.00</h4>
-                      <p>Pending Reward</p>
+                      <h4>{formatNumber(portfolioSummary?.total_expected_return || 0)} $</h4>
+                      <p>Expected Return</p>
                     </div>
                     <div className='balance_vector'>
                       <img src="/images/wallet_coins_balance2.svg" alt="Earning Balance" />
@@ -693,8 +692,8 @@ function Earning() {
                   </li>
                   <li>
                     <div className='balance_cnt'>
-                      <h4>$23.00</h4>
-                      <p>Yesterday Earning</p>
+                      <h4>{formatNumber(portfolioSummary?.total_running_investment || 0)} $</h4>
+                      <p>Running Investment</p>
                     </div>
                     <div className='balance_vector'>
                       <img src="/images/wallet_coins_balance3.svg" alt="Earning Balance" />
@@ -702,8 +701,8 @@ function Earning() {
                   </li>
                   <li>
                     <div className='balance_cnt'>
-                      <h4>$3,540.20</h4>
-                      <p>Cumulative Earning</p>
+                      <h4>{formatNumber(portfolioSummary?.total_bonus_remaining || 0)} $</h4>
+                      <p>Bonus Remaining</p>
                     </div>
                     <div className='balance_vector'>
                       <img src="/images/wallet_coins_balance4.svg" alt="Earning Balance" />
@@ -711,188 +710,211 @@ function Earning() {
                   </li>
                 </ul>
 
-
                 <div className="wallet_balance_tb">
                   <div className="user_list_top walletbalance_t">
                     <div className="user_list_l">
                       <h4>Earning Assets</h4>
                     </div>
-
                   </div>
 
-                  <ul className='earning_assets_list'>
-                    <li><span>Total Assets</span>$3,540.20</li>
-                    <li><span>Total Earning</span>$7,230.20</li>
-                    <li><span>Total Pending Reward</span>$730.20</li>
-                    <li><span>Reward Type</span>$930.20</li>
-                    <li className='exportbtn'><button><i class="ri-download-2-line"></i> Export</button></li>
-                  </ul>
-
-
+                  {portfolio?.length > 0 ? (
+                    portfolio.map((item, index) => (
+                      <ul className='earning_assets_list' key={item._id || index}>
+                        <li>
+                          <span>
+                            <img 
+                              src={ApiConfig?.baseImage + item?.icon_path} 
+                              alt={item?.currency} 
+                              width="20" 
+                              height="20" 
+                              style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                              onError={(e) => { e.target.src = '/images/default-coin.png'; }}
+                            />
+                            {item?.currency}
+                          </span>
+                          {item?.currency_fullname}
+                        </li>
+                        <li><span>Total Invested</span>{formatNumber(item?.invested_amount || 0)} {item?.currency}</li>
+                        <li><span>Expected Return</span>{formatNumber(item?.expected_return || 0)} {item?.currency}</li>
+                        <li><span>Running</span>{formatNumber(item?.running_investment || 0)} {item?.currency}</li>
+                        <li><span>Bonus Remaining</span>{formatNumber(item?.bonus_remaining || 0)} {item?.currency}</li>
+                      </ul>
+                    ))
+                  ) : (
+                    <ul className='earning_assets_list'>
+                      <li><span>No earning assets</span>Start investing to see your portfolio</li>
+                    </ul>
+                  )}
                 </div>
-
 
                 <div className="dashboard_recent_s productdata position_order">
                   <div className='d-flex justify-content-between align-items-center'>
-                    <h4>Earning Balance History </h4>
+                    <h4>Earning Balance History</h4>
                     <div className="searchBar custom-tabs">
                       <i className="ri-search-2-line"></i>
-                      <input type="search" className="custom_search" placeholder="Search token" value={search} onChange={(e) => { setSearch(e.target.value); }} />
+                      <input
+                        type="search"
+                        className="custom_search"
+                        placeholder="Search token"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
                     </div>
                   </div>
+
                   <div className="user_list_top rowtable">
                     <div className="user_list_l earning_section_cate responsive-table">
-                      <ul class="position_list">
-                        <li class="nav-item positions" role="presentation"><button>Active</button></li>
-                        <li class="nav-item open" role="presentation"><button>Completed</button></li>
+                      <ul className="position_list nav nav-tabs" id="earningHistoryTab" role="tablist">
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link active"
+                            id="active-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#activeTab"
+                            type="button"
+                            role="tab"
+                          >
+                            Active
+                          </button>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                          <button
+                            className="nav-link"
+                            id="completed-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#completedTab"
+                            type="button"
+                            role="tab"
+                          >
+                            Completed
+                          </button>
+                        </li>
                       </ul>
                     </div>
                   </div>
+
                   <div className='table-responsive recenttable_s'>
-                    <div className="cnt_table positions">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>S.No</th>
-                            <th>Currency</th>
-                            <th>Deducted From</th>
-                            <th>Duration</th>
-                            <th>Start date</th>
-                            <th>Mature date</th>
-                            <th>Subscription Amount</th>
-                            <th>Bonus Amount</th>
-                            <th>Receivable Amount</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {subscribedActivePackages?.length > 0 ? subscribedActivePackages?.map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item?.currency}</td>
-                                <td className='text-warning'>{item?.wallet_type.charAt(0).toUpperCase() + item?.wallet_type.slice(1)} Wallet</td>
-                                <td>{item?.duration_days}</td>
-                                <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
-                                <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
-                                <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
-                                <td className='text-warning'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
-                                <td>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
-                                <td className='text-warning'>{item?.status}</td>
-                              </tr>
-                            )
-                          }) :
-                          <tr rowSpan="5" className="no-data-row">
-                          <td colSpan="12">
-                            <div className="no-data-wrapper">
-                              <div className="no_data_s">
-                                <img src="/images/no_data_vector.svg" alt="no-data" />
-                              </div>
-                              {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-
-                            </div>
-                          </td>
-                        </tr>}
-                        </tbody>
-                      </table>
-                      {/* <div className="pagination_list">
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">«</span>
-                      </a>
-                    </li>
-                    <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item"><a className="page-link" href="#">4</a></li>
-                    <li className="page-item"><a className="page-link" href="#">5</a></li>
-                    <li className="page-item"><a className="page-link" href="#">...</a></li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">»</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div> */}
-                    </div>
-                    <div className="cnt_table open">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>S.No</th>
-                            <th>Currency</th>
-                            <th>Received In</th>
-                            <th>Duration</th>
-                            <th>Start date</th>
-                            <th>Mature date</th>
-                            <th>Subscription Amount</th>
-                            <th>Bonus</th>
-                            <th>Received Amount</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          {subscribedCompletedPackage?.length > 0 ? subscribedCompletedPackage?.map((item, index) => {
-                            return (
-
-                              <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item?.currency}</td>
-                                <td className='text-success'>{item?.credited_wallet_type.charAt(0).toUpperCase() + item?.credited_wallet_type.slice(1)} Wallet</td>
-                                <td>{item?.duration_days}</td>
-                                <td>{moment(item.start_date).format("YYYY-MM-DD")} </td>
-                                <td>{moment(item.end_date).format("YYYY-MM-DD")} </td>
-                                <td>{parseFloat(item?.invested_amount?.$numberDecimal || 0)}</td>
-                                <td className='text-success'>+{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
-                                <td className='text-success'>{parseFloat(item?.expected_return?.$numberDecimal || 0)}</td>
-                                <td className='text-success'>{item?.status}</td>
-                              </tr>
-
-                            )
-                          }) :
-                            <tr rowSpan="5" className="no-data-row">
-                              <td colSpan="12">
-                                <div className="no-data-wrapper">
-                                  <div className="no_data_s">
-                                    <img src="/images/no_data_vector.svg" alt="no-data" />
-
-                                  </div>
-
-                                  {token ? <p></p> : <p>Please <Link to='/login'>Login</Link> to continue</p>}
-
-
-                                </div>
-
-                              </td>
+                    <div className="tab-content" id="earningHistoryTabContent">
+                      {/* Active Subscriptions */}
+                      <div className="tab-pane fade show active" id="activeTab" role="tabpanel">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>S.No</th>
+                              <th>Currency</th>
+                              <th>Deducted From</th>
+                              <th>Duration</th>
+                              <th>Start Date</th>
+                              <th>Mature Date</th>
+                              <th>Subscription Amount</th>
+                              <th>Bonus Amount</th>
+                              <th>Receivable Amount</th>
+                              <th>Status</th>
                             </tr>
-                            }
-                        </tbody>
-                      </table>
-                    </div>
+                          </thead>
+                          <tbody>
+                            {subscribedActivePackages?.length > 0 ? (
+                              subscribedActivePackages.map((item, index) => (
+                                <tr key={item._id || index}>
+                                  <td>{skipActive + index + 1}</td>
+                                  <td>{item?.currency}</td>
+                                  <td className='text-warning'>
+                                    {item?.wallet_type?.charAt(0).toUpperCase() + item?.wallet_type?.slice(1)} Wallet
+                                  </td>
+                                  <td>{item?.duration_days} days</td>
+                                  <td>{moment(item.start_date).format("YYYY-MM-DD")}</td>
+                                  <td>{moment(item.end_date).format("YYYY-MM-DD")}</td>
+                                  <td>{formatToNineDecimals(parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
+                                  <td className='text-warning'>
+                                    +{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}
+                                  </td>
+                                  <td>{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0))}</td>
+                                  <td className='text-warning'>{item?.status}</td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr className="no-data-row">
+                                <td colSpan="10">
+                                  <div className="no-data-wrapper">
+                                    <div className="no_data_s">
+                                      <img src="/images/no_data_vector.svg" alt="no-data" />
+                                    </div>
+                                    {!token && <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
 
+                      {/* Completed Subscriptions */}
+                      <div className="tab-pane fade" id="completedTab" role="tabpanel">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>S.No</th>
+                              <th>Currency</th>
+                              <th>Received In</th>
+                              <th>Duration</th>
+                              <th>Start Date</th>
+                              <th>Mature Date</th>
+                              <th>Subscription Amount</th>
+                              <th>Bonus</th>
+                              <th>Received Amount</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {subscribedCompletedPackage?.length > 0 ? (
+                              subscribedCompletedPackage.map((item, index) => (
+                                <tr key={item._id || index}>
+                                  <td>{skipCompleted + index + 1}</td>
+                                  <td>{item?.currency}</td>
+                                  <td className='text-success'>
+                                    {item?.credited_wallet_type?.charAt(0).toUpperCase() + item?.credited_wallet_type?.slice(1)} Wallet
+                                  </td>
+                                  <td>{item?.duration_days} days</td>
+                                  <td>{moment(item.start_date).format("YYYY-MM-DD")}</td>
+                                  <td>{moment(item.end_date).format("YYYY-MM-DD")}</td>
+                                  <td>{formatToNineDecimals(parseFloat(item?.invested_amount?.$numberDecimal || 0))}</td>
+                                  <td className='text-success'>
+                                    +{formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0) - parseFloat(item?.invested_amount?.$numberDecimal || 0))}
+                                  </td>
+                                  <td className='text-success'>
+                                    {formatToNineDecimals(parseFloat(item?.expected_return?.$numberDecimal || 0))}
+                                  </td>
+                                  <td className='text-success'>{item?.status}</td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr className="no-data-row">
+                                <td colSpan="10">
+                                  <div className="no-data-wrapper">
+                                    <div className="no_data_s">
+                                      <img src="/images/no_data_vector.svg" alt="no-data" />
+                                    </div>
+                                    {!token && <p>Please <Link to='/login'>Login</Link> to continue</p>}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
               </div>
-
             </div>
           </div>
-
-
         </div>
-
-
-      </section >
-
+      </section>
 
       {/* <!-- Modal earning popup start --> */}
-
-
       <div
         className="modal fade earningpopup"
-        id="earningpopup"
+        id="package_details"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
       >
@@ -904,39 +926,46 @@ function Earning() {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={resetInput}
               ></button>
             </div>
 
             <div className="modal-body text-center">
               <div className='earining_popup_exchange'>
                 <div className='lft_pop_cnt'>
-                  <h3><img src="/images/tether_icon.png" alt="usdt" />USDT</h3>
+                  <h3>
+                    <img 
+                      src={packageDetails?.icon_path ? ApiConfig?.baseImage + packageDetails?.icon_path : "/images/tether_icon.png"} 
+                      alt={packageDetails?.currency || "coin"}
+                      onError={(e) => { e.target.src = '/images/tether_icon.png'; }}
+                    />
+                    {packageDetails?.currency || "N/A"}
+                  </h3>
 
                   <ul className='daylist'>
-                    <li className='active'>
-                      <span>30 Day</span>600.00%
-                    </li>
-                    <li>
-                      <span>60 Day</span>600.00%
-                    </li>
-                    <li>
-                      <span>90 Day</span>600.00%
-                    </li>
-                    <li>
-                      <span>180 Day</span>600.00%
-                    </li>
-                    <li>
-                      <span>270 Day</span>600.00%
-                    </li>
-                    <li>
-                      <span>360 Day</span>600.00%
-                    </li>
-
+                    {selectedCurrencyPackages.length > 0 ? (
+                      selectedCurrencyPackages.map((pkg) => (
+                        <li 
+                          key={pkg._id} 
+                          className={packageDetails?._id === pkg._id ? 'active' : ''}
+                          onClick={() => handleDurationSelect(pkg)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <span>{pkg.duration_days} Day</span>
+                          {pkg.return_percentage?.toFixed(2)}%
+                        </li>
+                      ))
+                    ) : (
+                      <li className='active'>
+                        <span>{packageDetails?.duration_days || 0} Day</span>
+                        {packageDetails?.return_percentage?.toFixed(2) || "0.00"}%
+                      </li>
+                    )}
                   </ul>
 
                   <ul className='termslist'>
-                    <li>Reference <span className='text-green'>3.0%</span></li>
-                    <li>Term<span><strong>30 days</strong></span></li>
+                    <li>Reference <span className='text-green'>{packageDetails?.return_percentage?.toFixed(2) || "0.00"}%</span></li>
+                    <li>Term<span><strong>{packageDetails?.duration_days || 0} days</strong></span></li>
                   </ul>
 
                   <div className='payment_method_f'>
@@ -944,9 +973,15 @@ function Earning() {
                     <div className='payment_inquery'>
                       <h3>Payment Method</h3>
                       <div className='select_option'>
-                        <select>
-                          <option>MAIN</option>
-                          <option>MAIN</option>
+                        <select 
+                          value={selectedWallet}
+                          onChange={(e) => setSelectedWallet(e.target.value)}
+                        >
+                          {walletType.map((wallet, index) => (
+                            <option key={index} value={wallet}>
+                              {wallet?.charAt(0).toUpperCase() + wallet?.slice(1)}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -954,18 +989,22 @@ function Earning() {
                     <div className='payment_inquery'>
                       <h3>Subscription Amount </h3>
                       <div className='amount_input'>
-                        <input type='text' placeholder='Enter Subscription Amount ' />
-                        <span className='max text-green'>Max</span>
+                        <input 
+                          type='text' 
+                          placeholder={`Enter Subscription Amount (Min ${packageDetails?.min_amount} ${packageDetails?.currency})`}
+                          value={subscriptionAmount}
+                          onChange={handleSubscriptionAmountChange}
+                        />
+                        <span className='max text-green' onClick={handleMaxAmount} style={{ cursor: 'pointer' }}>Max</span>
                       </div>
                     </div>
 
                   </div>
 
                   <ul className='termslist border-0'>
-                    <li>Funding Account <span>0 USDT<i class="ri-add-circle-line"></i></span></li>
-                    <li>Max Account<span className='text-light'>3,000,000 USDT</span></li>
+                    <li>Funding Account <span>{walletBalance} {packageDetails?.currency}<i className="ri-add-circle-line"></i></span></li>
+                    <li>Max Account<span className='text-light'>{packageDetails?.max_amount || "Unlimited"} {packageDetails?.currency}</span></li>
                   </ul>
-
 
                 </div>
 
@@ -973,30 +1012,44 @@ function Earning() {
                   <h4>Preview</h4>
 
                   <ul className='subscriptionlist'>
-                    <li>Subscription <span>Date1/5/2026, 10:44</span></li>
-                    <li>Accrual Date <span>Date1/5/2026, 10:44</span></li>
-                    <li>Profit Distribution Date <span>1/6/2026, 17:30</span></li>
-                    <li>Date of Maturity <span>4/6/2026</span></li>
+                    <li>Subscription Date<span>{moment().format("D/M/YYYY, HH:mm")}</span></li>
+                    <li>Accrual Date <span>{moment().add(1, 'days').format("D/M/YYYY, HH:mm")}</span></li>
+                    <li>Profit Distribution Date <span>{moment().add(packageDetails?.duration_days || 0, 'days').format("D/M/YYYY, 17:30")}</span></li>
+                    <li>Date of Maturity <span>{moment().add(packageDetails?.duration_days || 0, 'days').format("D/M/YYYY")}</span></li>
                   </ul>
 
                   <ul className='termslist border-0'>
-                    <li>Redemption Period <span>0 day</span></li>
-                    <li>Profit Received<span>Daily </span></li>
+                    <li>Redemption Period <span>{packageDetails?.duration_days || 0} days</span></li>
+                    <li>Profit Received<span>At Maturity</span></li>
                   </ul>
 
                   <div className='estimated'>
                     <h4>Estimated Returns</h4>
 
                     <ul className='termslist border-0 mb-0'>
-                      <li>USDT Earnings <span>- USDT / D</span></li>
+                      <li>Daily Earnings <span>{dailyReturns} {packageDetails?.currency} / D</span></li>
+                      <li>Total Earnings ({packageDetails?.duration_days || 0}D) <span className='text-green'>+{totalReturns} {packageDetails?.currency}</span></li>
+                      <li>Total Receivable <span className='text-green'>{totalReceivable} {packageDetails?.currency}</span></li>
                     </ul>
 
                     <ul className='estimatedlist'>
-                      <li>* At maturity, your funds are seamlessly transferred to the corresponding Flexible Promotions plans.</li>
-                      <li>* Early withdrawal is allowed; however, any earnings already credited will be adjusted accordingly.</li>
+                      <li>* At maturity, your funds are seamlessly transferred to you earning balance.</li>
+                      <li>* Early withdrawals are not permitted. In case of cancellation before maturity, profits will not be applicable.</li>
                     </ul>
-                    <label><input type='checkbox' /> I have read and agree to the <a href='#'>Earn Service Agreement.</a></label>
-                    <button className='subscribebtn'>Subscription</button>
+                    <label>
+                      <input 
+                        type='checkbox' 
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                      /> I have read and agree to the <a href='/terms'>Earn Service Agreement.</a>
+                    </label>
+                    <button 
+                      className='subscribebtn'
+                      onClick={subscribeEarningPackage}
+                      disabled={isSubscribing || !agreeTerms || !subscriptionAmount || parseFloat(subscriptionAmount) <= 0}
+                    >
+                      {isSubscribing ? 'Processing...' : 'Subscription'}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1006,8 +1059,8 @@ function Earning() {
       </div>
 
       {/* <!-- Modal   more details Pop Up End --> */}
-    </ >
-  )
+    </>
+  );
 }
 
-export default Earning
+export default Earning;

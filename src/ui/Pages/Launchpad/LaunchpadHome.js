@@ -134,11 +134,11 @@ const LaunchpadHome = () => {
                 />
             </Helmet>
 
-            <div class="launchpad_hero_s">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <div class="cnt_banner">
+            <div className="launchpad_hero_s">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-7">
+                            <div className="cnt_banner">
                                 <h1>Launchpad</h1>
                                 <p>Your Easiest Way to Top Tokens — Early or at a Discount</p>
 
@@ -150,8 +150,8 @@ const LaunchpadHome = () => {
 
                             </div>
                         </div>
-                        <div class="col-sm-5">
-                            <div class="hero_img">
+                        <div className="col-sm-5">
+                            <div className="hero_img">
                                 <img src="/images/AnnouncementImg/launchpad_hero_img.png" alt="Launchpad Crypto Platforms" />
                             </div>
                         </div>
@@ -186,9 +186,9 @@ const LaunchpadHome = () => {
 
                     <div className="project_crypto_bl">
                         <div className="project_top">
-                            <div class="coin_lft">
-                                <div class="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
-                                <div class="coin_cnt">
+                            <div className="coin_lft">
+                                <div className="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
+                                <div className="coin_cnt">
                                     <div className="hd d-flex">
                                         <h3>ZAC</h3>
                                         <ul className="subcate">
@@ -221,7 +221,7 @@ const LaunchpadHome = () => {
                                     </div>
 
                                     <div className="user_right">
-                                        <i class="ri-user-line"></i>529
+                                        <i className="ri-user-line"></i>529
                                     </div>
 
                                 </div>
@@ -246,7 +246,7 @@ const LaunchpadHome = () => {
                                     </div>
 
                                     <div className="user_right">
-                                        <i class="ri-user-line"></i>529
+                                        <i className="ri-user-line"></i>529
                                     </div>
 
                                 </div>
@@ -266,9 +266,9 @@ const LaunchpadHome = () => {
 
                     <div className="project_crypto_bl">
                         <div className="project_top">
-                            <div class="coin_lft">
-                                <div class="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
-                                <div class="coin_cnt">
+                            <div className="coin_lft">
+                                <div className="coin"><img src="https://backend.gatbits.com//uploads/logoUrl-1764864308285-985180289.png" alt="ZAC" /></div>
+                                <div className="coin_cnt">
                                     <div className="hd d-flex">
                                         <h3>ZAC</h3>
                                         <ul className="subcate">
@@ -301,7 +301,7 @@ const LaunchpadHome = () => {
                                     </div>
 
                                     <div className="user_right">
-                                        <i class="ri-user-line"></i>529
+                                        <i className="ri-user-line"></i>529
                                     </div>
 
                                 </div>
@@ -326,7 +326,7 @@ const LaunchpadHome = () => {
                                     </div>
 
                                     <div className="user_right">
-                                        <i class="ri-user-line"></i>529
+                                        <i className="ri-user-line"></i>529
                                     </div>
 
                                 </div>
@@ -553,186 +553,186 @@ const LaunchpadHome = () => {
                     </div> */}
                 </div>
             </section>
-            {/* <section class="project_coin complete_project_s">
-                <div class="container">
+            {/* <section className="project_coin complete_project_s">
+                <div className="container">
                     <h2>Faq’s</h2>
 
-                    <div class="faq_section">
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    <div className="faq_section">
+                        <div className="accordion" id="accordionExample">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingOne">
+                                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                         aria-expanded="true" aria-controls="collapseOne">
                                         What is crypto exchange development, and how can WrathCode help with it?
                                     </button>
                                 </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         Crypto exchange development is the process of building platforms that allow users to buy, sell, and
                                         trade cryptocurrencies. WrathCode specializes in developing secure, scalable, and high-performance
                                         crypto exchanges tailored to your business needs.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingTwo">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                         What types of web development services does WrathCode provide?
                                     </button>
                                 </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         WrathCode offers a full range of web development services, including front-end and back-end development,
                                         custom website design, e-commerce solutions, and CMS-based development. We use the latest technologies
                                         to deliver responsive and feature-rich websites.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingThree">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                         How do you ensure the security of cryptocurrency exchange platforms?
                                     </button>
                                 </h2>
-                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                                <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         We implement the latest security measures, including end-to-end encryption, two-factor authentication
                                         (2FA), regular audits, and secure APIs to protect user data and funds on your crypto exchange platform.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingFour">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingFour">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                         What game development services does WrathCode offer?
                                     </button>
                                 </h2>
-                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                                <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         WrathCode specializes in game development for various platforms, including mobile apps, desktop, and
                                         web-based games. We offer end-to-end game development services, from ideation and design to development
                                         and deployment.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingFive">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingFive">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                         How long does it take to develop a mobile app?
                                     </button>
                                 </h2>
-                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                                <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         The development timeline for a mobile app depends on its complexity. A simple app may take 2-4 weeks,
                                         while a more complex app with multiple features and integrations may take 4-8 weeks.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingSix">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingSix">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                                         What is blockchain development, and why is it important for my business?
                                     </button>
                                 </h2>
-                                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+                                <div id="collapseSix" className="accordion-collapse collapse" aria-labelledby="headingSix"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         Blockchain development involves creating decentralized applications (dApps) that use blockchain
                                         technology. It offers transparency, security, and immutability, making it ideal for industries like
                                         finance, healthcare, and supply chain management.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingSeven">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingSeven">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
                                         How can I improve the user experience of my website or mobile app?
                                     </button>
                                 </h2>
-                                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven"
+                                <div id="collapseSeven" className="accordion-collapse collapse" aria-labelledby="headingSeven"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         Focus on clean design, fast loading times, easy navigation, and mobile responsiveness. Regular user
                                         testing and feedback can help enhance the user experience and ensure the product meets user
                                         expectations.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingEight">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingEight">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
                                         Do you offer white-label solutions for crypto exchanges?
                                     </button>
                                 </h2>
-                                <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight"
+                                <div id="collapseEight" className="accordion-collapse collapse" aria-labelledby="headingEight"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         Yes, WrathCode provides customizable white-label solutions for crypto exchanges. You can launch your
                                         exchange platform quickly and with your branding while we handle the back-end development and technical
                                         support.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingNine">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingNine">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
                                         Can WrathCode help with SEO for my website or app?
                                     </button>
                                 </h2>
-                                <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine"
+                                <div id="collapseNine" className="accordion-collapse collapse" aria-labelledby="headingNine"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         Yes, we provide SEO optimization services to ensure your website or app ranks higher on search engines.
                                         This helps increase organic traffic, user engagement, and ultimately, conversions.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTen">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="headingTen">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
                                         How does WrathCode handle post-launch maintenance?
                                     </button>
                                 </h2>
-                                <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen"
+                                <div id="collapseTen" className="accordion-collapse collapse" aria-labelledby="headingTen"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                         We offer comprehensive post-launch maintenance services, including bug fixes, performance optimization,
                                         security updates, and regular feature enhancements to ensure the longevity of your product.
                                     </div>
                                 </div>
-                                <div class="btn_box_in"></div>
+                                <div className="btn_box_in"></div>
                             </div>
                         </div>
                     </div>

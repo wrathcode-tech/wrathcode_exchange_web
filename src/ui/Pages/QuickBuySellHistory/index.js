@@ -112,7 +112,7 @@ const QuickBuySellHistory = (props) => {
                           <td >{toFixed(item.pay_amount)} {item?.from}</td>
                           <td >{toFixed(item.get_amount)} {item?.to} </td>
                           <td >1 {item?.from} =  {toFixed(item.conversion_rate)} {item?.to}</td>
-                          <td >{toFixed(item.fee)} {item?.from}</td>
+                          <td >{toFixed(item.fee)} {item?.to}</td>
                           <td className="right_td"><strong className={item.status === "Completed" ? "text-success" : "text-danger"}>{item.status}</strong></td>
                         </tr>
                       ))
@@ -133,38 +133,24 @@ const QuickBuySellHistory = (props) => {
                 </table>
 
                 {buySellHist?.length > 0 ?
-                  < div className="hVPalX gap-2" >
-                    <span className="" >{skipQbsHistory + 1}-{Math.min(skipQbsHistory + limit, totalDataLength)} of {totalDataLength}</span>
+                  <div className="hVPalX gap-2">
+                    <span>{skipQbsHistory + 1}-{Math.min(skipQbsHistory + limit, totalDataLength)} of {totalDataLength}</span>
                     <div className="sc-eAKtBH gVtWSU">
                       <button type="button" aria-label="First Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('first')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-                          <path fill="none" d="M24 24H0V0h24v24z"></path>
-                        </svg>
+                        <i className="ri-skip-back-fill text-white"></i>
                       </button>
-                      <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('prev')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                        </svg>
+                      <button type="button" aria-label="Previous Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('prev')}>
+                        <i className="ri-arrow-left-s-line text-white"></i>
                       </button>
-
                       <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('next')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                        </svg>
+                        <i className="ri-arrow-right-s-line text-white"></i>
                       </button>
-                      <button type="button" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('last')}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                          <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-                          <path fill="none" d="M0 0h24v24H0V0z"></path>
-                        </svg>
+                      <button type="button" aria-label="Last Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('last')}>
+                        <i className="ri-skip-forward-fill text-white"></i>
                       </button>
                     </div>
                   </div>
-                  :
-                  ""
+                  : ""
                 }
 
 
@@ -186,11 +172,7 @@ const QuickBuySellHistory = (props) => {
                     <ul className='listdata'>
                       <li>
                         <span className='date'>{item?.from} → {item?.to}</span>
-                        <span className='date_light'>{moment(item.createdAt).format("DD/MM/YYYY")}</span>
-                      </li>
-                      <li>
-                        <span>Time</span>
-                        <span>{moment(item.createdAt).format("hh:mm A")}</span>
+                        <span className='date_light'>{moment(item.createdAt).format("DD/MM/YYYY, hh:mm A")}</span>
                       </li>
                       <li>
                         <span>Paid Amount</span>
@@ -212,7 +194,7 @@ const QuickBuySellHistory = (props) => {
                           </li>
                           <li>
                             <span>Fee</span>
-                            <span>{toFixed(item.fee)} {item?.from}</span>
+                            <span>{toFixed(item.fee)} {item?.to}</span>
                           </li>
                         </>
                       )}
@@ -240,28 +222,16 @@ const QuickBuySellHistory = (props) => {
                 <span>{skipQbsHistory + 1}-{Math.min(skipQbsHistory + limit, totalDataLength)} of {totalDataLength}</span>
                 <div className="sc-eAKtBH gVtWSU">
                   <button type="button" aria-label="First Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('first')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-                      <path fill="none" d="M24 24H0V0h24v24z"></path>
-                    </svg>
+                    <i className="ri-skip-back-fill text-white"></i>
                   </button>
                   <button type="button" aria-label="Previous Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('prev')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                      <path d="M0 0h24v24H0z" fill="none"></path>
-                    </svg>
+                    <i className="ri-arrow-left-s-line text-white"></i>
                   </button>
                   <button type="button" aria-label="Next Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('next')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                      <path d="M0 0h24v24H0z" fill="none"></path>
-                    </svg>
+                    <i className="ri-arrow-right-s-line text-white"></i>
                   </button>
                   <button type="button" aria-label="Last Page" className="sc-gjLLEI kuPCgf" onClick={() => handlePaginationQbsHistory('last')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-                      <path fill="none" d="M0 0h24v24H0V0z"></path>
-                    </svg>
+                    <i className="ri-skip-forward-fill text-white"></i>
                   </button>
                 </div>
               </div>

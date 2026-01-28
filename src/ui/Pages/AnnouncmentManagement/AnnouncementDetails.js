@@ -41,8 +41,8 @@ function AnnouncementDetails() {
 
     return (
         <>
-            <section class="announcement_section single_announcement">
-                <div class="container">
+            <section className="announcement_section single_announcement">
+                <div className="container">
 
                     <h1>
                         <img
@@ -54,11 +54,11 @@ function AnnouncementDetails() {
                         {announcementDetails?.title || "----"}
                     </h1>
 
-                    <span class="subtext">Published on {moment(announcementDetails.createdAt).format("DD-MM-YYYY")}</span>
+                    <span className="subtext">Published on {moment(announcementDetails.createdAt).format("DD-MM-YYYY")}</span>
 
-                    <div class="row pt-5">
-                        <div class="col-sm-8">
-                            <div class="single_left_s">
+                    <div className="row pt-5">
+                        <div className="col-sm-8">
+                            <div className="single_left_s">
                                 <div
                                     className="block_cnt"
                                     dangerouslySetInnerHTML={{
@@ -70,10 +70,10 @@ function AnnouncementDetails() {
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
-                            <div class="rightsidebar">
+                        <div className="col-sm-4">
+                            <div className="rightsidebar">
 
-                                <div class="articles_blog">
+                                <div className="articles_blog">
                                     <h3>Related Articles</h3>
 
                                     <ul>{relatedAnnouncement?.map((item, index) => {
@@ -87,7 +87,7 @@ function AnnouncementDetails() {
                                             <>
                                                 <li>
                                                     <h5><Link to={`/announcement_details/${formattedTitle}/${item?._id}`}>{item?.title}</Link></h5>
-                                                    <span class="subtext">Published on {moment(item?.createdAt).format("DD-MM-YYYY")}</span>
+                                                    <span className="subtext">Published on {moment(item?.createdAt).format("DD-MM-YYYY")}</span>
                                                 </li>
 
                                             </>

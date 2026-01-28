@@ -1,6 +1,4 @@
-// const appUrl = "http://159.195.23.93:5001";
 // const appUrl = "http://localhost:5001";
-// const appUrl2 = appUrl//"http://159.195.23.93:5001";
 const appUrl = "https://backend.demoexchange.wrathcode.com";
 const appUrl2 = appUrl;
 
@@ -137,6 +135,7 @@ export const ApiConfig = {
   packageList: "package-list",
   subscribedPackageList: "subscribed-package-list",
   earningPortfolio: "earning-portfolio",
+  earningPortfolioSummary: "earning-portfolio-summary",
   subscribeEarningPackage: "subscribe-earning-package",
 
 

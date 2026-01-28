@@ -1239,6 +1239,18 @@ const AuthService = {
     return ApiCallGet(url, headers);
   },
 
+  earningPortfolioSummary: async () => {
+    const token = localStorage.getItem("token");
+    const { baseEarning, earningPortfolioSummary } = ApiConfig;
+    const url = baseEarning + earningPortfolioSummary;
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+    return ApiCallGet(url, headers);
+  },
+
   subscribeEarningPackage: async (planId, investAmount, walletType) => {
     const token = localStorage.getItem("token");
     const { baseEarning, subscribeEarningPackage } = ApiConfig;

@@ -758,25 +758,25 @@ function UsdMFutures() {
         <>
 
 
-            <div class="usd_future_dashboard">
-                <div class="top_bar_usd_future">
-                    <div class="top_future_left_s">
-                        <div class="usd_left_pr">
-                            <div class="btcusd__currency " data-bs-toggle="modal" data-bs-target="#exampleModal2">
+            <div className="usd_future_dashboard">
+                <div className="top_bar_usd_future">
+                    <div className="top_future_left_s">
+                        <div className="usd_left_pr">
+                            <div className="btcusd__currency " data-bs-toggle="modal" data-bs-target="#exampleModal2">
                                 <img className='icon_img' src={ApiConfig?.baseImage + selectedCoin?.icon_path} alt="bitcoin" /> {selectedCoin?.short_name}/{selectedCoin?.margin_asset} <span> <img src="/images/futures_img/arrowbottom_icon.svg" alt="arrow" /></span>
                             </div>
                             {/* <!-- Modal Start --> */}
-                            <div class="modal fade currency_popup_s search_form_modal_2" id="exampleModal2" tabindex="-1"
+                            <div className="modal fade currency_popup_s search_form_modal_2" id="exampleModal2" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body">
-                                            <div class="search_form">
-                                                <i class="ri-search-2-line"></i>
+                                        <div className="modal-body">
+                                            <div className="search_form">
+                                                <i className="ri-search-2-line"></i>
                                                 <input
                                                     type="search"
                                                     placeholder="Search"
@@ -784,12 +784,12 @@ function UsdMFutures() {
                                                     onChange={(e) => setSearchTerm(e.target.value)}
                                                 />
                                             </div>
-                                            <div class="bn-tabs_favorites_bl">
-                                                <div class="top_tabs_center">
-                                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <div className="bn-tabs_favorites_bl">
+                                                <div className="top_tabs_center">
+                                                    <ul className="nav nav-tabs" id="myTab" role="tablist">
 
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link active" id="usd-tab" data-bs-toggle="tab"
+                                                        <li className="nav-item" role="presentation">
+                                                            <button className="nav-link active" id="usd-tab" data-bs-toggle="tab"
                                                                 data-bs-target="#main-tab" type="button" role="tab"
                                                                 aria-controls="usd-m" aria-selected="false">USDⓈ-M</button>
                                                         </li>
@@ -797,15 +797,15 @@ function UsdMFutures() {
 
                                                 </div>
 
-                                                <div class="tab-content" id="myTabContent">
+                                                <div className="tab-content" id="myTabContent">
 
 
-                                                    <div class="tab-pane fade show active" id="main-tab" role="tabpanel"
+                                                    <div className="tab-pane fade show active" id="main-tab" role="tabpanel"
                                                         aria-labelledby="favorites-tab">
                                                         <div id="all" role="tabpanel"
                                                             aria-labelledby="all-tab">
-                                                            <div class="currency_data_list">
-                                                                <div class="table-responsive ">
+                                                            <div className="currency_data_list">
+                                                                <div className="table-responsive ">
                                                                     <table>
                                                                         <thead>
                                                                             <tr>
@@ -836,7 +836,7 @@ function UsdMFutures() {
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>{pricePrecision(pair?.buy_price)}</td>
-                                                                                            <td class={pair?.change_percentage > 0 ? "text-success" : "danger"}>{toFixedThree(pair?.change_percentage)}%</td>
+                                                                                            <td className={pair?.change_percentage > 0 ? "text-success" : "danger"}>{toFixedThree(pair?.change_percentage)}%</td>
                                                                                             <td>{pair?.max_leverage}x</td>
                                                                                         </tr>
                                                                                     )
@@ -960,7 +960,7 @@ function UsdMFutures() {
 
                     </div>
 
-                    <div class="top_future_right_s">
+                    <div className="top_future_right_s">
                         <ul>
                             {topPairs?.length > 0 && topPairs?.map((item) => {
                                 return (
@@ -975,13 +975,13 @@ function UsdMFutures() {
                     </div>
                 </div>
 
-                <div class="dashboard_mid_s space_gap_0 pa_2">
-                    <div class="dashboard_summary_lft">
+                <div className="dashboard_mid_s space_gap_0 pa_2">
+                    <div className="dashboard_summary_lft">
                         {Object.keys(selectedCoin)?.length > 0 ?
                             <TVFuturesChartContainer symbol={`${selectedCoin?.short_name}${selectedCoin?.margin_asset}_PERP`} />
                             : <div className="favouriteData dsfdsf" style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                                <div class="spinner-border m-5" role="status">
-                                    <span class="sr-only"></span>
+                                <div className="spinner-border m-5" role="status">
+                                    <span className="sr-only"></span>
                                 </div>
                             </div>}
                         {/* <img src="/images/futures_img/dashboard_summry_left.svg" alt="dashboard" /> */}
@@ -1059,8 +1059,8 @@ function UsdMFutures() {
                                                     <div className="tab-pane show active toggle2" id="all_orders">
                                                         <div className="table_info_data">
 
-                                                            {/* <div class="price_card_head">
-                                                                <div class="ps-0">Price(USDT)</div><div>Quantity(BTC)</div><div>Total(USDT)</div></div> */}
+                                                            {/* <div className="price_card_head">
+                                                                <div className="ps-0">Price(USDT)</div><div>Quantity(BTC)</div><div>Total(USDT)</div></div> */}
                                                             <div className="scroll_y scroll_y_reverse">
                                                                 {SellOrders?.length > 0 ?
                                                                     <table>
@@ -1352,22 +1352,22 @@ function UsdMFutures() {
 
                     </div>
 
-                    <div class="relative_select_right">
-                        <div class="top_cross_dashboard">
+                    <div className="relative_select_right">
+                        <div className="top_cross_dashboard">
                             <ul>
                                 <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cross">Cross <i class="ri-arrow-down-s-fill"></i></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cross">Cross <i className="ri-arrow-down-s-fill"></i></a>
 
                                     {/* <!-- Modal Start Margin  --> */}
-                                    <div class="modal fade currency_popup_s crosstabs" id="cross" tabindex="-1"
+                                    <div className="modal fade currency_popup_s crosstabs" id="cross" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        <div className="modal-dialog modal-dialog-centered">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div className="modal-body">
 
                                                     <h3>Margin Mode</h3>
                                                     <h4>{selectedCoin?.short_name}{selectedCoin?.margin_asset} <sup>Perp</sup></h4>
@@ -1379,8 +1379,8 @@ function UsdMFutures() {
 
 
                                                     <div className='bn-modal-footer d-flex btnsupport'>
-                                                        <button class="bn-button verifybtn" data-bs-dismiss="modal">Got it</button>
-                                                        {/* <button class="customerbtn">Customer Support</button> */}
+                                                        <button className="bn-button verifybtn" data-bs-dismiss="modal">Got it</button>
+                                                        {/* <button className="customerbtn">Customer Support</button> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1389,23 +1389,23 @@ function UsdMFutures() {
 
 
 
-                                    {/* <div class="modal fade currency_popup_s crosstabs" id="cross" tabindex="-1"
+                                    {/* <div className="modal fade currency_popup_s crosstabs" id="cross" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        <div className="modal-dialog modal-dialog-centered">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div className="modal-body">
                                                     <div className='user_identyid'>
                                                         <img src="/images/user_identy.svg" alt="copy icon" />
                                                     </div>
                                                     <h4>Identity Verification Required</h4>
                                                     <p>To comply with regulations, complete identity verification to access Binance Futures services.</p>
                                                     <div className='bn-modal-footer d-flex btnsupport'>
-                                                        <button class="bn-button verifybtn">Verify Now</button>
-                                                        <button class="customerbtn">Customer Support</button>
+                                                        <button className="bn-button verifybtn">Verify Now</button>
+                                                        <button className="customerbtn">Customer Support</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1415,17 +1415,17 @@ function UsdMFutures() {
 
                                 </li>
                                 <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#twox">{Leverage}x <i class="ri-arrow-down-s-fill"></i></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#twox">{Leverage}x <i className="ri-arrow-down-s-fill"></i></a>
                                     {/* <!-- Modal Start leverage --> */}
-                                    <div class="modal fade currency_popup_s crosstabs" id="twox" tabindex="-1"
+                                    <div className="modal fade currency_popup_s crosstabs" id="twox" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        <div className="modal-dialog modal-dialog-centered">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div className="modal-body">
                                                     <h3>Adjust Leverage</h3>
 
                                                     <div className='range_value'>
@@ -1477,7 +1477,7 @@ function UsdMFutures() {
                                                     <p className='redcolor'>* Selecting higher leverage such as [10x] increases your liquidation
                                                         risk. Always manage your risk levels. See our help article for more information.</p>
                                                     <div className='bn-modal-footer d-flex btnsupport'>
-                                                        <button class="bn-button verifybtn" data-bs-dismiss="modal">Confirm</button>
+                                                        <button className="bn-button verifybtn" data-bs-dismiss="modal">Confirm</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1490,30 +1490,30 @@ function UsdMFutures() {
 
                         </div>
 
-                        <div class="spot_future_">
+                        <div className="spot_future_">
                             <ul>
-                                {/* <li><a href="/trade/futures">Spot <i class="ri-external-link-line"></i></a></li> */}
+                                {/* <li><a href="/trade/futures">Spot <i className="ri-external-link-line"></i></a></li> */}
 
-                                {/* <li class="active"><a href="#">Futures</a></li> */}
+                                {/* <li className="active"><a href="#">Futures</a></li> */}
                             </ul>
                         </div>
-                        <div class="leverage_bl cursor-pointer" data-bs-toggle="modal" data-bs-target="#twox" >
+                        <div className="leverage_bl cursor-pointer" data-bs-toggle="modal" data-bs-target="#twox" >
                             <div>
-                                <div class="rage_txt" >
+                                <div className="rage_txt" >
                                     <img src="/images/futures_img/irage_icon.svg" alt="leverage" /> Leverage
                                 </div>
-                                <div class="range_price">{Leverage}x <img src="/images/futures_img/arrowright_dotted.svg" /></div>
+                                <div className="range_price">{Leverage}x <img src="/images/futures_img/arrowright_dotted.svg" /></div>
                             </div>
 
 
                         </div>
 
-                        <div class="market_spot_form">
+                        <div className="market_spot_form">
 
 
-                            <ul class="limit_tabs">
+                            <ul className="limit_tabs">
                                 <li 
-                                    class={`nav-item positions_two ${activeLimitTab === "positions_two" ? "active" : ""}`} 
+                                    className={`nav-item positions_two ${activeLimitTab === "positions_two" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button 
@@ -1531,7 +1531,7 @@ function UsdMFutures() {
                                     </button>
                                 </li>
                                 <li 
-                                    class={`nav-item open_two ${activeLimitTab === "open_two" ? "active" : ""}`} 
+                                    className={`nav-item open_two ${activeLimitTab === "open_two" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button 
@@ -1552,15 +1552,15 @@ function UsdMFutures() {
                             </ul>
                             {/* 
 
-                            <ul class="nav nav-tabs" id="orderTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="limit-tab" data-bs-toggle="tab" data-bs-target="#limit"
+                            <ul className="nav nav-tabs" id="orderTabs" role="tablist">
+                                <li className="nav-item" role="presentation">
+                                    <button className="nav-link active" id="limit-tab" data-bs-toggle="tab" data-bs-target="#limit"
                                         type="button" role="tab" aria-controls="limit" aria-selected="true" onClick={() => { setOrderType("Limit"); setShowTpSlOption(false); setQuantity(""); setPercentage(0) }}>
                                         Limit
                                     </button>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market"
+                                <li className="nav-item" role="presentation">
+                                    <button className="nav-link" id="market-tab" data-bs-toggle="tab" data-bs-target="#market"
                                         type="button" role="tab" aria-controls="market" aria-selected="false" onClick={() => { setOrderType("Market"); setShowTpSlOption(false); setQuantity(""); setPercentage(0) }}>
                                         Market
                                     </button>
@@ -1569,58 +1569,58 @@ function UsdMFutures() {
 
 
                             <div className={`cnt_table_two positions_two ${activeLimitTab === "positions_two" ? "active" : ""}`}>
-                                <form class="price_info">
-                                    <div class="price_inputbl">
+                                <form className="price_info">
+                                    <div className="price_inputbl">
                                         <label>Price</label>
-                                        <div class="price_select_option">
-                                            <input class="inputtype" type="number" placeholder="Price" value={limitPrice} onWheel={(e) => e.target.blur()} onChange={(e) => { setLimitPrice(pricePrecision(+e.target.value)); setPercentage(0) }} />
+                                        <div className="price_select_option">
+                                            <input className="inputtype" type="number" placeholder="Price" value={limitPrice} onWheel={(e) => e.target.blur()} onChange={(e) => { setLimitPrice(pricePrecision(+e.target.value)); setPercentage(0) }} />
                                             <select>
                                                 <option>{selectedCoin?.margin_asset}</option>
                                                 {/* <option>BTC</option> */}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <label>Size <span class="btctoggle">({selectedCoin?.short_name})
+                                    <div className="price_inputbl">
+                                        <label>Size <span className="btctoggle">({selectedCoin?.short_name})
 
                                         </span></label>
-                                        <div class="price_select_option">
-                                            <input class="inputtype" type="number" placeholder="Size" value={quantity} onWheel={(e) => e.target.blur()} onChange={(e) => { setQuantity(qunaityPrecision(+e.target.value)); setPercentage(0) }} />
+                                        <div className="price_select_option">
+                                            <input className="inputtype" type="number" placeholder="Size" value={quantity} onWheel={(e) => e.target.blur()} onChange={(e) => { setQuantity(qunaityPrecision(+e.target.value)); setPercentage(0) }} />
                                             <select>
                                                 <option>{selectedCoin?.short_name}</option>
                                                 {/* <option>BTC</option> */}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl value_choose process_step">
+                                    <div className="price_inputbl value_choose process_step">
                                         <ul>
                                             {[20, 40, 60, 80, 100].map((perc) => (
                                                 <li><button type='button' className={percentage === perc && "active"} onClick={() => computeQuantityFromBalance(perc)}>{perc}%</button></li>
                                             ))}
                                         </ul>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="avail_total_usd">
+                                    <div className="price_inputbl">
+                                        <div className="avail_total_usd">
                                             <label>Avail.</label>
-                                            <div class="usd_price">{toFixedFive(balance?.quoteCurrency)} {selectedCoin?.margin_asset}</div>
+                                            <div className="usd_price">{toFixedFive(balance?.quoteCurrency)} {selectedCoin?.margin_asset}</div>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="tpsl_reduce d-flex gap-1">
-                                            <div class="form-check">
+                                    <div className="price_inputbl">
+                                        <div className="tpsl_reduce d-flex gap-1">
+                                            <div className="form-check">
                                                 <div className='tpsltabs'>
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" checked={showTpSlOption} onChange={(e) => setShowTpSlOption(e.target.checked)} />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" checked={showTpSlOption} onChange={(e) => setShowTpSlOption(e.target.checked)} />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
 
                                                 {/* <!-- TP/SL ON CLICK CONTENT COMMENT START --> */}
 
                                                 {showTpSlOption &&
                                                     <div className='tp_sl_option'>
-                                                        <div class="price_inputbl">
+                                                        <div className="price_inputbl">
                                                             <label>Take Profit</label>
-                                                            <div class="price_select_option">
-                                                                <input class="inputtype" type="number" placeholder="PnL" onWheel={(e) => e.target.blur()} value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} />
+                                                            <div className="price_select_option">
+                                                                <input className="inputtype" type="number" placeholder="PnL" onWheel={(e) => e.target.blur()} value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} />
                                                                 <select>
                                                                     <option>PnL</option>
                                                                     {/* <option>Lst</option> */}
@@ -1628,9 +1628,9 @@ function UsdMFutures() {
                                                             </div>
                                                         </div>
 
-                                                        <div class="price_inputbl">
+                                                        <div className="price_inputbl">
                                                             <label>Stop Loss</label>
-                                                            <div class="price_select_option">
+                                                            <div className="price_select_option">
                                                                 <input
                                                                     className="inputtype"
                                                                     type="number"
@@ -1663,8 +1663,8 @@ function UsdMFutures() {
 
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="buysell_btn d-flex gap-2 align-items-center">
+                                    <div className="price_inputbl">
+                                        <div className="buysell_btn d-flex gap-2 align-items-center">
                                             {!token ? (
                                                 <button className="buybtn" type="button" onClick={() => loginScreen()}>
                                                     Login
@@ -1722,38 +1722,38 @@ function UsdMFutures() {
                                             )}
                                         </div>
                                     </div>
-                                    <div class="price_inputbl  mt-2">
+                                    <div className="price_inputbl  mt-2">
 
-                                        <div class="d-flex justify-content-between costbtc_total liq_price">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total liq_price">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Liq Price <span> {futuresRisk?.shortLiq || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Liq Price <span> {futuresRisk?.longLiq || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Cost <span>{futuresRisk?.cost || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Cost <span>{futuresRisk?.cost || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Max long <span> NL</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Max short <span> NL</span></h5>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Taker Fee <span> 0.4%</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Maker Fee <span> 0.2%</span></h5>
                                             </div>
                                         </div>
@@ -1762,54 +1762,54 @@ function UsdMFutures() {
                             </div>
 
                             <div className={`cnt_table_two open_two ${activeLimitTab === "open_two" ? "active" : ""}`}>
-                                <form class="price_info">
-                                    <div class="price_inputbl">
+                                <form className="price_info">
+                                    <div className="price_inputbl">
                                         <label>Price</label>
-                                        <div class="price_select_option">
-                                            <input class="inputtype" type="text" placeholder="Market Price" disabled />
+                                        <div className="price_select_option">
+                                            <input className="inputtype" type="text" placeholder="Market Price" disabled />
                                             <select>
                                                 <option>{selectedCoin?.margin_asset}</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <label>Amount <span class="btctoggle">({selectedCoin?.short_name}) <img
+                                    <div className="price_inputbl">
+                                        <label>Amount <span className="btctoggle">({selectedCoin?.short_name}) <img
                                             src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                        <div class="price_select_option">
-                                            <input class="inputtype" type="number" placeholder="Size" value={quantity} onWheel={(e) => e.target.blur()} onChange={(e) => { setQuantity(e.target.value); setPercentage(0) }} />                                                <select>
+                                        <div className="price_select_option">
+                                            <input className="inputtype" type="number" placeholder="Size" value={quantity} onWheel={(e) => e.target.blur()} onChange={(e) => { setQuantity(e.target.value); setPercentage(0) }} />                                                <select>
                                                 <option>{selectedCoin?.short_name}</option>
                                                 {/* <option>USDT</option> */}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl value_choose">
+                                    <div className="price_inputbl value_choose">
                                         <ul>
                                             {[20, 40, 60, 80, 100].map((perc) => (
                                                 <li><button type='button' className={percentage === perc && "active"} onClick={() => computeQuantityFromBalance(perc)}>{perc}%</button></li>
                                             ))}
                                         </ul>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="avail_total_usd">
+                                    <div className="price_inputbl">
+                                        <div className="avail_total_usd">
                                             <label>Avail.</label>
-                                            <div class="usd_price">{toFixedFive(balance?.quoteCurrency)} {selectedCoin?.margin_asset}</div>
+                                            <div className="usd_price">{toFixedFive(balance?.quoteCurrency)} {selectedCoin?.margin_asset}</div>
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="tpsl_reduce d-flex gap-3">
-                                            <div class="form-check">
+                                    <div className="price_inputbl">
+                                        <div className="tpsl_reduce d-flex gap-3">
+                                            <div className="form-check">
                                                 <div className='tpsltabs'>
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" checked={showTpSlOption} onChange={(e) => setShowTpSlOption(e.target.checked)} />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" checked={showTpSlOption} onChange={(e) => setShowTpSlOption(e.target.checked)} />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
                                             </div>
 
                                             {showTpSlOption &&
                                                 <div className='tp_sl_option'>
-                                                    <div class="price_inputbl">
+                                                    <div className="price_inputbl">
                                                         <label>Take Profit</label>
-                                                        <div class="price_select_option">
-                                                            <input class="inputtype" type="number" placeholder="PnL" onWheel={(e) => e.target.blur()} value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} />
+                                                        <div className="price_select_option">
+                                                            <input className="inputtype" type="number" placeholder="PnL" onWheel={(e) => e.target.blur()} value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} />
                                                             <select>
                                                                 <option>PnL</option>
                                                                 {/* <option>Lst</option> */}
@@ -1817,9 +1817,9 @@ function UsdMFutures() {
                                                         </div>
                                                     </div>
 
-                                                    <div class="price_inputbl">
+                                                    <div className="price_inputbl">
                                                         <label>Stop Loss</label>
-                                                        <div class="price_select_option">
+                                                        <div className="price_select_option">
                                                             <input
                                                                 className="inputtype"
                                                                 type="number"
@@ -1848,14 +1848,14 @@ function UsdMFutures() {
 
 
 
-                                            {/* <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                            {/* <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div> */}
                                         </div>
                                     </div>
-                                    <div class="price_inputbl">
-                                        <div class="buysell_btn d-flex gap-2 align-items-center">
+                                    <div className="price_inputbl">
+                                        <div className="buysell_btn d-flex gap-2 align-items-center">
                                             {!token ? (
                                                 <button className="buybtn" type="button" onClick={() => loginScreen()}>
                                                     Login
@@ -1913,38 +1913,38 @@ function UsdMFutures() {
                                             )}
                                         </div>
                                     </div>
-                                    <div class="price_inputbl  mt-2">
+                                    <div className="price_inputbl  mt-2">
 
-                                        <div class="d-flex justify-content-between costbtc_total liq_price">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total liq_price">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Liq Price <span> {futuresRisk?.shortLiq || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Liq Price <span> {futuresRisk?.longLiq || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Cost <span>{futuresRisk?.cost || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Cost <span>{futuresRisk?.cost || "---"} {selectedCoin?.margin_asset}</span></h5>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Max long <span> NL</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Max short <span> NL</span></h5>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between costbtc_total">
-                                            <div class="d-flex align-items-center">
+                                        <div className="d-flex justify-content-between costbtc_total">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Taker Fee <span> 0.4%</span></h5>
                                             </div>
-                                            <div class="d-flex align-items-center">
+                                            <div className="d-flex align-items-center">
                                                 <h5>Maker Fee <span> 0.2%</span></h5>
                                             </div>
                                         </div>
@@ -1952,51 +1952,51 @@ function UsdMFutures() {
                                 </form>
                             </div>
 
-                            {/* <div class="tab-content pt-1" id="myTabContent2">
-                                <div class="tab-pane fade show active" id="limit" role="tabpanel" aria-labelledby="limit-tab">
+                            {/* <div className="tab-content pt-1" id="myTabContent2">
+                                <div className="tab-pane fade show active" id="limit" role="tabpanel" aria-labelledby="limit-tab">
 
                                 
 
                                 </div>
-                                <div class="tab-pane fade" id="market" role="tabpanel" aria-labelledby="market-tab">
+                                <div className="tab-pane fade" id="market" role="tabpanel" aria-labelledby="market-tab">
                                    
 
                                 </div>
-                                <div class="tab-pane fade" id="stop-market" role="tabpanel" aria-labelledby="stop-market-tab">
+                                <div className="tab-pane fade" id="stop-market" role="tabpanel" aria-labelledby="stop-market-tab">
 
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <ul>
                                                 <li><button>20%</button></li>
                                                 <li><button>40%</button></li>
@@ -2005,44 +2005,44 @@ function UsdMFutures() {
                                                 <li><button>100%</button></li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn" data-bs-toggle="modal" data-bs-target="#buypop">Buy/Long</button>
-                                                <button class="sellbtn" data-bs-toggle="modal" data-bs-target="#buypop">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn" data-bs-toggle="modal" data-bs-target="#buypop">Buy/Long</button>
+                                                <button className="sellbtn" data-bs-toggle="modal" data-bs-target="#buypop">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -2050,41 +2050,41 @@ function UsdMFutures() {
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="stop-limit" role="tabpanel" aria-labelledby="stop-limit-tab">
+                                <div className="tab-pane fade" id="stop-limit" role="tabpanel" aria-labelledby="stop-limit-tab">
 
-                                    <form class="price_info">
-                                        <div class="price_inputbl">
+                                    <form className="price_info">
+                                        <div className="price_inputbl">
                                             <label>Price</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
+                                        <div className="price_inputbl">
                                             <label>Price 2</label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="29197" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="29197" />
                                                 <select>
                                                     <option>USDT</option>
                                                     <option>BTC</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <label>Amount <span class="btctoggle">(BTC) <img
+                                        <div className="price_inputbl">
+                                            <label>Amount <span className="btctoggle">(BTC) <img
                                                 src="/images/futures_img/arrowright_dotted.svg" /></span></label>
-                                            <div class="price_select_option">
-                                                <input class="inputtype" type="text" placeholder="0.000" />
+                                            <div className="price_select_option">
+                                                <input className="inputtype" type="text" placeholder="0.000" />
                                                 <select>
                                                     <option>BTC</option>
                                                     <option>USDT</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl value_choose">
+                                        <div className="price_inputbl value_choose">
                                             <ul>
                                                 <li><button>20%</button></li>
                                                 <li><button>40%</button></li>
@@ -2093,44 +2093,44 @@ function UsdMFutures() {
                                                 <li><button>100%</button></li>
                                             </ul>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="avail_total_usd">
+                                        <div className="price_inputbl">
+                                            <div className="avail_total_usd">
                                                 <label>Avail.</label>
-                                                <div class="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
+                                                <div className="usd_price">0 USDT <img src="/images/futures_img/usd_icon_refersh.svg" /></div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="tpsl_reduce d-flex gap-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tp-sl" />
-                                                    <label class="form-check-label" for="tp-sl">TP/SL</label>
+                                        <div className="price_inputbl">
+                                            <div className="tpsl_reduce d-flex gap-3">
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="tp-sl" />
+                                                    <label className="form-check-label" for="tp-sl">TP/SL</label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="reduce-only" />
-                                                    <label class="form-check-label" for="reduce-only">Reduce only</label>
+                                                <div className="form-check">
+                                                    <input className="form-check-input" type="checkbox" id="reduce-only" />
+                                                    <label className="form-check-label" for="reduce-only">Reduce only</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl">
-                                            <div class="buysell_btn d-flex gap-2 align-items-center">
-                                                <button class="buybtn" data-bs-toggle="modal" data-bs-target="#buypop">Buy/Long</button>
-                                                <button class="sellbtn" data-bs-toggle="modal" data-bs-target="#buypop">Sell/Short</button>
+                                        <div className="price_inputbl">
+                                            <div className="buysell_btn d-flex gap-2 align-items-center">
+                                                <button className="buybtn" data-bs-toggle="modal" data-bs-target="#buypop">Buy/Long</button>
+                                                <button className="sellbtn" data-bs-toggle="modal" data-bs-target="#buypop">Sell/Short</button>
                                             </div>
                                         </div>
-                                        <div class="price_inputbl  mt-2">
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                        <div className="price_inputbl  mt-2">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Cost <span>- BTC</span></h5>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-between costbtc_total">
-                                                <div class="d-flex align-items-center">
+                                            <div className="d-flex justify-content-between costbtc_total">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max long <span> 0.1230 BTC</span></h5>
                                                 </div>
-                                                <div class="d-flex align-items-center">
+                                                <div className="d-flex align-items-center">
                                                     <h5>Max short <span> 0.0845 BTC</span></h5>
                                                 </div>
                                             </div>
@@ -2143,38 +2143,38 @@ function UsdMFutures() {
                     </div>
                 </div>
 
-                <div class="trade_account_summary_assets futuresflex">
+                <div className="trade_account_summary_assets futuresflex">
 
-                    <div class="trade_summary_table_lft mt-0 position_order">
-                        <div class="top_th_easyop border-0">
-                            <ul class="position_list">
+                    <div className="trade_summary_table_lft mt-0 position_order">
+                        <div className="top_th_easyop border-0">
+                            <ul className="position_list">
                                 <li 
-                                    class={`nav-item positions ${activePositionTab === "positions" ? "active" : ""}`} 
+                                    className={`nav-item positions ${activePositionTab === "positions" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("positions"); }}>Positions({openPositions?.length || 0})</button>
                                 </li>
                                 <li 
-                                    class={`nav-item open ${activePositionTab === "open" ? "active" : ""}`} 
+                                    className={`nav-item open ${activePositionTab === "open" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("open"); }}>Open Orders({OpenOrders?.length || 0})</button>
                                 </li>
                                 <li 
-                                    class={`nav-item order_history ${activePositionTab === "order_history" ? "active" : ""}`} 
+                                    className={`nav-item order_history ${activePositionTab === "order_history" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("order_history"); }}>Order History</button>
                                 </li>
                                 <li 
-                                    class={`nav-item exercise_history ${activePositionTab === "exercise_history" ? "active" : ""}`} 
+                                    className={`nav-item exercise_history ${activePositionTab === "exercise_history" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("exercise_history"); }}>Trade History</button>
                                 </li>
 
                                 <li 
-                                    class={`nav-item position_history ${activePositionTab === "position_history" ? "active" : ""}`} 
+                                    className={`nav-item position_history ${activePositionTab === "position_history" ? "active" : ""}`} 
                                     role="presentation"
                                 >
                                     <button type="button" onClick={(e) => { e.preventDefault(); setActivePositionTab("position_history"); }}>Position History</button>
@@ -2183,7 +2183,7 @@ function UsdMFutures() {
                             </ul>
                             <div className={`cnt_table positions ${activePositionTab === "positions" ? "active" : ""}`}>
                                 <div className="desktop_view2">
-                                    <div class="table-responsive">
+                                    <div className="table-responsive">
                                         {openPositions?.length > 0 ?
                                             <table>
                                                 <thead>
@@ -2320,7 +2320,7 @@ function UsdMFutures() {
                                                 className="view_more_btn"
                                                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                             >
-                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                             </button>
 
                                             <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -2351,7 +2351,7 @@ function UsdMFutures() {
 
                             <div className={`cnt_table open ${activePositionTab === "open" ? "active" : ""}`}>
                                 <div className="desktop_view2">
-                                    <div class="table-responsive">
+                                    <div className="table-responsive">
                                         {OpenOrders?.length > 0 ?
                                             <table>
 
@@ -2550,7 +2550,7 @@ function UsdMFutures() {
                                                 className="view_more_btn"
                                                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                             >
-                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                             </button>
 
                                             <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -2581,7 +2581,7 @@ function UsdMFutures() {
 
                             <div className={`cnt_table order_history ${activePositionTab === "order_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
-                                    <div class="table-responsive">
+                                    <div className="table-responsive">
                                         {ordersHistory?.length > 0 ? <table>
                                             <thead>
                                                 <tr>
@@ -2750,7 +2750,7 @@ function UsdMFutures() {
                                                 className="view_more_btn"
                                                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                             >
-                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                             </button>
 
                                             <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -2779,7 +2779,7 @@ function UsdMFutures() {
                             </div>
                             <div className={`cnt_table exercise_history ${activePositionTab === "exercise_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
-                                    <div class="table-responsive">
+                                    <div className="table-responsive">
                                         {tradeHistory.length > 0 ? <table>
                                             <thead>
                                                 <tr>
@@ -2925,7 +2925,7 @@ function UsdMFutures() {
                                                 className="view_more_btn"
                                                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                             >
-                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                             </button>
 
                                             <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -2954,7 +2954,7 @@ function UsdMFutures() {
                             </div>
                             <div className={`cnt_table position_history ${activePositionTab === "position_history" ? "active" : ""}`}>
                                 <div className="desktop_view2">
-                                    <div class="table-responsive">
+                                    <div className="table-responsive">
                                         {closePositions?.length > 0 ? <table>
                                             <thead>
                                                 <tr>
@@ -3103,7 +3103,7 @@ function UsdMFutures() {
                                                 className="view_more_btn"
                                                 onClick={() => setShowAllListItems({ ...showAllListItems, 0: !showAllListItems[0] })}
                                             >
-                                                {showAllListItems[0] ? <i class="ri-arrow-down-s-line"></i> : <i class="ri-arrow-up-s-line"></i>}
+                                                {showAllListItems[0] ? <i className="ri-arrow-down-s-line"></i> : <i className="ri-arrow-up-s-line"></i>}
                                             </button>
 
                                             <div className={`executed_trades_list ${showExecutedTrades[0] ? 'active' : ''}`}>
@@ -3135,48 +3135,48 @@ function UsdMFutures() {
 
                     </div>
 
-                    <div class="assets_right">
+                    <div className="assets_right">
                         <h2>Assets</h2>
-                        <div class="asset_total_value costbtc_total">
-                            <div class="d-flex align-items-center justify-content-between">
+                        <div className="asset_total_value costbtc_total">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h5>USDT-Perp</h5>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Total Assets</h6>
                                 </div>
                                 <div><span>{toFixedFive(estimatedportfolio + totalIsolatedMargin) || 0} {selectedCoin?.margin_asset}</span></div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Available</h6>
                                 </div>
                                 <div><span>{toFixedFive(balance?.quoteCurrency + totalIsolatedMargin) || 0} {selectedCoin?.margin_asset}</span></div>
                             </div>
                             <hr />
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h5>USDT-Perp</h5>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Maintance Margin</h6>
                                 </div>
                                 <div><span>{totalMaintenanceMargin || 0} {selectedCoin?.margin_asset}</span></div>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6>Unrealized PNL</h6>
                                 </div>
-                                <div><span class={`text-${totalUnrealizedPnl > 0 ? "green" : "red"}`}>{totalUnrealizedPnl || 0} USDT</span></div>
+                                <div><span className={`text-${totalUnrealizedPnl > 0 ? "green" : "red"}`}>{totalUnrealizedPnl || 0} USDT</span></div>
                             </div>
 
 
-                            <div class="d-flex align-items-center justify-content-between buy_transferbtn">
+                            <div className="d-flex align-items-center justify-content-between buy_transferbtn">
                                 <Link to='/asset_managemnet/deposit'>Deposit Crypto</Link>
                                 <Link to='/user_profile/asset_overview'>Transfer</Link>
                             </div>
@@ -3185,22 +3185,22 @@ function UsdMFutures() {
                 </div>
             </div >
             {/* <!-- buy/long / sell short pop-up --> */}
-            <div class="modal fade currency_popup_s crosstabs" id="buypop" tabindex="-1" aria-labelledby="buypopLabel" aria-hidden="true" >
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+            <div className="modal fade currency_popup_s crosstabs" id="buypop" tabindex="-1" aria-labelledby="buypopLabel" aria-hidden="true" >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className='user_identyid'>
                                 <img src="/images/user_identy.svg" alt="copy icon" />
                             </div>
                             <h4>3 Identity Verification Required</h4>
                             <p>To comply with regulations, complete identity verification to access Binance Futures services.</p>
                             <div className='bn-modal-footer d-flex btnsupport'>
-                                <button class="bn-button verifybtn">Verify Now</button>
-                                <button class="customerbtn">Customer Support</button>
+                                <button className="bn-button verifybtn">Verify Now</button>
+                                <button className="customerbtn">Customer Support</button>
                             </div>
                         </div>
                     </div>
